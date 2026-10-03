@@ -133,8 +133,9 @@ These are known. Raise each one in a pull request that changes the contract. Unt
 These features have no endpoint. Do not invent one in the client.
 
 - The personalised AI report.
-- Official notices.
-- Resident feedback and identity checks.
+- Official notices (shown as "to be implemented after city approval").
 - Aggregate demand counts.
+
+The personalised AI report and resident feedback are moving to a separate city service with its own contract (`../city-service/openapi.yaml`, not written yet). Do not code against them before it exists.
 
 Each will need a contract change first, and some need a separate backend service. The backend today is read-only and has no internet access by design.
