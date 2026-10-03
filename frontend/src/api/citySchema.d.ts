@@ -93,13 +93,26 @@ export interface components {
             instance?: string;
             detail?: string;
         };
+        /**
+         * @description The same shape as `Weights` in `backend/openapi.yaml`: category weights 0 to 5 and optional per-metric overrides 0 to 5. The data API
+         *     validates the values and rejects unknown categories or metric keys, and this service passes its 422 on.
+         */
+        Weights: {
+            category?: {
+                [key: string]: number;
+            };
+            /** @description Overrides for single metrics, keyed by metric key. */
+            metric?: {
+                [key: string]: number;
+            };
+        };
         AiReportRequest: {
             /** @description What matters to the person */
             requirements: string;
             /** @description A key from `GET /personas` of the API. Not together with `weights`. */
             persona?: string;
             /** @description Weights as in `POST /recommend` of the API. Not together with `persona`. */
-            weights?: Record<string, never>;
+            weights?: components["schemas"]["Weights"];
             lang?: components["schemas"]["Lang"];
         };
         AiReport: {
@@ -115,7 +128,8 @@ export interface components {
             report: string;
             basis: {
                 persona: string | null;
-                weights: Record<string, never> | null;
+                /** @description The weights the ranking used, or null for the default ranking. */
+                weights: components["schemas"]["Weights"] | null;
                 /** @description Says that scores compare districts of one city only. */
                 note: string;
             };
