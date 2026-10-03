@@ -20,6 +20,7 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 
 - Created this repository with a clean history.
 - `frontend/README.md`, `TODO.md` and `PLAN.md`: corrected how to reach the dev API (Tailscale, not a public tunnel), added the issue and `develop` steps, and recorded who starts F1. No imported code changed.
+- Added `docs/DESIGN.md` and `docs/design/field-journal.tokens.css`: a design proposal (the Field Journal system from the team design library, adapted for contrast, no theme toggle, and self-hosted fonts), accepted by the coordinator for now. Added `docs/design/fonts/` with Literata, IBM Plex Sans and JetBrains Mono (all SIL OFL). General Sans is not included, because its licence forbids distribution through a repository. No imported code changed.
 - `TODO.md`: added the way of working (`develop`, issues, `REVIEW.md`), key times to fill in, a status column, and corrected the API access and rate-limit notes to match the Tailscale setup. No imported code changed.
 - `TODO.md`: the owner of the frontend tasks (P0-2 to P0-8, P1-1 to P1-4) changed from `Rysia` to `unicorn-alex`, because `Rysia` is on break. No imported code changed.
 - Added `.github/` issue templates (bug, requirement, contract change) and a pull request template, to track bugs and requirements between backend, frontend and review. No imported code changed. (This line was lost in a merge and is restored here.)
@@ -38,3 +39,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Added `frontend/TODO.md` and `frontend/REVIEW_CHECKLIST.md`, and updated the frontend README, AGENTS and REQUIREMENTS with the start steps, the API access plan and the priority order.
 - Added the next steps for the MVP to `backend/README.md`. No backend code changed.
 - 2026-10-03: added `frontend/PLAN.md`, a proposed stack, screen order and open questions for tasks F1 to F3, for the coordinator to approve before code starts. No imported code changed.
+- 2026-10-03: added `frontend/HANDOFF.md` and `frontend/design/` (a clickable mock-up of the Districts screen with sample values, its screenshot, and proposed Kraków blue colour tokens), and listed them in `frontend/README.md`. Reason: hand the frontend to `Rysia` with the design session recorded. The palette conflicts with the accepted `docs/DESIGN.md` until `Delta-43` decides. No imported code changed.

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up: Districts screen</title>
+<style>
+:root{
+  --bg:#f6f9fc; --surface:#fff; --ink:#061f30; --muted:#3d566b; --line:#c5d3e0; --edge:#4a6a85;
+  --accent:#0063af; --accent-ink:#fff; --focus:#b35c00; --focus-on-accent:#fff;
+  --s1:#e5f0fa; --s2:#b5d3ee; --s3:#7fb0dc; --s4:#0063af; --s5:#0a3a66;
+  --s1t:#061f30; --s2t:#061f30; --s3t:#061f30; --s4t:#fff; --s5t:#fff;
+  --radius:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:8px;top:-60px;background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;z-index:10}
+.skip:focus{top:8px}
+.mock{background:#fff3cd;color:#4a3b00;border-bottom:1px solid #e3cf86;padding:8px 16px;font-size:14px}
+header{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;padding:10px 16px;background:var(--accent);color:var(--accent-ink)}
+header :focus-visible{outline-color:var(--focus-on-accent)}
+.brand{font-weight:700;font-size:22px;color:#fff}
+nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav a{padding:8px 12px;border-radius:4px;text-decoration:none;color:#fff;font-weight:600}
+nav a:hover{background:rgba(255,255,255,.18)}
+nav a[aria-current=page]{background:#fff;color:var(--accent)}
+.lang button{border:1px solid #fff;background:transparent;color:#fff;padding:6px 12px;cursor:pointer;font:inherit}
+.lang button:first-child{border-radius:8px 0 0 8px}.lang button:last-child{border-radius:0 8px 8px 0;border-left:0}
+.lang button[aria-pressed=true]{background:#fff;color:var(--accent)}
+main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,1fr);gap:16px;padding:16px;max-width:1280px;margin:0 auto}
+@media (max-width:820px){main{grid-template-columns:1fr}}
+h1{font-size:22px;margin:0 0 4px}
+.lead{margin:0 0 12px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+fieldset{border:0;margin:0 0 12px;padding:0}
+legend{font-weight:600;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg input{position:absolute;opacity:0}
+.seg label{border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;background:var(--surface)}
+.seg input:checked+label{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.seg input:focus-visible+label{outline:3px solid var(--focus);outline-offset:2px}
+.map{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.tile{min-height:76px;border-radius:6px;border:2px solid var(--edge);padding:6px;text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}
+.tile .n{font-size:12px;font-weight:600;line-height:1.2;hyphens:auto}
+.tile .b{font-size:13px;letter-spacing:2px}
+.tile[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px #fff inset,0 0 0 2px var(--ink)}
+.empty{visibility:hidden}
+.svgmap{width:100%;height:auto;display:block;background:#eef4fa;border:1px solid var(--line);border-radius:6px}
+.dist{stroke:var(--edge);stroke-width:1.5;cursor:pointer;stroke-linejoin:round}
+.dist:hover{stroke:var(--ink);stroke-width:3}
+.dist:focus-visible{outline:none;stroke:var(--focus);stroke-width:5}
+.dist[aria-pressed=true]{stroke:var(--ink);stroke-width:4}
+.lbl{font:600 12px system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none;text-anchor:middle}
+.lbl.d{font-weight:400;font-size:11px;letter-spacing:1px}
+.river{fill:none;stroke:#5b7a96;stroke-width:3;stroke-dasharray:2 7;stroke-linecap:round}
+.rlbl{font:italic 12px system-ui,sans-serif;fill:#3d566b}
+.profile td.d{white-space:nowrap;letter-spacing:2px}
+@media (max-width:560px){.lbl{display:none}}
+@media (max-width:560px){.map{grid-template-columns:repeat(3,minmax(0,1fr))}.empty{display:none}main{padding:12px}}
+.b1{background:var(--s1);color:var(--s1t)}.b2{background:var(--s2);color:var(--s2t)}.b3{background:var(--s3);color:var(--s3t)}
+.b4{background:var(--s4);color:var(--s4t)}.b5{background:var(--s5);color:var(--s5t)}
+.nodata{background:repeating-linear-gradient(45deg,#fff,#fff 6px,#dfe7e8 6px,#dfe7e8 8px);color:var(--ink);border:1px dashed var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:14px;align-items:center}
+.legend span.sw{display:inline-block;width:18px;height:18px;border-radius:4px;vertical-align:-4px;margin-right:4px;border:1px solid var(--line)}
+.note{font-size:14px;color:var(--muted);margin-top:8px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-4px 0 12px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:8px 12px;font:inherit;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button[aria-selected=true]{border-color:var(--accent);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th[scope=row]{font-weight:500}
+.rowbtn{background:none;border:0;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer;text-align:left}
+.badge{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--ink);border-radius:6px;padding:0 6px;font-size:13px;font-weight:600;background:#fff}
+.badge.est{border-style:dashed}.badge.proxy{border-style:dotted;border-width:2px}
+.ai{background:var(--s1);border:1px solid var(--accent);border-radius:8px;padding:8px 10px;font-size:14px;margin:8px 0}
+.gap{background:#f1f4f4;border-left:4px solid var(--muted);padding:8px 10px;font-size:14px;margin:8px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:8px 16px;border-radius:999px;font:inherit;cursor:pointer}
+.btn.sec{background:#fff;color:var(--accent)}
+footer{padding:16px;max-width:1280px;margin:0 auto;font-size:14px;color:var(--muted)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i="skip">Przejdź do treści</a>
+<div class="mock" role="note"><strong>Mock-up for design discussion.</strong> Bands are sample values, not data. The map shapes are illustrative, not real boundaries. Nothing here comes from the API.</div>
+<header>
+  <span class="brand">GdzieZamieszkać</span>
+  <nav aria-label="Main">
+    <a href="#" data-i="nHome">Start</a>
+    <a href="#" aria-current="page" data-i="nDistricts">Dzielnice</a>
+    <a href="#" data-i="nFind">Znajdź dzielnicę</a>
+    <a href="#" data-i="nCompare">Porównaj</a>
+    <a href="#" data-i="nSources">Źródła</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Język / Language">
+    <button type="button" aria-pressed="true" data-lang="pl" lang="pl">Polski</button><button type="button" aria-pressed="false" data-lang="en" lang="en">English</button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <section aria-labelledby="h-map">
+    <h1 id="h-map" data-i="title">Dzielnice Krakowa</h1>
+    <p class="lead" data-i="lead">Porównanie 18 dzielnic na podstawie danych publicznych. To nie jest serwis z ogłoszeniami.</p>
+    <div class="card">
+      <fieldset>
+        <legend data-i="colorBy">Koloruj mapę według</legend>
+        <div class="seg" id="metrics"></div>
+      </fieldset>
+      <svg class="svgmap" id="map" viewBox="0 0 900 640" role="group" aria-label="Mapa poglądowa dzielnic"></svg>
+      <p class="note" id="mapnote">Kształty poglądowe, nie granice. Każdą dzielnicę można wybrać klawiaturą lub z listy.</p>
+      <div class="legend" id="legend" aria-label="Legenda"></div>
+      <p class="note" data-i="scoreNote">Wyniki porównują wyłącznie dzielnice jednego miasta.</p>
+    </div>
+  </section>
+
+  <aside aria-label="Panel">
+    <div class="card">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="t-list" aria-selected="true" aria-controls="p-list" data-i="tList">Lista</button>
+        <button role="tab" id="t-det" aria-selected="false" aria-controls="p-det" data-i="tDetail">Szczegóły</button>
+      </div>
+      <div id="p-list" role="tabpanel" aria-labelledby="t-list">
+        <table>
+          <caption class="note" style="text-align:left" data-i="tableCap">Te same dane co na mapie, w tabeli.</caption>
+          <thead><tr><th scope="col" data-i="colName">Dzielnica</th><th scope="col" data-i="colBand">Przedział</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div id="p-det" role="tabpanel" aria-labelledby="t-det" hidden>
+        <h2 id="d-name" style="margin:0 0 4px;font-size:20px"></h2>
+        <p class="note" id="d-sub" style="margin:0"></p>
+        <table class="profile">
+          <caption class="note" style="text-align:left" id="profCap">Profil dzielnicy (przykładowe przedziały)</caption>
+          <thead><tr><th scope="col" id="ph1">Kategoria</th><th scope="col" id="ph2">Przedział</th></tr></thead>
+          <tbody id="prof"></tbody>
+        </table>
+        <div class="ai"><strong data-i="aiLabel">Raport napisany przez sztuczną inteligencję</strong> <span data-i="aiNote">na podstawie danych. Miejsce na tekst raportu z API.</span></div>
+        <table>
+          <caption class="note" style="text-align:left" data-i="metricCap">Przykład wiersza metryki: wartość, rodzaj danych, źródło, data.</caption>
+          <tbody>
+            <tr><th scope="row" data-i="mSample">Metryka (przykład)</th>
+              <td><span class="badge" title="observed">● <span data-i="kObs">zaobserwowane</span></span><br><span class="note" data-i="mSampleNote">Wartość z pola display, źródło, data i zastrzeżenie z API.</span></td></tr>
+            <tr><th scope="row" data-i="mEst">Metryka (przykład)</th>
+              <td><span class="badge est" title="estimated">◐ <span data-i="kEst">szacunek</span></span></td></tr>
+            <tr><th scope="row" data-i="mProxy">Metryka (przykład)</th>
+              <td><span class="badge proxy" title="proxy">◇ <span data-i="kProxy">wskaźnik zastępczy</span></span></td></tr>
+          </tbody>
+        </table>
+        <div class="gap"><strong data-i="gapTitle">Brak danych o przestępstwach.</strong> <span data-i="gapText">Dla Krakowa nie mamy tych danych. Pokazujemy powód, nie zero.</span></div>
+        <div class="actions">
+          <button type="button" class="btn" data-i="aCompare">Dodaj do porównania</button>
+          <button type="button" class="btn sec" data-i="aBack" id="back">Wróć do listy</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+<footer data-i="footer">Źródła i linie z uznaniem autorstwa będą pobierane z /meta. Tu tylko miejsce na nie.</footer>
+
+<script>
+const T={
+ pl:{skip:"Przejdź do treści",nHome:"Start",nDistricts:"Dzielnice",nFind:"Znajdź dzielnicę",nCompare:"Porównaj",nSources:"Źródła",title:"Dzielnice Krakowa",lead:"Porównanie 18 dzielnic na podstawie danych publicznych. To nie jest serwis z ogłoszeniami.",colorBy:"Koloruj mapę według",scoreNote:"Wyniki porównują wyłącznie dzielnice jednego miasta.",tList:"Lista",tDetail:"Szczegóły",tableCap:"Te same dane co na mapie, w tabeli.",colName:"Dzielnica",colBand:"Przedział",aiLabel:"Raport napisany przez sztuczną inteligencję",aiNote:"na podstawie danych. Miejsce na tekst raportu z API.",metricCap:"Przykład wiersza metryki: wartość, rodzaj danych, źródło, data.",mSample:"Metryka (przykład)",mEst:"Metryka (przykład)",mProxy:"Metryka (przykład)",mSampleNote:"Wartość z pola display, źródło, data i zastrzeżenie z API.",kObs:"zaobserwowane",kEst:"szacunek",kProxy:"wskaźnik zastępczy",gapTitle:"Brak danych o przestępstwach.",gapText:"Dla Krakowa nie mamy tych danych. Pokazujemy powód, nie zero.",aCompare:"Dodaj do porównania",aBack:"Wróć do listy",footer:"Źródła i linie z uznaniem autorstwa będą pobierane z /meta. Tu tylko miejsce na nie.",
+  band:"Przedział",of:"z 5",none:"brak danych",legendTitle:"Przedziały (przykładowe)",low:"niższy",high:"wyższy",sample:"Przykładowy przedział, nie dane.",pickHint:"Wybierz dzielnicę, aby zobaczyć szczegóły.",mapLabel:"Mapa poglądowa dzielnic",profCap:"Profil dzielnicy (przykładowe przedziały)",cat:"Kategoria",mapNote:"Kształty poglądowe, nie granice. Każdą dzielnicę można wybrać klawiaturą lub z listy.",
+  m:{livability:"Wynik ogólny",cost:"Koszty",transport:"Transport",amenities:"Udogodnienia",environment:"Środowisko",safety:"Przestępstwa"}},
+ en:{skip:"Skip to content",nHome:"Home",nDistricts:"Districts",nFind:"Find a district",nCompare:"Compare",nSources:"Sources",title:"Districts of Kraków",lead:"A comparison of 18 districts based on public data. This is not a listings site.",colorBy:"Colour the map by",scoreNote:"Scores compare the districts of one city only.",tList:"List",tDetail:"Details",tableCap:"The same data as the map, as a table.",colName:"District",colBand:"Band",aiLabel:"Report written by artificial intelligence",aiNote:"from the data. Placeholder for the report text from the API.",metricCap:"Example metric rows: value, data kind, source, date.",mSample:"Metric (example)",mEst:"Metric (example)",mProxy:"Metric (example)",mSampleNote:"Value from the display field, source, date and caveat from the API.",kObs:"observed",kEst:"estimated",kProxy:"proxy",gapTitle:"No data on recorded crimes.",gapText:"We have no such data for Kraków. We show the reason, never a zero.",aCompare:"Add to comparison",aBack:"Back to list",footer:"Sources and credit lines will come from /meta. This is only the place for them.",
+  band:"Band",of:"of 5",none:"no data",legendTitle:"Bands (sample)",low:"lower",high:"higher",sample:"Sample band, not data.",pickHint:"Pick a district to see details.",mapLabel:"Illustrative district map",profCap:"District profile (sample bands)",cat:"Category",mapNote:"Illustrative shapes, not boundaries. Every district can be chosen with the keyboard or from the list.",
+  m:{livability:"Overall score",cost:"Cost",transport:"Transport",amenities:"Amenities",environment:"Environment",safety:"Recorded crimes"}}
+};
+const D=["Bronowice","Prądnik Biały","Prądnik Czerwony","Mistrzejowice","Bieńczyce","Wzgórza Krzesławickie",
+"Zwierzyniec","Krowodrza","Stare Miasto","Grzegórzki","Czyżyny","Nowa Huta",
+"Dębniki","Łagiewniki-Borek Fałęcki","Podgórze","Podgórze Duchackie","Bieżanów-Prokocim",null,
+null,null,null,"Swoszowice",null,null];
+const SAMPLE={livability:[3,3,3,2,2,1,4,4,5,4,3,2,3,2,4,3,2,3],cost:[3,3,3,4,4,5,1,2,1,2,3,4,3,4,2,3,4,4],
+transport:[3,3,2,2,3,1,4,4,5,5,4,3,3,2,4,3,3,1],amenities:[3,3,2,2,2,1,4,5,5,4,3,3,3,2,4,3,2,2],environment:[3,4,3,2,2,3,5,3,2,2,2,3,4,3,3,3,2,5],safety:null};
+let lang="pl",metric="livability",sel=null;
+const $=s=>document.querySelector(s);
+const names=D.filter(Boolean);
+function idx(n){return names.indexOf(n)}
+
+/* Illustrative geography: weighted Voronoi cells around approximate district centres, clipped to an oval.
+   NOT real boundaries. The real map will draw polygons from GET /districts.geojson. */
+const SEED={"Stare Miasto":[440,305,0],"Zwierzyniec":[320,320,3000],"Krowodrza":[360,215,2500],"Bronowice":[255,190,5000],
+"Prądnik Biały":[400,100,6000],"Prądnik Czerwony":[515,150,3000],"Mistrzejowice":[600,115,2500],"Bieńczyce":[650,205,2500],
+"Nowa Huta":[770,270,9000],"Wzgórza Krzesławickie":[795,150,6000],"Czyżyny":[615,295,2000],"Grzegórzki":[525,300,0],
+"Podgórze":[490,385,1500],"Dębniki":[320,410,6000],"Łagiewniki-Borek Fałęcki":[405,475,3000],"Podgórze Duchackie":[520,475,3000],
+"Bieżanów-Prokocim":[655,440,5000],"Swoszowice":[450,575,8000]};
+function oval(){const p=[];for(let i=0;i<48;i++){const a=i/48*2*Math.PI;p.push([450+420*Math.cos(a),330+300*Math.sin(a)])}return p}
+function clip(poly,A,B,C){/* keep points with A*x+B*y<=C */const out=[];for(let i=0;i<poly.length;i++){const p=poly[i],q=poly[(i+1)%poly.length];
+ const fp=A*p[0]+B*p[1]-C,fq=A*q[0]+B*q[1]-C;if(fp<=0)out.push(p);if((fp<0&&fq>0)||(fp>0&&fq<0)){const t=fp/(fp-fq);out.push([p[0]+t*(q[0]-p[0]),p[1]+t*(q[1]-p[1])])}}return out}
+const SHAPES={};
+for(const n of names){const[x,y,w]=SEED[n];let poly=oval();
+ for(const m of names){if(m===n)continue;const[x2,y2,w2]=SEED[m];
+  poly=clip(poly,2*(x2-x),2*(y2-y),(x2*x2+y2*y2)-(x*x+y*y)-w2+w)}
+ SHAPES[n]=poly}
+function centroid(p){let x=0,y=0;p.forEach(q=>{x+=q[0];y+=q[1]});return[x/p.length,y/p.length]}
+function drawMap(t){
+ const vals=SAMPLE[metric];
+ let h='<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#fff"/><rect width="3" height="8" fill="#c5d3e0"/></pattern></defs>';
+ for(const n of names){const i=idx(n),b=vals?vals[i]:0;const pts=SHAPES[n].map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ");
+  const lab=b?`${t.band} ${b} ${t.of}`:t.none;
+  h+=`<polygon class="dist" points="${pts}" fill="${b?`var(--s${b})`:'url(#hatch)'}" role="button" tabindex="0" aria-pressed="${sel===n}" aria-label="${n}, ${lab}" data-n="${n}"/>`}
+ h+='<path class="river" aria-hidden="true" style="pointer-events:none" d="M20 372 C 120 340, 230 405, 330 372 S 560 350, 640 372 S 800 330, 880 350"/><text class="rlbl" x="70" y="360" aria-hidden="true">Wisła</text>';
+ for(const n of names){const i=idx(n),b=vals?vals[i]:0;const[cx,cy]=centroid(SHAPES[n]);
+  h+=`<text class="lbl" x="${cx.toFixed(0)}" y="${cy.toFixed(0)}" aria-hidden="true">${n.length>14?n.split(/[ -]/).map((w,k)=>`<tspan x="${cx.toFixed(0)}" dy="${k?13:0}">${w}</tspan>`).join(""):n}</text>`;
+  h+=`<text class="lbl d" x="${cx.toFixed(0)}" y="${(cy+(n.length>14?(n.split(/[ -]/).length)*13+4:15)).toFixed(0)}" aria-hidden="true">${b?"●".repeat(b)+"○".repeat(5-b):"—"}</text>`}
+ $("#map").innerHTML=h;
+ document.querySelectorAll(".dist").forEach(e=>{e.onclick=()=>{sel=e.dataset.n;showDetail()};e.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();e.onclick()}}});
+}
+function drawProfile(t){
+ if(!sel)return;const i=idx(sel);
+ $("#prof").innerHTML=Object.keys(t.m).map(k=>{const v=SAMPLE[k];const b=v?v[i]:0;
+  return `<tr><th scope="row">${t.m[k]}</th><td class="d">${b?"●".repeat(b)+"○".repeat(5-b)+` <span class="note" style="letter-spacing:0">${b} ${t.of}</span>`:`<span style="letter-spacing:0">${t.none}</span>`}</td></tr>`}).join("");
+ $("#profCap").textContent=t.profCap;$("#ph1").textContent=t.cat;$("#ph2").textContent=t.colBand;
+}
+function render(){
+  const t=T[lang];document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(e=>{const v=t[e.dataset.i];if(v)e.textContent=v});
+  $("#map").setAttribute("aria-label",t.mapLabel);
+  drawMap(t);
+  $("#metrics").innerHTML=Object.keys(t.m).map(k=>`<span><input type="radio" name="metric" id="m-${k}" value="${k}" ${k===metric?"checked":""}><label for="m-${k}">${t.m[k]}</label></span>`).join("");
+  document.querySelectorAll('input[name=metric]').forEach(r=>r.onchange=()=>{metric=r.value;render()});
+  const vals=SAMPLE[metric];
+  $("#rows").innerHTML=names.map((n,i)=>{const b=vals?vals[i]:0;return `<tr><th scope="row"><button type="button" class="rowbtn" data-n="${n}">${n}</button></th><td>${b?`${b} ${t.of}`:t.none}</td></tr>`}).join("");
+  const sw=[1,2,3,4,5].map(i=>`<span><span class="sw b${i}"></span>${i}</span>`).join("");
+  $("#legend").innerHTML=`<strong>${t.legendTitle}</strong><span>${t.low}</span>${sw}<span>${t.high}</span><span><span class="sw nodata"></span>${t.none}</span>`;
+  document.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sel=b.dataset.n;showDetail()});
+  if(sel){$("#d-name").textContent=sel;$("#d-sub").textContent=t.sample;drawProfile(t)}
+  $("#mapnote").textContent=t.mapNote;
+}
+function tab(which){const det=which==="det";$("#p-list").hidden=det;$("#p-det").hidden=!det;
+  $("#t-list").setAttribute("aria-selected",!det);$("#t-det").setAttribute("aria-selected",det)}
+function showDetail(){render();tab("det");$("#d-name").focus&&0}
+$("#t-list").onclick=()=>tab("list");$("#t-det").onclick=()=>{if(sel)tab("det")};
+$("#back").onclick=()=>{tab("list")};
+document.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;
+  document.querySelectorAll("[data-lang]").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
+render();
+</script>
+</body>
+</html>
