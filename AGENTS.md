@@ -2,6 +2,8 @@
 
 Operating rules for anyone, human or agent, who changes this repository. Module files (`backend/AGENTS.md`, `frontend/AGENTS.md`) add detail and never override this file.
 
+Start with `TODO.md`. It has the priorities and the owner of each task. `docs/IDEA.md` explains the idea.
+
 ## Provenance of the work
 
 HackYeah requires that earlier work and on-site work are clearly separated. This repository's first commit is the import of the earlier work.
