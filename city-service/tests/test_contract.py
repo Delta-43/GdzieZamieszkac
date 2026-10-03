@@ -18,3 +18,12 @@ def test_no_interactive_docs(make_client):
     client, _ = make_client()
     assert client.get("/docs").status_code == 404 and client.get("/openapi.json").status_code == 404
     assert create_app  # imported for the factory check above
+
+
+def test_every_post_documents_the_limits_and_the_discriminator_mapping():
+    for path in ("/ai-report", "/feedback"):
+        responses = CONTRACT["paths"][path]["post"]["responses"]
+        assert "413" in responses and "429" in responses
+    assert CONTRACT["components"]["responses"]["TooManyRequests"]["headers"]["Retry-After"]
+    mapping = CONTRACT["paths"]["/feedback"]["post"]["requestBody"]["content"]["application/json"]["schema"]["discriminator"]["mapping"]
+    assert set(mapping) == {"rent_paid", "data_problem"}

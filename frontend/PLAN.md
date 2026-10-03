@@ -1,14 +1,13 @@
-# Frontend plan (proposal for F1 to F3)
+# Frontend plan (F1 to F3)
 
-Status: **proposal, waiting for the coordinator's yes** (`frontend/TODO.md`, "Before you write code", step 2).
-It follows the suggested stack in `README.md`. Nothing here is built yet.
+Status: **approved and built** (3 and 4 October 2026). The stack below is the one in use. The pull request checks in `.github/workflows/ci.yml` run `npm run check`, so the generated types are checked there too.
 
 ## Stack
 
 | Need | Choice | Note |
 |---|---|---|
 | Build | Vite, React, TypeScript | TypeScript pinned to 5.9, ESLint to 9 (see "Known pitfalls" in `README.md`) |
-| API types | `openapi-typescript` from `../backend/openapi.yaml`, with `openapi-fetch` | Generated file is committed. CI fails when it differs from a fresh run. |
+| API types | `openapi-typescript` from `../backend/openapi.yaml`, with `openapi-fetch` | Generated file is committed. `npm run api:check` (run by CI) fails when it differs from a fresh run. |
 | Server state | TanStack Query | One hook per endpoint in `src/api/` |
 | Routing | React Router | Focus moves to the main region after navigation |
 | Interface text | `i18next`, hand-written `pl.json` and `en.json` | Polish default. `?lang=` sent on every API call. |

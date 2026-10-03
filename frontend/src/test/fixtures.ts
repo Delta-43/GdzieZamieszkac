@@ -1,3 +1,4 @@
+import type { components as cityComponents } from '../api/citySchema'
 import type { components } from '../api/schema'
 
 // Test-only values, obviously made up. They are typed by the contract and never shown to users.
@@ -214,6 +215,22 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/districts.geojson') return jsonResponse(boundariesFixture)
   if (pathname === '/v1/recommend') return jsonResponse(recommendFixture)
   if (pathname === '/v1/personas') return jsonResponse(personasFixture)
+  if (pathname === '/v1/compare') {
+    const codes = (new URL(request.url).searchParams.get('codes') ?? '').split(',')
+    if (codes.includes('nope')) return jsonResponse({ type: 'about:blank', title: 'Unknown district', status: 404 }, 404)
+    // Every district answers with the detail fixture under its own code. Beta has no rental values and no sale price.
+    return jsonResponse({
+      lang: 'pl',
+      districts: codes.map((code) => ({
+        ...detailFixture,
+        code,
+        name: code.charAt(0).toUpperCase() + code.slice(1),
+        ...(code === 'beta'
+          ? { yield_gross: null, categories: detailFixture.categories.map((category) => ({ ...category, metrics: category.metrics.filter((metric) => metric.key !== 'test_sale') })) }
+          : {}),
+      })),
+    })
+  }
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
   if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)
@@ -224,4 +241,21 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)
   if (pathname.startsWith('/v1/metrics/')) return jsonResponse({ ...metricValuesFixture, key: 'other', values: [] })
   return jsonResponse({ type: 'about:blank', title: 'Not found', status: 404 }, 404)
+}
+
+/** The AI report of the city service, as POST /v1/ai-report answers it. */
+export const aiReportFixture: cityComponents['schemas']['AiReport'] = {
+  lang: 'pl',
+  ai_generated: true,
+  label: 'Test AI label from the API.',
+  model: 'test-model',
+  generated_at: '2026-10-01T12:00:00+00:00',
+  report: 'Test AI report first paragraph.\n\nTest AI report <b>second</b> paragraph.',
+  basis: { persona: null, weights: null, note: 'Test AI report note from the API.' },
+  districts: [
+    { rank: 1, code: 'delta', name: 'Delta', score: 80.5, score_display: '80,5 test pts' },
+    { rank: 2, code: 'gamma', name: 'Gamma', score: 60, score_display: '60 test pts' },
+    { rank: 3, code: 'beta', name: 'Beta', score: 40, score_display: '40 test pts' },
+  ],
+  facts: ['Test fact one.', 'Test fact two.'],
 }

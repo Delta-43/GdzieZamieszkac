@@ -1,12 +1,11 @@
 // The one file that holds the theme. No component and no stylesheet writes a colour, a font or a size of its own:
 // they use the CSS custom properties that src/theme/index.ts builds from these values.
 //
-// Status: PROPOSAL (3 October 2026). The look follows the city's own website, krakow.pl: a white page, grey panels,
-// one blue, dark navy text and the Lato typeface. The colours are the ones that site's stylesheet uses most
-// (blue #0063af, ink #071f32, grey #f5f5f5, hairline #bfbfbf). Colours and a typeface only: no logo, crest or photo.
-// The map ramp is the one from ../../design/krakow-blue.tokens.css. The focus and status colours are ours.
-// The coordinator's accepted design is ../../../docs/DESIGN.md (Field Journal); whether this look replaces it is the
-// coordinator's open decision. Changing the look means changing the values here; theme.test.ts keeps the contrast honest.
+// Status: accepted by the coordinator (4 October 2026), see docs/DESIGN.md. The look follows the city's own website,
+// krakow.pl: a white page, grey panels, one blue, dark navy text and the Lato typeface. The colours are the ones that site's
+// stylesheet uses most (blue #0063af, ink #071f32, grey #f5f5f5, hairline #bfbfbf). Colours and a typeface only: no logo,
+// crest or photo. The focus and status colours are ours. Changing the look means changing the values here;
+// theme.test.ts keeps the contrast honest.
 
 export const colors = {
   /** The page. */

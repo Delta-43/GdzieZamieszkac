@@ -75,6 +75,8 @@ The data and the backend are done. The frontend is the work of this event. `TODO
 The frontend starts from the guide files in `frontend/`. Read `frontend/AGENTS.md` first.
 It targets WCAG 2.2 level AA, with Polish as the default language and an English toggle.
 
+Libraries and fonts used on site (all open source, installed from npm and listed in `frontend/package.json`): React, React Router, TanStack Query, i18next, `openapi-fetch` and `openapi-typescript`, built with Vite and tested with Vitest, Testing Library and `vitest-axe`. The typeface is Lato, bundled from `@fontsource/lato` under the SIL Open Font Licence 1.1. The look follows krakow.pl in colours and typeface only: no logo, crest or photo of the city is used.
+
 ## Layout
 
 ```
@@ -84,7 +86,8 @@ docs/                     API contract notes, backend plan, data dictionary, dat
 server/migrations/krakow/ SQL that created the krakow schema
 data/sources/derived/     scoring.py, the scoring code the backend copies
 TODO.md                   priorities and tasks for every module
-ON_SITE_CHANGELOG.md      what changed during the event
+ON_SITE_CHANGELOG.md      what changed during the event (built from changelog/)
+changelog/                one file per pull request, built into the file above before each merge into main
 LICENSE                   proprietary copyright notice
 CODEOWNERS                who reviews what
 presentation.html         the HackYeah pitch deck; open it in a browser

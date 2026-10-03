@@ -290,6 +290,21 @@ button.reserve-bold {
   gap: var(--space-2);
 }
 
+/* On a narrow screen the two language buttons would push the header wider than the screen (issue #45): they move to a row of their own. */
+@media (max-width: 26rem) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .language-toggle {
+    flex: 1 0 100%;
+    justify-content: flex-end;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-4);
+    box-sizing: border-box;
+  }
+}
+
 /* A button that reads as a link: the district names in the list. */
 .link-button {
   min-block-size: var(--target);
@@ -426,7 +441,8 @@ main:focus {
   gap: var(--space-1);
 }
 
-.field select {
+.field select,
+.field textarea {
   box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 28rem;
@@ -1239,4 +1255,105 @@ summary:hover {
 .notice ul {
   margin-block: var(--space-1) 0;
   padding-inline-start: var(--space-5);
+}
+
+/* The AI report card on the find page: a text field, the notice about the model provider, then the answer. */
+main > .ai-report-card {
+  margin-block-start: var(--space-5);
+}
+
+.field textarea {
+  max-inline-size: 44rem;
+  padding-block: var(--space-2);
+  font-family: var(--font-ui);
+  line-height: var(--line-base);
+  resize: vertical;
+}
+
+.ai-report-card__answer {
+  margin-block-start: var(--space-5);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ai-report-card__answer h3 {
+  margin-block-start: var(--space-5);
+}
+
+/* The compare page: a list of checkboxes that wraps into columns, then one table per category. */
+.compare-picker {
+  margin: var(--space-4) 0;
+}
+
+.compare-picker legend {
+  padding-inline: var(--space-2);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.compare-picker__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.compare-picker label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target);
+  cursor: pointer;
+}
+
+.compare-picker input {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.compare-picker input[aria-disabled='true'] + span {
+  color: var(--color-text-muted);
+}
+
+/*
+  Every column has the same width, at least 8rem, so at 320 pixels a measure and one district's value are on screen
+  together. The measure column stays in place while the region scrolls sideways, so a value is never without its name.
+*/
+.compare-table {
+  table-layout: fixed;
+  min-inline-size: calc(var(--columns, 3) * 8rem);
+}
+
+.compare-table th,
+.compare-table td {
+  padding-inline: var(--space-2);
+  vertical-align: top;
+  /* Row headers elsewhere stay on one line. Here a long measure name wraps inside its column. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.compare-table thead th {
+  font-size: var(--text-sm);
+}
+
+.compare-table tr > :first-child {
+  position: sticky;
+  inset-inline-start: 0;
+  background: var(--color-surface-raised);
+}
+
+.compare-table__value {
+  font-weight: 700;
+}
+
+.compare-table__source {
+  display: block;
+  font-weight: 400;
 }

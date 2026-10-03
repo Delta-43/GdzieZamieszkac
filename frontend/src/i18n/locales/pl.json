@@ -11,7 +11,8 @@
     "menu": "Menu",
     "close": "Zamknij menu",
     "groupDistricts": "Dzielnice",
-    "findDistrict": "Znajdź dzielnicę"
+    "findDistrict": "Znajdź dzielnicę",
+    "compare": "Porównaj dzielnice"
   },
   "language": {
     "label": "Język"
@@ -179,5 +180,44 @@
       "score": "Wynik (0–100)",
       "drivers": "Co najbardziej wpływa na wynik"
     }
+  },
+  "aiReport": {
+    "heading": "Podsumowanie dla Twoich potrzeb",
+    "intro": "Opisz własnymi słowami, co jest dla Ciebie ważne. Sztuczna inteligencja napisze krótkie podsumowanie trzech pierwszych dzielnic z rankingu pokazanego na tej stronie. Twój opis nie zmienia rankingu.",
+    "field": "Co jest dla Ciebie ważne?",
+    "hint": "Od {{min}} do {{max}} znaków.",
+    "privacy": "Wpisany tekst zostanie wysłany do zewnętrznego dostawcy modelu językowego. Nie zapisujemy go. Nie podawaj danych osobowych ani adresu.",
+    "submit": "Napisz podsumowanie",
+    "tooShort": "Opis jest za krótki. Wpisz co najmniej {{min}} znaki.",
+    "loading": "Piszemy podsumowanie. To trwa kilka sekund…",
+    "ready": "Podsumowanie jest gotowe.",
+    "answer": "Podsumowanie",
+    "districts": "Dzielnice w podsumowaniu",
+    "district": "Miejsce {{rank}}:",
+    "facts": "Fakty przekazane modelowi",
+    "generated": "Model: {{model}}. Wygenerowano: {{date}}.",
+    "error": {
+      "failed": "Nie udało się napisać podsumowania. Ranking na tej stronie działa bez zmian. Spróbuj ponownie.",
+      "unavailable": "Podsumowania są chwilowo niedostępne. Ranking na tej stronie działa bez zmian.",
+      "tooMany": "Zbyt wiele podsumowań w krótkim czasie. Odczekaj chwilę i spróbuj ponownie.",
+      "tooManySeconds": "Zbyt wiele podsumowań w krótkim czasie. Spróbuj ponownie za {{seconds}} s.",
+      "generic": "Nie udało się wysłać opisu. Sprawdź połączenie z internetem i spróbuj ponownie."
+    }
+  },
+  "compare": {
+    "title": "Porównaj dzielnice",
+    "heading": "Porównaj dzielnice",
+    "intro": "Wybierz od dwóch do czterech dzielnic. Tabele pokazują te same miary obok siebie, bez wskazywania lepszej dzielnicy.",
+    "choose": "Wybierz dzielnice (od {{min}} do {{max}})",
+    "count": "Wybrane dzielnice: {{count}} z {{max}}.",
+    "countFull": "Wybrane dzielnice: {{count}} z {{max}}. Aby dodać inną dzielnicę, najpierw odznacz jedną z wybranych.",
+    "clear": "Wyczyść wybór",
+    "tooFew": "Wybierz co najmniej {{min}} dzielnice, aby zobaczyć porównanie.",
+    "tooMany": "Można porównać najwyżej {{max}} dzielnice. Odznacz część wybranych.",
+    "ready": "Porównanie gotowe: {{names}}.",
+    "unknown": "Nie udało się porównać tych dzielnic. Sprawdź adres strony albo wybierz dzielnice z listy.",
+    "metric": "Miara",
+    "more": "Metodę, zastrzeżenia, licencję i oznaczenie źródła każdej miary znajdziesz na stronie dzielnicy.",
+    "region": "Tabela: {{label}}. Można ją przewijać."
   }
 }

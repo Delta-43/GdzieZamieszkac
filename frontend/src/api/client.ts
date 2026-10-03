@@ -25,10 +25,13 @@ api.use({
 /** An error answer from the API. The API's own error text is English only, so the interface shows its own message per status. */
 export class ApiError extends Error {
   readonly status: number
+  /** The seconds to wait, from the Retry-After header of a 429 answer. */
+  readonly retryAfter: number | undefined
 
-  constructor(status: number, title: string) {
+  constructor(status: number, title: string, retryAfter?: number) {
     super(title)
     this.name = 'ApiError'
     this.status = status
+    this.retryAfter = retryAfter
   }
 }

@@ -26,7 +26,7 @@ The jury's weights decide what we build first when time is short.
 3. **Ask before a big change.** A big change is described first, with its reason, and needs a yes. Examples: a new dependency, a change of folder layout,
    a change of stack, deleting or rewriting a file someone else wrote.
 4. **Work only in `frontend/`.** Do not touch `backend/`, `server/`, `data/` or `docs/`.
-   The one exception outside this folder is the line in the root `ON_SITE_CHANGELOG.md` that every change needs.
+   The one exception outside this folder is the new file in the root `changelog/` that every change needs (`changelog/README.md`). Do not edit `ON_SITE_CHANGELOG.md` itself.
    If the frontend needs something from the API, open a `contract` issue. Do not edit `backend/openapi.yaml`.
 5. **Never change database tables directly.** The frontend has no database access at all. It reads the API and nothing else.
 6. **Commit after each big step,** with a full message that says what changed and why, and add the changelog line in the same commit.
@@ -108,3 +108,4 @@ Newest entry last. Each entry has the date, the branch, what was done and any de
 - **Backend test.** Ran the coordinator's test of the two servers from this machine: all five parts passed. Four problems were found on the server side and filed as issues #36 to #39.
 - **`frontend/c4-city-service`.** Groundwork for the city service (types, client, dev proxy). Decisions by Aryna: build the AI report card first, then the feedback forms; show the facts list only in English until the backend sends Polish facts (the coordinator is fixing it); she and Aleksandra agreed that this work is built here. `TODO.md` and `HANDOFF.md` were brought up to date for the next session.
 
+- **Coordinator, 4 October 2026.** After the second backend test and the merges of #47 to #52: the coordinator accepted the krakow.pl look as the design, so the Field Journal files (`docs/design/`, `frontend/design/`) were removed and `docs/DESIGN.md` was rewritten to describe the look in use (the earlier entries above stay as history). `HANDOFF.md`, `TODO.md`, `PLAN.md`, `README.md` and the comment in `src/theme/tokens.ts` were brought up to date, and a CI workflow (`.github/workflows/ci.yml`) now runs `npm run check` on every pull request. Open frontend issues: #56 (two fast ticks on Compare) and #57 (Compare at 320 pixels).

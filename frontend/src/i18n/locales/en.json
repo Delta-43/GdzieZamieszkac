@@ -11,7 +11,8 @@
     "menu": "Menu",
     "close": "Close the menu",
     "groupDistricts": "Districts",
-    "findDistrict": "Find a district"
+    "findDistrict": "Find a district",
+    "compare": "Compare districts"
   },
   "language": {
     "label": "Language"
@@ -179,5 +180,44 @@
       "score": "Score (0–100)",
       "drivers": "What moves the score most"
     }
+  },
+  "aiReport": {
+    "heading": "A summary for your needs",
+    "intro": "Describe in your own words what matters to you. Artificial intelligence writes a short summary of the first three districts in the ranking shown on this page. Your text does not change the ranking.",
+    "field": "What matters to you?",
+    "hint": "From {{min}} to {{max}} characters.",
+    "privacy": "The text you type is sent to an outside provider of the language model. We do not store it. Do not enter personal data or an address.",
+    "submit": "Write the summary",
+    "tooShort": "The text is too short. Enter at least {{min}} characters.",
+    "loading": "Writing the summary. It takes a few seconds…",
+    "ready": "The summary is ready.",
+    "answer": "Summary",
+    "districts": "Districts in the summary",
+    "district": "Place {{rank}}:",
+    "facts": "Facts given to the model",
+    "generated": "Model: {{model}}. Generated: {{date}}.",
+    "error": {
+      "failed": "The summary could not be written. The ranking on this page still works. Try again.",
+      "unavailable": "Summaries are not available right now. The ranking on this page still works.",
+      "tooMany": "Too many summaries in a short time. Wait a moment and try again.",
+      "tooManySeconds": "Too many summaries in a short time. Try again in {{seconds}} s.",
+      "generic": "The text was not sent. Check your internet connection and try again."
+    }
+  },
+  "compare": {
+    "title": "Compare districts",
+    "heading": "Compare districts",
+    "intro": "Choose two to four districts. The tables show the same measures side by side and do not point to a better district.",
+    "choose": "Choose districts ({{min}} to {{max}})",
+    "count": "Districts chosen: {{count}} of {{max}}.",
+    "countFull": "Districts chosen: {{count}} of {{max}}. To add another district, first untick one of the chosen ones.",
+    "clear": "Clear the choice",
+    "tooFew": "Choose at least {{min}} districts to see the comparison.",
+    "tooMany": "At most {{max}} districts can be compared. Untick some of the chosen ones.",
+    "ready": "The comparison is ready: {{names}}.",
+    "unknown": "These districts could not be compared. Check the page address or choose districts from the list.",
+    "metric": "Measure",
+    "more": "The method, caveats, licence and credit line of each measure are on the district's page.",
+    "region": "Table: {{label}}. It scrolls."
   }
 }

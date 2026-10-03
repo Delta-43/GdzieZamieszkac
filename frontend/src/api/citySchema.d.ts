@@ -93,13 +93,26 @@ export interface components {
             instance?: string;
             detail?: string;
         };
+        /**
+         * @description The same shape as `Weights` in `backend/openapi.yaml`: category weights 0 to 5 and optional per-metric overrides 0 to 5. The data API
+         *     validates the values and rejects unknown categories or metric keys, and this service passes its 422 on.
+         */
+        Weights: {
+            category?: {
+                [key: string]: number;
+            };
+            /** @description Overrides for single metrics, keyed by metric key. */
+            metric?: {
+                [key: string]: number;
+            };
+        };
         AiReportRequest: {
             /** @description What matters to the person */
             requirements: string;
             /** @description A key from `GET /personas` of the API. Not together with `weights`. */
             persona?: string;
             /** @description Weights as in `POST /recommend` of the API. Not together with `persona`. */
-            weights?: Record<string, never>;
+            weights?: components["schemas"]["Weights"];
             lang?: components["schemas"]["Lang"];
         };
         AiReport: {
@@ -115,7 +128,8 @@ export interface components {
             report: string;
             basis: {
                 persona: string | null;
-                weights: Record<string, never> | null;
+                /** @description The weights the ranking used, or null for the default ranking. */
+                weights: components["schemas"]["Weights"] | null;
                 /** @description Says that scores compare districts of one city only. */
                 note: string;
             };
@@ -135,7 +149,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            type: "RentPaid";
+            type: "rent_paid";
             /** @description A district code from the API. */
             district: string;
             /** @description Monthly rent paid */
@@ -153,7 +167,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            type: "DataProblem";
+            type: "data_problem";
             district: string;
             /** @description A metric key from `GET /metrics` of the API. */
             metric_key: string;
@@ -190,6 +204,25 @@ export interface components {
         };
     };
     responses: {
+        /** @description The request body is larger than 8 KB (8192 bytes). Nothing was read or stored. */
+        TooLarge: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
+        /** @description Too many requests. One shared limit per endpoint, per minute, for all clients (10 for `/ai-report`, 30 for `/feedback`). */
+        TooManyRequests: {
+            headers: {
+                "Retry-After": components["headers"]["RetryAfter"];
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
         /** @description Problem details. */
         Problem: {
             headers: {
@@ -202,7 +235,10 @@ export interface components {
     };
     parameters: never;
     requestBodies: never;
-    headers: never;
+    headers: {
+        /** @description Whole seconds to wait before the next request. */
+        RetryAfter: number;
+    };
     pathItems: never;
 }
 export type $defs = Record<string, never>;
@@ -256,8 +292,9 @@ export interface operations {
                     "application/json": components["schemas"]["AiReport"];
                 };
             };
+            413: components["responses"]["TooLarge"];
             422: components["responses"]["Problem"];
-            429: components["responses"]["Problem"];
+            429: components["responses"]["TooManyRequests"];
             /** @description The model failed, or its text was dropped because it held a number that is not a fact. Use the stored area report instead. */
             502: {
                 headers: {
@@ -301,8 +338,9 @@ export interface operations {
                     "application/json": components["schemas"]["FeedbackReceipt"];
                 };
             };
+            413: components["responses"]["TooLarge"];
             422: components["responses"]["Problem"];
-            429: components["responses"]["Problem"];
+            429: components["responses"]["TooManyRequests"];
             503: components["responses"]["Problem"];
             default: components["responses"]["Problem"];
         };

@@ -10,7 +10,7 @@ info:
     - **Every AI report carries `ai_generated: true` and a label** in the requested language.
     - **The typed text is not stored and not logged.** It goes to the model provider (OpenRouter).
     - **Feedback is stored `unverified`, never published, and never changes a score,** until identity checks (Gov ID) exist.
-    - Request bodies reject unknown fields with 422.
+    - Request bodies are at most 8 KB (413 above that) and reject unknown fields with 422.
     - Errors are problem+json (RFC 9457).
 servers:
   - url: /v1
@@ -59,7 +59,8 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/AiReport" }
         "422": { $ref: "#/components/responses/Problem" }
-        "429": { $ref: "#/components/responses/Problem" }
+        "413": { $ref: "#/components/responses/TooLarge" }
+        "429": { $ref: "#/components/responses/TooManyRequests" }
         "502":
           description: The model failed, or its text was dropped because it held a number that is not a fact. Use the stored area report instead.
           content:
@@ -85,7 +86,11 @@ paths:
               oneOf:
                 - { $ref: "#/components/schemas/RentPaid" }
                 - { $ref: "#/components/schemas/DataProblem" }
-              discriminator: { propertyName: type }
+              discriminator:
+                propertyName: type
+                mapping:
+                  rent_paid: "#/components/schemas/RentPaid"
+                  data_problem: "#/components/schemas/DataProblem"
       responses:
         "201":
           description: Stored as unverified.
@@ -93,7 +98,8 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/FeedbackReceipt" }
         "422": { $ref: "#/components/responses/Problem" }
-        "429": { $ref: "#/components/responses/Problem" }
+        "413": { $ref: "#/components/responses/TooLarge" }
+        "429": { $ref: "#/components/responses/TooManyRequests" }
         "503": { $ref: "#/components/responses/Problem" }
         default: { $ref: "#/components/responses/Problem" }
 
@@ -110,7 +116,24 @@ paths:
               schema: { $ref: "#/components/schemas/FeedbackStatus" }
 
 components:
+  headers:
+    RetryAfter:
+      description: Whole seconds to wait before the next request.
+      schema: { type: integer, minimum: 1 }
+
   responses:
+    TooLarge:
+      description: The request body is larger than 8 KB (8192 bytes). Nothing was read or stored.
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    TooManyRequests:
+      description: Too many requests. One shared limit per endpoint, per minute, for all clients (10 for `/ai-report`, 30 for `/feedback`).
+      headers:
+        Retry-After: { $ref: "#/components/headers/RetryAfter" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
     Problem:
       description: Problem details.
       content:
@@ -130,13 +153,28 @@ components:
         instance: { type: string }
         detail: { type: string }
 
+    Weights:
+      type: object
+      description: |
+        The same shape as `Weights` in `backend/openapi.yaml`: category weights 0 to 5 and optional per-metric overrides 0 to 5. The data API
+        validates the values and rejects unknown categories or metric keys, and this service passes its 422 on.
+      properties:
+        category:
+          type: object
+          propertyNames: { enum: [transport, demographics, livability, amenities, environment, cost, safety] }
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+        metric:
+          type: object
+          description: Overrides for single metrics, keyed by metric key.
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+
     AiReportRequest:
       type: object
       required: [requirements]
       properties:
         requirements: { type: string, minLength: 3, maxLength: 1000, description: What matters to the person, in their own words. Sent to the model provider, not stored. }
         persona: { type: string, maxLength: 40, description: A key from `GET /personas` of the API. Not together with `weights`. }
-        weights: { type: object, description: "Weights as in `POST /recommend` of the API. Not together with `persona`." }
+        weights: { $ref: "#/components/schemas/Weights", description: "Weights as in `POST /recommend` of the API. Not together with `persona`." }
         lang: { $ref: "#/components/schemas/Lang" }
 
     AiReport:
@@ -154,7 +192,11 @@ components:
           required: [persona, weights, note]
           properties:
             persona: { type: [string, "null"] }
-            weights: { type: [object, "null"] }
+            weights:
+              description: The weights the ranking used, or null for the default ranking.
+              oneOf:
+                - { $ref: "#/components/schemas/Weights" }
+                - { type: "null" }
             note: { type: string, description: Says that scores compare districts of one city only. }
         districts:
           type: array
