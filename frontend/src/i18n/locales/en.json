@@ -193,7 +193,6 @@
     "answer": "Summary",
     "districts": "Districts in the summary",
     "district": "Place {{rank}}:",
-    "score": "score {{score}} (0–100)",
     "facts": "Facts given to the model",
     "generated": "Model: {{model}}. Generated: {{date}}.",
     "error": {

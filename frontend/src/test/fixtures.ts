@@ -237,9 +237,9 @@ export const aiReportFixture: cityComponents['schemas']['AiReport'] = {
   report: 'Test AI report first paragraph.\n\nTest AI report <b>second</b> paragraph.',
   basis: { persona: null, weights: null, note: 'Test AI report note from the API.' },
   districts: [
-    { rank: 1, code: 'delta', name: 'Delta', score: 80.5 },
-    { rank: 2, code: 'gamma', name: 'Gamma', score: 60 },
-    { rank: 3, code: 'beta', name: 'Beta', score: 40 },
+    { rank: 1, code: 'delta', name: 'Delta', score: 80.5, score_display: '80,5 test pts' },
+    { rank: 2, code: 'gamma', name: 'Gamma', score: 60, score_display: '60 test pts' },
+    { rank: 3, code: 'beta', name: 'Beta', score: 40, score_display: '40 test pts' },
   ],
   facts: ['Test fact one.', 'Test fact two.'],
 }

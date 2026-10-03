@@ -124,8 +124,10 @@ export interface components {
                 code: string;
                 name: string;
                 score: number;
+                /** @description The score as text in `lang`, with that language's decimal mark, for example `62,1 pkt (0-100)`. */
+                score_display: string;
             }[];
-            /** @description The facts the model was given. Show them as the basis of the text. */
+            /** @description The facts the model was given */
             facts: string[];
         };
         RentPaid: {

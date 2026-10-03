@@ -193,7 +193,6 @@
     "answer": "Podsumowanie",
     "districts": "Dzielnice w podsumowaniu",
     "district": "Miejsce {{rank}}:",
-    "score": "wynik {{score}} (0–100)",
     "facts": "Fakty przekazane modelowi",
     "generated": "Model: {{model}}. Wygenerowano: {{date}}.",
     "error": {

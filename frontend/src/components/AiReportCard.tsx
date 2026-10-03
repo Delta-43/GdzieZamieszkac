@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 import { ApiError } from '../api/client'
 import { useAiReport } from '../api/useAiReport'
 import type { CategoryWeights } from '../api/useDistrictsData'
-import { plainNumber } from '../lib/plainNumber'
 
 // The limits of `requirements` in the city service contract.
 const MIN_LENGTH = 3
@@ -108,20 +107,19 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
             {report.data.districts.map((district) => (
               <li key={district.code}>
                 <span lang={i18n.language}>{t('aiReport.district', { rank: district.rank })}</span>{' '}
-                <Link to={`/districts/${district.code}`}>{district.name}</Link>
-                {/* The score has no display string in the contract yet: shown as sent. */}
-                <span lang={i18n.language}>, {t('aiReport.score', { score: plainNumber(district.score, i18n.language) })}</span>
+                {/* The score is the API's display string, shown as given. */}
+                <Link to={`/districts/${district.code}`}>{district.name}</Link>, {district.score_display}
               </li>
             ))}
           </ul>
           {/* The API's own note: scores compare the districts of this city only. */}
           <p className="note">{report.data.basis.note}</p>
 
-          {/* The service sends the facts in English for every language (issue #38), so only the English view shows them. */}
-          {i18n.language === 'en' && report.data.facts.length > 0 && (
+          {/* The facts the model was given, in the language of the report: the basis of the text. */}
+          {report.data.facts.length > 0 && (
             <>
-              <h3 lang="en">{t('aiReport.facts')}</h3>
-              <ul lang="en">
+              <h3 lang={i18n.language}>{t('aiReport.facts')}</h3>
+              <ul>
                 {report.data.facts.map((fact, index) => (
                   <li key={index}>{fact}</li>
                 ))}

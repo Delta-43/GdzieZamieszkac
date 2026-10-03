@@ -73,3 +73,26 @@ def test_rate_limit(make_client):
 def test_body_limit(make_client):
     c, _ = make_client(settings=Settings(feedback_db_path=":memory:", max_body_bytes=100))
     assert c.post("/v1/ai-report", json={"requirements": "x" * 500}).status_code == 413
+
+
+def test_facts_follow_the_language(make_client):
+    llm = FakeLlm("Alfa ma wynik 64,0.")
+    c, _ = make_client(llm)
+    d = post(c, lang="pl").json()
+    assert d["facts"][0].startswith("Miejsce 1: Alfa, wynik 64,0 na 100")
+    assert all("Rank " not in f and "percentile " not in f for f in d["facts"])
+    assert d["districts"][0]["score_display"] == "64,0 pkt (0-100)"
+    en = post(c, lang="en").json()
+    assert en["facts"][0].startswith("Rank 1: Alfa, score 64.0 out of 100") and en["districts"][0]["score_display"] == "64.0 pts (0-100)"
+
+
+def test_polish_decimal_comma_passes_the_guard(make_client):
+    c, _ = make_client(FakeLlm("Alfa ma wynik 64,0, a Beta 55,5."))
+    assert post(c, lang="pl").status_code == 200
+    c, _ = make_client(FakeLlm("Alfa ma wynik 64,1."))
+    assert post(c, lang="pl").status_code == 502
+
+
+def test_unknown_field_is_rejected(make_client):
+    c, _ = make_client()
+    assert post(c, address="x").status_code == 422

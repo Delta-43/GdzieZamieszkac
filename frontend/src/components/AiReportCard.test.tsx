@@ -56,11 +56,13 @@ test('the button sends the text to the city service with the language and no wei
   expect(section.getByText('Model: test-model. Wygenerowano: 2026-10-01.')).toBeInTheDocument()
   // The three districts and their order are the API's.
   const items = section.getAllByRole('listitem')
-  expect(items.map((item) => item.textContent)).toEqual(['Miejsce 1: Delta, wynik 80,5 (0–100)', 'Miejsce 2: Gamma, wynik 60 (0–100)', 'Miejsce 3: Beta, wynik 40 (0–100)'])
+  // The scores are the API's display strings, as given.
+  expect(items.slice(0, 3).map((item) => item.textContent)).toEqual(['Miejsce 1: Delta, 80,5 test pts', 'Miejsce 2: Gamma, 60 test pts', 'Miejsce 3: Beta, 40 test pts'])
   expect(section.getByRole('link', { name: 'Delta' })).toHaveAttribute('href', '/districts/delta')
   expect(section.getByText('Test AI report note from the API.')).toBeInTheDocument()
-  // The facts arrive in English for Polish (issue #38), so the Polish view leaves them out.
-  expect(section.queryByText('Test fact one.')).not.toBeInTheDocument()
+  // The facts the model was given are listed as the basis of the text.
+  expect(section.getByRole('heading', { level: 3, name: 'Fakty przekazane modelowi' })).toBeInTheDocument()
+  expect(items.slice(3).map((item) => item.textContent)).toEqual(['Test fact one.', 'Test fact two.'])
 })
 
 test('the report is asked for the ranking on screen: the weights that were applied', async () => {
@@ -81,7 +83,7 @@ test('the report is asked for the ranking on screen: the weights that were appli
   })
 })
 
-test('the English view sends lang=en and lists the facts given to the model', async () => {
+test('the English view sends lang=en and shows the answer under English headings', async () => {
   const fetchMock = withReport(() => jsonResponse({ ...aiReportFixture, lang: 'en' }))
   renderApp('/find')
   fireEvent.click(screen.getByRole('button', { name: 'English' }))
