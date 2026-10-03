@@ -130,13 +130,28 @@ components:
         instance: { type: string }
         detail: { type: string }
 
+    Weights:
+      type: object
+      description: |
+        The same shape as `Weights` in `backend/openapi.yaml`: category weights 0 to 5 and optional per-metric overrides 0 to 5. The data API
+        validates the values and rejects unknown categories or metric keys, and this service passes its 422 on.
+      properties:
+        category:
+          type: object
+          propertyNames: { enum: [transport, demographics, livability, amenities, environment, cost, safety] }
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+        metric:
+          type: object
+          description: Overrides for single metrics, keyed by metric key.
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+
     AiReportRequest:
       type: object
       required: [requirements]
       properties:
         requirements: { type: string, minLength: 3, maxLength: 1000, description: What matters to the person, in their own words. Sent to the model provider, not stored. }
         persona: { type: string, maxLength: 40, description: A key from `GET /personas` of the API. Not together with `weights`. }
-        weights: { type: object, description: "Weights as in `POST /recommend` of the API. Not together with `persona`." }
+        weights: { $ref: "#/components/schemas/Weights", description: "Weights as in `POST /recommend` of the API. Not together with `persona`." }
         lang: { $ref: "#/components/schemas/Lang" }
 
     AiReport:
@@ -154,7 +169,11 @@ components:
           required: [persona, weights, note]
           properties:
             persona: { type: [string, "null"] }
-            weights: { type: [object, "null"] }
+            weights:
+              description: The weights the ranking used, or null for the default ranking.
+              oneOf:
+                - { $ref: "#/components/schemas/Weights" }
+                - { type: "null" }
             note: { type: string, description: Says that scores compare districts of one city only. }
         districts:
           type: array
