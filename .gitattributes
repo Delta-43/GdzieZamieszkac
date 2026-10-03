@@ -1,0 +1,2 @@
+# Keep both sides when two branches add lines to the same place in a local merge (GitHub's web merge ignores this: use changelog/ fragments).
+ON_SITE_CHANGELOG.md merge=union

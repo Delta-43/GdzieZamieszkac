@@ -84,7 +84,8 @@ docs/                     API contract notes, backend plan, data dictionary, dat
 server/migrations/krakow/ SQL that created the krakow schema
 data/sources/derived/     scoring.py, the scoring code the backend copies
 TODO.md                   priorities and tasks for every module
-ON_SITE_CHANGELOG.md      what changed during the event
+ON_SITE_CHANGELOG.md      what changed during the event (built from changelog/)
+changelog/                one file per pull request, built into the file above before each merge into main
 LICENSE                   proprietary copyright notice
 CODEOWNERS                who reviews what
 presentation.html         the HackYeah pitch deck; open it in a browser
