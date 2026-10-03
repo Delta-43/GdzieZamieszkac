@@ -114,7 +114,7 @@ Each needs a contract change and a separate service first. `docs/IDEA.md` has th
 
 - Whether one project may be entered in both tasks. Ask the organisers.
 - How the AI task sees a meaningful, checkable role for AI. Today it narrates reports and translates, and it never computes the score.
-- The two cities' visual identity. Until the coordinator sends one, use the placeholder theme.
+- The visual design. The coordinator accepted `docs/DESIGN.md` for now (3 October): the Field Journal system with our changes. Build task F3 from `docs/design/field-journal.tokens.css`. The placeholder theme is only a fallback.
 - Which licence terms apply if the project ever becomes commercial: the road accident data needs written approval.
 
 ## Risks
