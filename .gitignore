@@ -11,3 +11,5 @@ venv/
 *.secret
 *token*.json
 .DS_Store
+city-service/data/
+*.sqlite

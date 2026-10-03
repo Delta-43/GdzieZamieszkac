@@ -49,3 +49,16 @@ test('plainNumber changes only the decimal sign, and only in Polish', () => {
   expect(plainNumber(49, 'pl')).toBe('49')
   expect(plainNumber(3.694, 'pl')).toBe('3,694')
 })
+
+test('sourceLinks keeps real pages, splits several addresses, and avoids downloads and listings sites', async () => {
+  const { sourceLinks } = await import('./sourceLinks')
+  expect(sourceLinks(undefined)).toEqual([])
+  expect(sourceLinks('https://example.org/page')).toEqual(['https://example.org/page'])
+  expect(sourceLinks('https://a.example.org/x ; https://b.example.org/y')).toEqual(['https://a.example.org/x', 'https://b.example.org/y'])
+  // A data file would start a download: link to the site that publishes it.
+  expect(sourceLinks('https://files.example.org/a.zip ; https://files.example.org/b.zip')).toEqual(['https://files.example.org'])
+  // The portal never links to a listings site.
+  expect(sourceLinks('https://www.otodom.pl ; https://www.olx.pl')).toEqual([])
+  expect(sourceLinks('javascript:alert(1)')).toEqual([])
+  expect(sourceLinks('not a url')).toEqual([])
+})

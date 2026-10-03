@@ -93,7 +93,6 @@ select {
 }
 
 /* Shared page column: the same width and side gutter for the header bar, the navigation, the content and the footer. */
-.site-header__bar,
 main,
 .site-footer__inner,
 .stale-notice {
@@ -103,20 +102,21 @@ main,
   padding-inline: var(--space-4);
 }
 
+/*
+  The header: a full-width white bar of a fixed height. The menu button is a grey square at its left edge,
+  then the site name, and the language toggle at the right. A blue rule runs under it.
+*/
 .site-header {
+  position: relative;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-block-size: var(--header-height);
+  padding-inline-end: var(--space-4);
   font-family: var(--font-ui);
   background: var(--color-surface-raised);
-  /* The Kraków blue as a rule under the header. */
   border-block-end: 0.25rem solid var(--color-accent);
-}
-
-.site-header__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2) var(--space-5);
-  padding-block: var(--space-3);
 }
 
 .site-name {
@@ -124,8 +124,7 @@ main,
   flex: 1 1 auto;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: center;
-  gap: var(--space-1) var(--space-4);
+  gap: 0 var(--space-4);
   margin: 0;
   max-inline-size: none;
 }
@@ -139,6 +138,65 @@ main,
   text-decoration: none;
 }
 
+/* The menu button: a grey square as tall as the header, with the icon in a disc above the word. */
+.menu-opener {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.125rem;
+  inline-size: var(--header-height);
+  block-size: var(--header-height);
+  padding: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 0;
+  cursor: pointer;
+}
+
+.menu-opener:focus-visible {
+  outline-offset: -3px;
+}
+
+/* The disc lights up under the pointer and while pressed. */
+.menu-opener__icons {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 50%;
+  transition: background-color 200ms ease-out;
+}
+
+.menu-opener:hover .menu-opener__icons,
+.menu-opener[aria-expanded='true'] .menu-opener__icons {
+  background: var(--color-surface-raised);
+}
+
+/* Two icons in one place. They cross-fade with a change of scale and blur, so the swap reads as one movement. */
+.menu-opener__icons .icon {
+  grid-area: 1 / 1;
+  transition-property: opacity, scale, filter;
+  transition-duration: var(--duration-base);
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.menu-opener__close,
+.menu-opener[aria-expanded='true'] .menu-opener__open {
+  opacity: 0;
+  scale: 0.25;
+  filter: blur(4px);
+}
+
+.menu-opener[aria-expanded='true'] .menu-opener__close {
+  opacity: 1;
+  scale: 1;
+  filter: blur(0);
+}
+
 /* Data caption style: the interface font, small and muted. Used for the city name, notes and provenance lines. */
 .site-city,
 .note,
@@ -148,51 +206,46 @@ main,
   color: var(--color-text-muted);
 }
 
-.language-toggle {
-  display: flex;
-  gap: var(--space-2);
-}
-
+/*
+  Buttons. Secondary: white with a blue border and blue text. Primary, and the chosen item of a group: filled blue
+  with white text. Under the pointer the blue turns lighter. Only the colours change, over a short time.
+*/
 .language-toggle button,
 .error-message button,
 .button-secondary,
+.button-primary,
 .pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   min-block-size: var(--target);
   padding-inline: var(--space-4);
+  font-family: var(--font-ui);
   font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-accent);
   background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
+  border: 0.125rem solid var(--color-accent);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  /* Background, text and border change together, so none of them snaps while another fades. */
-  transition-property: background-color, color, border-color, scale;
-  transition-duration: var(--duration-fast);
+  transition-property: background-color, color, border-color;
+  transition-duration: 150ms;
   transition-timing-function: ease-out;
-}
-
-/* A pressed button shrinks a little: feedback before the result arrives. The duration is zero under reduced motion. */
-.language-toggle button:active,
-.error-message button:active,
-.button-secondary:active,
-.pill:active,
-.button-primary:active {
-  scale: 0.96;
 }
 
 .language-toggle button:hover,
 .error-message button:hover,
 .button-secondary:hover,
 .pill:hover {
-  background: var(--color-surface);
+  color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 
 /*
-  The chosen item turns bold. Bold text is wider, so each of these buttons holds a hidden bold copy of its label
-  (from data-label) in the same grid cell. The button is always as wide as its bold label and its neighbours never move.
+  The buttons of a group keep one weight, so choosing one never moves its neighbours.
+  The grid keeps the hidden copy of the label that older markup relies on in the same cell.
 */
 button.reserve-bold {
   display: inline-grid;
@@ -211,37 +264,30 @@ button.reserve-bold {
   pointer-events: none;
 }
 
-/* The chosen language and the chosen map view are filled and bold, so they do not rely on colour alone. */
+/* Primary button, and the chosen language or map view: filled. The fill is a difference of shape and tone, with the state also in the markup. */
+.button-primary,
 .language-toggle button[aria-pressed='true'],
 .pill[aria-pressed='true'] {
-  font-weight: 700;
   color: var(--color-accent-contrast);
   background: var(--color-accent);
   border-color: var(--color-accent);
 }
 
-.pill {
-  border-radius: var(--radius-pill);
+.button-primary:hover,
+.language-toggle button[aria-pressed='true']:hover,
+.pill[aria-pressed='true']:hover {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 
 .button-primary {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--target);
   padding-inline: var(--space-5);
-  font-family: var(--font-ui);
-  font-weight: 700;
-  text-decoration: none;
-  color: var(--color-accent-contrast);
-  background: var(--color-accent);
-  border-radius: var(--radius-pill);
-  transition-property: scale;
-  transition-duration: var(--duration-fast);
-  transition-timing-function: ease-out;
 }
 
-.button-primary:hover {
-  text-decoration: underline;
+.language-toggle {
+  display: flex;
+  gap: var(--space-2);
 }
 
 /* A button that reads as a link: the district names in the list. */
@@ -411,24 +457,19 @@ main:focus {
   cursor: pointer;
 }
 
-/* The fill carries a light halo. The dark line is drawn on top of it. One of the two shows on every step of the ramp. */
-.map-district__fill {
-  stroke: var(--color-surface-raised);
-  stroke-width: 5;
+/* One even outline around every district: a hairline that keeps its width at every size of the map. */
+.map-district path {
+  stroke: var(--color-text);
+  stroke-width: 1px;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
   transition: fill var(--duration-base);
 }
 
-.map-district__line {
-  fill: none;
-  stroke: var(--color-text);
-  stroke-width: 1.5;
-  stroke-linejoin: round;
-}
-
-.map-district text {
+/* The district's name. Dark on the pale steps, light on the deep ones. */
+.map-label {
   font-family: var(--font-ui);
-  font-size: 30px;
+  font-size: 15px;
   font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
@@ -436,37 +477,43 @@ main:focus {
   fill: var(--color-text);
 }
 
-.map-district--c1 .map-district__fill {
-  fill: var(--color-map-ramp1);
-}
-
-.map-district--c2 .map-district__fill {
-  fill: var(--color-map-ramp2);
-}
-
-.map-district--c3 .map-district__fill {
-  fill: var(--color-map-ramp3);
-}
-
-.map-district--c4 .map-district__fill {
-  fill: var(--color-map-ramp4);
-}
-
-.map-district--c5 .map-district__fill {
-  fill: var(--color-map-ramp5);
-}
-
-.map-district--c4 text,
-.map-district--c5 text {
+.map-label--light {
   fill: var(--color-accent-contrast);
 }
 
+/* On a narrow screen the names would be too small to read, so the list carries them. */
+@media (max-width: 40rem) {
+  .map-labels {
+    display: none;
+  }
+}
+
+.map-district--c1 path {
+  fill: var(--color-map-ramp1);
+}
+
+.map-district--c2 path {
+  fill: var(--color-map-ramp2);
+}
+
+.map-district--c3 path {
+  fill: var(--color-map-ramp3);
+}
+
+.map-district--c4 path {
+  fill: var(--color-map-ramp4);
+}
+
+.map-district--c5 path {
+  fill: var(--color-map-ramp5);
+}
+
 /* Values on their way: a plain fill. The hatch is kept for "no data" only. */
-.map-district--loading .map-district__fill {
+.map-district--loading path {
   fill: var(--color-surface-raised);
 }
 
-.map-district--none .map-district__fill {
+.map-district--none path {
   fill: url('#map-no-data');
 }
 
@@ -479,13 +526,13 @@ main:focus {
   stroke-width: 6;
 }
 
-/* Hover and the chosen district are shown by the outline, never by a new colour: medium for hover, thick for the chosen one. */
-.map-district:hover .map-district__line {
-  stroke-width: 3.5;
+/* Hover and the chosen district are shown by a thicker outline, never by a new colour: a little for hover, more for the chosen one. */
+.map-district:hover path {
+  stroke-width: 2px;
 }
 
-.map-district[aria-pressed='true'] .map-district__line {
-  stroke-width: 6;
+.map-district[aria-pressed='true'] path {
+  stroke-width: 3.5px;
 }
 
 .map-district:focus {
@@ -493,10 +540,10 @@ main:focus {
 }
 
 /* Keyboard focus: a thick ring in the focus colour, dashed so it also differs in shape from the chosen outline. */
-.map-district:focus-visible .map-district__line {
+.map-district:focus-visible path {
   stroke: var(--color-focus);
-  stroke-width: 7;
-  stroke-dasharray: 16 7;
+  stroke-width: 4px;
+  stroke-dasharray: 8 4;
 }
 
 .map-legend {
@@ -668,7 +715,8 @@ th,
 td {
   padding: var(--space-2) var(--space-3);
   text-align: start;
-  vertical-align: top;
+  /* A row can hold a tall control (a district name is a 44 pixel target), so its cells share one middle line. */
+  vertical-align: middle;
   border-block-end: 1px solid var(--color-border);
 }
 
@@ -900,48 +948,32 @@ summary:hover {
 /* Icons are line drawings in the text colour, sized with the text beside them. */
 .icon {
   flex: none;
-  inline-size: 1.25em;
-  block-size: 1.25em;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
 }
 
-/* A button with an icon and a word: the menu button and the close button. */
-.icon-button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-block-size: var(--target);
-  padding-inline: var(--space-3);
-  font-size: var(--text-sm);
-  font-weight: 700;
-  color: var(--color-text);
-  background: none;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition-property: background-color, scale;
-  transition-duration: var(--duration-fast);
-  transition-timing-function: ease-out;
-}
-
-.icon-button:hover {
-  background: var(--color-surface);
-}
-
-.icon-button:active {
-  scale: 0.96;
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /*
-  The menu: a sheet that slides in from the left over a dimmed page. Only the properties that change are animated,
-  and the durations are zero under reduced motion. Closed, it is invisible and inert.
+  The menu: a grey panel that opens from the left edge, under the header. Sections of plain links are divided by a
+  line. Only translate and visibility are animated; the durations are zero under reduced motion. Closed, it is
+  invisible and inert.
 */
 .site-menu {
   position: fixed;
-  inset: 0;
+  inset: var(--header-height) 0 0 0;
   z-index: 10;
   visibility: hidden;
   font-family: var(--font-ui);
-  transition: visibility 0s linear var(--duration-base);
+  font-size: var(--text-base);
+  transition: visibility 0s linear 300ms;
 }
 
 .site-menu.is-open {
@@ -949,16 +981,10 @@ summary:hover {
   transition-delay: 0s;
 }
 
-.site-menu__backdrop {
+/* The area beside the panel: a click there closes the menu. The page stays visible, as nothing dims it. */
+.site-menu__outside {
   position: absolute;
   inset: 0;
-  background: var(--color-text);
-  opacity: 0;
-  transition: opacity var(--duration-base) ease-out;
-}
-
-.site-menu.is-open .site-menu__backdrop {
-  opacity: 0.45;
 }
 
 .site-menu__panel {
@@ -966,149 +992,90 @@ summary:hover {
   inset-block: 0;
   inset-inline-start: 0;
   box-sizing: border-box;
-  inline-size: min(26rem, 100%);
+  inline-size: min(20rem, 100%);
+  padding-block-end: var(--space-7);
   overflow-y: auto;
   background: var(--color-surface);
   box-shadow: var(--shadow-menu);
-  translate: -100% 0;
-  transition: translate var(--duration-base) cubic-bezier(0.2, 0, 0, 1);
+  translate: -105% 0;
+  transition: translate 300ms ease;
 }
 
 .site-menu.is-open .site-menu__panel {
   translate: 0 0;
 }
 
-.site-menu__top {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-surface-raised);
+.site-menu__panel:focus {
+  outline: none;
 }
 
-.site-menu__name {
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--color-accent);
-}
-
-/* The search block: two stacked rows in one frame, the word first, then the field. */
-.site-menu__search {
+.site-menu__section {
+  position: relative;
   margin: 0;
-  padding: 0 var(--space-4) var(--space-4);
-  background: var(--color-surface-raised);
-  border-block-end: 1px solid var(--color-border);
+  padding: var(--space-3) 0;
+  list-style: none;
 }
 
-.site-menu__field {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  box-sizing: border-box;
-  min-block-size: 3.25rem;
-  margin: 0;
-  padding-inline: var(--space-4);
-  font-size: var(--text-base);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-strong);
+/* The line between two sections, set in from both edges. */
+.site-menu__section + .site-menu__section::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--space-5) var(--space-4);
+  block-size: 1px;
+  background: var(--color-border);
 }
 
-.site-menu__field + .site-menu__field {
-  border-block-start: 0;
-}
-
-.site-menu__field label,
-.site-menu__field span:first-child {
-  font-weight: 700;
-}
-
-.site-menu__field input {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  min-block-size: var(--target);
-  font: inherit;
-  color: var(--color-text);
-  background: none;
-  border: 0;
-}
-
-.site-menu__field .icon {
-  color: var(--color-accent);
-}
-
-/* A group of links: an uppercase label in the accent colour, a chevron that turns when the group is open, a hairline between groups. */
-.site-menu details {
-  margin-inline: var(--space-4);
-  font-size: var(--text-base);
-  border-block-end: 1px solid var(--color-border);
-}
-
-.site-menu summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  inline-size: auto;
-  min-block-size: 3.5rem;
+.site-menu__section--secondary {
   font-size: var(--text-sm);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  list-style: none;
-  color: var(--color-accent);
 }
 
-.site-menu summary::-webkit-details-marker {
-  display: none;
-}
-
-.site-menu summary:hover {
-  text-decoration: none;
-  background: var(--color-surface-raised);
-}
-
-.site-menu summary .icon {
-  color: var(--color-text);
-  transition: rotate var(--duration-fast) ease-out;
-}
-
-.site-menu details[open] summary .icon {
-  rotate: 180deg;
-}
-
-.site-menu ul {
-  margin: 0 0 var(--space-3);
-  padding: 0;
-  list-style: none;
-}
-
-.site-menu details p {
-  margin-inline-start: var(--space-4);
-}
-
-.site-menu li a {
+.site-menu__section a {
   display: flex;
   align-items: center;
-  min-block-size: var(--target);
-  padding-inline: var(--space-4);
+  min-block-size: 2.5rem;
+  padding-inline: var(--space-5);
   text-decoration: none;
   color: var(--color-text);
-  border-inline-start: 0.25rem solid transparent;
-  transition: background-color var(--duration-fast) ease-out;
+  transition: color 150ms ease-out;
 }
 
-.site-menu li a:hover {
-  background: var(--color-surface-raised);
+.site-menu__section a:hover {
+  color: var(--color-accent-hover);
 }
 
-/* The current page: a bar at the edge and bold text, not colour alone. */
-.site-menu li a[aria-current='page'] {
+/* The focus ring sits inside the row, so the edge of the panel does not cut it. */
+.site-menu__section a:focus-visible {
+  outline-offset: -3px;
+}
+
+/* The current page: a filled row with light text, and aria-current in the markup. */
+.site-menu__section a[aria-current='page'] {
   font-weight: 700;
-  border-inline-start-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+}
+
+.site-menu__section a[aria-current='page']:focus-visible {
+  outline-color: var(--color-focus-on-accent);
+}
+
+/* The close button at the end of the menu: off screen until it has the focus. */
+.site-menu__close {
+  position: absolute;
+  inset-inline-start: -200vw;
+  font-size: var(--text-sm);
+}
+
+.site-menu__close:focus {
+  position: static;
+  margin: var(--space-3) var(--space-5);
+  min-block-size: var(--target);
 }
 
 /*
   The footer: the site name and its pages in a narrow column on the left; on the right a large sentence,
-  a line between two hairlines, then columns of links and credit lines under uppercase labels.
+  a line between two hairlines, then the sources under an uppercase label, each linked to where the data comes from.
 */
 .site-footer {
   font-family: var(--font-ui);
@@ -1118,10 +1085,13 @@ summary:hover {
 }
 
 .site-footer__inner {
+  box-sizing: border-box;
   display: grid;
   gap: var(--space-6);
-  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
-  padding-block: var(--space-6) var(--space-7);
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  max-inline-size: var(--container);
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4) var(--space-7);
 }
 
 @media (max-width: 48rem) {
@@ -1144,13 +1114,17 @@ summary:hover {
 }
 
 .site-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: 2rem;
+  transition: color 150ms ease-out;
+}
+
+.site-footer a:hover {
+  color: var(--color-accent-hover);
 }
 
 .site-footer__side a {
-  font-size: var(--text-base);
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2rem;
 }
 
 .site-footer__tagline {
@@ -1168,14 +1142,7 @@ summary:hover {
   border-block: 1px solid var(--color-border);
 }
 
-.site-footer__columns {
-  display: grid;
-  gap: var(--space-5) var(--space-6);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  font-size: var(--text-sm);
-}
-
-/* Column labels: uppercase, wide tracking, in the accent colour. They are not section headings of the page, so no bar. */
+/* The column label: uppercase, wide tracking, in the accent colour. It is not a section heading of the page, so no bar. */
 .site-footer h2 {
   margin-block: 0 var(--space-3);
   padding-inline-start: 0;
@@ -1187,23 +1154,24 @@ summary:hover {
   border-inline-start: 0;
 }
 
-.site-footer__districts {
-  columns: 2;
-  column-gap: var(--space-5);
+.site-footer__sources {
+  columns: 2 18rem;
+  column-gap: var(--space-6);
+  font-size: var(--text-sm);
 }
 
-.site-footer__columns a {
-  text-decoration: none;
-  color: var(--color-text-muted);
-}
-
-.site-footer__columns a:hover {
-  text-decoration: underline;
-}
-
-.site-footer section li {
+.site-footer__sources li {
   padding-block: var(--space-1);
+  break-inside: avoid;
   color: var(--color-text-muted);
+}
+
+.site-footer__sources li {
+  line-height: 1.7;
+}
+
+.site-footer__more {
+  margin-inline-start: var(--space-2);
 }
 
 /* Find a district: the form card and the ranking card side by side on a wide screen. */
@@ -1260,16 +1228,6 @@ summary:hover {
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-block: var(--space-4) 0;
-}
-
-button.button-primary {
-  font-size: var(--text-base);
-  border: 0;
-  cursor: pointer;
-}
-
-a.button-secondary {
-  text-decoration: none;
 }
 
 .drivers {

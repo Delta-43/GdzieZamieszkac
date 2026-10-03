@@ -17,7 +17,7 @@ test.each(CONTRAST_PAIRS)('$fg on $bg reaches $min:1 ($use)', ({ fg, bg, min }) 
 })
 
 test('every colour that can sit on a background is covered by a contrast pair', () => {
-  const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent', ...MAP_RAMP])
+  const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent', 'accentHover', ...MAP_RAMP])
   // "border" is a decorative hairline and carries no meaning, so it is the one colour with no requirement.
   const exempt = new Set<string>(['border', 'noDataStripe'])
   const covered = new Set<string>(CONTRAST_PAIRS.map((pair) => pair.fg))
@@ -32,13 +32,12 @@ test('the map ramp gets darker with every step, so its order does not depend on 
   expect(new Set(againstWhite).size).toBe(5)
 })
 
-test('a district outline shows on every map step: the dark line or its light halo reaches 3:1', () => {
-  // The outline is a dark line (text) on a light halo (surfaceRaised). On a pale step the line shows, on a deep step the halo does.
-  for (const step of MAP_RAMP) {
-    const best = Math.max(contrastRatio(colors.text, colors[step]), contrastRatio(colors.surfaceRaised, colors[step]))
-    expect(best).toBeGreaterThanOrEqual(UI_MIN)
-  }
-  expect(contrastRatio(colors.text, colors.surfaceRaised)).toBeGreaterThanOrEqual(UI_MIN)
+test('a district name on the map reaches 4.5:1 on every step of the ramp', () => {
+  // The name is dark on the three pale steps and light on the two deep ones.
+  MAP_RAMP.forEach((step, index) => {
+    const ink = index < 3 ? colors.text : colors.accentContrast
+    expect(contrastRatio(ink, colors[step])).toBeGreaterThanOrEqual(TEXT_MIN)
+  })
 })
 
 test('the theme stylesheet defines a custom property for every colour', () => {
@@ -51,7 +50,7 @@ test('the theme stylesheet defines a custom property for every colour', () => {
 })
 
 test('no colour is written outside the theme folder', () => {
-  const sources = import.meta.glob(['/src/**/*.{css,ts,tsx}', '!/src/theme/**', '!/src/api/schema.d.ts', '!/src/**/*.test.*'], {
+  const sources = import.meta.glob(['/src/**/*.{css,ts,tsx}', '!/src/theme/**', '!/src/api/schema.d.ts', '!/src/api/citySchema.d.ts', '!/src/**/*.test.*'], {
     query: '?raw',
     import: 'default',
     eager: true,

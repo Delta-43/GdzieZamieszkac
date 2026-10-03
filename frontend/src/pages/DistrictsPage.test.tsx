@@ -43,28 +43,35 @@ test('while the values are loading, districts say so and are not shown as "no da
   expect(within(map).getByRole('button', { name: 'Delta: brak danych' })).toHaveClass('map-district--none')
 })
 
-test('the list tab holds everything the map shows, with labels from the catalogue', async () => {
+test('the list is short: each district with its overall score and the value shown on the map', async () => {
   mockFetch(districtsApi)
   renderApp(PAGE)
 
   const table = await screen.findByRole('table')
   const rowOf = (name: string) => within(table).getByRole('rowheader', { name: new RegExp(`^${name}`) }).closest('tr') as HTMLElement
-  await within(table).findByText('100 test', { selector: 'td:nth-child(2)' })
+  await within(table).findByText('100 test', { selector: 'td:nth-child(3)' })
   expect(screen.getByRole('tab', { name: 'Lista' })).toHaveAttribute('aria-selected', 'true')
-  for (const header of ['Dzielnica', 'Test sale label', 'Pozycja', 'Przedział na mapie', 'Wskaźnik jakości życia (0–100)', 'Powierzchnia (km²)', 'Test rent label']) {
-    expect(within(table).getAllByRole('columnheader', { name: header }).length).toBeGreaterThan(0)
-  }
+  expect(within(table).getAllByRole('columnheader').map((header) => header.textContent)).toEqual(['Dzielnica', 'Wynik ogólny (0–100) szacowane', 'Test sale label'])
   const alpha = rowOf('Alpha')
-  // The score and the area have no display string yet: shown as sent, with a decimal comma in Polish.
+  // The score has no display string yet: shown as sent, with a decimal comma in Polish.
   expect(alpha).toHaveTextContent('61,5')
-  expect(alpha).toHaveTextContent('10,5')
   expect(alpha).toHaveTextContent('100 test')
   expect(alpha).toHaveTextContent('obserwowane')
   // The data kind badge is a shape and a word: the shape is an SVG hidden from screen readers.
   expect(alpha.querySelector('.data-kind svg[aria-hidden="true"]')).not.toBeNull()
-  expect(alpha).toHaveTextContent('Pozycja 1 z 3')
+  // A district without a value, or without a score, says so. It never shows a zero.
   expect(rowOf('Delta')).toHaveTextContent('brak danych')
   expect(rowOf('Gamma')).toHaveTextContent('brak danych')
+})
+
+test('with the overall score on the map the list has one value column, and the map prints the district names', async () => {
+  mockFetch(districtsApi)
+  const { container } = renderApp('/districts')
+
+  const table = await screen.findByRole('table', { name: 'Dzielnice: wynik ogólny' })
+  expect(within(table).getAllByRole('columnheader')).toHaveLength(2)
+  const names = [...container.querySelectorAll('.map-label')].map((text) => text.textContent)
+  expect(names.sort()).toEqual(['Alpha', 'Beta', 'Delta', 'Gamma'])
 })
 
 test('the legend and the provenance say what the colours mean, in words', async () => {
@@ -72,7 +79,7 @@ test('the legend and the provenance say what the colours mean, in words', async 
   renderApp(PAGE)
 
   expect(await screen.findByText('Przedział 1: 100 test')).toBeInTheDocument()
-  expect(screen.getByText('Ciemniejszy kolor i wyższy numer oznaczają wyższą wartość.')).toBeInTheDocument()
+  expect(screen.getByText('Ciemniejszy kolor oznacza wyższą wartość.')).toBeInTheDocument()
   expect(screen.getByText('Pole kreskowane: brak danych')).toBeInTheDocument()
   expect(screen.getByText('Test source A')).toBeInTheDocument()
   expect(screen.getByText('2026-09-30')).toBeInTheDocument()

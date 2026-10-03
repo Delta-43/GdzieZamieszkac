@@ -16,15 +16,14 @@ This is not a listings site. It shows data about districts, not offers.
 ## Status
 
 **Tasks F1 to F6 are done.** The project builds, lints and tests, and the API types are generated from the contract.
-The shared parts exist: skip link, header with the city name from `/meta`, a menu that slides in from the left (district search first, then groups of links),
-language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages, every district and the credit line of every source.
+The shared parts exist: skip link, header with the city name from `/meta`, a menu that opens from the left under the header (the pages, then the districts),
+language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages and the credit line of every source, linked to where the data comes from.
 The pages are home, districts (map and list), one district, find a district, and "page not found". The menu and the footer list only pages that exist (`src/lib/pages.ts`), so they grow with each task.
 The other screens are tasks F7 and F8 in `TODO.md`.
 
 On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
 The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
-from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value, and it prints its class number,
-so nothing depends on colour. A panel beside the map has two tabs: "Lista" is the table with the same values, and "Szczegóły" shows the chosen district:
+from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value and prints its name, with one even outline around it. A panel beside the map has two tabs: "Lista" is a short table (the overall score, and the value on the map), and "Szczegóły" shows the chosen district:
 its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
 
 The page of one district (`/districts/<code>`) shows the area, the livability score, the area report with its AI label, the price history, and every metric by category.
@@ -64,7 +63,7 @@ Run them from this folder. Tested with Node 26 and npm 11.
 | `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
 | `npm run typecheck` | Checks the types only. |
 | `npm test` | Runs the tests once, with an automated accessibility check on each rendered page. |
-| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml`. Run it after every contract change and commit the result. |
+| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml` and `src/api/citySchema.d.ts` from `../city-service/openapi.yaml`. Run it after every contract change and commit the result. |
 | `npm run api:check` | Fails when the committed types differ from a fresh run. |
 | `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
 
@@ -149,6 +148,8 @@ Every user shares one rate limit, about 600 requests a minute, so cache (the ans
 | Variable | Meaning |
 |---|---|
 | `VITE_DEV_API` | Development only. The address the dev server forwards `/v1` to. Defaults to `http://localhost:8000`. Never shipped. |
+| `VITE_DEV_CITY` | Development only. The address the dev server forwards `/v1/ai-report` and `/v1/feedback` to (the city service). Defaults to `http://localhost:8100`. Never shipped. |
+| `VITE_CITY_API_URL` | Build argument. Origin of the city service. Empty means the same origin as the page. |
 | `DEV_ALLOWED_HOSTS` | Development only. Extra host names the dev server answers to, comma separated. Names ending in `.ts.net` are always allowed. |
 | `VITE_API_URL` | Build argument. Origin of the API. Empty means the same origin as the page. The client adds the `/v1` prefix. |
 

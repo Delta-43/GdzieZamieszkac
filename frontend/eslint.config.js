@@ -5,8 +5,8 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  // The API types are generated from ../backend/openapi.yaml and are never edited by hand.
-  { ignores: ['dist', 'coverage', 'src/api/schema.d.ts'] },
+  // The API types are generated from the two contracts (../backend/openapi.yaml, ../city-service/openapi.yaml) and are never edited by hand.
+  { ignores: ['dist', 'coverage', 'src/api/schema.d.ts', 'src/api/citySchema.d.ts'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   jsxA11y.flatConfigs.strict,
