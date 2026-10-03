@@ -86,6 +86,7 @@ TODO.md                   priorities and tasks for every module
 ON_SITE_CHANGELOG.md      what changed during the event
 LICENSE                   proprietary copyright notice
 CODEOWNERS                who reviews what
+presentation.html         the HackYeah pitch deck; open it in a browser
 ```
 
 ## Team
