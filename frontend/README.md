@@ -15,8 +15,27 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Not started.** This folder holds guide files and empty folders. There is no `package.json` yet.
-You create the project yourself. The guide files tell you what to build and what to avoid.
+**Task F1 is done: the project exists.** It builds, lints and tests, and the API types are generated from the contract.
+The only screen is a placeholder that shows the city name and the district count from `/meta`, to prove the app reaches the API.
+The layout, the language toggle, the theme and the real screens are tasks F2 to F8 in `TODO.md`.
+
+## Commands
+
+Run them from this folder. Tested with Node 26 and npm 11.
+
+| Command | What it does |
+|---|---|
+| `npm install` | Installs the packages. |
+| `npm run dev` | Starts the dev server on port 5173, on the network. It forwards `/v1` to `VITE_DEV_API`. |
+| `npm run build` | Checks the types and builds the app into `dist/`. |
+| `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
+| `npm run typecheck` | Checks the types only. |
+| `npm test` | Runs the tests once, with an automated accessibility check on each rendered page. |
+| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml`. Run it after every contract change and commit the result. |
+| `npm run api:check` | Fails when the committed types differ from a fresh run. |
+| `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
+
+Copy `.env.example` to `.env.local` and put the API address there. Git ignores `.env.local`, so the address stays private.
 
 | File | What it covers |
 |---|---|
@@ -97,6 +116,7 @@ cloudflared tunnel --url http://localhost:8000      # or another tunnel tool
 | Variable | Meaning |
 |---|---|
 | `VITE_DEV_API` | Development only. The address the dev server forwards `/v1` to. Defaults to `http://localhost:8000`. Never shipped. |
+| `DEV_ALLOWED_HOSTS` | Development only. Extra host names the dev server answers to, comma separated. Names ending in `.ts.net` are always allowed. |
 | `VITE_API_URL` | Build argument. Origin of the API. Empty means the same origin as the page. The client adds the `/v1` prefix. |
 
 Every `VITE_` variable is public. Never put a secret in one.
