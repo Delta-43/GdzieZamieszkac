@@ -1,3 +1,4 @@
+import type { components as cityComponents } from '../api/citySchema'
 import type { components } from '../api/schema'
 
 // Test-only values, obviously made up. They are typed by the contract and never shown to users.
@@ -224,4 +225,21 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)
   if (pathname.startsWith('/v1/metrics/')) return jsonResponse({ ...metricValuesFixture, key: 'other', values: [] })
   return jsonResponse({ type: 'about:blank', title: 'Not found', status: 404 }, 404)
+}
+
+/** The AI report of the city service, as POST /v1/ai-report answers it. */
+export const aiReportFixture: cityComponents['schemas']['AiReport'] = {
+  lang: 'pl',
+  ai_generated: true,
+  label: 'Test AI label from the API.',
+  model: 'test-model',
+  generated_at: '2026-10-01T12:00:00+00:00',
+  report: 'Test AI report first paragraph.\n\nTest AI report <b>second</b> paragraph.',
+  basis: { persona: null, weights: null, note: 'Test AI report note from the API.' },
+  districts: [
+    { rank: 1, code: 'delta', name: 'Delta', score: 80.5 },
+    { rank: 2, code: 'gamma', name: 'Gamma', score: 60 },
+    { rank: 3, code: 'beta', name: 'Beta', score: 40 },
+  ],
+  facts: ['Test fact one.', 'Test fact two.'],
 }

@@ -37,8 +37,8 @@ The city service (`../city-service/`, contract `../city-service/openapi.yaml`) w
 | ID | Task | Done when | Status |
 |---|---|---|---|
 | C4-0 | Types from the city service contract, a second API client, the dev proxy | `npm run api:check` covers both contracts | Done on `frontend/c4-city-service` |
-| C4-1 | AI report card on the find page: a text field, a notice that the text goes to a model provider and is not stored, a button; then the API's label, the text, the three districts and the facts as the basis | The AI label from the API is visible. A `502` or `503` shows a message and the page still works. The ranking shown is the API's. | Next |
-| C4-2 | Feedback page with two forms: rent paid, and a data problem | The API's "unverified, not published" note is shown before sending. Field errors are named in text. Nothing is stored in the browser. | After C4-1 |
+| C4-1 | AI report card on the find page: a text field, a notice that the text goes to a model provider and is not stored, a button; then the API's label, the text, the three districts and the facts as the basis | The AI label from the API is visible. A `502` or `503` shows a message and the page still works. The ranking shown is the API's. | Built, in review (issue #42). The facts list is shown in the English view only until #38 is fixed. |
+| C4-2 | Feedback page with two forms: rent paid, and a data problem | The API's "unverified, not published" note is shown before sending. Field errors are named in text. Nothing is stored in the browser. | Next |
 | C4-3 | Notices label: "to be implemented after city approval" | A short, clearly marked section. No endpoint is called and no notice is invented. | After C4-2 |
 
 ## Small fixes waiting

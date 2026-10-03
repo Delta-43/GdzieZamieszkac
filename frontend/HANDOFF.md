@@ -15,7 +15,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **C4-1, the AI report card** on the find page. Decided by Aryna: build it first.
+1. **C4-1, the AI report card** on the find page. Built on `frontend/c4-ai-report` (issue #42): `src/components/AiReportCard.tsx` and `src/api/useAiReport.ts`. The rules it follows:
    - Call `POST /v1/ai-report` of the city service with `requirements`, `lang`, and the weights on the sliders (or nothing for the default ranking). Use `src/api/cityClient.ts`.
    - Before the first request, say that the typed text goes to a model provider and is not stored (`../docs/CITY_SERVICE_PLAN.md`, section 2).
    - Show the API's `label` as given: it is the AI label. Show `report` as plain text in paragraphs, never as HTML. Show the three `districts` and `basis.note`.
@@ -57,7 +57,8 @@ Contract gaps we work around (raise as `contract` issues if they still matter): 
 - **The dev server loses its settings when a branch without `frontend/vite.config.ts` is checked out** (an old `main` or `develop`). It keeps running without the proxy, and every API call then returns the page itself. Restart it after such a switch. Update a local branch with `git fetch origin develop:develop` to avoid the checkout.
 - **Merging.** In the agent's session `gh pr merge` was refused by the tool's permission check. Open the pull request, state that the section 7 conditions hold, and let the person merge with `gh pr merge <n> --merge`.
 - **Stacked branches.** Several tasks were built on top of each other before the first was merged. Start each new task from a current `develop`.
-- **Screenshots.** Headless Chrome will not render narrower than about 500 pixels, so 320 pixels was never checked. Check it by hand.
+- **Screenshots.** A headless Chrome window will not go narrower than about 500 pixels. Setting the width through the DevTools protocol (`Emulation.setDeviceMetricsOverride`) does render 320 pixels. The first such check found that the header's language toggle makes every page scroll sideways at 320 pixels (issue #45).
+- **Tests under load.** A few tests wait at most one second for the page. They fail now and then when the machine is busy and pass when run again.
 - **React runs effects twice in development.** An effect that acts "after navigation" must compare the address with the last one (see `components/Layout.tsx`).
 
 ## Rules that are easy to break
