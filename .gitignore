@@ -13,3 +13,7 @@ venv/
 .DS_Store
 city-service/data/
 *.sqlite
+*.swp
+.*.swp
+*.swo
+*~
