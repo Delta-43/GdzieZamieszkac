@@ -1,0 +1,45 @@
+name: Bug
+description: Something in the app or the API does not work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is public. Do not paste secrets, tokens, database URLs, personal data or private network addresses.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where is the bug?
+      options: [Frontend, Backend or API, Data, Polish text, Not sure]
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Page or request
+      description: The page and language, or the API path with its parameters.
+      placeholder: "District detail, Polish. Or GET /v1/districts/stare-miasto?lang=pl"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected and what happened
+    validations:
+      required: true
+  - type: input
+    id: request-id
+    attributes:
+      label: X-Request-ID
+      description: For an API problem, the `X-Request-ID` response header. The server logs it, so we can find the request.
+  - type: textarea
+    id: context
+    attributes:
+      label: Browser, device and screenshot
+      description: Add a screenshot if it helps. For an accessibility bug, name the tool you used (keyboard, screen reader, zoom).
