@@ -19,8 +19,12 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 ## 3 October 2026
 
 - Created this repository with a clean history.
+- Added `REVIEW.md` (review procedure and agent routine) and pointers to it in the three `AGENTS.md` files, so reviewers and agents follow one process. No imported code changed. The pointers add lines to `backend/AGENTS.md`, which is imported.
 - Wrote the frontend guide files: `frontend/AGENTS.md`, `README.md`, `REQUIREMENTS.md`, `API.md`, `ACCESSIBILITY.md`, plus empty folders for the app.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
 - Added `presentation.html`, the HackYeah pitch deck for the Kraków edition. It is based on the team briefing deck from before the event, rewritten for the final idea: Kraków only, the offer to the city, what was built when, and the disclosure of AI use. It changes no imported code.
+- Added `TODO.md` with the MVP priorities, `docs/IDEA.md`, `docs/README.md` and `docs/data-review/`.
+- Added `frontend/TODO.md` and `frontend/REVIEW_CHECKLIST.md`, and updated the frontend README, AGENTS and REQUIREMENTS with the start steps, the API access plan and the priority order.
+- Added the next steps for the MVP to `backend/README.md`. No backend code changed.

@@ -1,0 +1,26 @@
+name: Contract change
+description: The frontend needs something that `backend/openapi.yaml` does not give yet.
+labels: ["contract"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The contract changes first, in a pull request, and then the code. Check `frontend/API.md` first: the gap may be known.
+  - type: textarea
+    id: need
+    attributes:
+      label: What the frontend needs
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: What the contract gives today
+      description: The operation and the field, and the work-around you use meanwhile.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: The path, the field, its type, and an example value in Polish and in English if it is text.

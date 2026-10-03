@@ -76,6 +76,18 @@ per-client rate limits and a body size limit; security headers (`nosniff`, `fram
 no interactive docs or generated schema; errors as problem+json without internals (a request id links a 500 to its log line); no personal data stored or logged; dependencies pinned and checked with `pip-audit`.
 Not in the service by design: TLS, authentication (the data is public), a web application firewall. Those belong to the proxy or platform.
 
+## Next steps for the MVP
+
+The task list for the whole project is in `../TODO.md`. These tasks belong to this module.
+
+| ID | Task | Priority |
+|---|---|---|
+| B1 | Run for Kraków behind a tunnel for the frontend developers. Set `TRUSTED_PROXY_HOPS=1` so rate limits count real clients. | P0 |
+| B2 | Add `*_display` fields for the district score, area, commute minutes, recommend score and percentile, and similarity. Change the contract first. | P1 |
+| B3 | Add couple and newly married presets to `app/data/personas.json`. `unicorn-alex` reviews the Polish text. | P1 |
+| B4 | Keep the offline tests green. Record any change to imported code in `../ON_SITE_CHANGELOG.md`. | Always |
+| B5 | Design the services for the later features (personalised AI report, official notices, resident feedback, demand counts). This backend stays read-only with no internet access. Build nothing before a contract change. | After the event |
+
 ## Status (2026-10-02)
 
 Implemented: `/health`, `/meta`, `/districts`, `/districts.geojson`, `/districts/{code}` (+ `/report`, `/similar`, `/rent-vs-buy`, `/series/{key}`), `/metrics`, `/metrics/{key}/values`, `/compare`, `/personas`, `/recommend`.
