@@ -12,16 +12,18 @@ export function Footer() {
 
   return (
     <footer className="site-footer">
-      <h2>{t('footer.sources')}</h2>
-      {meta.isPending && <Loading />}
-      {meta.isError && <ErrorMessage error={meta.error} onRetry={() => void meta.refetch()} />}
-      {meta.isSuccess && (
-        <ul>
-          {credits.map((credit) => (
-            <li key={credit}>{credit}</li>
-          ))}
-        </ul>
-      )}
+      <div className="site-footer__inner">
+        <h2>{t('footer.sources')}</h2>
+        {meta.isPending && <Loading />}
+        {meta.isError && <ErrorMessage error={meta.error} onRetry={() => void meta.refetch()} />}
+        {meta.isSuccess && (
+          <ul>
+            {credits.map((credit) => (
+              <li key={credit}>{credit}</li>
+            ))}
+          </ul>
+        )}
+      </div>
     </footer>
   )
 }

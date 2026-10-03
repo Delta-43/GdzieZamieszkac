@@ -31,12 +31,15 @@ export function Layout() {
         {t('skipLink')}
       </a>
       <header className="site-header">
-        <p className="site-name">
-          <Link to="/">{t('site.name')}</Link>
-          {/* The city name comes from /meta and is never written into the code. */}
-          {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
-        </p>
-        <nav aria-label={t('nav.label')}>
+        <div className="site-header__bar">
+          <p className="site-name">
+            <Link to="/">{t('site.name')}</Link>
+            {/* The city name comes from /meta and is never written into the code. */}
+            {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
+          </p>
+          <LanguageToggle />
+        </div>
+        <nav aria-label={t('nav.label')} className="site-nav">
           <ul>
             <li>
               <NavLink to="/" end>
@@ -45,7 +48,6 @@ export function Layout() {
             </li>
           </ul>
         </nav>
-        <LanguageToggle />
       </header>
       <StaleNotice />
       <main id={MAIN_ID} ref={mainRef} tabIndex={-1}>

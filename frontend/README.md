@@ -15,11 +15,23 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Tasks F1 and F2 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+**Tasks F1, F2 and F3 are done.** The project builds, lints and tests, and the API types are generated from the contract.
 The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
 stale-data notice, loading and error states, and a footer with the credit line of every source.
 There are two pages, home and "page not found". The navigation lists only pages that exist, so it grows with each task.
-The theme tokens are task F3. Until then the styles use system colours only. The real screens are tasks F4 to F8 in `TODO.md`.
+The real screens are tasks F4 to F8 in `TODO.md`.
+
+## Theme
+
+All colours, fonts and sizes are in `src/theme/tokens.ts`. Stylesheets and components use them as CSS custom properties and never write a colour.
+`src/theme/theme.test.ts` checks every colour pair in use (4.5:1 for text, 3:1 for interface parts) and fails if a colour appears outside the theme folder.
+To put a colour on a new background, add the pair to `CONTRAST_PAIRS` first.
+
+The theme is **provisional**. It follows a design system proposal that the design library owner had not approved on 3 October 2026.
+Replace the values in `tokens.ts` when a system is approved. The contrast test will say if a new value breaks a pair.
+
+The fonts are Schibsted Grotesk and DM Mono, both under the SIL Open Font Licence 1.1. They are bundled from the
+`@fontsource-variable/schibsted-grotesk` and `@fontsource/dm-mono` packages and served with the app. Nothing loads from a third party.
 
 ## Commands
 
