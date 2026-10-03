@@ -19,6 +19,7 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 ## 3 October 2026
 
 - Created this repository with a clean history.
+- Added `frontend/BACKEND_CONTRACT.md`: how to reach the development API (the host name is shared privately), CORS, limits, Kraków data gaps and a contract summary. No imported code changed.
 - Wrote the frontend guide files: `frontend/AGENTS.md`, `README.md`, `REQUIREMENTS.md`, `API.md`, `ACCESSIBILITY.md`, plus empty folders for the app.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
