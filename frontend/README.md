@@ -14,7 +14,6 @@ You create the project yourself. The guide files tell you what to build and what
 | `REQUIREMENTS.md` | Screens, elements, states, phases and the definition of done. |
 | `API.md` | How to use the contract, with real example responses and the known gaps. |
 | `ACCESSIBILITY.md` | What WCAG 2.2 level AA means for this app, and how to test it. |
-| `HACKATHON_TRACKS.md`, `HANDOFF.md` | `Rysia`'s notes on the hackathon rules and her working agreement. They are added when her branch is merged. |
 
 ## Folder layout
 

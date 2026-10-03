@@ -21,3 +21,5 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Created this repository with a clean history.
 - Wrote the frontend guide files: `frontend/AGENTS.md`, `README.md`, `REQUIREMENTS.md`, `API.md`, `ACCESSIBILITY.md`, plus empty folders for the app.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
+- Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
+- Removed the pointers in `frontend/` to two note files that are not part of this repository.

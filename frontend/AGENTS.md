@@ -1,7 +1,6 @@
 # AGENTS.md: frontend
 
 Read this file first. Then read `README.md`, `REQUIREMENTS.md`, `API.md` and `ACCESSIBILITY.md` in this folder.
-If `HACKATHON_TRACKS.md` and `HANDOFF.md` exist here, read them too. They hold `Rysia`'s working agreement and the hackathon's judging rules.
 The API contract is `../backend/openapi.yaml`. If a rule here conflicts with the root `../AGENTS.md`, ask the coordinator.
 
 ## What this module is

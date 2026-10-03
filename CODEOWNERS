@@ -1,0 +1,3 @@
+# Review routing. Handles only. The coordinator owns everything; the frontend reviewer co-owns frontend/.
+*          @Delta-43
+/frontend/ @Delta-43 @unicorn-alex

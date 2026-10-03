@@ -78,6 +78,8 @@ docs/                     API contract notes, backend plan, data dictionary, dat
 server/migrations/krakow/ SQL that created the krakow schema
 data/sources/derived/     scoring.py, the scoring code the backend copies
 ON_SITE_CHANGELOG.md      what changed during the event
+LICENSE                   proprietary copyright notice
+CODEOWNERS                who reviews what
 ```
 
 ## Team
@@ -86,4 +88,6 @@ ON_SITE_CHANGELOG.md      what changed during the event
 
 ## Licence
 
-No licence has been chosen yet. Until the team chooses one, all rights are reserved.
+Proprietary. Copyright (c) 2026 the GdzieZamieszkać team. All rights reserved. The repository is public so that readers can look at the work.
+Publishing it does not grant a licence to copy, modify or use it. See `LICENSE`.
+Third-party data and components keep their own licences. See `docs/DATA_SOURCES.md`.
