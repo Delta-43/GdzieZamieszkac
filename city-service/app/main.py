@@ -41,12 +41,20 @@ SIZE_BANDS = ("up_to_30", "31_50", "51_70", "over_70")
 Lang = Literal["pl", "en"]
 
 
+class Weights(BaseModel):
+    """The shape of `Weights` in backend/openapi.yaml. The data API checks the keys and the 0 to 5 range and this service passes its 422 on."""
+    model_config = ConfigDict(extra="forbid")
+
+    category: dict[str, float] | None = None
+    metric: dict[str, float] | None = None
+
+
 class AiReportRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     requirements: str = Field(min_length=3, max_length=1000)
     persona: str | None = Field(default=None, max_length=40)
-    weights: dict | None = None
+    weights: Weights | None = None
     lang: Lang = "pl"
 
 
@@ -163,7 +171,7 @@ def create_app(settings: Settings | None = None, backend: BackendClient | None =
             raise ProblemError(422, "Invalid request", "Send either persona or weights, not both.")
         limited(ai_bucket)
         try:
-            weights = body.weights
+            weights = body.weights.model_dump(exclude_none=True) if body.weights else None
             if body.persona:
                 found = {p["key"]: p["weights"] for p in (await backend.personas(body.lang))["personas"]}
                 if body.persona not in found:
