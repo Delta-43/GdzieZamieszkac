@@ -64,10 +64,14 @@ Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule chang
 4. City service skeleton: config, health, rate limit, tests.
 5. AI report, then feedback.
 
-## Decisions needed
+## Decisions (3 October 2026, coordinator)
 
-1. **Model provider and key.** Which model and which account? The key stays in the environment of `city-service/`, never in the repository.
-2. **Notice sources.** Which public documents may we cite, and who checks the licences? Without real entries the endpoint ships empty.
-3. **Feedback without identity.** Is a no-identity, never-published, unverified intake acceptable for the demo? The alternative is to show the feedback screen as a concept only.
-4. **Database for feedback.** A new schema in the existing Supabase project with its own role, or a local SQLite file for the demo?
-5. **Hosting.** `city-service/` runs on the coordinator's machine behind Tailscale like the API, with a second CORS origin entry.
+1. **Model:** OpenRouter, model `z-ai/glm-5.3-flash`. The coordinator provides the key. It goes in the environment of `city-service/` (`OPENROUTER_API_KEY`), never in the repository. OpenRouter is a third party, so this is a backend call only. The frontend still calls no third party.
+2. **Notice source:** the Kraków open data portal (`otwartedane.um.krakow.pl`). **Finding:** on 3 October its 45 datasets hold no planned-project, road-works or investment dataset. The portal links the city API portal (`api.um.krakow.pl/devportal`), not checked yet. Open question below.
+3. **Feedback identity:** Gov ID gating comes later. Today reports are stored as `unverified`, nothing is published, and the interface says so.
+4. **Feedback storage:** a local SQLite file, outside the repository (`FEEDBACK_DB_PATH`), created by the service. It is git-ignored and never committed.
+5. **Hosting:** as the API: the coordinator's machine, on Tailscale, with a second CORS entry. Containers later; each service gets its own `Dockerfile`, configured by environment only, like `backend/`.
+
+## Still open
+
+- **Where the real notices come from.** Options: (a) the city API portal if it has a suitable feed; (b) one dataset from `dane.gov.pl` or the BIP of Kraków, with its licence checked; (c) ship the endpoint and the model empty, so the frontend shows "no notices published" until the city publishes. Until one is chosen, no notice entry is written.
