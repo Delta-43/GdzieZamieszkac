@@ -1,0 +1,188 @@
+{
+  "site": {
+    "name": "GdzieZamieszkać",
+    "city": "City: {{city}}"
+  },
+  "skipLink": "Skip to main content",
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "districts": "Districts on the map",
+    "menu": "Menu",
+    "close": "Close",
+    "find": "Find",
+    "findPlaceholder": "a district…",
+    "city": "City",
+    "groupPortal": "Portal",
+    "groupDistricts": "Districts",
+    "noMatch": "There is no district with that name.",
+    "findDistrict": "Find a district"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "states": {
+    "loading": "Loading the data…",
+    "retry": "Try again",
+    "error": {
+      "generic": "The data did not load. Check your internet connection and try again.",
+      "tooManyRequests": "Too many requests in a short time. Wait a moment and try again.",
+      "unavailable": "The data service is not available right now. Try again in a moment."
+    }
+  },
+  "stale": {
+    "notice": "Some data may be out of date. We still show the last checked version."
+  },
+  "footer": {
+    "sources": "Data sources",
+    "nav": "Footer navigation",
+    "tagline": "Get to know the districts before you look for a flat."
+  },
+  "home": {
+    "title": "Home",
+    "heading": "Compare the districts before you look for a flat",
+    "what": "This portal shows public data about the districts: transport, amenities, environment, prices and rents. Every number comes with its source and date.",
+    "notListings": "This is not a listings site. We show no flats for sale or rent, and no brokers.",
+    "cta": "See the districts"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "There is no page at this address.",
+    "back": "Back to the home page"
+  },
+  "dataKind": {
+    "observed": "observed",
+    "estimated": "estimated",
+    "proxy": "proxy"
+  },
+  "provenance": {
+    "dataKind": "Data kind",
+    "unit": "Unit",
+    "source": "Source",
+    "asOf": "As of"
+  },
+  "districts": {
+    "title": "Districts",
+    "heading": "Districts on the map and in the list",
+    "intro": "Pick a category or a measure to colour the map. The same values are in the list beside the map.",
+    "optionNoData": "{{label}} (no data)",
+    "unavailable": "No data for this measure.",
+    "noData": "no data",
+    "rank": "Rank {{position}} of {{of}}",
+    "higherIsBetter": "a higher value ranks better",
+    "lowerIsBetter": "a lower value ranks better",
+    "classOf": "Class {{number}} of {{count}} on the map",
+    "map": {
+      "label": "Map of the districts. Measure: {{metric}}",
+      "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
+      "districtNoData": "{{name}}: no data",
+      "districtLoading": "{{name}}: loading the data"
+    },
+    "legend": {
+      "title": "Legend",
+      "direction": "A darker colour and a higher number mean a higher value.",
+      "range": "Class {{number}}: from {{min}} to {{max}}",
+      "single": "Class {{number}}: {{value}}",
+      "noData": "Hatched area: no data"
+    },
+    "table": {
+      "region": "Table of the districts. It scrolls sideways.",
+      "caption": "Districts: {{metric}}, livability score, area and prices",
+      "district": "District",
+      "score": "Livability score (0–100)",
+      "area": "Area (km²)",
+      "rank": "Rank",
+      "class": "Class on the map",
+      "selected": "selected"
+    },
+    "colourBy": "Colour the map by",
+    "overall": "Overall score",
+    "moreMeasures": "Another measure",
+    "chooseMeasure": "— pick a measure —",
+    "categoryScore": "Category score: {{category}} (0–100)",
+    "categoryMethod": "A score from 0 to 100 that the API computes from the measures of this category only. It compares the districts of one city.",
+    "tabs": {
+      "label": "District data",
+      "list": "List",
+      "details": "Details"
+    },
+    "details": {
+      "none": "Choose a district on the map or in the list to see its details.",
+      "profile": "District profile: category scores",
+      "category": "Category",
+      "score": "Score (0–100)",
+      "classShort": "{{number}} of {{count}}",
+      "backToList": "Back to the list"
+    }
+  },
+  "report": {
+    "heading": "About the district",
+    "label": "This report was written by artificial intelligence from the data.",
+    "fallback": "This text is available in English only.",
+    "generated": "Generated: {{date}}"
+  },
+  "detail": {
+    "back": "Back to the list of districts",
+    "area": "Area",
+    "areaValue": "{{value}} km²",
+    "notFoundTitle": "There is no such district",
+    "notFoundText": "Check the address, or choose a district from the list.",
+    "fullProfile": "See the full district profile",
+    "rental": "Rent against purchase price"
+  },
+  "metric": {
+    "noData": "No data.",
+    "sample": "Sample size",
+    "caveat": "Caveat",
+    "more": "Method, licence and credit line",
+    "method": "Method",
+    "licence": "Licence",
+    "attribution": "Credit line"
+  },
+  "series": {
+    "heading": "History: {{label}}",
+    "highest": "highest: {{value}}",
+    "lowest": "lowest: {{value}}",
+    "summary": "First quarter ({{from}}): {{first}}. Last quarter (to {{to}}): {{last}}. Number of quarters: {{count}}.",
+    "lowKey": "A hollow, larger circle marks a quarter with low confidence.",
+    "lowMark": "(low confidence)",
+    "readout": "{{from}} – {{to}}: {{value}}, sample size: {{n}}",
+    "hint": "Point at the chart to see a value. Every value is in the table.",
+    "table": {
+      "region": "Table of the price history. It scrolls.",
+      "caption": "The values of the chart, quarter by quarter",
+      "period": "Quarter (from – to)",
+      "value": "Value",
+      "confidence": "Confidence",
+      "low": "low",
+      "enough": "sufficient"
+    }
+  },
+  "find": {
+    "title": "Find a district",
+    "heading": "Find a district that fits you",
+    "intro": "Pick a ready profile, or set how much each category matters to you. The API computes the ranking from public data.",
+    "priorities": "Your priorities",
+    "presets": "Ready profiles",
+    "hint": "The scale runs from 0 to 5. A value of 0 leaves the category out. A value of 5 counts five times as much as 1.",
+    "weight": "{{value}} of {{max}}",
+    "left_out": "0 – category left out",
+    "allZero": "Every category is set to 0. Set at least one category above zero.",
+    "submit": "Show the ranking",
+    "reset": "Back to the defaults",
+    "ranking": "Ranking of the districts",
+    "ready": "The ranking is ready. First place: {{name}}.",
+    "readyDefault": "The default ranking, with no weights. First place: {{name}}.",
+    "percentile": "percentile {{value}}",
+    "used": "Number of measures in the score: {{count}}.",
+    "missing": "Measures without data in this city are left out of the score:",
+    "table": {
+      "region": "Table with the ranking of the districts. It scrolls.",
+      "caption": "Ranking for your priorities",
+      "captionDefault": "Default ranking: the livability score",
+      "rank": "Place",
+      "score": "Score (0–100)",
+      "drivers": "What moves the score most"
+    }
+  }
+}

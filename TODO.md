@@ -80,16 +80,25 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request | Open |
 | P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change | Open |
 
-## P2: concept only, for the pitch
+## P2: concept only, for the pitch (and the city service, below)
 
 Show these in the slides, or as screens that are clearly marked "concept". Build no endpoint and no fake data.
 
-- Personalised AI report from typed requirements and a household profile, with the AI label.
-- Official notices of planned projects and infrastructure, set by the city.
-- Resident feedback: rent actually paid and bad-data reports, with identity checks, verified before use. Crime sightings are not collected.
+- Official notices of planned projects and infrastructure, set by the city. **Not implemented. Shown in the app as "to be implemented after city approval".** The Kraków open data portal has no such dataset (checked 3 October 2026). No endpoint, no data.
 - Aggregate, anonymous demand counts by district for the city.
 
 Each needs a contract change and a separate service first. `docs/IDEA.md` has the rules for each.
+
+## City service (`city-service/`), decided 3 October 2026
+
+Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. Each starts with a contract pull request.
+
+| ID | Task | Owner | Status |
+|---|---|---|---|
+| C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | Open |
+| C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | Open |
+| C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | Open |
+| C4 | Frontend screens for C2 and C3, and the "after city approval" label for notices | `unicorn-alex` | Open, after C1 |
 
 ## P3: after the event
 
@@ -108,7 +117,7 @@ Each needs a contract change and a separate service first. `docs/IDEA.md` has th
 | B2 | Add `*_display` fields for district score, area, commute minutes, recommend score and percentile, similarity. Contract first | P1 |
 | B3 | Add couple and newly married presets to `app/data/personas.json`, with Polish text reviewed by `unicorn-alex` | P1 |
 | B4 | Keep the offline tests green. Record any change to imported code in `ON_SITE_CHANGELOG.md` | Always |
-| B5 | Design the services for the P2 features. Do not build before a contract change | P3 |
+| B5 | Services for the P2 features. Notices and demand counts stay concepts. The AI report and feedback are tasks C1 to C3 | P3 |
 
 ## Open decisions
 

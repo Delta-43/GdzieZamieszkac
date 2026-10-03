@@ -1,0 +1,188 @@
+{
+  "site": {
+    "name": "GdzieZamieszkać",
+    "city": "Miasto: {{city}}"
+  },
+  "skipLink": "Przejdź do treści głównej",
+  "nav": {
+    "label": "Nawigacja główna",
+    "home": "Strona główna",
+    "districts": "Dzielnice na mapie",
+    "menu": "Menu",
+    "close": "Zamknij",
+    "find": "Znajdź",
+    "findPlaceholder": "dzielnicę…",
+    "city": "Miasto",
+    "groupPortal": "Portal",
+    "groupDistricts": "Dzielnice",
+    "noMatch": "Nie ma dzielnicy o takiej nazwie.",
+    "findDistrict": "Znajdź dzielnicę"
+  },
+  "language": {
+    "label": "Język"
+  },
+  "states": {
+    "loading": "Wczytywanie danych…",
+    "retry": "Spróbuj ponownie",
+    "error": {
+      "generic": "Nie udało się wczytać danych. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "tooManyRequests": "Zbyt wiele zapytań w krótkim czasie. Odczekaj chwilę i spróbuj ponownie.",
+      "unavailable": "Serwis z danymi jest chwilowo niedostępny. Spróbuj ponownie za chwilę."
+    }
+  },
+  "stale": {
+    "notice": "Część danych może być nieaktualna. Nadal pokazujemy ostatnią sprawdzoną wersję."
+  },
+  "footer": {
+    "sources": "Źródła danych",
+    "nav": "Nawigacja w stopce",
+    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania."
+  },
+  "home": {
+    "title": "Strona główna",
+    "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
+    "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
+    "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników.",
+    "cta": "Zobacz dzielnice"
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "text": "Strona pod tym adresem nie istnieje.",
+    "back": "Wróć na stronę główną"
+  },
+  "dataKind": {
+    "observed": "obserwowane",
+    "estimated": "szacowane",
+    "proxy": "pośrednie"
+  },
+  "provenance": {
+    "dataKind": "Rodzaj danych",
+    "unit": "Jednostka",
+    "source": "Źródło",
+    "asOf": "Stan na"
+  },
+  "districts": {
+    "title": "Dzielnice",
+    "heading": "Dzielnice na mapie i na liście",
+    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Te same wartości są na liście obok mapy.",
+    "optionNoData": "{{label}} (brak danych)",
+    "unavailable": "Brak danych dla tej miary.",
+    "noData": "brak danych",
+    "rank": "Pozycja {{position}} z {{of}}",
+    "higherIsBetter": "wyższa wartość to lepsza pozycja",
+    "lowerIsBetter": "niższa wartość to lepsza pozycja",
+    "classOf": "Przedział {{number}} z {{count}} na mapie",
+    "map": {
+      "label": "Mapa dzielnic. Miara: {{metric}}",
+      "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
+      "districtNoData": "{{name}}: brak danych",
+      "districtLoading": "{{name}}: wczytywanie danych"
+    },
+    "legend": {
+      "title": "Legenda",
+      "direction": "Ciemniejszy kolor i wyższy numer oznaczają wyższą wartość.",
+      "range": "Przedział {{number}}: od {{min}} do {{max}}",
+      "single": "Przedział {{number}}: {{value}}",
+      "noData": "Pole kreskowane: brak danych"
+    },
+    "table": {
+      "region": "Tabela dzielnic. Można ją przewijać w poziomie.",
+      "caption": "Dzielnice: {{metric}}, wskaźnik jakości życia, powierzchnia i ceny",
+      "district": "Dzielnica",
+      "score": "Wskaźnik jakości życia (0–100)",
+      "area": "Powierzchnia (km²)",
+      "rank": "Pozycja",
+      "class": "Przedział na mapie",
+      "selected": "wybrana"
+    },
+    "colourBy": "Koloruj mapę według",
+    "overall": "Wynik ogólny",
+    "moreMeasures": "Inna miara",
+    "chooseMeasure": "— wybierz miarę —",
+    "categoryScore": "Wynik kategorii: {{category}} (0–100)",
+    "categoryMethod": "Wynik od 0 do 100 obliczony przez API tylko z miar tej kategorii. Porównuje dzielnice jednego miasta.",
+    "tabs": {
+      "label": "Dane dzielnic",
+      "list": "Lista",
+      "details": "Szczegóły"
+    },
+    "details": {
+      "none": "Wybierz dzielnicę na mapie albo na liście, aby zobaczyć jej szczegóły.",
+      "profile": "Profil dzielnicy: wyniki kategorii",
+      "category": "Kategoria",
+      "score": "Wynik (0–100)",
+      "classShort": "{{number}} z {{count}}",
+      "backToList": "Wróć do listy"
+    }
+  },
+  "report": {
+    "heading": "Opis dzielnicy",
+    "label": "Raport napisany przez sztuczną inteligencję na podstawie danych.",
+    "fallback": "Ten tekst jest dostępny tylko po angielsku.",
+    "generated": "Wygenerowano: {{date}}"
+  },
+  "detail": {
+    "back": "Wróć do listy dzielnic",
+    "area": "Powierzchnia",
+    "areaValue": "{{value}} km²",
+    "notFoundTitle": "Nie ma takiej dzielnicy",
+    "notFoundText": "Sprawdź adres albo wybierz dzielnicę z listy.",
+    "fullProfile": "Zobacz pełny profil dzielnicy",
+    "rental": "Najem a cena zakupu"
+  },
+  "metric": {
+    "noData": "Brak danych.",
+    "sample": "Liczba obserwacji",
+    "caveat": "Zastrzeżenie",
+    "more": "Metoda, licencja i oznaczenie źródła",
+    "method": "Metoda",
+    "licence": "Licencja",
+    "attribution": "Oznaczenie źródła"
+  },
+  "series": {
+    "heading": "Historia: {{label}}",
+    "highest": "najwyższa: {{value}}",
+    "lowest": "najniższa: {{value}}",
+    "summary": "Pierwszy kwartał ({{from}}): {{first}}. Ostatni kwartał (do {{to}}): {{last}}. Liczba kwartałów: {{count}}.",
+    "lowKey": "Puste, większe kółko oznacza kwartał o niskiej wiarygodności.",
+    "lowMark": "(niska wiarygodność)",
+    "readout": "{{from}} – {{to}}: {{value}}, liczba obserwacji: {{n}}",
+    "hint": "Wskaż punkt na wykresie, aby zobaczyć wartość. Wszystkie wartości są w tabeli.",
+    "table": {
+      "region": "Tabela z historią cen. Można ją przewijać.",
+      "caption": "Wartości z wykresu, kwartał po kwartale",
+      "period": "Kwartał (od – do)",
+      "value": "Wartość",
+      "confidence": "Wiarygodność",
+      "low": "niska",
+      "enough": "wystarczająca"
+    }
+  },
+  "find": {
+    "title": "Znajdź dzielnicę",
+    "heading": "Znajdź dzielnicę dla siebie",
+    "intro": "Wybierz gotowy profil albo ustaw, jak ważna jest dla Ciebie każda kategoria. Ranking oblicza API na podstawie danych publicznych.",
+    "priorities": "Twoje priorytety",
+    "presets": "Gotowe profile",
+    "hint": "Skala od 0 do 5. Wartość 0 pomija kategorię. Wartość 5 liczy się pięć razy mocniej niż 1.",
+    "weight": "{{value}} z {{max}}",
+    "left_out": "0 – kategoria pominięta",
+    "allZero": "Wszystkie kategorie mają wartość 0. Ustaw co najmniej jedną kategorię powyżej zera.",
+    "submit": "Pokaż ranking",
+    "reset": "Przywróć domyślne",
+    "ranking": "Ranking dzielnic",
+    "ready": "Ranking gotowy. Pierwsze miejsce: {{name}}.",
+    "readyDefault": "Ranking domyślny, bez wag. Pierwsze miejsce: {{name}}.",
+    "percentile": "percentyl {{value}}",
+    "used": "Liczba miar w wyniku: {{count}}.",
+    "missing": "Miary bez danych w tym mieście są pominięte w wyniku:",
+    "table": {
+      "region": "Tabela z rankingiem dzielnic. Można ją przewijać.",
+      "caption": "Ranking dla Twoich priorytetów",
+      "captionDefault": "Ranking domyślny: wskaźnik jakości życia",
+      "rank": "Miejsce",
+      "score": "Wynik (0–100)",
+      "drivers": "Co najbardziej wpływa na wynik"
+    }
+  }
+}

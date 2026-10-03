@@ -1,0 +1,51 @@
+import { expect, test } from 'vitest'
+import { classify } from './classes'
+import { buildMap } from './geo'
+import { plainNumber } from './plainNumber'
+
+const values = (numbers: number[]) => numbers.map((value, i) => ({ district: `d${i}`, value, display: `${value} u` }))
+
+test('classify puts the lowest values in class 1 and the highest in class 5', () => {
+  const { classOf, classes } = classify(values([50, 10, 40, 20, 30, 60, 70, 80, 90, 100]))
+
+  expect(classOf.get('d1')).toBe(1)
+  expect(classOf.get('d9')).toBe(5)
+  expect(classes.map((c) => c.number)).toEqual([1, 2, 3, 4, 5])
+  expect(classes[0]).toEqual({ number: 1, minDisplay: '10 u', maxDisplay: '20 u' })
+  expect(classes[4]).toEqual({ number: 5, minDisplay: '90 u', maxDisplay: '100 u' })
+})
+
+test('classify gives equal values the same class and handles an empty list', () => {
+  const { classOf } = classify(values([5, 5, 5, 5, 9]))
+  expect(new Set(['d0', 'd1', 'd2', 'd3'].map((d) => classOf.get(d))).size).toBe(1)
+  expect(classify([]).classes).toEqual([])
+})
+
+test('buildMap draws a path per district and puts the label inside a bent shape', () => {
+  // An L shape: its centroid is near the inner corner, and the label must land inside the shape.
+  const lShape = { type: 'Polygon', coordinates: [[[0, 0], [4, 0], [4, 1], [1, 1], [1, 4], [0, 4], [0, 0]]] }
+  const multi = { type: 'MultiPolygon', coordinates: [[[[5, 0], [6, 0], [6, 1], [5, 1], [5, 0]]]] }
+  const map = buildMap([
+    { geometry: lShape, properties: { code: 'l', name: 'L' } },
+    { geometry: multi, properties: { code: 'm', name: 'M' } },
+    { geometry: { type: 'Point', coordinates: [0, 0] }, properties: { code: 'p', name: 'P' } },
+  ])
+
+  expect(map.shapes.map((s) => s.code)).toEqual(['l', 'm'])
+  expect(map.shapes[0]?.path.startsWith('M')).toBe(true)
+  expect(map.width).toBe(1000)
+  expect(map.height).toBeGreaterThan(0)
+  const unit = map.width / 6
+  const { x, y } = map.shapes[0]!.label
+  // Inside the L: either in the bottom arm or in the left arm, in projected units (north is up, so y is flipped).
+  const lon = x / unit
+  const lat = 4 - y / unit
+  expect((lat <= 1.05 && lon <= 4.05) || (lon <= 1.05 && lat <= 4.05)).toBe(true)
+})
+
+test('plainNumber changes only the decimal sign, and only in Polish', () => {
+  expect(plainNumber(57.8, 'pl')).toBe('57,8')
+  expect(plainNumber(57.8, 'en')).toBe('57.8')
+  expect(plainNumber(49, 'pl')).toBe('49')
+  expect(plainNumber(3.694, 'pl')).toBe('3,694')
+})

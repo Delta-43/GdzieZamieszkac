@@ -15,8 +15,60 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Not started.** This folder holds guide files and empty folders. There is no `package.json` yet.
-You create the project yourself. The guide files tell you what to build and what to avoid.
+**Tasks F1 to F6 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+The shared parts exist: skip link, header with the city name from `/meta`, a menu that slides in from the left (district search first, then groups of links),
+language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages, every district and the credit line of every source.
+The pages are home, districts (map and list), one district, find a district, and "page not found". The menu and the footer list only pages that exist (`src/lib/pages.ts`), so they grow with each task.
+The other screens are tasks F7 and F8 in `TODO.md`.
+
+On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
+The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
+from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value, and it prints its class number,
+so nothing depends on colour. A panel beside the map has two tabs: "Lista" is the table with the same values, and "Szczegóły" shows the chosen district:
+its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
+
+The page of one district (`/districts/<code>`) shows the area, the livability score, the area report with its AI label, the price history, and every metric by category.
+Each metric shows the API's display string, the data kind, the as-of date, the source, the rank, the sample size and the caveat; the method, the licence and the credit line open in a detail.
+A metric without data shows its reason in a dashed frame. The price history is a line chart with a sentence that sums it up and a table with every value; a quarter with low confidence has a hollow marker and the word "low" in the table.
+The chart formats no number: its two gridlines are labelled with the API's display strings of the lowest and the highest value.
+
+On the find page (`/find`) the user picks a preset from `/personas` or sets a weight from 0 to 5 for each of the six scored categories, and presses a button.
+The ranking, the score and the top drivers come from `POST /recommend`. With no weights the page sends none, so the first ranking equals the default livability score.
+The page shows the API's note and names the measures that are left out because the city has no data for them. A new ranking is announced to screen readers.
+
+A category score is asked from `POST /recommend` with that one category switched on and the others off. The answers are cached for five minutes, because that endpoint is rate limited.
+
+## Theme
+
+All colours, fonts and sizes are in `src/theme/tokens.ts`. Stylesheets and components use them as CSS custom properties and never write a colour.
+`src/theme/theme.test.ts` checks every colour pair in use (4.5:1 for text, 3:1 for interface parts) and fails if a colour appears outside the theme folder.
+To put a colour on a new background, add the pair to `CONTRAST_PAIRS` first.
+
+The theme is a **proposal** (3 October 2026). It follows the look of the city's own website, krakow.pl:
+
+- **Colours:** a white page, grey panels, one blue and dark navy text, taken from that site's stylesheet (blue `#0063af`, ink `#071f32`, grey `#f5f5f5`). The map ramp is the one in `design/krakow-blue.tokens.css`. Colours only: no logo, crest or photo of the city is used.
+- **Font:** Lato, regular and bold, the typeface of that site. It is bundled from the `@fontsource/lato` package (SIL Open Font Licence 1.1) and served with the app, with the Latin Extended range for Polish. Nothing loads from a third party.
+- **Layout of the districts page:** the mock-up in `design/districts-mockup.html` (map with category buttons, a tabbed panel beside it). The header is a white bar over a blue navigation band, and section headings carry a short dark bar.
+
+The coordinator's accepted design is `../docs/DESIGN.md` (Field Journal: moss green, Literata and IBM Plex Sans). Whether the Kraków look replaces it is the coordinator's open decision. Changing the look means changing the values in `tokens.ts`.
+
+## Commands
+
+Run them from this folder. Tested with Node 26 and npm 11.
+
+| Command | What it does |
+|---|---|
+| `npm install` | Installs the packages. |
+| `npm run dev` | Starts the dev server on port 5173, on the network. It forwards `/v1` to `VITE_DEV_API`. |
+| `npm run build` | Checks the types and builds the app into `dist/`. |
+| `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
+| `npm run typecheck` | Checks the types only. |
+| `npm test` | Runs the tests once, with an automated accessibility check on each rendered page. |
+| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml`. Run it after every contract change and commit the result. |
+| `npm run api:check` | Fails when the committed types differ from a fresh run. |
+| `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
+
+Copy `.env.example` to `.env.local` and put the API address there. Git ignores `.env.local`, so the address stays private.
 
 | File | What it covers |
 |---|---|
@@ -97,6 +149,7 @@ Every user shares one rate limit, about 600 requests a minute, so cache (the ans
 | Variable | Meaning |
 |---|---|
 | `VITE_DEV_API` | Development only. The address the dev server forwards `/v1` to. Defaults to `http://localhost:8000`. Never shipped. |
+| `DEV_ALLOWED_HOSTS` | Development only. Extra host names the dev server answers to, comma separated. Names ending in `.ts.net` are always allowed. |
 | `VITE_API_URL` | Build argument. Origin of the API. Empty means the same origin as the page. The client adds the `/v1` prefix. |
 
 Every `VITE_` variable is public. Never put a secret in one.
