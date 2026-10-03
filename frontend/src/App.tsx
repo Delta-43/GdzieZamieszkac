@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router'
 import { Layout } from './components/Layout'
+import { ComparePage } from './pages/ComparePage'
 import { DistrictPage } from './pages/DistrictPage'
 import { DistrictsPage } from './pages/DistrictsPage'
 import { FindPage } from './pages/FindPage'
@@ -14,6 +15,7 @@ export function App() {
         <Route path="districts" element={<DistrictsPage />} />
         <Route path="districts/:code" element={<DistrictPage />} />
         <Route path="find" element={<FindPage />} />
+        <Route path="compare" element={<ComparePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

@@ -11,7 +11,8 @@
     "menu": "Menu",
     "close": "Close the menu",
     "groupDistricts": "Districts",
-    "findDistrict": "Find a district"
+    "findDistrict": "Find a district",
+    "compare": "Compare districts"
   },
   "language": {
     "label": "Language"
@@ -202,5 +203,21 @@
       "tooManySeconds": "Too many summaries in a short time. Try again in {{seconds}} s.",
       "generic": "The text was not sent. Check your internet connection and try again."
     }
+  },
+  "compare": {
+    "title": "Compare districts",
+    "heading": "Compare districts",
+    "intro": "Choose two to four districts. The tables show the same measures side by side and do not point to a better district.",
+    "choose": "Choose districts ({{min}} to {{max}})",
+    "count": "Districts chosen: {{count}} of {{max}}.",
+    "countFull": "Districts chosen: {{count}} of {{max}}. To add another district, first untick one of the chosen ones.",
+    "clear": "Clear the choice",
+    "tooFew": "Choose at least {{min}} districts to see the comparison.",
+    "tooMany": "At most {{max}} districts can be compared. Untick some of the chosen ones.",
+    "ready": "The comparison is ready: {{names}}.",
+    "unknown": "These districts could not be compared. Check the page address or choose districts from the list.",
+    "metric": "Measure",
+    "more": "The method, caveats, licence and credit line of each measure are on the district's page.",
+    "region": "Table: {{label}}. It scrolls."
   }
 }
