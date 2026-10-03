@@ -189,8 +189,8 @@ export function DistrictsPage() {
                     metricsByKey={metricsByKey}
                     scoreKey={SCORE_KEY}
                     view={view}
+                    showView={choice.kind !== 'overall'}
                     valueOf={valueOf}
-                    classOf={classOf}
                     selected={selected}
                     onSelect={select}
                   />

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, Outlet, useLocation } from 'react-router'
 import { useMeta } from '../api/useMeta'
 import { Footer } from './Footer'
-import { MenuIcon } from './Icons'
+import { CloseIcon, MenuIcon } from './Icons'
 import { LanguageToggle } from './LanguageToggle'
 import { SiteMenu } from './SiteMenu'
 import { StaleNotice } from './StaleNotice'
@@ -40,32 +40,41 @@ export function Layout() {
 
   return (
     <>
-      {/* While the menu is open, the page behind it is inert: the keyboard and screen readers stay in the menu. */}
+      <a className="skip-link" href={`#${MAIN_ID}`}>
+        {t('skipLink')}
+      </a>
+      <header className="site-header">
+        {/* The same button opens and closes the menu. Its two icons cross-fade; the word says what it is. */}
+        <button
+          ref={menuButtonRef}
+          type="button"
+          className="menu-opener"
+          aria-expanded={menuOpen}
+          aria-controls={menuId}
+          onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
+        >
+          <span className="menu-opener__icons">
+            <MenuIcon className="menu-opener__open" />
+            <CloseIcon className="menu-opener__close" />
+          </span>
+          {t('nav.menu')}
+        </button>
+        <p className="site-name">
+          <Link to="/">{t('site.name')}</Link>
+          {/* The city name comes from /meta and is never written into the code. */}
+          {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
+        </p>
+        <LanguageToggle />
+      </header>
+      <SiteMenu id={menuId} open={menuOpen} onClose={closeMenu} />
+      {/* While the menu is open, the page under it is inert: the keyboard and screen readers stay in the header and the menu. */}
       <div inert={menuOpen}>
-        <a className="skip-link" href={`#${MAIN_ID}`}>
-          {t('skipLink')}
-        </a>
-        <header className="site-header">
-          <div className="site-header__bar">
-            <button ref={menuButtonRef} type="button" className="icon-button" aria-expanded={menuOpen} aria-controls={menuId} onClick={() => setMenuOpen(true)}>
-              <MenuIcon />
-              {t('nav.menu')}
-            </button>
-            <p className="site-name">
-              <Link to="/">{t('site.name')}</Link>
-              {/* The city name comes from /meta and is never written into the code. */}
-              {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
-            </p>
-            <LanguageToggle />
-          </div>
-        </header>
         <StaleNotice />
         <main id={MAIN_ID} ref={mainRef} tabIndex={-1}>
           <Outlet />
         </main>
         <Footer />
       </div>
-      <SiteMenu id={menuId} open={menuOpen} onClose={closeMenu} />
     </>
   )
 }

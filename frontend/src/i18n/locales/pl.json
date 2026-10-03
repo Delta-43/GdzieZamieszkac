@@ -9,13 +9,8 @@
     "home": "Strona główna",
     "districts": "Dzielnice na mapie",
     "menu": "Menu",
-    "close": "Zamknij",
-    "find": "Znajdź",
-    "findPlaceholder": "dzielnicę…",
-    "city": "Miasto",
-    "groupPortal": "Portal",
+    "close": "Zamknij menu",
     "groupDistricts": "Dzielnice",
-    "noMatch": "Nie ma dzielnicy o takiej nazwie.",
     "findDistrict": "Znajdź dzielnicę"
   },
   "language": {
@@ -36,7 +31,9 @@
   "footer": {
     "sources": "Źródła danych",
     "nav": "Nawigacja w stopce",
-    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania."
+    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania.",
+    "newTab": "(otwiera się w nowej karcie)",
+    "moreLink": "{{credit}}: adres {{number}} (otwiera się w nowej karcie)"
   },
   "home": {
     "title": "Strona główna",
@@ -80,20 +77,18 @@
     },
     "legend": {
       "title": "Legenda",
-      "direction": "Ciemniejszy kolor i wyższy numer oznaczają wyższą wartość.",
+      "direction": "Ciemniejszy kolor oznacza wyższą wartość.",
       "range": "Przedział {{number}}: od {{min}} do {{max}}",
       "single": "Przedział {{number}}: {{value}}",
       "noData": "Pole kreskowane: brak danych"
     },
     "table": {
-      "region": "Tabela dzielnic. Można ją przewijać w poziomie.",
-      "caption": "Dzielnice: {{metric}}, wskaźnik jakości życia, powierzchnia i ceny",
+      "region": "Lista dzielnic. Można ją przewijać.",
+      "caption": "Dzielnice: wynik ogólny i {{metric}}",
       "district": "Dzielnica",
-      "score": "Wskaźnik jakości życia (0–100)",
-      "area": "Powierzchnia (km²)",
-      "rank": "Pozycja",
-      "class": "Przedział na mapie",
-      "selected": "wybrana"
+      "score": "Wynik ogólny (0–100)",
+      "selected": "wybrana",
+      "captionScore": "Dzielnice: wynik ogólny"
     },
     "colourBy": "Koloruj mapę według",
     "overall": "Wynik ogólny",

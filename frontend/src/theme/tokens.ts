@@ -24,6 +24,8 @@ export const colors = {
   /** The one Kraków blue: the navigation band, the primary action, the chosen item and links. */
   accent: '#0063af',
   accentContrast: '#ffffff',
+  /** The lighter blue a button or a menu link takes under the pointer. */
+  accentHover: '#006cd7',
   link: '#0063af',
   /** The focus ring on the page and on panels. */
   focus: '#b35c00',
@@ -67,6 +69,9 @@ export const CONTRAST_PAIRS: ContrastPair[] = [
   pair('link', 'surface', TEXT_MIN, 'links on a panel'),
   pair('accentContrast', 'accent', TEXT_MIN, 'text on the navigation band and on the primary button'),
   pair('accent', 'bg', UI_MIN, 'the band and the primary button against the page'),
+  pair('accentContrast', 'accentHover', TEXT_MIN, 'text on a hovered primary button'),
+  pair('accentHover', 'bg', TEXT_MIN, 'a hovered link or secondary button on the page'),
+  pair('accentHover', 'surface', TEXT_MIN, 'a hovered link in the menu or on a panel'),
   pair('borderStrong', 'bg', UI_MIN, 'control borders on the page'),
   pair('borderStrong', 'surface', UI_MIN, 'control borders on a panel'),
   pair('focus', 'bg', UI_MIN, 'focus ring on the page'),
@@ -103,12 +108,12 @@ export const fonts = {
 
 /** Sizes, spacing, corners and durations, in rem so the user's text size setting is respected. */
 export const scale = {
-  'text-xs': '0.8125rem',
-  'text-sm': '0.9375rem',
-  'text-base': '1.125rem',
-  'text-lg': '1.3125rem',
-  'text-xl': '1.625rem',
-  'text-2xl': '2rem',
+  'text-xs': '0.75rem',
+  'text-sm': '0.875rem',
+  'text-base': '1rem',
+  'text-lg': '1.25rem',
+  'text-xl': '1.5rem',
+  'text-2xl': '1.875rem',
   'line-tight': '1.2',
   'line-base': '1.5',
   'space-1': '0.25rem',
@@ -125,8 +130,10 @@ export const scale = {
   measure: '68ch',
   /** 44 CSS pixels at the default text size: the aim for pointer targets on touch screens (24 is the minimum). */
   target: '2.75rem',
-  /** The one shadow in the interface: under the menu sheet, which lies over the page. Navy at low opacity. */
-  'shadow-menu': '0 0 2.5rem rgb(7 31 50 / 0.28)',
+  /** The one shadow in the interface: at the edge of the menu, which lies over the page. */
+  'shadow-menu': '1px 2px 5px 0 rgb(0 0 0 / 0.25)',
+  /** The height of the header. The menu opens right under it. */
+  'header-height': '4rem',
   'duration-fast': '120ms',
   'duration-base': '200ms',
 } as const

@@ -12,39 +12,36 @@ type Props = {
   metricsByKey: Map<string, MetricDefinition>
   scoreKey: string
   view: MapView
+  /** False while the map shows the overall score itself: the list then needs no second value column. */
+  showView: boolean
   valueOf: Map<string, ViewValue>
-  classOf: Map<string, number>
   selected: string | null
   onSelect: (code: string) => void
 }
 
-/** The full equivalent of the map: every district with the value shown on the map, its score, area and highlight values. */
-export function DistrictsTable({ districts, metricsByKey, scoreKey, view, valueOf, classOf, selected, onSelect }: Props) {
+/**
+ * The list beside the map, kept short: each district with its overall score, and the value shown on the map when the
+ * map shows something else. Everything else about a district is on its details tab and its page.
+ */
+export function DistrictsTable({ districts, metricsByKey, scoreKey, view, showView, valueOf, selected, onSelect }: Props) {
   const { t, i18n } = useTranslation()
-  const highlightKeys = [...new Set(districts.flatMap((district) => district.highlights.map((h) => h.key)))]
   const scoreKind = metricsByKey.get(scoreKey)?.data_kind
   const noData = <span className="no-data">{t('districts.noData')}</span>
 
   return (
-    // A wide table scrolls inside its own region. The region is focusable and labelled, so the keyboard can scroll it.
+    // The table scrolls inside its own region when it is wider than its card. The region is focusable and labelled.
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div className="table-scroll" role="region" aria-label={t('districts.table.region')} tabIndex={0}>
       <table>
-        <caption>{t('districts.table.caption', { metric: view.label })}</caption>
+        <caption>{t(showView ? 'districts.table.caption' : 'districts.table.captionScore', { metric: view.label })}</caption>
         <thead>
           <tr>
             <th scope="col">{t('districts.table.district')}</th>
-            <th scope="col">{view.label}</th>
-            <th scope="col">{t('districts.table.rank')}</th>
-            <th scope="col">{t('districts.table.class')}</th>
-            <th scope="col">{t('districts.table.score')}</th>
-            <th scope="col">{t('districts.table.area')}</th>
-            {highlightKeys.map((key) => (
-              // The list endpoint sends the key only; the label comes from the metric catalogue.
-              <th scope="col" key={key}>
-                {metricsByKey.get(key)?.label ?? key}
-              </th>
-            ))}
+            <th scope="col">
+              {/* The data kind of the score is the same for every row, so it is shown once, in the column header. */}
+              {t('districts.table.score')} {scoreKind && <DataKindBadge kind={scoreKind} />}
+            </th>
+            {showView && <th scope="col">{view.label}</th>}
           </tr>
         </thead>
         <tbody>
@@ -60,41 +57,19 @@ export function DistrictsTable({ districts, metricsByKey, scoreKey, view, valueO
                   </button>
                   {isSelected && <span className="selected-mark"> ({t('districts.table.selected')})</span>}
                 </th>
-                <td>
-                  {value ? (
-                    <>
-                      {value.display} {value.dataKind && <DataKindBadge kind={value.dataKind} />}
-                    </>
-                  ) : (
-                    noData
-                  )}
-                </td>
-                <td>{value?.rank ? t('districts.rank', { position: value.rank.position, of: value.rank.of }) : '–'}</td>
-                <td>{classOf.get(district.code) ?? '–'}</td>
-                <td>
-                  {district.livability_score === null ? (
-                    noData
-                  ) : (
-                    <>
-                      {plainNumber(district.livability_score, i18n.language)} {scoreKind && <DataKindBadge kind={scoreKind} />}
-                    </>
-                  )}
-                </td>
-                <td>{plainNumber(district.area_km2, i18n.language)}</td>
-                {highlightKeys.map((key) => {
-                  const highlight = district.highlights.find((h) => h.key === key)
-                  return (
-                    <td key={key}>
-                      {highlight ? (
-                        <>
-                          {highlight.display} <DataKindBadge kind={highlight.data_kind} />
-                        </>
-                      ) : (
-                        noData
-                      )}
-                    </td>
-                  )
-                })}
+                {/* The score has no display string in the contract yet: shown as sent. */}
+                <td>{district.livability_score === null ? noData : plainNumber(district.livability_score, i18n.language)}</td>
+                {showView && (
+                  <td>
+                    {value ? (
+                      <>
+                        {value.display} {value.dataKind && <DataKindBadge kind={value.dataKind} />}
+                      </>
+                    ) : (
+                      noData
+                    )}
+                  </td>
+                )}
               </tr>
             )
           })}
