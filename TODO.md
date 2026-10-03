@@ -2,7 +2,7 @@
 
 Last updated 3 October 2026, the first evening of HackYeah. This is the one list for the team. Module files link here.
 
-Owners use GitHub handles. `Delta-43` is the coordinator. `Rysia` builds the frontend. `unicorn-alex` reviews, owns the Polish text and verifies the data.
+Owners use GitHub handles. `Delta-43` is the coordinator. `unicorn-alex` builds the frontend from 3 October (evening), owns the Polish text and verifies the data. `Rysia` is on break; the handle stays trusted and can return to the frontend.
 
 ## The idea
 
@@ -41,13 +41,13 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | ID | Task | Owner | Done when |
 |---|---|---|---|
 | P0-1 | A live Kraków API the frontend can reach: run the backend and share a temporary URL | `Delta-43` | `GET /v1/meta` works from the frontend developer's machine. See `frontend/README.md`. |
-| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `Rysia` | `frontend/TODO.md` tasks F1 to F3 pass review |
-| P0-3 | Districts screen: accessible table and SVG map | `Rysia` | Task F4 passes review |
-| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `Rysia` | Task F5 passes review |
-| P0-5 | Find a district: personas and sliders to `POST /recommend` | `Rysia` | Task F6 passes review |
-| P0-6 | Compare two to four districts | `Rysia` | Task F7 passes review |
-| P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `Rysia` | Task F8 passes review |
-| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `Rysia`, reviewed by `unicorn-alex` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow |
+| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `unicorn-alex` | `frontend/TODO.md` tasks F1 to F3 pass review |
+| P0-3 | Districts screen: accessible table and SVG map | `unicorn-alex` | Task F4 passes review |
+| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `unicorn-alex` | Task F5 passes review |
+| P0-5 | Find a district: personas and sliders to `POST /recommend` | `unicorn-alex` | Task F6 passes review |
+| P0-6 | Compare two to four districts | `unicorn-alex` | Task F7 passes review |
+| P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `unicorn-alex` | Task F8 passes review |
+| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `unicorn-alex`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow |
 | P0-9 | Apply the data verification feedback: fix a value, or add a caveat, for each "Fix" | `Delta-43`, with `unicorn-alex` | `docs/data-review/` records every finding and what changed |
 | P0-10 | Submission pack: project description, a PDF of at most 10 slides, the declaration of earlier work | `Delta-43` | Uploaded to the Challenge Rocket platform |
 
@@ -55,10 +55,10 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 
 | ID | Task | Owner | Notes |
 |---|---|---|---|
-| P1-1 | Household profile, kept in the browser, mapped to weights | `Rysia` | `frontend/TODO.md` task F9. Needs couple and newly married presets (B3). |
-| P1-2 | Commute from a work district | `Rysia` | Task F10. Show the API's caveat. Long trips run fast. |
-| P1-3 | Outlook card: momentum, the city's historical range, the backtest. No forecast | `Rysia` | Task F11 |
-| P1-4 | Rent versus buy and similar districts | `Rysia` | Task F12 |
+| P1-1 | Household profile, kept in the browser, mapped to weights | `unicorn-alex` | `frontend/TODO.md` task F9. Needs couple and newly married presets (B3). |
+| P1-2 | Commute from a work district | `unicorn-alex` | Task F10. Show the API's caveat. Long trips run fast. |
+| P1-3 | Outlook card: momentum, the city's historical range, the backtest. No forecast | `unicorn-alex` | Task F11 |
+| P1-4 | Rent versus buy and similar districts | `unicorn-alex` | Task F12 |
 | P1-5 | `*_display` strings for the numbers that lack one (contract B2) | `Delta-43` | Removes a temporary helper in the frontend |
 | P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request |
 | P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change |
