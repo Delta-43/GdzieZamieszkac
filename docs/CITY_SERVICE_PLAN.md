@@ -1,14 +1,14 @@
 # City service plan (notices, AI report, resident feedback)
 
 Status: **proposal, waiting for the coordinator's decisions** (section "Decisions needed").
-Replaces the "concept only" status of P2 in `TODO.md` for three features. Demand counts stay a concept.
+Replaces the "concept only" status of P2 in `TODO.md` for two features: the AI report and resident feedback. **Official notices and demand counts stay concepts.** Notices are shown as "to be implemented after city approval" (coordinator, 3 October).
 Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule changes" lists the ones that must change.
 
 ## Split
 
 | Feature | Where | Why |
 |---|---|---|
-| Official notices | `backend/` (read-only API) | A reviewed, versioned data file. It needs no writes and no internet. |
+| Official notices | Not built | Waits for the city. Concept label only. The section below is the design for later. |
 | Personalised AI report | `city-service/` (new) | A language model call needs internet and an API key. The backend must keep neither. |
 | Resident feedback | `city-service/` (new) | It needs writes and storage. The backend must stay read-only. |
 
@@ -16,11 +16,10 @@ Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule chang
 
 ## Contracts (first pull requests, no code)
 
-1. `backend/openapi.yaml`: add `GET /notices` and `GET /districts/{code}/notices` (read-only).
-2. `city-service/openapi.yaml` (new file): add `POST /v1/ai-report`, `POST /v1/feedback`, `GET /v1/feedback/status`.
+1. `city-service/openapi.yaml` (new file): add `POST /v1/ai-report`, `POST /v1/feedback`, `GET /v1/feedback/status`.
    `AGENTS.md` names only `backend/openapi.yaml` as the contract, so this file needs a root rule: each service has its own contract and the same contract-first rule.
 
-## 1. Official notices
+## 1. Official notices (not built, design for later)
 
 - Fields: `id`, `district` (a code, or `null` for the whole city), `title`, `summary`, `kind` (`planned_project`, `infrastructure`, `closure`), `status` (`planned`, `in_progress`, `done`), `valid_from`, `published_at`, `source_name`, `source_url`, `licence`, `attribution`, `caveat`.
 - `data_kind` is `official`. This is a new kind next to `observed`, `estimated` and `proxy`, and it needs a contract change.
@@ -66,7 +65,7 @@ Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule chang
 
 ## Decisions (3 October 2026, coordinator)
 
-1. **Model:** OpenRouter, model `z-ai/glm-5.3-flash`. The coordinator provides the key. It goes in the environment of `city-service/` (`OPENROUTER_API_KEY`), never in the repository. OpenRouter is a third party, so this is a backend call only. The frontend still calls no third party.
+1. **Model:** OpenRouter, model `z-ai/glm-5.3-flash`. The coordinator provides the key. It goes in the environment of `city-service/` (`OPENROUTER_LLM_KEY`), never in the repository. OpenRouter is a third party, so this is a backend call only. The frontend still calls no third party.
 2. **Notice source:** the Kraków open data portal (`otwartedane.um.krakow.pl`). **Finding:** on 3 October its 45 datasets hold no planned-project, road-works or investment dataset. The portal links the city API portal (`api.um.krakow.pl/devportal`), not checked yet. Open question below.
 3. **Feedback identity:** Gov ID gating comes later. Today reports are stored as `unverified`, nothing is published, and the interface says so.
 4. **Feedback storage:** a local SQLite file, outside the repository (`FEEDBACK_DB_PATH`), created by the service. It is git-ignored and never committed.
@@ -75,3 +74,8 @@ Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule chang
 ## Still open
 
 - **Where the real notices come from.** Options: (a) the city API portal if it has a suitable feed; (b) one dataset from `dane.gov.pl` or the BIP of Kraków, with its licence checked; (c) ship the endpoint and the model empty, so the frontend shows "no notices published" until the city publishes. Until one is chosen, no notice entry is written.
+
+## Update, 3 October 2026
+
+- Notices: the coordinator decided they come later, from the city. The Kraków open data portal has no planned-project dataset. The ten culture and sport datasets (categories 5 and 15) are statistics of past editions, not notices, and are not used for this feature. Reuse of that portal needs the credit line "Gmina Miejska Kraków, otwartedane.um.krakow.pl" and the dates of creation and acquisition.
+- The model key is read from `OPENROUTER_LLM_KEY`.
