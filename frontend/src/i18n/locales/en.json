@@ -1,0 +1,40 @@
+{
+  "site": {
+    "name": "GdzieZamieszkać",
+    "city": "City: {{city}}"
+  },
+  "skipLink": "Skip to main content",
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "states": {
+    "loading": "Loading the data…",
+    "retry": "Try again",
+    "error": {
+      "generic": "The data did not load. Check your internet connection and try again.",
+      "tooManyRequests": "Too many requests in a short time. Wait a moment and try again.",
+      "unavailable": "The data service is not available right now. Try again in a moment."
+    }
+  },
+  "stale": {
+    "notice": "Some data may be out of date. We still show the last checked version."
+  },
+  "footer": {
+    "sources": "Data sources"
+  },
+  "home": {
+    "title": "Home",
+    "heading": "Compare the districts before you look for a flat",
+    "what": "This portal shows public data about the districts: transport, amenities, environment, prices and rents. Every number comes with its source and date.",
+    "notListings": "This is not a listings site. We show no flats for sale or rent, and no brokers."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "There is no page at this address.",
+    "back": "Back to the home page"
+  }
+}

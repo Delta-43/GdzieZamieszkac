@@ -1,24 +1,33 @@
-import { expect, test, vi } from 'vitest'
-import { jsonResponse, metaFixture } from '../test/fixtures'
+import { expect, test } from 'vitest'
+import i18n from '../i18n'
+import { jsonResponse, metaFixture, problemFixture } from '../test/fixtures'
+import { mockFetch, requestedUrls } from '../test/render'
 import { api } from './client'
 
-test('calls the API under /v1 and sends the language', async () => {
-  const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(jsonResponse(metaFixture))
+test('calls the API under /v1 and sends the chosen language on every request', async () => {
+  const fetchMock = mockFetch(() => jsonResponse(metaFixture))
 
-  const { data } = await api.GET('/meta', { params: { query: { lang: 'pl' } } })
+  const { data } = await api.GET('/meta')
+  await api.GET('/districts/{code}/similar', { params: { path: { code: 'alpha' }, query: { limit: 5 } } })
+  await api.POST('/recommend', { body: { weights: { category: { cost: 3 } } } })
+  await i18n.changeLanguage('en')
+  await api.GET('/meta')
 
-  const request = fetchMock.mock.calls[0]?.[0] as Request
-  expect(request.url).toBe('http://api.test/v1/meta?lang=pl')
   expect(data?.district_count).toBe(4)
+  expect(requestedUrls(fetchMock)).toEqual([
+    'http://api.test/v1/meta?lang=pl',
+    'http://api.test/v1/districts/alpha/similar?limit=5&lang=pl',
+    'http://api.test/v1/recommend?lang=pl',
+    'http://api.test/v1/meta?lang=en',
+  ])
 })
 
 test('returns a problem+json error as the error value', async () => {
-  vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-    jsonResponse({ type: 'about:blank', title: 'Data unavailable', status: 503 }, 503),
-  )
+  mockFetch(() => jsonResponse(problemFixture, 503))
 
-  const { data, error } = await api.GET('/meta', { params: { query: { lang: 'pl' } } })
+  const { data, error, response } = await api.GET('/meta')
 
   expect(data).toBeUndefined()
-  expect(error?.status).toBe(503)
+  expect(error?.title).toBe('Data unavailable')
+  expect(response.status).toBe(503)
 })

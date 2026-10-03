@@ -1,0 +1,40 @@
+{
+  "site": {
+    "name": "GdzieZamieszkać",
+    "city": "Miasto: {{city}}"
+  },
+  "skipLink": "Przejdź do treści głównej",
+  "nav": {
+    "label": "Nawigacja główna",
+    "home": "Strona główna"
+  },
+  "language": {
+    "label": "Język"
+  },
+  "states": {
+    "loading": "Wczytywanie danych…",
+    "retry": "Spróbuj ponownie",
+    "error": {
+      "generic": "Nie udało się wczytać danych. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "tooManyRequests": "Zbyt wiele zapytań w krótkim czasie. Odczekaj chwilę i spróbuj ponownie.",
+      "unavailable": "Serwis z danymi jest chwilowo niedostępny. Spróbuj ponownie za chwilę."
+    }
+  },
+  "stale": {
+    "notice": "Część danych może być nieaktualna. Nadal pokazujemy ostatnią sprawdzoną wersję."
+  },
+  "footer": {
+    "sources": "Źródła danych"
+  },
+  "home": {
+    "title": "Strona główna",
+    "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
+    "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
+    "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników."
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "text": "Strona pod tym adresem nie istnieje.",
+    "back": "Wróć na stronę główną"
+  }
+}

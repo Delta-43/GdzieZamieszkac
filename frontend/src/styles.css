@@ -1,0 +1,141 @@
+/*
+  Structure only. Task F3 adds the theme tokens (colours, fonts) in src/theme/.
+  Until then every colour is a system colour, so no colour is hard-coded here.
+*/
+
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid CanvasText;
+  outline-offset: 2px;
+}
+
+/* The skip link is the first focusable element. It is off screen until it has focus. */
+.skip-link {
+  position: absolute;
+  inset-block-start: -10rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: Canvas;
+  border: 2px solid CanvasText;
+}
+
+.skip-link:focus {
+  inset-block-start: 0.5rem;
+}
+
+.site-header,
+main,
+.site-footer,
+.stale-notice {
+  box-sizing: border-box;
+  max-inline-size: 70rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding-block: 0.75rem;
+}
+
+.site-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.site-city {
+  font-weight: 400;
+}
+
+.site-header nav {
+  flex: 1 1 auto;
+}
+
+.site-header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Pointer targets: at least 24 by 24 CSS pixels is required; 44 is the aim on touch screens. */
+.site-header a,
+.language-toggle button,
+.error-message button {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+}
+
+.site-header nav a[aria-current='page'] {
+  font-weight: 600;
+  text-decoration-thickness: 0.2em;
+}
+
+.language-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.language-toggle button,
+.error-message button {
+  padding-inline: 0.75rem;
+  font: inherit;
+  background: ButtonFace;
+  color: ButtonText;
+  border: 1px solid ButtonBorder;
+}
+
+/* The chosen language is marked by a thicker border and bold text, not by colour. */
+.language-toggle button[aria-pressed='true'] {
+  font-weight: 600;
+  border-width: 3px;
+}
+
+.stale-notice {
+  border: 1px solid CanvasText;
+  padding-block: 0.25rem;
+}
+
+.stale-notice ul,
+.site-footer ul {
+  margin-block: 0.5rem;
+  padding-inline-start: 1.25rem;
+}
+
+main {
+  padding-block: 1rem 2rem;
+}
+
+/* main takes focus after navigation; it is not a control, so it shows no focus ring. */
+main:focus {
+  outline: none;
+}
+
+.site-footer {
+  padding-block: 1rem 2rem;
+  border-block-start: 1px solid CanvasText;
+  overflow-wrap: anywhere;
+}
+
+.site-footer h2 {
+  margin-block: 0 0.5rem;
+  font-size: 1rem;
+}

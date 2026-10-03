@@ -15,9 +15,11 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Task F1 is done: the project exists.** It builds, lints and tests, and the API types are generated from the contract.
-The only screen is a placeholder that shows the city name and the district count from `/meta`, to prove the app reaches the API.
-The layout, the language toggle, the theme and the real screens are tasks F2 to F8 in `TODO.md`.
+**Tasks F1 and F2 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
+stale-data notice, loading and error states, and a footer with the credit line of every source.
+There are two pages, home and "page not found". The navigation lists only pages that exist, so it grows with each task.
+The theme tokens are task F3. Until then the styles use system colours only. The real screens are tasks F4 to F8 in `TODO.md`.
 
 ## Commands
 
