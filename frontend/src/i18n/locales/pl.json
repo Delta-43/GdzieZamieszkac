@@ -11,7 +11,8 @@
     "menu": "Menu",
     "close": "Zamknij menu",
     "groupDistricts": "Dzielnice",
-    "findDistrict": "Znajdź dzielnicę"
+    "findDistrict": "Znajdź dzielnicę",
+    "compare": "Porównaj dzielnice"
   },
   "language": {
     "label": "Język"
@@ -202,5 +203,21 @@
       "tooManySeconds": "Zbyt wiele podsumowań w krótkim czasie. Spróbuj ponownie za {{seconds}} s.",
       "generic": "Nie udało się wysłać opisu. Sprawdź połączenie z internetem i spróbuj ponownie."
     }
+  },
+  "compare": {
+    "title": "Porównaj dzielnice",
+    "heading": "Porównaj dzielnice",
+    "intro": "Wybierz od dwóch do czterech dzielnic. Tabele pokazują te same miary obok siebie, bez wskazywania lepszej dzielnicy.",
+    "choose": "Wybierz dzielnice (od {{min}} do {{max}})",
+    "count": "Wybrane dzielnice: {{count}} z {{max}}.",
+    "countFull": "Wybrane dzielnice: {{count}} z {{max}}. Aby dodać inną dzielnicę, najpierw odznacz jedną z wybranych.",
+    "clear": "Wyczyść wybór",
+    "tooFew": "Wybierz co najmniej {{min}} dzielnice, aby zobaczyć porównanie.",
+    "tooMany": "Można porównać najwyżej {{max}} dzielnice. Odznacz część wybranych.",
+    "ready": "Porównanie gotowe: {{names}}.",
+    "unknown": "Nie udało się porównać tych dzielnic. Sprawdź adres strony albo wybierz dzielnice z listy.",
+    "metric": "Miara",
+    "more": "Metodę, zastrzeżenia, licencję i oznaczenie źródła każdej miary znajdziesz na stronie dzielnicy.",
+    "region": "Tabela: {{label}}. Można ją przewijać."
   }
 }

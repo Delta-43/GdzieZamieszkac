@@ -8,7 +8,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 ## Where things stand
 
 - The app exists and runs. Tasks F1 to F6 are merged into `develop`. `TODO.md` has the status of every task.
-- Pages: home (`/`), districts with the map and the list (`/districts`), one district (`/districts/<code>`), find a district (`/find`), and "page not found".
+- Pages: home (`/`), districts with the map and the list (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`, on `frontend/f7-compare`, issue #49), and "page not found".
 - Shared parts: skip link, header with a menu button, a menu that opens from the left, language toggle (Polish default), stale-data notice, loading and error states, footer with every source linked to its origin.
 - `npm run check` passes: both contracts in `api:check`, lint, type check, 91 tests, build (about 127 KB of JavaScript compressed).
 - The branch `frontend/c4-city-service` holds the groundwork for the city service (types, client, dev proxy), the updated `TODO.md` and this file.
@@ -24,7 +24,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
    - The endpoint allows 10 reports a minute for the whole team, and each one costs the coordinator's model budget. Send only on the button. Use fixtures in tests.
 2. **C4-2, the feedback page**: two forms (`rent_paid`, `data_problem`). Show the note from `GET /v1/feedback/status` before sending. Put the word TEST in any message you send by hand, because reports are stored.
 3. **C4-3, the notices label**: "to be implemented after city approval". No endpoint.
-4. **F7 compare**, then **F8 sources, "how it works" and the draft accessibility statement**.
+4. **F7 compare** is built (issue #49), ahead of C4-2 and C4-3 on Aryna's decision. Then **F8 sources, "how it works" and the draft accessibility statement**.
 5. The small fixes at the end of `TODO.md`.
 
 ## Decisions that are still open (not ours to make)

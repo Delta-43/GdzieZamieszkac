@@ -215,6 +215,22 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/districts.geojson') return jsonResponse(boundariesFixture)
   if (pathname === '/v1/recommend') return jsonResponse(recommendFixture)
   if (pathname === '/v1/personas') return jsonResponse(personasFixture)
+  if (pathname === '/v1/compare') {
+    const codes = (new URL(request.url).searchParams.get('codes') ?? '').split(',')
+    if (codes.includes('nope')) return jsonResponse({ type: 'about:blank', title: 'Unknown district', status: 404 }, 404)
+    // Every district answers with the detail fixture under its own code. Beta has no rental values and no sale price.
+    return jsonResponse({
+      lang: 'pl',
+      districts: codes.map((code) => ({
+        ...detailFixture,
+        code,
+        name: code.charAt(0).toUpperCase() + code.slice(1),
+        ...(code === 'beta'
+          ? { yield_gross: null, categories: detailFixture.categories.map((category) => ({ ...category, metrics: category.metrics.filter((metric) => metric.key !== 'test_sale') })) }
+          : {}),
+      })),
+    })
+  }
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
   if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)

@@ -1264,3 +1264,64 @@ main > .ai-report-card {
 .ai-report-card__answer h3 {
   margin-block-start: var(--space-5);
 }
+
+/* The compare page: a list of checkboxes that wraps into columns, then one table per category. */
+.compare-picker {
+  margin: var(--space-4) 0;
+}
+
+.compare-picker legend {
+  padding-inline: var(--space-2);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.compare-picker__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.compare-picker label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target);
+  cursor: pointer;
+}
+
+.compare-picker input {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.compare-picker input[aria-disabled='true'] + span {
+  color: var(--color-text-muted);
+}
+
+/* The measure column stays narrow enough for four districts beside it; a cell keeps a readable width and the region scrolls. */
+.compare-table th,
+.compare-table td {
+  min-inline-size: 9rem;
+  vertical-align: top;
+}
+
+.compare-table thead th {
+  font-size: var(--text-sm);
+}
+
+.compare-table__value {
+  font-weight: 700;
+}
+
+.compare-table__source {
+  display: block;
+  font-weight: 400;
+}

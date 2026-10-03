@@ -175,3 +175,19 @@ export function useRecommend(weights: CategoryWeights | null) {
     },
   })
 }
+
+/** Two to four districts side by side, in the order asked for. Not asked until the choice is complete. */
+export function useCompare(codes: string[]) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['compare', codes, i18n.language],
+    enabled: codes.length >= 2 && codes.length <= 4,
+    // An unknown district answers 404 and a wrong count 422. Asking again would not help.
+    retry: (count, error) => !(error instanceof ApiError && error.status < 500) && count < 1,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/compare', { params: { query: { codes: codes.join(',') } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
