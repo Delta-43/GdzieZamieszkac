@@ -13,6 +13,9 @@ export function HomePage() {
       <p>
         <Link className="button-primary" to="/districts">
           {t('home.cta')}
+        </Link>{' '}
+        <Link className="button-secondary" to="/find">
+          {t('nav.findDistrict')}
         </Link>
       </p>
     </>

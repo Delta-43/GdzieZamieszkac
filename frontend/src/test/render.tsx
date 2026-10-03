@@ -4,9 +4,9 @@ import { MemoryRouter } from 'react-router'
 import { vi } from 'vitest'
 import { App } from '../App'
 
-/** Renders the whole app at a path, with a fresh query cache and no retries. */
+/** Renders the whole app at a path, with a fresh query cache, no retries, and the app's five-minute stale time. */
 export function renderApp(path = '/') {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 5 * 60 * 1000 } } })
   return render(
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[path]}>

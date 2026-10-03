@@ -2,6 +2,7 @@
 export const PAGES = [
   { to: '/', labelKey: 'nav.home', end: true },
   { to: '/districts', labelKey: 'nav.districts', end: true },
+  { to: '/find', labelKey: 'nav.findDistrict', end: true },
 ] as const
 
 /** Lower case and without diacritics, so "lagiewniki" finds "Łagiewniki". */

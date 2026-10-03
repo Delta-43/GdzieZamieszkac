@@ -137,3 +137,41 @@ export function useDistrictSeries(code: string | undefined, key: string) {
     },
   })
 }
+
+/** The category names as the API sends them. They arrive only inside a district's detail, so the first district is read for them. */
+export function useCategoryLabels(): Map<string, string> {
+  const districts = useDistricts()
+  const detail = useDistrictDetail(districts.data?.districts?.[0]?.code)
+  return new Map(detail.data?.categories.map((category) => [category.category as string, category.label]))
+}
+
+/** The named weight presets of the recommender. */
+export function usePersonas() {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['personas', i18n.language],
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/personas')
+      if (error) throw new ApiError(response.status, error.title)
+      return data.personas
+    },
+  })
+}
+
+export type CategoryWeights = Record<ScoredCategory, number>
+
+/**
+ * The ranking of the districts for the given category weights. With no weights the API returns the default
+ * livability score. Each set of weights is cached, because the endpoint is rate limited.
+ */
+export function useRecommend(weights: CategoryWeights | null) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['recommend', weights, i18n.language],
+    queryFn: async () => {
+      const { data, error, response } = await api.POST('/recommend', { body: weights ? { weights: { category: weights } } : {} })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}

@@ -189,6 +189,14 @@ export const recommendFixture: Schemas['RecommendResponse'] = {
   ],
 }
 
+export const personasFixture = {
+  lang: 'pl' as const,
+  personas: [
+    { key: 'test_one', label: 'Test persona one', description: 'Test persona one description.', weights: { category: { cost: 5, transport: 4, safety: 0 } } },
+    { key: 'test_two', label: 'Test persona two', description: 'Test persona two description.', weights: { category: { environment: 3 } } },
+  ] satisfies Schemas['Persona'][],
+}
+
 /** Answers every endpoint the districts page calls, from the fixtures above. */
 export function districtsApi(request: Request): Response {
   const { pathname } = new URL(request.url)
@@ -201,6 +209,7 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/districts') return jsonResponse(districtsFixture)
   if (pathname === '/v1/districts.geojson') return jsonResponse(boundariesFixture)
   if (pathname === '/v1/recommend') return jsonResponse(recommendFixture)
+  if (pathname === '/v1/personas') return jsonResponse(personasFixture)
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
   if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)

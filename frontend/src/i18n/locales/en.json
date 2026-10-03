@@ -15,7 +15,8 @@
     "city": "City",
     "groupPortal": "Portal",
     "groupDistricts": "Districts",
-    "noMatch": "There is no district with that name."
+    "noMatch": "There is no district with that name.",
+    "findDistrict": "Find a district"
   },
   "language": {
     "label": "Language"
@@ -155,6 +156,33 @@
       "confidence": "Confidence",
       "low": "low",
       "enough": "sufficient"
+    }
+  },
+  "find": {
+    "title": "Find a district",
+    "heading": "Find a district that fits you",
+    "intro": "Pick a ready profile, or set how much each category matters to you. The API computes the ranking from public data.",
+    "priorities": "Your priorities",
+    "presets": "Ready profiles",
+    "hint": "The scale runs from 0 to 5. A value of 0 leaves the category out. A value of 5 counts five times as much as 1.",
+    "weight": "{{value}} of {{max}}",
+    "left_out": "0 – category left out",
+    "allZero": "Every category is set to 0. Set at least one category above zero.",
+    "submit": "Show the ranking",
+    "reset": "Back to the defaults",
+    "ranking": "Ranking of the districts",
+    "ready": "The ranking is ready. First place: {{name}}.",
+    "readyDefault": "The default ranking, with no weights. First place: {{name}}.",
+    "percentile": "percentile {{value}}",
+    "used": "Number of measures in the score: {{count}}.",
+    "missing": "Measures without data in this city are left out of the score:",
+    "table": {
+      "region": "Table with the ranking of the districts. It scrolls.",
+      "caption": "Ranking for your priorities",
+      "captionDefault": "Default ranking: the livability score",
+      "rank": "Place",
+      "score": "Score (0–100)",
+      "drivers": "What moves the score most"
     }
   }
 }
