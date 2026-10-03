@@ -41,6 +41,7 @@ Unchanged from `README.md`: `src/api`, `src/components`, `src/pages`, `src/i18n/
 1. Is the placeholder theme acceptable until the design requirements arrive?
 2. Is the 5.9 TypeScript pin acceptable, or should we try the newest versions first?
 3. Who starts F1: `Rysia`, or an agent working for `unicorn-alex`? Both own `frontend/`, so two people must not start it in parallel.
+   **Answered 3 October:** `unicorn-alex` (the frontend is hers while `Rysia` is on break). Questions 1 and 2 are still open.
 
 ## Rules that every pull request keeps
 
