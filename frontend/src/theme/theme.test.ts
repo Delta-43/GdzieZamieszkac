@@ -33,12 +33,12 @@ test('the map ramp gets darker with every step, so its order does not depend on 
 })
 
 test('a district outline shows on every map step: the dark line or its light halo reaches 3:1', () => {
-  // The outline is a dark line (text) on a light halo (surface). On a pale step the line shows, on a deep step the halo does.
+  // The outline is a dark line (text) on a light halo (surfaceRaised). On a pale step the line shows, on a deep step the halo does.
   for (const step of MAP_RAMP) {
-    const best = Math.max(contrastRatio(colors.text, colors[step]), contrastRatio(colors.surface, colors[step]))
+    const best = Math.max(contrastRatio(colors.text, colors[step]), contrastRatio(colors.surfaceRaised, colors[step]))
     expect(best).toBeGreaterThanOrEqual(UI_MIN)
   }
-  expect(contrastRatio(colors.text, colors.surface)).toBeGreaterThanOrEqual(UI_MIN)
+  expect(contrastRatio(colors.text, colors.surfaceRaised)).toBeGreaterThanOrEqual(UI_MIN)
 })
 
 test('the theme stylesheet defines a custom property for every colour', () => {

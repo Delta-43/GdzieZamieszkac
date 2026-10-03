@@ -1,30 +1,31 @@
 // The one file that holds the theme. No component and no stylesheet writes a colour, a font or a size of its own:
 // they use the CSS custom properties that src/theme/index.ts builds from these values.
 //
-// Status: PROPOSAL, merged from two team documents on 3 October 2026.
-// - Colours: the Kraków blue tokens of unicorn-alex in ../../design/krakow-blue.tokens.css (light theme only).
-//   The coordinator had accepted the Field Journal palette in ../../../docs/DESIGN.md and had not yet said whether
-//   the blue replaces it. Swapping the palette means changing the values here; theme.test.ts keeps the contrast honest.
-// - Fonts, type scale, spacing and the 44 pixel target: the accepted ../../../docs/DESIGN.md (Field Journal).
-// - The four status colours are not in the blue tokens. They are kept from the first version of this file.
+// Status: PROPOSAL (3 October 2026). The look follows the city's own website, krakow.pl: a white page, grey panels,
+// one blue, dark navy text and the Lato typeface. The colours are the ones that site's stylesheet uses most
+// (blue #0063af, ink #071f32, grey #f5f5f5, hairline #bfbfbf). Colours and a typeface only: no logo, crest or photo.
+// The map ramp is the one from ../../design/krakow-blue.tokens.css. The focus and status colours are ours.
+// The coordinator's accepted design is ../../../docs/DESIGN.md (Field Journal); whether this look replaces it is the
+// coordinator's open decision. Changing the look means changing the values here; theme.test.ts keeps the contrast honest.
 
 export const colors = {
   /** The page. */
-  bg: '#f6f9fc',
-  /** Cards, panels, the header bar and the footer. */
-  surface: '#ffffff',
+  bg: '#ffffff',
+  /** Grey panels: the map stage, notices, the footer, a chosen table row. */
+  surface: '#f5f5f5',
+  /** White cards and controls. */
   surfaceRaised: '#ffffff',
   /** Decorative hairline between rows. It carries no meaning, so it has no contrast requirement. */
-  border: '#c5d3e0',
-  /** Border of a control (button, input). It must reach 3:1 against the page. */
-  borderStrong: '#4a6a85',
-  text: '#061f30',
-  textMuted: '#3d566b',
+  border: '#bfbfbf',
+  /** Border of a control (button, input). It must reach 3:1 against the page and against a panel. */
+  borderStrong: '#6b6b6b',
+  text: '#071f32',
+  textMuted: '#505050',
   /** The one Kraków blue: the navigation band, the primary action, the chosen item and links. */
   accent: '#0063af',
   accentContrast: '#ffffff',
   link: '#0063af',
-  /** The focus ring on the page and on cards. */
+  /** The focus ring on the page and on panels. */
   focus: '#b35c00',
   /** The focus ring on the blue band, where the orange ring would not show. */
   focusOnAccent: '#ffffff',
@@ -42,7 +43,7 @@ export const colors = {
   mapRamp4: '#0063af',
   mapRamp5: '#0a3a66',
   /** "No data" is hatching, never a fill that looks like a low value. */
-  noDataStripe: '#c5d3e0',
+  noDataStripe: '#bfbfbf',
 } as const
 
 export type ColorToken = keyof typeof colors
@@ -91,12 +92,13 @@ export const CONTRAST_PAIRS: ContrastPair[] = [
 export const MAP_RAMP: ColorToken[] = ['mapRamp1', 'mapRamp2', 'mapRamp3', 'mapRamp4', 'mapRamp5']
 
 /**
- * Fonts are self-hosted from /fonts/ (see fonts.css): Literata for headings and running text, IBM Plex Sans for the
- * interface (navigation, buttons, labels, tables, data captions). Both are under the SIL Open Font Licence.
+ * One typeface for everything, as on the city's website: Lato, regular and bold. It is self-hosted (bundled from the
+ * @fontsource/lato package, SIL Open Font Licence 1.1) and includes the Latin Extended range that Polish needs.
+ * The two names stay separate, so text and interface can take different faces again without touching the styles.
  */
 export const fonts = {
-  body: "Literata, Georgia, 'Times New Roman', serif",
-  ui: "'IBM Plex Sans', 'Segoe UI', sans-serif",
+  body: "Lato, 'Segoe UI', Arial, sans-serif",
+  ui: "Lato, 'Segoe UI', Arial, sans-serif",
 } as const
 
 /** Sizes, spacing, corners and durations, in rem so the user's text size setting is respected. */
@@ -108,7 +110,7 @@ export const scale = {
   'text-xl': '1.625rem',
   'text-2xl': '2rem',
   'line-tight': '1.2',
-  'line-base': '1.65',
+  'line-base': '1.5',
   'space-1': '0.25rem',
   'space-2': '0.5rem',
   'space-3': '0.75rem',
