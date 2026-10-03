@@ -37,7 +37,6 @@ FEEDBACK_NOTE = {
     "pl": "Zgłoszenia są zapisywane jako niezweryfikowane. Nie są publikowane i nie wpływają na żaden wynik, dopóki nie będzie weryfikacji tożsamości.",
     "en": "Reports are stored as unverified. They are not published and change no score until identity checks exist.",
 }
-SIZE_BANDS = ("up_to_30", "31_50", "51_70", "over_70")
 Lang = Literal["pl", "en"]
 
 
