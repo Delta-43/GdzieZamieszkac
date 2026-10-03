@@ -1,7 +1,7 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { expect, test } from 'vitest'
 import { axe } from 'vitest-axe'
-import { jsonResponse, metaFixture, problemFixture } from './test/fixtures'
+import { districtsApi, jsonResponse, metaFixture, problemFixture } from './test/fixtures'
 import { mockFetch, renderApp, requestedUrls } from './test/render'
 
 test('starts in Polish, with the skip link as the first focusable element', async () => {
@@ -22,7 +22,8 @@ test('the toggle switches the text, the page language, the stored choice and the
   const fetchMock = mockFetch(() => jsonResponse(metaFixture))
   renderApp()
   await screen.findByText('Test credit line B')
-  expect(requestedUrls(fetchMock)).toEqual(['http://api.test/v1/meta?lang=pl'])
+  // Every page asks for /meta (header, footer) and /districts (menu, footer), both in the chosen language.
+  expect(requestedUrls(fetchMock).sort()).toEqual(['http://api.test/v1/districts?lang=pl', 'http://api.test/v1/meta?lang=pl'])
 
   fireEvent.click(screen.getByRole('button', { name: 'English' }))
 
@@ -49,7 +50,8 @@ test('shows the city name and each credit line from /meta once', async () => {
 
 test('shows the stale notice when the API sends X-Data-Warning, and keeps it after an answer without the header', async () => {
   let calls = 0
-  mockFetch(() => {
+  mockFetch((request) => {
+    if (new URL(request.url).pathname !== '/v1/meta') return jsonResponse(metaFixture)
     calls += 1
     return jsonResponse(metaFixture, 200, calls === 1 ? { 'X-Data-Warning': 'stale-data; see /v1/meta' } : {})
   })
@@ -119,4 +121,67 @@ test.each(['pl', 'en'] as const)('the home and not-found pages have no automated
     expect((await axe(container)).violations).toEqual([])
     unmount()
   }
+})
+
+test('the menu opens from its button, takes the focus, makes the page inert, and closes with Escape', async () => {
+  mockFetch(districtsApi)
+  renderApp()
+  const button = await screen.findByRole('button', { name: 'Menu' })
+  expect(button).toHaveAttribute('aria-expanded', 'false')
+  // Closed, the menu is hidden from assistive software and cannot be reached.
+  expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
+
+  fireEvent.click(button)
+
+  const menu = screen.getByRole('navigation', { name: 'Nawigacja główna' })
+  expect(button).toHaveAttribute('aria-expanded', 'true')
+  expect(within(menu).getByRole('button', { name: 'Zamknij' })).toHaveFocus()
+  expect(document.querySelector('main')?.closest('[inert]')).not.toBeNull()
+  expect(within(menu).getByRole('link', { name: 'Strona główna' })).toHaveAttribute('aria-current', 'page')
+  expect(within(menu).getByRole('link', { name: 'Dzielnice na mapie' })).toHaveAttribute('href', '/districts')
+  expect(await within(menu).findByText('Testowo')).toBeInTheDocument()
+
+  fireEvent.keyDown(document, { key: 'Escape' })
+
+  expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
+  expect(button).toHaveFocus()
+  expect(document.querySelector('main')?.closest('[inert]')).toBeNull()
+})
+
+test('the menu search filters the districts without diacritics, and Enter opens the first match', async () => {
+  mockFetch(districtsApi)
+  renderApp()
+  fireEvent.click(await screen.findByRole('button', { name: 'Menu' }))
+  const menu = screen.getByRole('navigation', { name: 'Nawigacja główna' })
+  expect(await within(menu).findByRole('link', { name: 'Alpha' })).toBeInTheDocument()
+  expect(within(menu).getByRole('link', { name: 'Delta' })).toBeInTheDocument()
+
+  const search = within(menu).getByLabelText('Znajdź')
+  fireEvent.change(search, { target: { value: 'zzz' } })
+  expect(within(menu).getByText('Nie ma dzielnicy o takiej nazwie.')).toBeInTheDocument()
+
+  fireEvent.change(search, { target: { value: 'ÁLP' } })
+  expect(within(menu).getByRole('link', { name: 'Alpha' })).toBeInTheDocument()
+  expect(within(menu).queryByRole('link', { name: 'Delta' })).not.toBeInTheDocument()
+
+  fireEvent.submit(search.closest('form') as HTMLFormElement)
+
+  // Navigation closes the menu and moves the focus to the new page.
+  expect(await screen.findByRole('heading', { level: 1, name: 'Alpha' })).toBeInTheDocument()
+  expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
+  expect(screen.getByRole('main')).toHaveFocus()
+})
+
+test('the footer lists the pages, every district and every credit line', async () => {
+  mockFetch(districtsApi)
+  renderApp()
+
+  const footer = await screen.findByRole('contentinfo')
+  expect(within(footer).getByText('Poznaj dzielnice, zanim zaczniesz szukać mieszkania.')).toBeInTheDocument()
+  expect(within(footer).getByRole('navigation', { name: 'Nawigacja w stopce' })).toBeInTheDocument()
+  const districts = await within(footer).findByRole('navigation', { name: 'Dzielnice' })
+  expect(within(districts).getAllByRole('link')).toHaveLength(4)
+  expect(within(districts).getByRole('link', { name: 'Gamma' })).toHaveAttribute('href', '/districts/gamma')
+  expect(within(footer).getByRole('heading', { name: 'Źródła danych' })).toBeInTheDocument()
+  expect(within(footer).getByText('Test credit line A')).toBeInTheDocument()
 })

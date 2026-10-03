@@ -7,7 +7,15 @@
   "nav": {
     "label": "Main navigation",
     "home": "Home",
-    "districts": "Districts"
+    "districts": "Districts on the map",
+    "menu": "Menu",
+    "close": "Close",
+    "find": "Find",
+    "findPlaceholder": "a district…",
+    "city": "City",
+    "groupPortal": "Portal",
+    "groupDistricts": "Districts",
+    "noMatch": "There is no district with that name."
   },
   "language": {
     "label": "Language"
@@ -25,7 +33,9 @@
     "notice": "Some data may be out of date. We still show the last checked version."
   },
   "footer": {
-    "sources": "Data sources"
+    "sources": "Data sources",
+    "nav": "Footer navigation",
+    "tagline": "Get to know the districts before you look for a flat."
   },
   "home": {
     "title": "Home",

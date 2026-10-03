@@ -16,9 +16,9 @@ This is not a listings site. It shows data about districts, not offers.
 ## Status
 
 **Tasks F1 to F5 are done.** The project builds, lints and tests, and the API types are generated from the contract.
-The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
-stale-data notice, loading and error states, and a footer with the credit line of every source.
-The pages are home, districts (map and list), one district, and "page not found". The navigation lists only pages that exist, so it grows with each task.
+The shared parts exist: skip link, header with the city name from `/meta`, a menu that slides in from the left (district search first, then groups of links),
+language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages, every district and the credit line of every source.
+The pages are home, districts (map and list), one district, and "page not found". The menu and the footer list only pages that exist (`src/lib/pages.ts`), so they grow with each task.
 The other screens are tasks F6 to F8 in `TODO.md`.
 
 On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
