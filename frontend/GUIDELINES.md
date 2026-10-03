@@ -26,7 +26,7 @@ The jury's weights decide what we build first when time is short.
 3. **Ask before a big change.** A big change is described first, with its reason, and needs a yes. Examples: a new dependency, a change of folder layout,
    a change of stack, deleting or rewriting a file someone else wrote.
 4. **Work only in `frontend/`.** Do not touch `backend/`, `server/`, `data/` or `docs/`.
-   The one exception outside this folder is the line in the root `ON_SITE_CHANGELOG.md` that every change needs.
+   The one exception outside this folder is the new file in the root `changelog/` that every change needs (`changelog/README.md`). Do not edit `ON_SITE_CHANGELOG.md` itself.
    If the frontend needs something from the API, open a `contract` issue. Do not edit `backend/openapi.yaml`.
 5. **Never change database tables directly.** The frontend has no database access at all. It reads the API and nothing else.
 6. **Commit after each big step,** with a full message that says what changed and why, and add the changelog line in the same commit.

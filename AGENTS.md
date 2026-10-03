@@ -9,7 +9,7 @@ Start with `TODO.md`. It has the priorities and the owner of each task. `docs/ID
 HackYeah requires that earlier work and on-site work are clearly separated. This repository's first commit is the import of the earlier work.
 
 1. Never rewrite history or squash the first commit.
-2. Record every change to imported code in `ON_SITE_CHANGELOG.md`, with the date and the reason.
+2. Record every change to imported code, with the date and the reason, as a new file in `changelog/` (see `changelog/README.md`). Do not edit `ON_SITE_CHANGELOG.md` in a pull request: the coordinator builds the fragments into it before each merge into `main`.
 3. Never describe earlier work as done on site. Never hide a significant earlier part.
 4. Disclose any significant use of AI tools, models, APIs, datasets and libraries in `README.md`.
 
