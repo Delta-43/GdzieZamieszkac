@@ -50,7 +50,7 @@ test('the theme stylesheet defines a custom property for every colour', () => {
 })
 
 test('no colour is written outside the theme folder', () => {
-  const sources = import.meta.glob(['/src/**/*.{css,ts,tsx}', '!/src/theme/**', '!/src/api/schema.d.ts', '!/src/**/*.test.*'], {
+  const sources = import.meta.glob(['/src/**/*.{css,ts,tsx}', '!/src/theme/**', '!/src/api/schema.d.ts', '!/src/api/citySchema.d.ts', '!/src/**/*.test.*'], {
     query: '?raw',
     import: 'default',
     eager: true,

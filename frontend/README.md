@@ -63,7 +63,7 @@ Run them from this folder. Tested with Node 26 and npm 11.
 | `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
 | `npm run typecheck` | Checks the types only. |
 | `npm test` | Runs the tests once, with an automated accessibility check on each rendered page. |
-| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml`. Run it after every contract change and commit the result. |
+| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml` and `src/api/citySchema.d.ts` from `../city-service/openapi.yaml`. Run it after every contract change and commit the result. |
 | `npm run api:check` | Fails when the committed types differ from a fresh run. |
 | `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
 
@@ -148,6 +148,8 @@ Every user shares one rate limit, about 600 requests a minute, so cache (the ans
 | Variable | Meaning |
 |---|---|
 | `VITE_DEV_API` | Development only. The address the dev server forwards `/v1` to. Defaults to `http://localhost:8000`. Never shipped. |
+| `VITE_DEV_CITY` | Development only. The address the dev server forwards `/v1/ai-report` and `/v1/feedback` to (the city service). Defaults to `http://localhost:8100`. Never shipped. |
+| `VITE_CITY_API_URL` | Build argument. Origin of the city service. Empty means the same origin as the page. |
 | `DEV_ALLOWED_HOSTS` | Development only. Extra host names the dev server answers to, comma separated. Names ending in `.ts.net` are always allowed. |
 | `VITE_API_URL` | Build argument. Origin of the API. Empty means the same origin as the page. The client adds the `/v1` prefix. |
 
