@@ -61,6 +61,8 @@ Copy `.env.example` to `.env.local` and put the API address there. Git ignores `
 | `AGENTS.md` | The hard rules. Read it first. |
 | `TODO.md` | The tasks in order, with sizes and the condition for done. |
 | `REVIEW_CHECKLIST.md` | What a reviewer checks. Run it yourself before you ask for a review. |
+| `HANDOFF.md` | State of the work, the design session, what is undecided, and next steps. Read it after `AGENTS.md`. |
+| `design/` | A clickable mock-up of the Districts screen and the proposed Kraków blue tokens. Mock-up values are samples. |
 | `REQUIREMENTS.md` | Screens, elements, states, phases and the definition of done. |
 | `API.md` | How to use the contract, with real example responses and the known gaps. |
 | `ACCESSIBILITY.md` | What WCAG 2.2 level AA means for this app, and how to test it. |
@@ -114,23 +116,21 @@ These came up in a trial run on 2026-10-03. They save you an afternoon.
 
 ## Get an API
 
-No API is deployed. For the hackathon, the coordinator (`Delta-43`) runs the Kraków backend on their own machine and shares a temporary public address through a tunnel.
-The address changes each time the tunnel restarts, so ask for the current one.
+No API is deployed. For the hackathon, the coordinator (`Delta-43`) runs the Kraków backend on their own machine and shares it **only over the team Tailscale network**. It is plain HTTP, and it is not on the public internet.
+The host name is private, because this repository is public. Never write it in a file that is committed, in an issue, or in a pull request.
 
-1. Ask the coordinator for the API address. It looks like `https://something.example`.
-2. Put it in a local file that git ignores, such as `.env.local`, as `VITE_DEV_API=https://something.example`.
-3. Let the dev server forward `/v1` to that address. Your browser then makes same-origin requests, and you need no CORS setup.
-4. Check it: open `/v1/meta` in the browser. You should see `"city": "krakow"` and `"district_count": 18`.
+1. Join the team Tailscale network and keep it connected.
+2. Ask the coordinator for the API host name.
+3. Put it in a local file that git ignores, such as `.env.local`, as `VITE_DEV_API=http://<host>:8000`. Do not add `/v1`. The client adds it.
+4. Let the dev server forward `/v1` to that address. Your browser then makes same-origin requests, and you need no CORS setup.
+5. Check it: open `/v1/health` (it answers `{"status":"ok","database":"reachable"}`) and `/v1/meta` (it shows `"city": "krakow"` and `"district_count": 18`).
 
-If the address stops working, the tunnel is down. Ask the coordinator to restart it. Do not copy data into the repository as a work-around.
+Use the host name. The bare Tailscale IP answers `404`, because the proxy routes by name.
+If the API stops answering, check that Tailscale is connected, then that the coordinator's machine is awake, then comment on the pinned issue #4. Do not copy data into the repository as a work-around.
 
-The coordinator starts the API like this. The tunnel shows all clients as one address, so set `TRUSTED_PROXY_HOPS=1` to keep the rate limits fair.
+Run your dev server on port 5173 and listen on the network (`--host`) if the reviewer opens it from another machine. The API allows the origins `http://localhost:5173` and the developers' dev addresses, and no others. Ask in #4 to allow another origin.
 
-```bash
-cd backend
-API_DB_URL=... CITY=krakow TRUSTED_PROXY_HOPS=1 .venv/bin/uvicorn app.main:app_from_env --factory --port 8000
-cloudflared tunnel --url http://localhost:8000      # or another tunnel tool
-```
+Every user shares one rate limit, about 600 requests a minute, so cache (the answers carry an `ETag`, with a five-minute stale time) and avoid bursts. `BACKEND_CONTRACT.md` has the details of the server, and `API.md` the endpoints.
 
 | Variable | Meaning |
 |---|---|
