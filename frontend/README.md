@@ -40,14 +40,13 @@ All colours, fonts and sizes are in `src/theme/tokens.ts`. Stylesheets and compo
 `src/theme/theme.test.ts` checks every colour pair in use (4.5:1 for text, 3:1 for interface parts) and fails if a colour appears outside the theme folder.
 To put a colour on a new background, add the pair to `CONTRAST_PAIRS` first.
 
-The theme is a **proposal** that merges two team documents (3 October 2026):
+The theme is a **proposal** (3 October 2026). It follows the look of the city's own website, krakow.pl:
 
-- **Colours:** the Kraków blue tokens in `design/krakow-blue.tokens.css` (light theme only). The coordinator accepted the Field Journal palette in `../docs/DESIGN.md` and has not yet said whether the blue replaces it. Changing the palette means changing the values in `tokens.ts`.
-- **Fonts, type scale and spacing:** the accepted `../docs/DESIGN.md`. Literata is for headings and running text. IBM Plex Sans is for the interface.
-- **Layout of the districts page:** the mock-up in `design/districts-mockup.html` (map with category buttons, a tabbed panel beside it). The header keeps a white bar over a blue navigation band, and the map prints class numbers, not dots or names.
+- **Colours:** a white page, grey panels, one blue and dark navy text, taken from that site's stylesheet (blue `#0063af`, ink `#071f32`, grey `#f5f5f5`). The map ramp is the one in `design/krakow-blue.tokens.css`. Colours only: no logo, crest or photo of the city is used.
+- **Font:** Lato, regular and bold, the typeface of that site. It is bundled from the `@fontsource/lato` package (SIL Open Font Licence 1.1) and served with the app, with the Latin Extended range for Polish. Nothing loads from a third party.
+- **Layout of the districts page:** the mock-up in `design/districts-mockup.html` (map with category buttons, a tabbed panel beside it). The header is a white bar over a blue navigation band, and section headings carry a short dark bar.
 
-The fonts are served from `public/fonts/`, copied from `../docs/design/fonts/`. Both are under the SIL Open Font Licence 1.1, and each folder keeps its `LICENSE.txt`.
-Only the upright styles are shipped, in the Latin and Latin Extended ranges. Nothing loads from a third party.
+The coordinator's accepted design is `../docs/DESIGN.md` (Field Journal: moss green, Literata and IBM Plex Sans). Whether the Kraków look replaces it is the coordinator's open decision. Changing the look means changing the values in `tokens.ts`.
 
 ## Commands
 

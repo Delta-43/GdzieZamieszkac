@@ -4,7 +4,9 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import { App } from './App'
 import './i18n'
-import './theme/fonts.css'
+// Self-hosted font: the Lato files are bundled with the app, so nothing loads from a third party.
+import '@fontsource/lato/400.css'
+import '@fontsource/lato/700.css'
 import './styles.css'
 import { applyTheme } from './theme'
 
