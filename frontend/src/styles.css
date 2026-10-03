@@ -426,7 +426,8 @@ main:focus {
   gap: var(--space-1);
 }
 
-.field select {
+.field select,
+.field textarea {
   box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 28rem;
@@ -1239,4 +1240,27 @@ summary:hover {
 .notice ul {
   margin-block: var(--space-1) 0;
   padding-inline-start: var(--space-5);
+}
+
+/* The AI report card on the find page: a text field, the notice about the model provider, then the answer. */
+main > .ai-report-card {
+  margin-block-start: var(--space-5);
+}
+
+.field textarea {
+  max-inline-size: 44rem;
+  padding-block: var(--space-2);
+  font-family: var(--font-ui);
+  line-height: var(--line-base);
+  resize: vertical;
+}
+
+.ai-report-card__answer {
+  margin-block-start: var(--space-5);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ai-report-card__answer h3 {
+  margin-block-start: var(--space-5);
 }

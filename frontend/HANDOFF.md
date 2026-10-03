@@ -15,11 +15,11 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **C4-1, the AI report card** on the find page. Decided by Aryna: build it first.
+1. **C4-1, the AI report card** on the find page. Built on `frontend/c4-ai-report` (issue #42): `src/components/AiReportCard.tsx` and `src/api/useAiReport.ts`. The rules it follows:
    - Call `POST /v1/ai-report` of the city service with `requirements`, `lang`, and the weights on the sliders (or nothing for the default ranking). Use `src/api/cityClient.ts`.
    - Before the first request, say that the typed text goes to a model provider and is not stored (`../docs/CITY_SERVICE_PLAN.md`, section 2).
    - Show the API's `label` as given: it is the AI label. Show `report` as plain text in paragraphs, never as HTML. Show the three `districts` and `basis.note`.
-   - `facts`: the service sends them in English even for Polish (issue #38). The coordinator is fixing this in the backend. Until it is fixed, show the facts list only in the English view.
+   - `facts` follow `lang` since pull request #43, so the list is shown in both languages. Each district's score is the API's `score_display`.
    - A report takes 3 to 6 seconds: show a loading state. `502` and `503` get a message and the page keeps working. `429` carries `Retry-After`.
    - The endpoint allows 10 reports a minute for the whole team, and each one costs the coordinator's model budget. Send only on the button. Use fixtures in tests.
 2. **C4-2, the feedback page**: two forms (`rent_paid`, `data_problem`). Show the note from `GET /v1/feedback/status` before sending. Put the word TEST in any message you send by hand, because reports are stored.
@@ -39,7 +39,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 |---|---|---|
 | #36 | Feedback accepts an unknown extra field | `Delta-43` |
 | #37 | The Content-Security-Policy header arrives rewritten by an ad filter on the server machine | `Delta-43` |
-| #38 | AI report facts are in English for `lang=pl` | `Delta-43`, in progress |
+| #38 | AI report facts are in English for `lang=pl` | `Delta-43`, fixed on `develop` (#43) |
 | #39 | The Polish AI report writes decimals with a point | `Delta-43` |
 | #21, #23, #25, #27, #29, #34 | Our tasks. Their pull requests are merged into `develop`; GitHub closes the issues when `develop` reaches `main`. | Closed by the merge |
 
@@ -57,7 +57,8 @@ Contract gaps we work around (raise as `contract` issues if they still matter): 
 - **The dev server loses its settings when a branch without `frontend/vite.config.ts` is checked out** (an old `main` or `develop`). It keeps running without the proxy, and every API call then returns the page itself. Restart it after such a switch. Update a local branch with `git fetch origin develop:develop` to avoid the checkout.
 - **Merging.** In the agent's session `gh pr merge` was refused by the tool's permission check. Open the pull request, state that the section 7 conditions hold, and let the person merge with `gh pr merge <n> --merge`.
 - **Stacked branches.** Several tasks were built on top of each other before the first was merged. Start each new task from a current `develop`.
-- **Screenshots.** Headless Chrome will not render narrower than about 500 pixels, so 320 pixels was never checked. Check it by hand.
+- **Screenshots.** A headless Chrome window will not go narrower than about 500 pixels. Setting the width through the DevTools protocol (`Emulation.setDeviceMetricsOverride`) does render 320 pixels. The first such check found that the header's language toggle makes every page scroll sideways at 320 pixels (issue #45).
+- **Tests under load.** A few tests wait at most one second for the page. They fail now and then when the machine is busy and pass when run again.
 - **React runs effects twice in development.** An effect that acts "after navigation" must compare the address with the last one (see `components/Layout.tsx`).
 
 ## Rules that are easy to break

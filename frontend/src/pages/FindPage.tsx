@@ -10,6 +10,7 @@ import {
   type CategoryWeights,
   type ScoredCategory,
 } from '../api/useDistrictsData'
+import { AiReportCard } from '../components/AiReportCard'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { plainNumber } from '../lib/plainNumber'
@@ -211,6 +212,9 @@ export function FindPage() {
           )}
         </section>
       </div>
+
+      {/* The report narrates the ranking on screen, so it gets the weights of that ranking, not the sliders' current values. */}
+      <AiReportCard weights={applied} />
     </>
   )
 }
