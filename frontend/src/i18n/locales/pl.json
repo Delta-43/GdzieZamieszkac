@@ -12,7 +12,8 @@
     "close": "Zamknij menu",
     "groupDistricts": "Dzielnice",
     "findDistrict": "Znajdź dzielnicę",
-    "compare": "Porównaj dzielnice"
+    "compare": "Porównaj dzielnice",
+    "feedback": "Zgłoszenia"
   },
   "language": {
     "label": "Język"
@@ -219,5 +220,59 @@
     "metric": "Miara",
     "more": "Metodę, zastrzeżenia, licencję i oznaczenie źródła każdej miary znajdziesz na stronie dzielnicy.",
     "region": "Tabela: {{label}}. Można ją przewijać."
+  },
+  "feedback": {
+    "title": "Zgłoszenia",
+    "heading": "Zgłoszenia od mieszkańców",
+    "intro": "Napisz, ile faktycznie płacisz za wynajem, albo zgłoś problem, który znalazłeś w danych. Zgłoszenie pomaga nam sprawdzać liczby. To nie jest oferta, ogłoszenie ani skarga do miasta.",
+    "noIdentity": "Dziś nie pytamy o tożsamość. Zgłoszenia nie da się jeszcze sprawdzić, więc nie jest używane.",
+    "privacy": "Nie wpisuj imienia, adresu, numeru telefonu ani niczego, co wskazuje osobę lub właściciela mieszkania. Zgłoszeń o przestępstwach tu nie zbieramy.",
+    "choose": "Wybierz…",
+    "sending": "Wysyłanie…",
+    "submit": "Wyślij zgłoszenie",
+    "sent": "Zgłoszenie zostało wysłane.",
+    "rent": {
+      "heading": "Czynsz, który płacisz",
+      "intro": "Jedna liczba dla jednego mieszkania: dzielnica, miesięczny czynsz, wielkość i miesiąc."
+    },
+    "problem": {
+      "heading": "Problem w danych",
+      "intro": "Napisz, która liczba wygląda źle i dlaczego. Opisz liczbę, nie osobę."
+    },
+    "fields": {
+      "district": "Dzielnica",
+      "rent": "Miesięczny czynsz (zł)",
+      "size": "Wielkość mieszkania",
+      "month": "Miesiąc, za który zapłacono",
+      "metric": "Liczba",
+      "message": "Co jest nie tak?"
+    },
+    "hints": {
+      "rent": "Liczba całkowita od {{min}} do {{max}}.",
+      "month": "Rok i miesiąc, na przykład 2026-09.",
+      "message": "Od {{min}} do {{max}} znaków."
+    },
+    "sizes": {
+      "up_to_30": "Do 30 m²",
+      "31_50": "Od 31 do 50 m²",
+      "51_70": "Od 51 do 70 m²",
+      "over_70": "Powyżej 70 m²"
+    },
+    "errors": {
+      "district": "Wybierz dzielnicę.",
+      "rent": "Wpisz liczbę całkowitą od {{min}} do {{max}}.",
+      "size": "Wybierz wielkość mieszkania.",
+      "month": "Wpisz rok i miesiąc, na przykład 2026-09.",
+      "metric": "Wybierz liczbę.",
+      "message": "Napisz od {{min}} do {{max}} znaków."
+    },
+    "error": {
+      "tooLarge": "Zgłoszenie jest za duże. Skróć je i spróbuj ponownie.",
+      "invalid": "Zgłoszenie nie zostało przyjęte. Sprawdź pola i spróbuj ponownie.",
+      "tooMany": "Za dużo zgłoszeń w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
+      "tooManySeconds": "Za dużo zgłoszeń w krótkim czasie. Spróbuj za {{seconds}} s.",
+      "unavailable": "Zgłoszenia nie mogą teraz być przyjęte. Spróbuj później.",
+      "generic": "Zgłoszenie nie zostało wysłane. Sprawdź połączenie z internetem i spróbuj ponownie."
+    }
   }
 }

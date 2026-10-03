@@ -12,7 +12,8 @@
     "close": "Close the menu",
     "groupDistricts": "Districts",
     "findDistrict": "Find a district",
-    "compare": "Compare districts"
+    "compare": "Compare districts",
+    "feedback": "Share feedback"
   },
   "language": {
     "label": "Language"
@@ -219,5 +220,59 @@
     "metric": "Measure",
     "more": "The method, caveats, licence and credit line of each measure are on the district's page.",
     "region": "Table: {{label}}. It scrolls."
+  },
+  "feedback": {
+    "title": "Share feedback",
+    "heading": "Share feedback",
+    "intro": "Tell us the rent you actually pay, or a problem you found in the data. A report helps us check the figures. It is not an offer, a listing or a complaint to the city.",
+    "noIdentity": "No identity is asked for today. A report cannot yet be checked, so it is not used.",
+    "privacy": "Do not enter your name, address, telephone number or anything that identifies a person or a landlord. Crime reports are not collected here.",
+    "choose": "Choose…",
+    "sending": "Sending…",
+    "submit": "Send the report",
+    "sent": "The report was sent.",
+    "rent": {
+      "heading": "The rent you pay",
+      "intro": "One figure for one flat: the district, the monthly rent, the size and the month."
+    },
+    "problem": {
+      "heading": "A problem in the data",
+      "intro": "Say which figure looks wrong, and why. Describe the figure, not a person."
+    },
+    "fields": {
+      "district": "District",
+      "rent": "Monthly rent (PLN)",
+      "size": "Flat size",
+      "month": "Month the rent was paid",
+      "metric": "Figure",
+      "message": "What is wrong?"
+    },
+    "hints": {
+      "rent": "A whole number from {{min}} to {{max}}.",
+      "month": "Year and month, as 2026-09.",
+      "message": "From {{min}} to {{max}} characters."
+    },
+    "sizes": {
+      "up_to_30": "Up to 30 m²",
+      "31_50": "31 to 50 m²",
+      "51_70": "51 to 70 m²",
+      "over_70": "Over 70 m²"
+    },
+    "errors": {
+      "district": "Choose a district.",
+      "rent": "Enter a whole number from {{min}} to {{max}}.",
+      "size": "Choose a flat size.",
+      "month": "Enter the month as year and month, for example 2026-09.",
+      "metric": "Choose a figure.",
+      "message": "Write from {{min}} to {{max}} characters."
+    },
+    "error": {
+      "tooLarge": "The report is too large. Shorten it and try again.",
+      "invalid": "The report was not accepted. Check the fields and try again.",
+      "tooMany": "Too many reports in a short time. Wait a moment and try again.",
+      "tooManySeconds": "Too many reports in a short time. Try again in {{seconds}} s.",
+      "unavailable": "Reports cannot be received right now. Try again later.",
+      "generic": "The report was not sent. Check your internet connection and try again."
+    }
   }
 }
