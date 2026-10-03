@@ -90,4 +90,6 @@ Newest entry last. Each entry has the date, the branch, what was done and any de
   - Map labels: ours, the class number only.
   - Added by the assistant to meet `docs/DESIGN.md`: a light halo under the dark district outline, so the outline reaches 3:1 on every step of the ramp, with a test.
   - Still open: the coordinator has not said whether the blue replaces the Field Journal palette.
+- **Merged.** The coordinator merged tasks F1 to F4 and the design merge into `develop` (pull request #20). The branch `rysia` was deleted after the merge.
+- **`frontend/ui-polish` (issue #21).** A design check with a UI review skill found eight details, none of them blocking, and all were fixed. The one real bug: while values loaded, the map showed every district as "no data". Decision: the rule "shadows, not borders" from that review was not applied, because `docs/DESIGN.md` asks for flat surfaces with hairline borders.
 

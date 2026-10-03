@@ -202,7 +202,19 @@ main,
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background-color var(--duration-fast);
+  /* Background, text and border change together, so none of them snaps while another fades. */
+  transition-property: background-color, color, border-color, scale;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: ease-out;
+}
+
+/* A pressed button shrinks a little: feedback before the result arrives. The duration is zero under reduced motion. */
+.language-toggle button:active,
+.error-message button:active,
+.button-secondary:active,
+.pill:active,
+.button-primary:active {
+  scale: 0.96;
 }
 
 .language-toggle button:hover,
@@ -210,6 +222,27 @@ main,
 .button-secondary:hover,
 .pill:hover {
   background: var(--color-bg);
+}
+
+/*
+  The chosen item turns bold. Bold text is wider, so each of these buttons holds a hidden bold copy of its label
+  (from data-label) in the same grid cell. The button is always as wide as its bold label and its neighbours never move.
+*/
+button.reserve-bold {
+  display: inline-grid;
+  place-items: center;
+}
+
+.reserve-bold > span,
+.reserve-bold::after {
+  grid-area: 1 / 1;
+}
+
+.reserve-bold::after {
+  content: attr(data-label);
+  font-weight: 600;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* The chosen language and the chosen map view are filled and bold, so they do not rely on colour alone. */
@@ -236,6 +269,9 @@ main,
   color: var(--color-accent-contrast);
   background: var(--color-accent);
   border-radius: var(--radius-pill);
+  transition-property: scale;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: ease-out;
 }
 
 .button-primary:hover {
@@ -255,6 +291,10 @@ main,
   background: none;
   border: 0;
   cursor: pointer;
+}
+
+.link-button:hover {
+  text-decoration-thickness: 0.15em;
 }
 
 /* Notices: a card with a rule in a status colour and the message in words. */
@@ -348,8 +388,15 @@ main:focus {
 }
 
 /* The data kind badge: a shape and a word in a pill. */
+.data-kind__mark {
+  inline-size: 0.75em;
+  block-size: 0.75em;
+}
+
 .data-kind {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
   padding-inline: var(--space-2);
   font-family: var(--font-ui);
   font-size: var(--text-xs);
@@ -420,7 +467,7 @@ main:focus {
   padding: var(--space-3);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  /* Square: the card around it has a small radius and a wide padding, so a rounded inner surface would not be concentric. */
 }
 
 .district-map {
@@ -483,6 +530,11 @@ main:focus {
   fill: var(--color-accent-contrast);
 }
 
+/* Values on their way: a plain fill. The hatch is kept for "no data" only. */
+.map-district--loading .map-district__fill {
+  fill: var(--color-surface);
+}
+
 .map-district--none .map-district__fill {
   fill: url('#map-no-data');
 }
@@ -496,8 +548,11 @@ main:focus {
   stroke-width: 6;
 }
 
-/* Hover and the chosen district are shown by a thick outline, never by a new colour. */
-.map-district:hover .map-district__line,
+/* Hover and the chosen district are shown by the outline, never by a new colour: medium for hover, thick for the chosen one. */
+.map-district:hover .map-district__line {
+  stroke-width: 3.5;
+}
+
 .map-district[aria-pressed='true'] .map-district__line {
   stroke-width: 6;
 }
@@ -628,6 +683,13 @@ main:focus {
   border: 0;
   border-block-end: 0.2rem solid transparent;
   cursor: pointer;
+  transition-property: background-color, border-color;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: ease-out;
+}
+
+.tabs__list button:hover {
+  background: var(--color-bg);
 }
 
 .tabs__list button[aria-selected='true'] {
@@ -647,7 +709,6 @@ main:focus {
   font-weight: 600;
   background: var(--color-bg);
   border: 1px solid var(--color-accent);
-  border-radius: var(--radius-md);
 }
 
 .report p {

@@ -29,6 +29,8 @@ export function Tabs<Key extends string>({ label, tabs, active, onChange }: { la
               else buttons.current.delete(tab.key)
             }}
             type="button"
+            className="reserve-bold"
+            data-label={tab.label}
             role="tab"
             id={`${id}-tab-${tab.key}`}
             aria-selected={tab.key === active}
@@ -37,7 +39,7 @@ export function Tabs<Key extends string>({ label, tabs, active, onChange }: { la
             onClick={() => onChange(tab.key)}
             onKeyDown={onKeyDown}
           >
-            {tab.label}
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>

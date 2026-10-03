@@ -13,6 +13,8 @@ type Props = {
   values: Map<string, MapValue>
   classCount: number
   metricLabel: string
+  /** True while the values are on their way. Districts are then drawn plain: "no data" would be a false claim. */
+  loading: boolean
   selected: string | null
   onSelect: (code: string) => void
 }
@@ -21,7 +23,7 @@ type Props = {
  * The choropleth map: district shapes drawn as SVG, filled by class. Each district is a button with a name that
  * includes its value, and it prints its class number, so nothing depends on colour or on hover.
  */
-export function DistrictMap({ boundaries, values, classCount, metricLabel, selected, onSelect }: Props) {
+export function DistrictMap({ boundaries, values, classCount, metricLabel, loading, selected, onSelect }: Props) {
   const { t } = useTranslation()
   const map = useMemo(() => buildMap(boundaries.features), [boundaries])
   // Draw the selected district last, so its thick outline is not covered by its neighbours.
@@ -39,7 +41,7 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, selec
         const value = values.get(shape.code)
         const name = value
           ? t('districts.map.district', { name: shape.name, value: value.display, class: value.classNumber, count: classCount })
-          : t('districts.map.districtNoData', { name: shape.name })
+          : t(loading ? 'districts.map.districtLoading' : 'districts.map.districtNoData', { name: shape.name })
         return (
           <g
             key={shape.code}
@@ -47,7 +49,7 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, selec
             tabIndex={0}
             aria-label={name}
             aria-pressed={shape.code === selected}
-            className={`map-district map-district--${value ? `c${value.classNumber}` : 'none'}`}
+            className={`map-district map-district--${value ? `c${value.classNumber}` : loading ? 'loading' : 'none'}`}
             onClick={() => onSelect(shape.code)}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {

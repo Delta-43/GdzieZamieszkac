@@ -139,10 +139,10 @@ export function DistrictsPage() {
           {waiting && <Loading />}
 
           <div className="map-stage">
-            <DistrictMap boundaries={boundaries.data} values={mapValues} classCount={CLASS_COUNT} metricLabel={view.label} selected={selected} onSelect={select} />
+            <DistrictMap boundaries={boundaries.data} values={mapValues} classCount={CLASS_COUNT} metricLabel={view.label} loading={waiting} selected={selected} onSelect={select} />
           </div>
 
-          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps} />}
+          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} />}
 
           <dl className="provenance">
             {view.dataKind && (
