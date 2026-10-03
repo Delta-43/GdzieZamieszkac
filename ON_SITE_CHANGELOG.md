@@ -23,3 +23,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
+- Added `.github/` issue templates (bug, requirement, contract change) and a pull request template, to track bugs and requirements between backend, frontend and review. No imported code changed.

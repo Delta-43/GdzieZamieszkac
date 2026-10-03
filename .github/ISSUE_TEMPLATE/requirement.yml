@@ -1,0 +1,30 @@
+name: Requirement
+description: A feature or a change the product needs.
+labels: ["requirement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Frontend, Backend or API, Data, Polish text]
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: What is needed and why
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: A checklist. Each line must be something a reviewer can check. Link the section of `frontend/REQUIREMENTS.md` if there is one.
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: Data and wording
+      description: Which real data it shows, and the provenance it carries. Say what appears when there is no data.
