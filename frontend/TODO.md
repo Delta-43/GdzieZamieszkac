@@ -1,6 +1,8 @@
 # Frontend tasks
 
-Do these in order. Each task is one small pull request. The priorities and owners for the whole project are in `../TODO.md`.
+Do these in order. Each task is one small pull request, opened with `--base develop`. Open a GitHub issue for the task first, and write `Closes #n` in the pull request. `../REVIEW.md` has the full rules, and `../TODO.md` has the status of every task.
+
+The owner of F1 to F12 is `unicorn-alex` while `Rysia` is on break. The priorities and owners for the whole project are in `../TODO.md`.
 Tasks F1 to F8 are the MVP (P0). Tasks F9 to F12 are P1. Do not start a P1 task before the P0 tasks pass review.
 
 The screen details and the acceptance criteria are in `REQUIREMENTS.md`. The API is in `API.md`. The accessibility rules are in `ACCESSIBILITY.md`.
@@ -8,7 +10,7 @@ The screen details and the acceptance criteria are in `REQUIREMENTS.md`. The API
 ## Before you write code
 
 1. Read `AGENTS.md`, then `README.md`, then `REQUIREMENTS.md`.
-2. Write a short plan: the stack, the screen order and the folder layout. Share it with the coordinator and wait for a yes.
+2. The plan is `PLAN.md` (merged in #10). It waits for the coordinator's answers on the placeholder theme and the TypeScript pin.
 3. Get an API to build against. Follow "Get an API" in `README.md`.
 4. Create the project in this folder. Keep the empty folders as they are, or change them in a pull request that explains why.
 
