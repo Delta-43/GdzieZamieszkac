@@ -203,7 +203,11 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/meta') {
     return jsonResponse({
       ...metaFixture,
-      sources: [{ name: 'Test source A', licence: 'Test licence', attribution: 'Test credit line A', as_of: '2026-09-30', metric_keys: ['test_sale'] }],
+      sources: [
+        { name: 'Test source A', licence: 'Test licence', attribution: 'Test credit line A', as_of: '2026-09-30', metric_keys: ['test_sale'], url: 'https://example.org/source-a ; https://example.org/source-a2' },
+        { name: 'Test source B', licence: 'Test licence', attribution: 'Test credit line B' },
+        { name: 'Test listings', licence: 'Test licence', attribution: 'Test listings credit', url: 'https://www.otodom.pl' },
+      ],
     })
   }
   if (pathname === '/v1/districts') return jsonResponse(districtsFixture)

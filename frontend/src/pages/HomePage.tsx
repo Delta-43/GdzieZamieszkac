@@ -10,10 +10,10 @@ export function HomePage() {
       <h1>{t('home.heading')}</h1>
       <p>{t('home.what')}</p>
       <p>{t('home.notListings')}</p>
-      <p>
+      <p className="find-actions">
         <Link className="button-primary" to="/districts">
           {t('home.cta')}
-        </Link>{' '}
+        </Link>
         <Link className="button-secondary" to="/find">
           {t('nav.findDistrict')}
         </Link>

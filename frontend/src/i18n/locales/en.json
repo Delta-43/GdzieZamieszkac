@@ -9,13 +9,8 @@
     "home": "Home",
     "districts": "Districts on the map",
     "menu": "Menu",
-    "close": "Close",
-    "find": "Find",
-    "findPlaceholder": "a district…",
-    "city": "City",
-    "groupPortal": "Portal",
+    "close": "Close the menu",
     "groupDistricts": "Districts",
-    "noMatch": "There is no district with that name.",
     "findDistrict": "Find a district"
   },
   "language": {
@@ -36,7 +31,9 @@
   "footer": {
     "sources": "Data sources",
     "nav": "Footer navigation",
-    "tagline": "Get to know the districts before you look for a flat."
+    "tagline": "Get to know the districts before you look for a flat.",
+    "newTab": "(opens in a new tab)",
+    "moreLink": "{{credit}}: address {{number}} (opens in a new tab)"
   },
   "home": {
     "title": "Home",
@@ -80,20 +77,18 @@
     },
     "legend": {
       "title": "Legend",
-      "direction": "A darker colour and a higher number mean a higher value.",
+      "direction": "A darker colour means a higher value.",
       "range": "Class {{number}}: from {{min}} to {{max}}",
       "single": "Class {{number}}: {{value}}",
       "noData": "Hatched area: no data"
     },
     "table": {
-      "region": "Table of the districts. It scrolls sideways.",
-      "caption": "Districts: {{metric}}, livability score, area and prices",
+      "region": "List of the districts. It scrolls.",
+      "caption": "Districts: overall score and {{metric}}",
       "district": "District",
-      "score": "Livability score (0–100)",
-      "area": "Area (km²)",
-      "rank": "Rank",
-      "class": "Class on the map",
-      "selected": "selected"
+      "score": "Overall score (0–100)",
+      "selected": "selected",
+      "captionScore": "Districts: overall score"
     },
     "colourBy": "Colour the map by",
     "overall": "Overall score",

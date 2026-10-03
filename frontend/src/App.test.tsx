@@ -123,7 +123,7 @@ test.each(['pl', 'en'] as const)('the home and not-found pages have no automated
   }
 })
 
-test('the menu opens from its button, takes the focus, makes the page inert, and closes with Escape', async () => {
+test('the menu button opens and closes the menu, moves the focus, and makes the page under it inert', async () => {
   mockFetch(districtsApi)
   renderApp()
   const button = await screen.findByRole('button', { name: 'Menu' })
@@ -135,53 +135,62 @@ test('the menu opens from its button, takes the focus, makes the page inert, and
 
   const menu = screen.getByRole('navigation', { name: 'Nawigacja główna' })
   expect(button).toHaveAttribute('aria-expanded', 'true')
-  expect(within(menu).getByRole('button', { name: 'Zamknij' })).toHaveFocus()
+  expect(menu.parentElement).toHaveFocus()
   expect(document.querySelector('main')?.closest('[inert]')).not.toBeNull()
+  // The header stays usable while the menu is open: the same button closes it.
+  expect(button.closest('[inert]')).toBeNull()
   expect(within(menu).getByRole('link', { name: 'Strona główna' })).toHaveAttribute('aria-current', 'page')
   expect(within(menu).getByRole('link', { name: 'Dzielnice na mapie' })).toHaveAttribute('href', '/districts')
-  expect(await within(menu).findByText('Testowo')).toBeInTheDocument()
+  // There is no search field in the menu.
+  expect(within(menu).queryByRole('searchbox')).not.toBeInTheDocument()
 
   fireEvent.keyDown(document, { key: 'Escape' })
 
   expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
   expect(button).toHaveFocus()
   expect(document.querySelector('main')?.closest('[inert]')).toBeNull()
+
+  fireEvent.click(button)
+  expect(button).toHaveAttribute('aria-expanded', 'true')
+  fireEvent.click(button)
+  expect(button).toHaveAttribute('aria-expanded', 'false')
 })
 
-test('the menu search filters the districts without diacritics, and Enter opens the first match', async () => {
+test('the menu lists every district, and choosing one opens its page and closes the menu', async () => {
   mockFetch(districtsApi)
   renderApp()
   fireEvent.click(await screen.findByRole('button', { name: 'Menu' }))
   const menu = screen.getByRole('navigation', { name: 'Nawigacja główna' })
-  expect(await within(menu).findByRole('link', { name: 'Alpha' })).toBeInTheDocument()
-  expect(within(menu).getByRole('link', { name: 'Delta' })).toBeInTheDocument()
+  const districts = await within(menu).findByRole('list', { name: 'Dzielnice' })
+  expect(within(districts).getAllByRole('link')).toHaveLength(4)
 
-  const search = within(menu).getByLabelText('Znajdź')
-  fireEvent.change(search, { target: { value: 'zzz' } })
-  expect(within(menu).getByText('Nie ma dzielnicy o takiej nazwie.')).toBeInTheDocument()
+  fireEvent.click(within(districts).getByRole('link', { name: 'Alpha' }))
 
-  fireEvent.change(search, { target: { value: 'ÁLP' } })
-  expect(within(menu).getByRole('link', { name: 'Alpha' })).toBeInTheDocument()
-  expect(within(menu).queryByRole('link', { name: 'Delta' })).not.toBeInTheDocument()
-
-  fireEvent.submit(search.closest('form') as HTMLFormElement)
-
-  // Navigation closes the menu and moves the focus to the new page.
   expect(await screen.findByRole('heading', { level: 1, name: 'Alpha' })).toBeInTheDocument()
   expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
   expect(screen.getByRole('main')).toHaveFocus()
 })
 
-test('the footer lists the pages, every district and every credit line', async () => {
+test('the footer lists the pages and every credit line, each linked to where its data comes from', async () => {
   mockFetch(districtsApi)
   renderApp()
 
   const footer = await screen.findByRole('contentinfo')
   expect(within(footer).getByText('Poznaj dzielnice, zanim zaczniesz szukać mieszkania.')).toBeInTheDocument()
   expect(within(footer).getByRole('navigation', { name: 'Nawigacja w stopce' })).toBeInTheDocument()
-  const districts = await within(footer).findByRole('navigation', { name: 'Dzielnice' })
-  expect(within(districts).getAllByRole('link')).toHaveLength(4)
-  expect(within(districts).getByRole('link', { name: 'Gamma' })).toHaveAttribute('href', '/districts/gamma')
+  // The footer has no list of districts: only the sources.
+  expect(within(footer).queryByRole('link', { name: 'Gamma' })).not.toBeInTheDocument()
   expect(within(footer).getByRole('heading', { name: 'Źródła danych' })).toBeInTheDocument()
-  expect(within(footer).getByText('Test credit line A')).toBeInTheDocument()
+
+  const first = await within(footer).findByRole('link', { name: /^Test credit line A\s*\(otwiera się w nowej karcie\)$/ })
+  expect(first).toHaveAttribute('href', 'https://example.org/source-a')
+  expect(first).toHaveAttribute('target', '_blank')
+  expect(first).toHaveAttribute('rel', 'noopener noreferrer')
+  // A second address of the same source follows as a numbered link.
+  expect(within(footer).getByRole('link', { name: 'Test credit line A: adres 2 (otwiera się w nowej karcie)' })).toHaveAttribute('href', 'https://example.org/source-a2')
+  // A source without an address, and a listings site, are named but not linked.
+  expect(within(footer).getByText('Test credit line B')).toBeInTheDocument()
+  expect(within(footer).queryByRole('link', { name: /Test credit line B/ })).not.toBeInTheDocument()
+  expect(within(footer).getByText('Test listings credit')).toBeInTheDocument()
+  expect(within(footer).queryByRole('link', { name: /Test listings credit/ })).not.toBeInTheDocument()
 })

@@ -7,6 +7,14 @@ type Boundaries = components['schemas']['BoundaryCollection']
 
 export type MapValue = { display: string; classNumber: number }
 
+// Line height of a name on the map, in the units of the drawing.
+const LINE = 17
+
+/** A long name is split at its spaces and hyphens, so it fits inside its district. */
+function nameLines(name: string): string[] {
+  return name.split(/(?<=-)|\s+/).filter(Boolean)
+}
+
 type Props = {
   boundaries: Boundaries
   /** Value and class per district code. A district that is missing here has no data and is drawn hatched. */
@@ -20,8 +28,8 @@ type Props = {
 }
 
 /**
- * The choropleth map: district shapes drawn as SVG, filled by class. Each district is a button with a name that
- * includes its value, and it prints its class number, so nothing depends on colour or on hover.
+ * The choropleth map: district shapes drawn as SVG, filled by class, with one even outline and the district's name.
+ * Each district is a button whose accessible name includes its value and class, so nothing depends on colour or on hover.
  */
 export function DistrictMap({ boundaries, values, classCount, metricLabel, loading, selected, onSelect }: Props) {
   const { t } = useTranslation()
@@ -58,17 +66,26 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
               }
             }}
           >
-            {/* A light halo under a dark line: one of the two shows against every fill of the ramp. */}
-            <path className="map-district__fill" d={shape.path} fillRule="evenodd" />
-            <path className="map-district__line" d={shape.path} />
-            {value && (
-              <text x={shape.label.x} y={shape.label.y} aria-hidden="true">
-                {value.classNumber}
-              </text>
-            )}
+            <path d={shape.path} fillRule="evenodd" />
           </g>
         )
       })}
+      {/* The names are drawn after every shape, so no district covers the name of its neighbour. They are hidden on a narrow screen, where the list carries them. */}
+      <g className="map-labels" aria-hidden="true">
+        {map.shapes.map((shape) => {
+          const lines = nameLines(shape.name)
+          const classNumber = values.get(shape.code)?.classNumber
+          return (
+            <text key={shape.code} className={classNumber && classNumber >= 4 ? 'map-label map-label--light' : 'map-label'} x={shape.label.x} y={shape.label.y - ((lines.length - 1) * LINE) / 2}>
+              {lines.map((line, index) => (
+                <tspan key={line + index} x={shape.label.x} dy={index === 0 ? 0 : LINE}>
+                  {line}
+                </tspan>
+              ))}
+            </text>
+          )
+        })}
+      </g>
     </svg>
   )
 }
