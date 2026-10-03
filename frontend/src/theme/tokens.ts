@@ -125,6 +125,8 @@ export const scale = {
   measure: '68ch',
   /** 44 CSS pixels at the default text size: the aim for pointer targets on touch screens (24 is the minimum). */
   target: '2.75rem',
+  /** The one shadow in the interface: under the menu sheet, which lies over the page. Navy at low opacity. */
+  'shadow-menu': '0 0 2.5rem rgb(7 31 50 / 0.28)',
   'duration-fast': '120ms',
   'duration-base': '200ms',
 } as const

@@ -7,7 +7,15 @@
   "nav": {
     "label": "Nawigacja główna",
     "home": "Strona główna",
-    "districts": "Dzielnice"
+    "districts": "Dzielnice na mapie",
+    "menu": "Menu",
+    "close": "Zamknij",
+    "find": "Znajdź",
+    "findPlaceholder": "dzielnicę…",
+    "city": "Miasto",
+    "groupPortal": "Portal",
+    "groupDistricts": "Dzielnice",
+    "noMatch": "Nie ma dzielnicy o takiej nazwie."
   },
   "language": {
     "label": "Język"
@@ -25,7 +33,9 @@
     "notice": "Część danych może być nieaktualna. Nadal pokazujemy ostatnią sprawdzoną wersję."
   },
   "footer": {
-    "sources": "Źródła danych"
+    "sources": "Źródła danych",
+    "nav": "Nawigacja w stopce",
+    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania."
   },
   "home": {
     "title": "Strona główna",
