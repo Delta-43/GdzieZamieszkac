@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbf5e9">
+<title>GdzieZamieszkać Kraków Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+  /* Layout: full-screen slide deck, one slide at a time; forest-and-cream identity carried over from the team deck. Single light look by design. */
+  :root {
+    color-scheme: light;
+    --palette-forest-950: #14261c; --palette-forest-900: #1d3527; --palette-forest-700: #2f5a40;
+    --palette-forest-500: #4f8a5f; --palette-forest-300: #8fbf8f; --palette-forest-100: #dcebd6;
+    --palette-cream-50: #fbf5e9; --palette-cream-100: #efe4cf;
+    --palette-rust-300: #f0aa7c; --palette-rust-500: #d0683a; --palette-rust-600: #b4532a;
+    --palette-bark-700: #5a4030; --palette-bark-900: #3b2a1f;
+    --palette-mist-100: #e4eeea; --palette-mist-300: #bfd4cd;
+
+    --color-bg: var(--palette-cream-50);
+    --color-surface: #f3ead8;
+    --color-surface-raised: #fffdf8;
+    --color-surface-mist: var(--palette-mist-100);
+    --color-text: var(--palette-forest-950);
+    --color-text-muted: #45564b;
+    --color-border: #ddd1b9;
+    --color-accent: var(--palette-rust-600);
+    --color-accent-contrast: var(--palette-cream-50);
+    --color-accent-text: #9a4320;
+    --color-link: var(--palette-forest-700);
+    --color-focus: #1f6fb8;
+    --color-success: #2e7d4f;
+    --color-warning: #c08414;
+    --color-danger: #b23b2a;
+    --color-info: #3a7ca5;
+
+    --font-display: "Chewy", "Nunito", "Trebuchet MS", system-ui, sans-serif;
+    --font-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+    --text-xs: .74rem; --text-xs-line: 1.4; --text-xs-weight: 800; --text-xs-tracking: .09em;
+    --text-sm: .92rem; --text-sm-line: 1.5;
+    --text-base: 1.05rem; --text-base-line: 1.6; --text-base-weight: 400;
+    --text-lg: 1.2rem; --text-lg-line: 1.5; --text-lg-weight: 600;
+    --text-xl: 1.6rem;
+    --text-2xl: clamp(1.7rem, 3.2vw, 2.7rem); --text-2xl-line: 1.15;
+    --text-4xl: clamp(2.8rem, 7vw, 5.4rem); --text-4xl-line: 1;
+
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 40px; --space-7: 64px;
+    --gutter: clamp(16px, 5vw, 64px);
+    --container: 1180px;
+    --measure: 65ch;
+    --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+    --shadow-soft: 0 8px 24px rgba(20, 38, 28, .25);
+    --duration-base: 200ms; --duration-slow: 500ms;
+    --ease-out: cubic-bezier(.2, .8, .2, 1); --ease-inout: cubic-bezier(.45, 0, .55, 1);
+  }
+  h1, h2 { text-wrap: balance; }
+  td, .tnum { font-variant-numeric: tabular-nums; }
+  .inner > *, .card, .table-wrap { min-width: 0; }
+  .split { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--space-4); align-items: start; }
+  .report-quote { margin: 0; font-size: var(--text-sm); line-height: var(--text-sm-line); }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-1) var(--space-4); margin: 0; font-size: var(--text-sm); }
+  .kv dt { font-weight: 800; color: var(--color-text-muted); }
+  .kv dd { margin: 0; }
+  .ai-label { display: inline-flex; align-items: center; gap: var(--space-2); }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+</style>
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; background: var(--color-bg); color: var(--color-text); }
+    body { font: var(--text-base-weight) var(--text-base)/var(--text-base-line) var(--font-body); overflow: hidden; }
+    button, a { font: inherit; }
+    a { color: var(--color-link); text-underline-offset: 3px; }
+    :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+    h1, h2, h3, p, ul, ol { margin-top: 0; }
+    h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: .01em; }
+    h1 { font-size: var(--text-4xl); line-height: var(--text-4xl-line); margin-bottom: var(--space-5); }
+    h2 { max-width: 28ch; font-size: var(--text-2xl); line-height: var(--text-2xl-line); margin-bottom: var(--space-4); }
+    h3 { margin-bottom: var(--space-2); font-size: var(--text-lg); line-height: 1.25; font-weight: 800; }
+    p { max-width: var(--measure); color: var(--color-text-muted); }
+    .ico { width: 1.25em; height: 1.25em; flex: none; fill: currentColor; }
+
+    /* deck shell */
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide { position: absolute; inset: 0; display: none; overflow: auto; padding: var(--space-6) var(--gutter) 96px; }
+    .slide.active { display: flex; flex-direction: column; }
+    .inner { width: 100%; max-width: var(--container); margin: auto; display: flex; flex-direction: column; gap: var(--space-5); }
+    .band-sand { background: var(--color-surface); }
+    .band-forest { background: var(--palette-forest-950); color: var(--palette-cream-100); }
+    .band-bark { background: var(--palette-bark-700); color: var(--palette-cream-50); }
+    .band-forest p, .band-bark p { color: var(--palette-cream-100); }
+    .band-forest .eyebrow, .band-bark .eyebrow { color: var(--palette-rust-300); }
+    .band-bark .eyebrow { color: var(--palette-cream-100); }
+    .eyebrow { margin: 0 0 var(--space-3); font-size: var(--text-xs); line-height: var(--text-xs-line); font-weight: var(--text-xs-weight); letter-spacing: var(--text-xs-tracking); text-transform: uppercase; color: var(--color-accent-text); }
+    .lede { font-size: var(--text-lg); line-height: var(--text-lg-line); font-weight: var(--text-lg-weight); }
+    .small { font-size: var(--text-sm); line-height: var(--text-sm-line); }
+    .slide-no { position: absolute; top: var(--space-5); right: var(--gutter); font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--text-xs-tracking); color: var(--color-text-muted); }
+    .band-forest .slide-no, .band-bark .slide-no { color: var(--palette-cream-100); }
+    .trail { height: 0; border-top: 4px dotted var(--color-border); }
+    .band-forest .trail { border-color: var(--palette-forest-700); }
+    .band-bark .trail { border-color: var(--palette-bark-900); }
+
+    /* pills, chips, buttons */
+    .btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); border: 2px solid var(--color-accent); border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-accent-contrast); font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); text-transform: uppercase; text-decoration: none; cursor: pointer; transition: transform var(--duration-base) var(--ease-out); }
+    .btn:hover { transform: scale(1.02); }
+    .chip { display: inline-flex; align-items: center; gap: var(--space-2); width: fit-content; padding: var(--space-1) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface-raised); color: var(--color-text); font-size: var(--text-xs); font-weight: 700; white-space: nowrap; }
+    .chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--color-success); }
+    .chip.warn::before { background: var(--color-warning); }
+    .chip.gap::before { background: var(--color-danger); }
+    .chip.todo::before { background: var(--color-info); }
+    .chip.plain::before { display: none; }
+    .band-forest .chip, .band-bark .chip { border-color: transparent; }
+
+    /* cards */
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: var(--space-4); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { padding: var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-raised); color: var(--color-text); }
+    .card p { color: var(--color-text-muted); font-size: var(--text-sm); line-height: var(--text-sm-line); margin-bottom: 0; }
+    .card.sand { background: var(--color-surface); border-color: transparent; }
+    .card .ico-badge { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: var(--space-4); border-radius: 50%; background: var(--color-surface); color: var(--color-accent-text); font-size: var(--text-lg); }
+    .card .ico-badge .ico { width: 26px; height: 26px; }
+    .card .step { display: block; margin-bottom: var(--space-3); font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); text-transform: uppercase; color: var(--color-accent-text); }
+    .band-forest .card, .band-bark .card { background: rgba(251, 245, 233, .08); border-color: rgba(251, 245, 233, .25); color: var(--palette-cream-50); }
+    .band-forest .card p, .band-bark .card p { color: var(--palette-cream-100); }
+    .band-forest .card .ico-badge, .band-bark .card .ico-badge { background: var(--palette-forest-900); color: var(--palette-rust-300); }
+    .band-forest .card .step, .band-bark .card .step { color: var(--palette-rust-300); }
+    .band-bark .card .step { color: var(--palette-cream-100); }
+    .note { padding: var(--space-3) var(--space-4); border: 2px solid var(--color-warning); border-radius: var(--radius-md); background: var(--color-surface-raised); color: var(--color-text); font-size: var(--text-sm); line-height: var(--text-sm-line); }
+    .note.info { border-color: var(--color-info); background: var(--color-surface-mist); }
+    .band-forest .note, .band-bark .note { background: rgba(251, 245, 233, .1); color: var(--palette-cream-50); }
+    .bullets { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+    .bullets li { position: relative; padding-left: var(--space-5); color: var(--color-text-muted); font-size: var(--text-sm); line-height: var(--text-sm-line); }
+    .bullets li::before { content: ""; position: absolute; left: 0; top: .55em; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); }
+    .band-forest .bullets li, .band-bark .bullets li { color: var(--palette-cream-100); }
+    .band-forest .bullets li::before { background: var(--palette-rust-300); }
+    .band-bark .bullets li::before { background: var(--palette-cream-100); }
+    .head-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-5); }
+    .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: stretch; gap: var(--space-3); }
+    .flow.three { grid-template-columns: 1fr auto 1fr auto 1fr; }
+    .flow .arrow { align-self: center; color: var(--color-accent-text); }
+    .band-forest .flow .arrow, .band-bark .flow .arrow { color: var(--palette-rust-300); }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-raised); color: var(--color-text); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); text-align: left; vertical-align: top; font-size: var(--text-sm); line-height: var(--text-sm-line); }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--color-text-muted); font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); text-transform: uppercase; }
+    td:first-child { font-weight: 800; }
+    table.wide { min-width: 860px; }
+    table.plain td:first-child { font-weight: 400; }
+    td.review { white-space: nowrap; font-weight: 700; color: var(--color-text-muted); }
+    td code, .note code { font-size: .85em; }
+    table.tight th, table.tight td { padding: var(--space-2) var(--space-4); }
+    .refs.tight li { padding: var(--space-1) 0; }
+
+    /* hero */
+    .hero { padding: 0; background: var(--palette-mist-100); color: var(--palette-forest-950); overflow: hidden; }
+    .hero .hero-copy { position: relative; z-index: 2; width: 100%; max-width: var(--container); margin: 0 auto; padding: var(--space-7) var(--gutter) 0; }
+    .hero .brand { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-5); font-size: var(--text-sm); font-weight: 800; }
+    .hero h1 { position: relative; width: fit-content; color: var(--palette-forest-950); text-shadow: 0 2px 0 var(--palette-cream-50); }
+    .hero h1 .leaf { position: absolute; color: var(--palette-rust-600); font-size: var(--text-xl); transform-origin: 20% 100%; }
+    .hero h1 .leaf.l1 { right: -0.9em; top: -0.2em; }
+    .hero h1 .leaf.l2 { right: -1.7em; top: .25em; font-size: var(--text-lg); }
+    .hero .lede { color: var(--palette-forest-700); max-width: 34ch; }
+    .hero .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+    .hero .hero-actions .chip { background: var(--palette-cream-50); color: var(--palette-forest-950); }
+    .forest { position: absolute; left: 0; bottom: 0; width: 100%; height: 58%; min-height: 300px; z-index: 1; }
+    .forest .f-mist { fill: var(--palette-mist-300); } .forest .f-100 { fill: var(--palette-forest-100); }
+    .forest .f-300 { fill: var(--palette-forest-300); } .forest .f-500 { fill: var(--palette-forest-500); }
+    .forest .f-700 { fill: var(--palette-forest-700); } .forest .f-900 { fill: var(--palette-forest-900); }
+    .forest .f-950 { fill: var(--palette-forest-950); } .forest .water { fill: var(--palette-mist-100); opacity: .92; }
+    .forest .water.w2 { fill: var(--palette-cream-50); opacity: .8; }
+    .forest .rust { fill: var(--palette-rust-500); } .forest .cream { fill: var(--palette-cream-50); } .forest .dark { fill: var(--palette-forest-950); }
+    .hero .meta { position: absolute; z-index: 2; right: var(--gutter); top: var(--space-6); text-align: right; font-size: var(--text-sm); font-weight: 800; color: var(--palette-forest-700); }
+
+    .notes { display: none; position: absolute; z-index: 9; left: var(--gutter); right: var(--gutter); bottom: 84px; max-width: 900px; padding: var(--space-3) var(--space-4); border: 2px solid var(--color-accent); border-radius: var(--radius-md); background: var(--palette-cream-50); color: var(--palette-forest-950); box-shadow: var(--shadow-soft); font-size: var(--text-sm); line-height: var(--text-sm-line); }
+    .show-notes .active .notes { display: block; }
+    .controls { position: fixed; z-index: 20; right: var(--space-5); bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); border: 1px solid var(--palette-forest-700); border-radius: var(--radius-pill); background: var(--palette-forest-950); box-shadow: var(--shadow-soft); }
+    .controls button { min-width: 44px; height: 44px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-pill); color: var(--palette-cream-50); background: transparent; font-weight: 800; cursor: pointer; }
+    .controls button:hover:not(:disabled) { background: var(--palette-forest-700); }
+    .controls button:disabled { opacity: .4; cursor: default; }
+    .controls :focus-visible { outline-color: var(--palette-mist-300); }
+    .counter { min-width: 64px; text-align: center; color: var(--palette-cream-100); font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); }
+    .progress { position: fixed; z-index: 19; left: 0; bottom: 0; width: 100%; height: 6px; background: var(--color-border); }
+    .progress span { display: block; width: 0; height: 100%; border-radius: 0 var(--radius-pill) var(--radius-pill) 0; background: var(--color-accent); transition: width var(--duration-slow) var(--ease-out); }
+    .overview { position: fixed; inset: 0; z-index: 30; display: none; overflow: auto; padding: var(--space-6); background: var(--palette-forest-950); }
+    .overview.open { display: block; }
+    .overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: var(--space-3); max-width: var(--container); margin: var(--space-7) auto; }
+    .overview-grid button, .overview-close { border: 1px solid var(--palette-forest-700); border-radius: var(--radius-md); color: var(--palette-cream-50); background: var(--palette-forest-900); cursor: pointer; text-align: left; }
+    .overview-grid button { min-height: 110px; padding: var(--space-4); font-weight: 800; }
+    .overview-grid button span { display: block; margin-bottom: var(--space-3); color: var(--palette-rust-300); font-size: var(--text-xs); }
+    .overview-grid button:hover, .overview-close:hover { background: var(--palette-forest-700); }
+    .overview-close { position: fixed; top: var(--space-4); right: var(--space-5); padding: var(--space-3) var(--space-4); border-radius: var(--radius-pill); }
+    .refs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-6); margin: 0; padding: 0; list-style: none; }
+    .refs li { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border); font-size: var(--text-sm); line-height: 1.4; }
+    .refs .key { display: block; color: var(--color-text-muted); font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); text-transform: uppercase; }
+    .decision { display: grid; grid-template-columns: 56px 1fr; gap: var(--space-4); padding: var(--space-2) 0; border-bottom: 1px solid var(--palette-bark-900); }
+    .decision:last-child { border-bottom: 0; }
+    .decision .dno { font-family: var(--font-display); font-size: var(--text-xl); color: var(--palette-cream-100); }
+    .decision .dno .ico { width: 28px; height: 28px; color: var(--palette-cream-50); }
+    .decision h3 { margin-bottom: var(--space-1); }
+    .decision p { margin: 0; font-size: var(--text-sm); }
+    .done-pill { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); background: var(--palette-cream-50); color: var(--palette-forest-950); font-weight: 800; font-size: var(--text-sm); }
+    .done-pill .ico { color: var(--color-success); }
+    .city { position: relative; overflow: hidden; padding: var(--space-5); border-radius: var(--radius-lg); background: var(--palette-forest-700); color: var(--palette-cream-50); min-height: 210px; }
+    .city.krakow { background: var(--palette-rust-600); }
+    .city p { color: var(--palette-cream-50); font-size: var(--text-sm); position: relative; }
+    .city h3 { position: relative; font: var(--text-xl) var(--font-display); }
+    .city .big { position: absolute; right: var(--space-4); bottom: -28px; font: 9rem/1 var(--font-display); opacity: .16; }
+    .city .eyebrow { color: var(--palette-cream-100); }
+    .arch { display: grid; grid-template-columns: 1fr auto 1.3fr auto 1fr; gap: var(--space-3); align-items: center; }
+    .arch .card h3 { font-size: var(--text-base); }
+    .pills { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+    .pills span { flex: 1; padding: var(--space-2); border-radius: var(--radius-pill); background: var(--palette-forest-700); color: var(--palette-cream-50); text-align: center; font-size: var(--text-xs); font-weight: 800; letter-spacing: var(--text-xs-tracking); }
+    .pills span:last-child { background: var(--palette-rust-600); }
+    .timeline { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4, .flow, .flow.three, .arch, .timeline, .refs { grid-template-columns: 1fr; }
+      .flow .arrow, .arch .arrow { transform: rotate(90deg); justify-self: center; }
+      .head-row { flex-direction: column; align-items: flex-start; }
+      .hero .meta { display: none; }
+      h2 { font-size: var(--text-xl); }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    @keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+    .leaf { animation: sway 4s var(--ease-inout) infinite; }
+    @media print {
+      body { overflow: visible; }
+      .slide, .slide.active { position: relative; display: flex !important; height: 100vh; overflow: hidden; page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .controls, .progress, .overview, .notes { display: none !important; }
+    }
+</style>
+  </head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="shield-check-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M208 40H48a16 16 0 0 0-16 16v56c0 52.72 25.52 84.67 46.93 102.19c23.06 18.86 46 25.26 47 25.53a8 8 0 0 0 4.2 0c1-.27 23.91-6.67 47-25.53C198.48 196.67 224 164.72 224 112V56a16 16 0 0 0-16-16m-34.32 69.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32Z"/></symbol>
+  <symbol id="train-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M184 24H72a32 32 0 0 0-32 32v128a32 32 0 0 0 32 32h8l-14.4 19.2a8 8 0 1 0 12.8 9.6L100 216h56l21.6 28.8a8 8 0 1 0 12.8-9.6L176 216h8a32 32 0 0 0 32-32V56a32 32 0 0 0-32-32M84 184a12 12 0 1 1 12-12a12 12 0 0 1-12 12m36-64H56V80h64Zm52 64a12 12 0 1 1 12-12a12 12 0 0 1-12 12m28-64h-64V80h64Z"/></symbol>
+  <symbol id="users-three-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M64.12 147.8a4 4 0 0 1-4 4.2H16a8 8 0 0 1-7.8-6.17a8.35 8.35 0 0 1 1.62-6.93A67.8 67.8 0 0 1 37 117.51a40 40 0 1 1 66.46-35.8a3.94 3.94 0 0 1-2.27 4.18A64.08 64.08 0 0 0 64 144c0 1.28 0 2.54.12 3.8m182-8.91A67.76 67.76 0 0 0 219 117.51a40 40 0 1 0-66.46-35.8a3.94 3.94 0 0 0 2.27 4.18A64.08 64.08 0 0 1 192 144c0 1.28 0 2.54-.12 3.8a4 4 0 0 0 4 4.2H240a8 8 0 0 0 7.8-6.17a8.33 8.33 0 0 0-1.63-6.94Zm-89 43.18a48 48 0 1 0-58.37 0A72.13 72.13 0 0 0 65.07 212A8 8 0 0 0 72 224h112a8 8 0 0 0 6.93-12a72.15 72.15 0 0 0-33.74-29.93Z"/></symbol>
+  <symbol id="tree-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M128 187.85a72 72 0 0 0 8 4.62V232a8 8 0 0 1-16 0v-39.53a72 72 0 0 0 8-4.62m70.1-125.26a76 76 0 0 0-140.2 0A71.71 71.71 0 0 0 16 127.8C15.9 166 48 199 86.14 200a72.2 72.2 0 0 0 33.86-7.53v-35.53l-43.58-21.78a8 8 0 1 1 7.16-14.32L120 139.06V88a8 8 0 0 1 16 0v27.06l36.42-18.22a8 8 0 1 1 7.16 14.32L136 132.94v59.53a72.2 72.2 0 0 0 32 7.53h1.82c38.18-1 70.29-34 70.18-72.2a71.71 71.71 0 0 0-41.9-65.21"/></symbol>
+  <symbol id="speaker-high-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M160 32.25v191.44a8.29 8.29 0 0 1-3.91 7.18a8 8 0 0 1-9-.56l-65.57-51a4 4 0 0 1-1.52-3.15V79.84a4 4 0 0 1 1.55-3.15l65.57-51a8 8 0 0 1 10 .16a8.27 8.27 0 0 1 2.88 6.4M60 80H32a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h28a4 4 0 0 0 4-4V84a4 4 0 0 0-4-4m126.77 20.84a8 8 0 0 0-.72 11.3a24 24 0 0 1 0 31.72a8 8 0 1 0 12 10.58a40 40 0 0 0 0-52.88a8 8 0 0 0-11.31-.72Zm40.89-26.17a8 8 0 1 0-11.92 10.66a64 64 0 0 1 0 85.34a8 8 0 1 0 11.92 10.66a80 80 0 0 0 0-106.66"/></symbol>
+  <symbol id="storefront-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M231.69 93.81L217.35 43.6A16.07 16.07 0 0 0 202 32H54a16.07 16.07 0 0 0-15.35 11.6L24.31 93.81A8 8 0 0 0 24 96v16a40 40 0 0 0 16 32v72a8 8 0 0 0 8 8h160a8 8 0 0 0 8-8v-72a40 40 0 0 0 16-32V96a8 8 0 0 0-.31-2.19M88 112a24 24 0 0 1-35.12 21.26a8 8 0 0 0-1.82-1.06A24 24 0 0 1 40 112v-8h48Zm64 0a24 24 0 0 1-48 0v-8h48Zm64 0a24 24 0 0 1-11.07 20.2a8 8 0 0 0-1.8 1.05A24 24 0 0 1 168 112v-8h48Z"/></symbol>
+  <symbol id="house-line-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M240 208h-16v-72l2.34 2.34A8 8 0 0 0 237.66 127l-98.35-98.32a16 16 0 0 0-22.62 0L18.34 127a8 8 0 0 0 11.32 11.31L32 136v72H16a8 8 0 0 0 0 16h224a8 8 0 0 0 0-16m-88 0h-48v-48a4 4 0 0 1 4-4h40a4 4 0 0 1 4 4Z"/></symbol>
+  <symbol id="map-trifold-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M228.92 49.69a8 8 0 0 0-6.86-1.45l-61.13 15.28l-61.35-30.68a8 8 0 0 0-5.52-.6l-64 16A8 8 0 0 0 24 56v144a8 8 0 0 0 9.94 7.76l61.13-15.28l61.35 30.68a8.15 8.15 0 0 0 3.58.84a8 8 0 0 0 1.94-.24l64-16A8 8 0 0 0 232 200V56a8 8 0 0 0-3.08-6.31M96 176a8 8 0 0 0-1.94.24L40 189.75V62.25l55.07-13.77l.93.46Zm120 17.75l-55.07 13.77l-.93-.46V80a8 8 0 0 0 1.94-.23L216 66.25Z"/></symbol>
+  <symbol id="sparkle-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M208 144a15.78 15.78 0 0 1-10.42 14.94L146 178l-19 51.62a15.92 15.92 0 0 1-29.88 0L78 178l-51.62-19a15.92 15.92 0 0 1 0-29.88L78 110l19-51.62a15.92 15.92 0 0 1 29.88 0L146 110l51.62 19A15.78 15.78 0 0 1 208 144m-56-96h16v16a8 8 0 0 0 16 0V48h16a8 8 0 0 0 0-16h-16V16a8 8 0 0 0-16 0v16h-16a8 8 0 0 0 0 16m88 32h-8v-8a8 8 0 0 0-16 0v8h-8a8 8 0 0 0 0 16h8v8a8 8 0 0 0 16 0v-8h8a8 8 0 0 0 0-16"/></symbol>
+  <symbol id="warning-circle-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m-8 56a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0Zm8 104a12 12 0 1 1 12-12a12 12 0 0 1-12 12"/></symbol>
+  <symbol id="lightbulb-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M176 232a8 8 0 0 1-8 8H88a8 8 0 0 1 0-16h80a8 8 0 0 1 8 8m40-128a87.55 87.55 0 0 1-33.64 69.21A16.24 16.24 0 0 0 176 186v6a16 16 0 0 1-16 16H96a16 16 0 0 1-16-16v-6a16 16 0 0 0-6.23-12.66A87.59 87.59 0 0 1 40 104.49C39.74 56.83 78.26 17.14 125.88 16A88 88 0 0 1 216 104m-32.11-9.34a57.6 57.6 0 0 0-46.56-46.55a8 8 0 0 0-2.66 15.78c16.57 2.79 30.63 16.85 33.44 33.45A8 8 0 0 0 176 104a9 9 0 0 0 1.35-.11a8 8 0 0 0 6.54-9.23"/></symbol>
+  <symbol id="database-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M128 24c-53.83 0-96 24.6-96 56v96c0 31.4 42.17 56 96 56s96-24.6 96-56V80c0-31.4-42.17-56-96-56m80 104c0 9.62-7.88 19.43-21.61 26.92C170.93 163.35 150.19 168 128 168s-42.93-4.65-58.39-13.08C55.88 147.43 48 137.62 48 128v-16.64c17.06 15 46.23 24.64 80 24.64s62.94-9.68 80-24.64Zm-21.61 74.92C170.93 211.35 150.19 216 128 216s-42.93-4.65-58.39-13.08C55.88 195.43 48 185.62 48 176v-16.64c17.06 15 46.23 24.64 80 24.64s62.94-9.68 80-24.64V176c0 9.62-7.88 19.43-21.61 26.92"/></symbol>
+  <symbol id="translate-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M160 129.89L175.06 160h-30.12l6.36-12.7ZM224 48v160a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h160a16 16 0 0 1 16 16m-16.84 140.42l-40-80a8 8 0 0 0-14.32 0l-13.18 26.38a62.3 62.3 0 0 1-23.61-10A79.6 79.6 0 0 0 135.6 80H152a8 8 0 0 0 0-16h-40v-8a8 8 0 0 0-16 0v8H56a8 8 0 0 0 0 16h63.48a63.73 63.73 0 0 1-15.3 34.05a66 66 0 0 1-9-13.61a8 8 0 0 0-14.32 7.12a81.8 81.8 0 0 0 11.4 17.15A63.6 63.6 0 0 1 56 136a8 8 0 0 0 0 16a79.56 79.56 0 0 0 48.11-16.13a78.3 78.3 0 0 0 28.18 13.66l-19.45 38.89a8 8 0 0 0 14.32 7.16l9.78-19.58h46.12l9.78 19.58a8 8 0 1 0 14.32-7.16"/></symbol>
+  <symbol id="car-profile-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M240 112h-28.69L168 68.69A15.86 15.86 0 0 0 156.69 64H44.28A16 16 0 0 0 31 71.12L1.34 115.56A8.07 8.07 0 0 0 0 120v48a16 16 0 0 0 16 16h17a32 32 0 0 0 62 0h66a32 32 0 0 0 62 0h17a16 16 0 0 0 16-16v-40a16 16 0 0 0-16-16M44.28 80h112.41l32 32H23ZM64 192a16 16 0 1 1 16-16a16 16 0 0 1-16 16m128 0a16 16 0 1 1 16-16a16 16 0 0 1-16 16"/></symbol>
+  <symbol id="person-simple-walk-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M120 48a32 32 0 1 1 32 32a32 32 0 0 1-32-32m88 88c-28.64 0-41.81-13.3-55.75-27.37c-3.53-3.57-7.18-7.26-11-10.58c-37-32.14-96.22 22.73-98.72 25.08a8 8 0 0 0 10.95 11.66A164 164 0 0 1 84 113c13.78-7.38 25.39-10.23 34.7-8.58L64.66 228.81a8 8 0 0 0 4.15 10.52A7.8 7.8 0 0 0 72 240a8 8 0 0 0 7.34-4.81l33.59-77.27l31.07 22.2V232a8 8 0 0 0 16 0v-56a8 8 0 0 0-3.35-6.51l-37.2-26.57L132.88 112c2.64 2.44 5.26 5.07 8 7.84C155.05 134.19 172.69 152 208 152a8 8 0 0 0 0-16"/></symbol>
+  <symbol id="moon-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M235.54 150.21a104.84 104.84 0 0 1-37 52.91A104 104 0 0 1 32 120a103.1 103.1 0 0 1 20.88-62.52a104.84 104.84 0 0 1 52.91-37a8 8 0 0 1 10 10a88.08 88.08 0 0 0 109.8 109.8a8 8 0 0 1 10 10Z"/></symbol>
+  <symbol id="leaf-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M223.45 40.07a8 8 0 0 0-7.52-7.52C139.8 28.08 78.82 51 52.82 94a87.1 87.1 0 0 0-12.76 49a101.7 101.7 0 0 0 6.64 32.2a4 4 0 0 0 6.61 1.43l85-86.3a8 8 0 0 1 11.32 11.32l-92.89 94.29l-14.19 14.19a8.2 8.2 0 0 0-.6 11.1a8 8 0 0 0 11.71.43l16.79-16.79c14.14 6.84 28.41 10.57 42.56 11.07q1.67.06 3.33.06A86.93 86.93 0 0 0 162 203.18c43-26 65.93-86.97 61.45-163.11"/></symbol>
+  <symbol id="arrow-right-fill" viewBox="0 0 256 256"><path fill="currentColor" d="m221.66 133.66l-72 72A8 8 0 0 1 136 200v-64H40a8 8 0 0 1 0-16h96V56a8 8 0 0 1 13.66-5.66l72 72a8 8 0 0 1 0 11.32"/></symbol>
+  <symbol id="check-circle-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m45.66 85.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32"/></symbol>
+  <symbol id="flask-fill" viewBox="0 0 256 256"><path fill="currentColor" d="M221.69 199.77L160 96.92V40h8a8 8 0 0 0 0-16H88a8 8 0 0 0 0 16h8v56.92L34.31 199.77A16 16 0 0 0 48 224h160a16 16 0 0 0 13.72-24.23Zm-90.08-42.91c-15.91-8.05-31.05-12.32-45.22-12.81l24.47-40.8a7.93 7.93 0 0 0 1.14-4.11V40h32v59.14a7.93 7.93 0 0 0 1.14 4.11L183.36 167c-11.96 2.34-29.07 1.34-51.75-10.14"/></symbol>
+  <symbol id="scales-fill" viewBox="0 0 256 256"><path fill="currentColor" d="m239.43 133l-32-80a8 8 0 0 0-7.43-5a8.3 8.3 0 0 0-1.73.21L136 62V40a8 8 0 0 0-16 0v25.58L54.27 80.21a8 8 0 0 0-5.7 4.79l-32 80a7.9 7.9 0 0 0-.57 3c0 23.31 24.54 32 40 32s40-8.69 40-32a7.9 7.9 0 0 0-.57-3L66.92 93.77L120 82v126h-16a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16h-16V78.42l51-11.32l-26.43 65.9a7.9 7.9 0 0 0-.57 3c0 23.31 24.54 32 40 32s40-8.69 40-32a7.9 7.9 0 0 0-.57-3m-160 35H32.62L56 109.54Zm97.24-32L200 77.54L223.38 136Z"/></symbol>
+</svg>
+
+
+<main class="deck" id="deck" aria-label="GdzieZamieszkać pitch for HackYeah 2026">
+
+    <!-- 1 -->
+    <section class="slide hero active" data-title="GdzieZamieszkać">
+      <div class="meta">Kraków<br>HackYeah · 3–4 October 2026</div>
+      <div class="hero-copy">
+        <div class="brand"><svg class="ico" style="color:var(--palette-rust-600)" aria-hidden="true"><use href="#house-line-fill"/></svg> GdzieZamieszkać · Open task: Smart City</div>
+        <h1>Find where<br>life fits.
+          <svg class="ico leaf l1" aria-hidden="true"><use href="#leaf-fill"/></svg><svg class="ico leaf l2" aria-hidden="true"><use href="#leaf-fill"/></svg>
+        </h1>
+        <p class="lede">Compare Kraków's 18 districts on public data before you look for a flat. A free public service the city can host.</p>
+        <div class="hero-actions">
+          <button class="btn" type="button" data-next>Start <svg class="ico" aria-hidden="true"><use href="#arrow-right-fill"/></svg></button>
+          <span class="chip plain">18 districts · 45 metrics</span><span class="chip plain">Free · no login</span><span class="chip plain">Polski · English</span>
+        </div>
+      </div>
+      <svg class="forest" viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g class="px px-1"><path class="f-mist" d="M0,620 L-20,333 L-10,320 L-14,320 L-5,311 L-9,311 L-1,303 L7,311 L4,311 L12,320 L9,320 L18,333 L18,333 L25,315 L22,315 L29,302 L27,302 L32,292 L38,302 L36,302 L42,315 L39,315 L46,333 L46,332 L54,315 L51,315 L58,304 L56,304 L62,295 L68,304 L66,304 L73,315 L70,315 L78,332 L78,328 L87,310 L83,310 L92,298 L89,298 L96,289 L104,298 L101,298 L109,310 L106,310 L115,328 L115,323 L121,310 L119,310 L124,301 L122,301 L127,294 L132,301 L130,301 L136,310 L133,310 L139,323 L139,319 L147,300 L144,300 L151,287 L149,287 L155,276 L161,287 L159,287 L166,300 L163,300 L170,319 L170,315 L176,296 L174,296 L179,284 L178,284 L182,273 L187,284 L185,284 L191,296 L188,296 L194,315 L194,312 L203,296 L200,296 L208,285 L205,285 L212,276 L220,285 L217,285 L225,296 L221,296 L230,312 L230,310 L240,295 L236,295 L245,286 L242,286 L250,278 L258,286 L255,286 L264,295 L260,295 L270,310 L270,308 L276,289 L274,289 L279,275 L277,275 L282,264 L287,275 L285,275 L291,289 L288,289 L295,308 L295,309 L303,296 L299,296 L307,288 L304,288 L311,281 L318,288 L315,288 L323,296 L319,296 L328,309 L328,310 L335,290 L332,290 L339,276 L337,276 L343,265 L349,276 L346,276 L353,290 L350,290 L358,310 L358,311 L366,297 L362,297 L370,288 L367,288 L373,280 L379,288 L377,288 L384,297 L381,297 L389,311 L389,313 L396,300 L393,300 L399,291 L397,291 L403,284 L408,291 L406,291 L412,300 L409,300 L416,313 L416,313 L424,297 L421,297 L429,286 L426,286 L432,277 L439,286 L436,286 L444,297 L441,297 L449,313 L449,312 L456,298 L453,298 L459,288 L457,288 L462,280 L468,288 L466,288 L472,298 L469,298 L476,312 L476,310 L484,295 L481,295 L488,286 L486,286 L492,278 L498,286 L496,286 L503,295 L500,295 L508,310 L508,305 L514,291 L512,291 L517,281 L515,281 L520,273 L525,281 L523,281 L528,291 L526,291 L532,305 L532,301 L540,282 L537,282 L545,269 L542,269 L549,258 L555,269 L553,269 L560,282 L557,282 L565,301 L565,294 L572,276 L569,276 L576,264 L573,264 L579,254 L584,264 L582,264 L588,276 L586,276 L592,294 L592,287 L602,267 L598,267 L607,253 L604,253 L612,242 L619,253 L616,253 L625,267 L621,267 L631,287 L631,278 L638,265 L635,265 L642,256 L640,256 L645,248 L651,256 L649,256 L656,265 L653,265 L660,278 L660,272 L669,253 L666,253 L674,241 L671,241 L678,231 L685,241 L682,241 L691,253 L687,253 L696,272 L696,265 L704,245 L701,245 L708,232 L705,232 L712,221 L718,232 L715,232 L722,245 L719,245 L727,265 L727,262 L736,243 L732,243 L740,230 L738,230 L745,219 L752,230 L749,230 L757,243 L753,243 L762,262 L762,261 L771,246 L767,246 L775,236 L772,236 L779,228 L786,236 L783,236 L791,246 L788,246 L796,261 L796,263 L806,244 L802,244 L811,230 L807,230 L815,219 L823,230 L820,230 L828,244 L825,244 L834,263 L834,268 L843,252 L839,252 L847,241 L844,241 L851,232 L858,241 L855,241 L863,252 L860,252 L868,268 L868,275 L875,262 L872,262 L879,254 L876,254 L882,247 L888,254 L885,254 L892,262 L889,262 L896,275 L896,281 L904,262 L901,262 L908,249 L905,249 L911,239 L918,249 L915,249 L922,262 L919,262 L927,281 L927,287 L935,274 L932,274 L939,264 L937,264 L943,257 L950,264 L947,264 L955,274 L952,274 L960,287 L960,294 L969,276 L965,276 L973,264 L971,264 L978,253 L985,264 L982,264 L990,276 L986,276 L995,294 L995,299 L1003,284 L1000,284 L1007,274 L1005,274 L1011,265 L1017,274 L1015,274 L1022,284 L1019,284 L1026,299 L1026,303 L1036,286 L1032,286 L1041,275 L1038,275 L1045,266 L1052,275 L1049,275 L1058,286 L1054,286 L1063,303 L1063,304 L1071,288 L1068,288 L1075,277 L1073,277 L1079,267 L1085,277 L1082,277 L1089,288 L1086,288 L1094,304 L1094,305 L1100,288 L1098,288 L1103,277 L1101,277 L1106,268 L1111,277 L1109,277 L1115,288 L1112,288 L1118,305 L1118,304 L1127,291 L1124,291 L1132,283 L1129,283 L1136,276 L1143,283 L1140,283 L1149,291 L1145,291 L1154,304 L1154,303 L1163,282 L1159,282 L1167,269 L1164,269 L1171,257 L1178,269 L1175,269 L1183,282 L1179,282 L1188,303 L1188,302 L1195,286 L1192,286 L1198,276 L1196,276 L1201,267 L1207,276 L1204,276 L1211,286 L1208,286 L1215,302 L1215,302 L1225,286 L1221,286 L1230,274 L1227,274 L1235,265 L1243,274 L1240,274 L1249,286 L1245,286 L1255,302 L1255,304 L1263,285 L1260,285 L1268,272 L1265,272 L1272,262 L1278,272 L1276,272 L1283,285 L1280,285 L1288,304 L1288,307 L1295,287 L1292,287 L1299,274 L1296,274 L1302,263 L1308,274 L1305,274 L1312,287 L1309,287 L1316,307 L1316,311 L1326,294 L1322,294 L1331,283 L1328,283 L1336,274 L1344,283 L1341,283 L1350,294 L1346,294 L1356,311 L1356,318 L1364,300 L1361,300 L1368,289 L1365,289 L1372,279 L1378,289 L1375,289 L1383,300 L1380,300 L1387,318 L1387,323 L1396,309 L1392,309 L1400,299 L1397,299 L1404,291 L1411,299 L1408,299 L1416,309 L1412,309 L1421,323 L1421,329 L1427,309 L1424,309 L1430,295 L1428,295 L1432,284 L1437,295 L1435,295 L1441,309 L1438,309 L1444,329 L1444,333 L1454,314 L1450,314 L1459,301 L1456,301 L1463,291 L1471,301 L1468,301 L1477,314 L1473,314 L1482,333 L1440,620Z"/></g><g class="px px-2"><path class="f-100" d="M0,620 L-20,370 L-8,341 L-13,341 L-2,323 L-6,323 L3,307 L13,323 L9,323 L20,341 L15,341 L27,370 L27,362 L34,344 L31,344 L38,332 L36,332 L42,322 L48,332 L45,332 L52,344 L49,344 L57,362 L57,358 L67,331 L63,331 L73,313 L69,313 L78,298 L87,313 L83,313 L93,331 L89,331 L99,358 L99,355 L108,330 L104,330 L112,314 L110,314 L116,300 L123,314 L121,314 L128,330 L125,330 L134,355 L134,355 L144,331 L140,331 L149,315 L146,315 L154,301 L162,315 L158,315 L168,331 L164,331 L174,355 L174,356 L181,332 L178,332 L186,316 L183,316 L189,303 L195,316 L193,316 L200,332 L197,332 L205,356 L205,358 L214,335 L210,335 L218,321 L216,321 L223,308 L230,321 L227,321 L235,335 L232,335 L241,358 L241,359 L253,333 L248,333 L259,316 L255,316 L265,302 L274,316 L270,316 L281,333 L277,333 L289,359 L289,357 L298,329 L294,329 L303,310 L300,310 L308,294 L316,310 L313,310 L322,329 L318,329 L327,357 L327,353 L336,330 L332,330 L340,315 L337,315 L344,303 L351,315 L348,315 L356,330 L353,330 L361,353 L361,347 L368,329 L365,329 L372,317 L369,317 L375,308 L381,317 L379,317 L385,329 L382,329 L389,347 L389,340 L398,318 L395,318 L402,303 L400,303 L407,290 L413,303 L411,303 L419,318 L415,318 L424,340 L424,332 L435,310 L431,310 L441,296 L438,296 L447,284 L456,296 L452,296 L463,310 L458,310 L470,332 L470,320 L479,297 L475,297 L485,281 L481,281 L489,268 L497,281 L494,281 L503,297 L499,297 L509,320 L509,312 L516,292 L513,292 L520,278 L517,278 L523,267 L529,278 L526,278 L533,292 L530,292 L537,312 L537,307 L545,286 L542,286 L549,272 L547,272 L553,261 L559,272 L556,272 L563,286 L560,286 L568,307 L568,305 L580,282 L575,282 L586,267 L582,267 L592,254 L602,267 L598,267 L609,282 L604,282 L616,305 L616,307 L624,282 L621,282 L628,265 L625,265 L632,251 L638,265 L636,265 L643,282 L640,282 L648,307 L648,312 L659,284 L654,284 L664,266 L661,266 L670,250 L678,266 L675,266 L685,284 L681,284 L692,312 L692,321 L703,296 L698,296 L709,279 L705,279 L715,264 L724,279 L720,279 L731,296 L726,296 L738,321 L738,334 L749,308 L744,308 L754,290 L751,290 L760,276 L768,290 L765,290 L775,308 L771,308 L782,334 L782,345 L793,324 L789,324 L800,310 L796,310 L805,298 L815,310 L811,310 L822,324 L817,324 L829,345 L829,355 L837,327 L834,327 L841,308 L838,308 L845,292 L851,308 L848,308 L856,327 L853,327 L860,355 L860,359 L871,333 L867,333 L876,316 L873,316 L881,301 L890,316 L887,316 L896,333 L892,333 L903,359 L903,362 L912,339 L908,339 L917,324 L914,324 L922,311 L930,324 L927,324 L935,339 L932,339 L941,362 L941,361 L953,338 L948,338 L959,323 L955,323 L965,310 L974,323 L970,323 L981,338 L976,338 L988,361 L988,359 L999,336 L994,336 L1005,321 L1001,321 L1010,308 L1019,321 L1015,321 L1026,336 L1021,336 L1032,359 L1032,358 L1044,336 L1039,336 L1050,322 L1046,322 L1055,310 L1064,322 L1061,322 L1071,336 L1067,336 L1078,358 L1078,358 L1087,331 L1084,331 L1092,312 L1089,312 L1097,297 L1104,312 L1101,312 L1110,331 L1106,331 L1115,358 L1115,361 L1127,337 L1122,337 L1133,321 L1129,321 L1138,308 L1148,321 L1144,321 L1155,337 L1150,337 L1162,361 L1162,367 L1171,342 L1167,342 L1176,324 L1173,324 L1181,310 L1188,324 L1185,324 L1194,342 L1190,342 L1199,367 L1199,374 L1208,354 L1205,354 L1213,341 L1210,341 L1217,330 L1224,341 L1221,341 L1229,354 L1225,354 L1234,374 L1234,380 L1242,355 L1239,355 L1246,338 L1243,338 L1250,324 L1256,338 L1253,338 L1261,355 L1257,355 L1265,380 L1265,385 L1274,358 L1270,358 L1278,339 L1275,339 L1282,324 L1289,339 L1286,339 L1294,358 L1290,358 L1299,385 L1299,389 L1307,361 L1304,361 L1312,343 L1309,343 L1316,327 L1323,343 L1320,343 L1328,361 L1324,361 L1333,389 L1333,390 L1343,362 L1339,362 L1349,343 L1345,343 L1354,328 L1362,343 L1359,343 L1369,362 L1364,362 L1375,390 L1375,388 L1384,365 L1381,365 L1389,349 L1386,349 L1394,337 L1402,349 L1399,349 L1407,365 L1404,365 L1413,388 L1413,382 L1423,357 L1419,357 L1428,340 L1425,340 L1433,326 L1441,340 L1438,340 L1447,357 L1443,357 L1453,382 L1453,372 L1461,351 L1458,351 L1465,337 L1463,337 L1469,325 L1476,337 L1473,337 L1480,351 L1477,351 L1485,372 L1440,620Z"/></g><g class="px px-3">
+      <path class="f-300" d="M1010,620 L1030,300 Q1040,238 1070,232 L1110,236 Q1130,248 1140,300 L1180,620Z"/>
+      <rect class="water" x="1062" y="238" width="30" height="330" rx="15"/>
+      <rect class="water w2" x="1072" y="238" width="10" height="330" rx="5"/>
+      <ellipse class="water" cx="1077" cy="566" rx="62" ry="12"/>
+    </g><g class="px px-3"><path class="f-500" d="M0,620 L-20,415 L-9,386 L-13,386 L-3,367 L-7,367 L2,351 L11,367 L8,367 L18,386 L14,386 L25,415 L25,416 L36,385 L32,385 L42,364 L39,364 L48,347 L57,364 L53,364 L64,385 L59,385 L71,416 L71,417 L79,382 L76,382 L84,359 L81,359 L88,339 L94,359 L92,359 L99,382 L96,382 L105,417 L105,417 L117,392 L112,392 L124,375 L120,375 L130,361 L141,375 L136,375 L148,392 L143,392 L156,417 L156,413 L165,384 L162,384 L170,364 L167,364 L175,348 L182,364 L179,364 L188,384 L184,384 L194,413 L194,407 L204,366 L200,366 L210,338 L206,338 L215,315 L224,338 L220,338 L230,366 L226,366 L237,407 L237,398 L247,359 L243,359 L253,334 L250,334 L258,312 L267,334 L263,334 L273,359 L269,359 L280,398 L280,388 L289,353 L285,353 L293,329 L290,329 L298,309 L305,329 L302,329 L310,353 L306,353 L315,388 L315,380 L328,345 L323,345 L335,321 L331,321 L341,302 L352,321 L348,321 L360,345 L355,345 L368,380 L368,372 L380,339 L375,339 L386,317 L382,317 L392,298 L402,317 L398,317 L409,339 L405,339 L417,372 L417,371 L425,335 L422,335 L430,311 L427,311 L434,291 L440,311 L438,311 L445,335 L442,335 L450,371 L450,374 L462,337 L457,337 L468,312 L464,312 L473,291 L483,312 L479,312 L489,337 L485,337 L496,374 L496,383 L505,353 L501,353 L509,333 L506,333 L513,317 L519,333 L517,333 L524,353 L521,353 L529,383 L529,391 L540,352 L536,352 L546,326 L542,326 L551,304 L559,326 L556,326 L566,352 L562,352 L572,391 L572,404 L585,367 L580,367 L592,343 L588,343 L598,322 L609,343 L605,343 L617,367 L612,367 L625,404 L625,418 L638,382 L633,382 L645,357 L641,357 L651,337 L662,357 L658,357 L670,382 L665,382 L678,418 L678,428 L691,397 L686,397 L697,376 L693,376 L703,359 L714,376 L709,376 L721,397 L716,397 L729,428 L729,433 L742,400 L737,400 L749,379 L745,379 L756,361 L766,379 L762,379 L774,400 L769,400 L782,433 L782,432 L791,393 L788,393 L795,366 L793,366 L800,344 L807,366 L804,366 L812,393 L808,393 L817,432 L817,430 L826,403 L822,403 L831,385 L828,385 L835,370 L843,385 L840,385 L848,403 L845,403 L854,430 L854,428 L865,387 L860,387 L870,360 L867,360 L875,337 L884,360 L880,360 L890,387 L886,387 L896,428 L896,427 L906,391 L902,391 L911,368 L908,368 L916,348 L924,368 L921,368 L930,391 L926,391 L935,427 L935,428 L946,394 L942,394 L951,372 L948,372 L956,354 L964,372 L961,372 L970,394 L966,394 L976,428 L976,431 L988,400 L983,400 L994,380 L990,380 L999,363 L1008,380 L1005,380 L1015,400 L1011,400 L1022,431 L1022,437 L1035,403 L1030,403 L1042,380 L1038,380 L1049,361 L1059,380 L1055,380 L1067,403 L1062,403 L1075,437 L1075,446 L1089,409 L1083,409 L1095,385 L1091,385 L1102,365 L1113,385 L1108,385 L1121,409 L1115,409 L1129,446 L1129,451 L1142,412 L1137,412 L1150,386 L1145,386 L1156,365 L1167,386 L1163,386 L1175,412 L1170,412 L1184,451 L1184,451 L1193,415 L1189,415 L1197,391 L1194,391 L1202,371 L1209,391 L1206,391 L1214,415 L1211,415 L1220,451 L1220,447 L1233,408 L1228,408 L1240,382 L1236,382 L1247,360 L1258,382 L1253,382 L1266,408 L1260,408 L1274,447 L1274,434 L1285,395 L1281,395 L1291,368 L1288,368 L1297,346 L1306,368 L1302,368 L1313,395 L1308,395 L1319,434 L1319,421 L1329,384 L1325,384 L1333,360 L1330,360 L1338,339 L1345,360 L1342,360 L1351,384 L1347,384 L1356,421 L1356,409 L1368,370 L1363,370 L1374,344 L1370,344 L1379,323 L1388,344 L1385,344 L1395,370 L1390,370 L1402,409 L1402,396 L1410,366 L1407,366 L1415,347 L1412,347 L1419,330 L1425,347 L1423,347 L1430,366 L1427,366 L1435,396 L1435,389 L1449,350 L1444,350 L1456,324 L1452,324 L1463,302 L1474,324 L1469,324 L1482,350 L1477,350 L1490,389 L1440,620Z"/></g><g class="px px-4"><path class="f-700" d="M0,620 L-20,475 L-10,438 L-14,438 L-5,414 L-8,414 L-0,393 L7,414 L4,414 L13,438 L9,438 L19,475 L19,471 L29,431 L25,431 L34,404 L31,404 L39,381 L47,404 L44,404 L53,431 L49,431 L60,471 L60,465 L71,432 L67,432 L77,409 L74,409 L83,391 L92,409 L89,409 L99,432 L95,432 L106,465 L106,456 L121,405 L115,405 L128,371 L124,371 L135,342 L146,371 L142,371 L155,405 L149,405 L164,456 L164,447 L174,399 L170,399 L180,367 L176,367 L185,340 L193,367 L190,367 L199,399 L195,399 L206,447 L206,444 L217,400 L212,400 L222,372 L219,372 L228,347 L236,372 L233,372 L243,400 L238,400 L249,444 L249,444 L259,408 L255,408 L264,385 L261,385 L269,365 L277,385 L274,385 L283,408 L279,408 L288,444 L288,448 L304,412 L298,412 L311,387 L307,387 L319,367 L331,387 L326,387 L340,412 L334,412 L349,448 L349,460 L363,411 L358,411 L371,378 L366,378 L378,350 L389,378 L385,378 L398,411 L392,411 L406,460 L406,475 L417,426 L413,426 L422,394 L419,394 L427,367 L435,394 L432,394 L442,426 L437,426 L448,475 L448,486 L461,447 L456,447 L468,422 L464,422 L474,400 L485,422 L480,422 L493,447 L487,447 L501,486 L501,496 L515,448 L509,448 L523,417 L518,417 L530,390 L542,417 L537,417 L550,448 L544,448 L559,496 L559,500 L569,450 L565,450 L574,416 L571,416 L578,388 L586,416 L583,416 L592,450 L588,450 L598,500 L598,500 L611,455 L606,455 L618,426 L614,426 L625,401 L635,426 L631,426 L644,455 L638,455 L652,500 L652,497 L662,455 L658,455 L667,426 L664,426 L672,402 L680,426 L677,426 L687,455 L682,455 L693,497 L693,494 L702,452 L698,452 L707,424 L704,424 L712,401 L720,424 L717,424 L726,452 L722,452 L731,494 L731,493 L746,441 L740,441 L754,406 L749,406 L761,378 L773,406 L768,406 L781,441 L776,441 L790,493 L790,493 L801,450 L797,450 L807,421 L804,421 L812,397 L821,421 L818,421 L828,450 L823,450 L835,493 L835,497 L847,445 L842,445 L854,411 L850,411 L860,383 L870,411 L866,411 L878,445 L873,445 L886,497 L886,502 L900,451 L895,451 L908,418 L903,418 L915,390 L927,418 L922,418 L935,451 L930,451 L944,502 L944,507 L956,465 L951,465 L962,436 L958,436 L968,413 L977,436 L973,436 L984,465 L980,465 L991,507 L991,508 L1003,464 L999,464 L1009,434 L1006,434 L1015,409 L1025,434 L1021,434 L1032,464 L1027,464 L1039,508 L1039,505 L1050,470 L1046,470 L1056,446 L1052,446 L1061,426 L1070,446 L1066,446 L1077,470 L1072,470 L1083,505 L1083,497 L1093,448 L1089,448 L1098,415 L1095,415 L1102,388 L1110,415 L1107,415 L1115,448 L1111,448 L1121,497 L1121,488 L1134,456 L1129,456 L1141,434 L1137,434 L1147,415 L1158,434 L1154,434 L1166,456 L1160,456 L1174,488 L1174,474 L1186,436 L1181,436 L1193,411 L1189,411 L1199,390 L1209,411 L1205,411 L1216,436 L1211,436 L1224,474 L1224,461 L1235,419 L1231,419 L1241,391 L1237,391 L1247,368 L1256,391 L1252,391 L1262,419 L1258,419 L1269,461 L1269,452 L1280,399 L1275,399 L1285,364 L1282,364 L1290,335 L1298,364 L1295,364 L1304,399 L1300,399 L1311,452 L1311,448 L1321,408 L1317,408 L1326,381 L1323,381 L1331,358 L1340,381 L1336,381 L1346,408 L1342,408 L1352,448 L1352,448 L1363,403 L1359,403 L1369,373 L1365,373 L1374,348 L1383,373 L1379,373 L1389,403 L1385,403 L1396,448 L1396,452 L1410,412 L1404,412 L1417,386 L1413,386 L1424,364 L1435,386 L1431,386 L1443,412 L1438,412 L1452,452 L1452,459 L1464,420 L1459,420 L1471,394 L1467,394 L1477,373 L1487,394 L1483,394 L1495,420 L1490,420 L1503,459 L1440,620Z"/></g><g class="px px-5"><path class="f-900" d="M0,620 L-20,520 L-4,462 L-10,462 L4,424 L-1,424 L12,392 L25,424 L20,424 L35,462 L28,462 L44,520 L44,516 L62,454 L55,454 L71,413 L65,413 L79,378 L93,413 L88,413 L104,454 L97,454 L115,516 L115,520 L132,460 L125,460 L141,419 L135,419 L149,386 L163,419 L158,419 L174,460 L167,460 L184,520 L184,533 L198,491 L193,491 L205,464 L201,464 L212,441 L223,464 L219,464 L232,491 L226,491 L240,533 L240,545 L256,480 L249,480 L264,436 L259,436 L271,399 L283,436 L278,436 L292,480 L286,480 L302,545 L302,558 L313,493 L308,493 L319,450 L315,450 L324,414 L333,450 L330,450 L340,493 L336,493 L347,558 L347,564 L359,511 L354,511 L366,475 L362,475 L372,446 L382,475 L378,475 L389,511 L384,511 L396,564 L396,566 L411,511 L405,511 L419,474 L414,474 L426,444 L438,474 L433,474 L447,511 L441,511 L456,566 L456,564 L468,524 L463,524 L474,496 L470,496 L480,474 L490,496 L486,496 L497,524 L492,524 L504,564 L504,561 L522,513 L515,513 L531,481 L525,481 L539,454 L553,481 L547,481 L563,513 L556,513 L574,561 L574,557 L585,495 L581,495 L591,455 L588,455 L597,421 L606,455 L603,455 L613,495 L609,495 L620,557 L620,556 L632,494 L627,494 L638,453 L634,453 L644,418 L653,453 L649,453 L660,494 L655,494 L667,556 L667,558 L678,501 L673,501 L684,463 L680,463 L689,431 L699,463 L695,463 L706,501 L701,501 L712,558 L712,561 L729,520 L723,520 L738,493 L733,493 L746,471 L760,493 L755,493 L770,520 L763,520 L781,561 L781,565 L793,519 L788,519 L799,488 L795,488 L805,463 L814,488 L811,488 L822,519 L817,519 L829,565 L829,565 L846,498 L839,498 L855,453 L849,453 L863,416 L877,453 L871,453 L887,498 L880,498 L897,565 L897,559 L915,510 L908,510 L924,478 L918,478 L933,451 L947,478 L941,478 L957,510 L950,510 L968,559 L968,545 L984,489 L977,489 L992,453 L987,453 L999,422 L1012,453 L1007,453 L1021,489 L1015,489 L1030,545 L1030,530 L1048,484 L1041,484 L1057,454 L1051,454 L1065,428 L1080,454 L1074,454 L1090,484 L1083,484 L1101,530 L1101,518 L1118,459 L1111,459 L1128,420 L1122,420 L1136,387 L1150,420 L1145,420 L1161,459 L1154,459 L1172,518 L1172,516 L1184,451 L1179,451 L1191,408 L1187,408 L1197,372 L1207,408 L1203,408 L1215,451 L1210,451 L1223,516 L1223,519 L1234,469 L1230,469 L1240,435 L1237,435 L1246,407 L1255,435 L1252,435 L1262,469 L1258,469 L1270,519 L1270,525 L1281,480 L1276,480 L1286,451 L1283,451 L1291,426 L1300,451 L1297,451 L1307,480 L1302,480 L1313,525 L1313,531 L1328,482 L1322,482 L1336,450 L1331,450 L1344,423 L1356,450 L1351,450 L1365,482 L1359,482 L1374,531 L1374,537 L1389,496 L1383,496 L1397,469 L1392,469 L1405,447 L1417,469 L1412,469 L1427,496 L1420,496 L1436,537 L1436,539 L1449,490 L1444,490 L1455,457 L1451,457 L1462,429 L1472,457 L1468,457 L1480,490 L1474,490 L1487,539 L1440,620Z"/></g><g class="px px-6">
+      <path class="f-950" d="M0,620 L0,585 Q220,548 470,575 Q760,604 1000,566 Q1240,530 1440,572 L1440,620Z"/>
+      <g class="fox" transform="translate(760,494)">
+        <path class="rust" d="M0,52 C-24,52 -40,34 -30,14 C-18,26 -6,30 4,30 C4,40 2,46 0,52Z"/>
+        <path class="rust" d="M-28,18 C-44,6 -48,-8 -38,-14 C-34,-2 -30,4 -20,10Z"/>
+        <path class="cream" d="M-38,-14 C-42,-12 -46,-8 -44,-2 C-40,-4 -38,-8 -38,-14Z"/>
+        <ellipse class="rust" cx="14" cy="26" rx="26" ry="14"/>
+        <path class="rust" d="M28,20 L52,4 L58,12 L64,10 L60,22 Q48,34 34,32Z"/>
+        <path class="rust" d="M46,6 L48,-8 L54,4Z"/>
+        <path class="rust" d="M56,8 L62,-4 L64,10Z"/>
+        <path class="cream" d="M50,18 Q58,26 44,32 Q40,26 50,18Z"/>
+        <rect class="dark" x="4" y="36" width="5" height="16" rx="2"/>
+        <rect class="dark" x="22" y="36" width="5" height="16" rx="2"/>
+        <circle class="dark" cx="60" cy="12" r="2"/>
+      </g>
+    </g></svg>
+
+      <aside class="notes">GdzieZamieszkać means "where to live". Frame it as a district decision tool and a public service, not another property search site.</aside>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-title="The problem">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">The problem</p><h2>A home is a unit. A life happens in a district.</h2></div><span class="chip plain">Decision support, not listings</span></div>
+        <div class="grid-2">
+          <div class="card"><span class="step">Today</span><h3>People compare flats</h3><p>Price, rooms, photos and an address are easy to find. The day-to-day trade-offs around that address sit in scattered maps, registers and reports from different institutions, in different formats and at different dates.</p></div>
+          <div class="card sand"><span class="step">Our answer</span><h3>Compare places to live</h3><p>All 18 districts of Kraków side by side: transport, amenities, air, noise, green space, road safety and housing costs. Every number shows where it comes from, when, and how reliable it is.</p></div>
+        </div>
+        <div class="trail" aria-hidden="true"></div>
+        <p class="small">It is not a listings site. It shows data about districts, never offers. It never fills a gap with invented data, and it never calls a district the best for everyone.</p>
+      </div>
+      <aside class="notes">Add one real statistic here with its source, for example how many people move to or within Kraków each year. Do not say a number aloud that is not on a slide with a source.</aside>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide band-sand" data-title="Who it is for">
+      <div class="inner">
+        <div><p class="eyebrow">Who it is for</p><h2>People choosing where to live, not data experts.</h2></div>
+        <div class="grid-4">
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></div><h3>Couples and families</h3><p>Schools, nurseries, parks and family friendliness, weighed against price.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></div><h3>Students and newcomers</h3><p>Transport at night, commute times and asking rents, in Polish or English.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#person-simple-walk-fill"/></svg></div><h3>Seniors</h3><p>Clinics, walkability, quiet streets and distance to emergency services.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></div><h3>Remote workers and buyers</h3><p>Green space and noise, sale price history and a rent-versus-buy estimate.</p></div>
+        </div>
+        <div class="note info">Designed for a phone first, 320 pixels wide, and for screen readers, keyboards and zoomed screens. Target: WCAG 2.2 level AA. Polish by default, English as a toggle.</div>
+      </div>
+      <aside class="notes">Five persona presets exist in the backend today: student, family, remote worker, senior and budget.</aside>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-title="The product">
+      <div class="inner">
+        <div><p class="eyebrow">The product loop</p><h2>From your priorities to a shortlist worth exploring.</h2></div>
+        <div class="flow">
+          <div class="card"><span class="step">Explore</span><h3>The district map</h3><p>A map of the 18 districts, coloured by the metric you choose, with a full table beside it. No map tiles, no third-party requests.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Inspect</span><h3>One district in detail</h3><p>Every metric with its source, date, data kind, rank and caveat. Price history, commute times and rent versus buy.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Compare</span><h3>Two to four side by side</h3><p>One column per district, one row per metric, missing values shown with their reason.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Find</span><h3>Rank by what matters</h3><p>Pick a persona or set six category weights from 0 to 5. See the ranking and the reasons behind it.</p></div>
+        </div>
+        <div class="note">The price outlook shows history, not a forecast. We tested two forecasting methods and neither beat the naive baseline, so we publish the history and the backtest only.</div>
+      </div>
+      <aside class="notes">Emphasise explainability. Each result names the metrics that drove its rank, and says in words which metrics have no data.</aside>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide band-sand" data-title="Every number has a trail">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">Trust by design</p><h2>Every number carries its own trail.</h2></div><span class="chip">Stare Miasto · real stored value</span></div>
+        <div class="split">
+          <div class="card">
+            <span class="step">As the reader sees it</span>
+            <h3>Median asking rent per m²</h3>
+            <p class="lede tnum" style="color:var(--color-text)">74.5 PLN/m² <span class="small">(EN)</span> · 74,5 PLN/m² <span class="small">(PL)</span></p>
+            <p><span class="chip">observed</span> <span class="chip plain">rank 18 of 18 · lower is better</span></p>
+            <dl class="kv" style="margin-top:var(--space-4)">
+              <dt>Source</dt><dd>Otodom and OLX listings, pooled</dd>
+              <dt>As of</dt><dd class="tnum">2026-09-30, one snapshot</dd>
+              <dt>Method</dt><dd>Median asking rent per m², without the service charge; 10–250 m² flats; cross-postings counted once</dd>
+              <dt>Caveat</dt><dd>Asking rents, not signed leases</dd>
+              <dt>Licence</dt><dd>Listings are not redistributed; only district medians are shown</dd>
+            </dl>
+          </div>
+          <div class="grid-1" style="display:grid; gap:var(--space-4)">
+            <div class="card"><span class="chip">Observed</span><h3 style="margin-top:var(--space-3)">Measured or officially reported</h3><p>Transit stops, registered residents, sale prices from the national register.</p></div>
+            <div class="card"><span class="chip warn">Estimated</span><h3 style="margin-top:var(--space-3)">Calculated from real inputs</h3><p>Air quality interpolated between monitoring stations; the livability score.</p></div>
+            <div class="card"><span class="chip todo">Proxy</span><h3 style="margin-top:var(--space-3)">An indirect indicator</h3><p>Night noise from bars and clubs per km²; streets tagged as lit.</p></div>
+          </div>
+        </div>
+        <p class="small">A metric without data shows its reason, never a zero.</p>
+      </div>
+      <aside class="notes">This is a real row from the krakow schema, as stored on 30 September 2026. The same shape travels with every value the API returns.</aside>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-title="The data">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">What is in the database</p><h2>45 metrics in 7 categories, from public sources.</h2></div><span class="chip warn">45 of 51 catalogue metrics have data</span></div>
+        <div class="table-wrap">
+          <table class="wide tight">
+            <thead><tr><th>Category</th><th>Kraków</th><th>What it covers</th><th>Missing, with the reason shown</th></tr></thead>
+            <tbody>
+              <tr><td>Transport</td><td class="tnum">7 / 8</td><td>Stops (bus, tram), routes, weekday and night departures, distance to the airport</td><td>Rail and metro stations: the city's timetable feeds contain none</td></tr>
+              <tr><td>Demographics</td><td class="tnum">5 / 6</td><td>Registered residents, density, average age, share aged 65+, share of women. Shown, not scored</td><td>Total population: Kraków publishes registrations, not a population count</td></tr>
+              <tr><td>Amenities</td><td class="tnum">9 / 10</td><td>Schools, clinics, parks, supermarkets, malls, gyms, car parks, nursery places, restaurants</td><td>Open school sports grounds: no source for Kraków</td></tr>
+              <tr><td>Environment</td><td class="tnum">7 / 7</td><td>PM10, PM2.5, NO₂, latest air quality index, tree cover, green space, summer heat exposure</td><td>None</td></tr>
+              <tr><td>Livability</td><td class="tnum">7 / 7</td><td>Area above 55 dB, night noise, bars and clubs, busyness, walkability, family friendliness, the score</td><td>None</td></tr>
+              <tr><td>Cost</td><td class="tnum">5 / 5</td><td>Median sale price per m², number of sales, median asking rent per m², listings, nursery fee</td><td>None</td></tr>
+              <tr><td>Safety</td><td class="tnum">5 / 8</td><td>Road accidents and pedestrian or cyclist casualties per km of road, lit streets, distance to emergency services, a composite index</td><td>Recorded crimes per 10 000 residents and detection rate: not part of the Kraków data. Public defibrillators: no source</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small">Also stored: district boundaries, quarterly sale price history since 2021, public transport minutes between districts, and a report per district in Polish and in English. 810 metric rows, audited with 0 errors and 0 warnings on 30 September 2026.</p>
+      </div>
+      <aside class="notes">Say "road accident and safety indicators", never "safe" or "dangerous". Kraków has no recorded crime metric.</aside>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide band-forest" data-title="Score and report">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">Score and report</p><h2>The code scores. The model tells the story.</h2></div><span class="chip plain">Reports pre-generated, never live</span></div>
+        <div class="flow">
+          <div class="card"><span class="step">Metrics</span><h3>Real rows</h3><p>One district's values, with source, date and data kind for each.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Score</span><h3>Calculated in code</h3><p>Percentile ranks within Kraków, 0 to 100, each category counting equally, or your own weights. Tested.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Narrate</span><h3>A short report</h3><p>A language model writes 100–140 words from the facts only. A guard rejects any number not in the facts.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Store</span><h3>Polish and English</h3><p>36 reports, each written natively in its language and stored. Labelled as AI-written in the app.</p></div>
+        </div>
+        <div class="card">
+          <span class="step ai-label"><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg> AI-written report · Stare Miasto, stored excerpt</span>
+          <p class="report-quote">“Stare Miasto scores 40.9 out of 100 on our livability scale, placing it 16th among Kraków's 18 districts. Its strongest points come from amenities and transit: it ranks 1st for schools with 58 facilities (10.4 per km²) […] and 1st for night public transport with 910 departures per night. On the downside, it records 0.97 road casualties involving pedestrians or cyclists per km per year, ranking last (18th) […] Recorded-crime data is not included for this city.”</p>
+        </div>
+      </div>
+      <aside class="notes">A score compares the districts of one city only. With no weights, the ranking equals the stored default score; a test checks that.</aside>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide band-bark" data-title="What the city gets">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">For the City of Kraków</p><h2>A public service the city can host.</h2></div></div>
+        <div class="grid-3">
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></div><h3>Ready to host</h3><p>A free portal with no login, built on the city's own open data and national registers. The backend ships as a Docker image the city can run on its own servers.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg></div><h3>Privacy and low risk</h3><p>Read-only. Stores nothing about its users: no accounts, cookies or analytics, and no third-party requests. Every figure is sourced, so the city can stand behind it.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></div><h3>Accessible from the start</h3><p>Built to WCAG 2.2 level AA, as Polish law requires of public bodies, with a draft accessibility statement for the city to complete.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#map-trifold-fill"/></svg></div><h3>A map of data gaps</h3><p>Each missing metric says why. That tells the city which datasets to publish next, such as district crime figures or a population count.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></div><h3>Planned: official notices</h3><p>Planned projects and infrastructure, published by the city, dated and sourced. Never presented as a price forecast.</p></div>
+          <div class="card"><div class="ico-badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></div><h3>Planned: residents' voice</h3><p>Rent reports and data corrections with identity checked through the national login (Profil Zaufany), and anonymous counts of what people look for, for housing and transport planning.</p></div>
+        </div>
+        <p class="small">The last two cards are planned work: each needs an API change and a new service first. They are not in the demo.</p>
+      </div>
+      <aside class="notes">Lead with the three things that exist: hostable, private, accessible. Be clear that notices and resident feedback are the next phase.</aside>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" data-title="The market gap">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">Market scan · preliminary</p><h2>Useful products exist. The combination is the gap.</h2></div><span class="chip warn">Directional scan, not exhaustive</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Product</th><th>Strong at</th><th>What we add</th></tr></thead>
+            <tbody>
+              <tr><td>Mistopolia</td><td>Polish city comparisons: rent, transport, air and infrastructure</td><td>Within-city district detail and a user-weighted comparison</td></tr>
+              <tr><td>PolandRent</td><td>District-level rent figures and trends</td><td>Livability context beyond price: transit, amenities, road safety, environment</td></tr>
+              <tr><td>Otodom Analytics</td><td>Housing market data and reports</td><td>A district decision tool, not a market view</td></tr>
+              <tr><td>AreaVibes / Niche</td><td>Composite scores and comparison design</td><td>Polish city data and visible provenance on every value</td></tr>
+              <tr><td>Strado</td><td>European walkability from OpenStreetMap</td><td>Housing cost, transit, road safety and multi-metric comparison</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small">District-level, not city-level. Livability, not just price. A public service, not a portal selling leads.</p>
+      </div>
+      <aside class="notes">Don't claim nobody has built this. Our preliminary scan suggests a gap in the combination of geography, metrics, provenance and public hosting.</aside>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide band-sand" data-title="How it is built">
+      <div class="inner">
+        <div><p class="eyebrow">Architecture</p><h2>Public sources in. One audited, read-only service out.</h2></div>
+        <div class="flow">
+          <div class="card"><span class="step">Sources</span><h3>Public data only</h3><p>GTFS, OpenStreetMap, GIOŚ, Copernicus, the city noise map, BIP, RCN, police road data, a rent snapshot.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">Database</span><h3>Audited store</h3><p>Postgres with PostGIS. Provenance on every row, row-level security, a read-only role for the API.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">API</span><h3>FastAPI, read-only</h3><p>16 operations under an OpenAPI 3.1 contract, 153 offline tests. Serves a snapshot from memory.</p></div>
+          <svg class="ico arrow" aria-hidden="true"><use href="#arrow-right-fill"/></svg>
+          <div class="card"><span class="step">App</span><h3>React, PL and EN</h3><p>Types generated from the contract. Accessible map, tables and charts. No third-party calls.</p></div>
+        </div>
+        <div class="grid-2">
+          <div class="note info"><strong>Security.</strong> Rate limits, strict security headers and content policy, CORS limited to the city's frontend, no secrets in the repository.</div>
+          <div class="note info"><strong>Quality.</strong> District areas match official areas within 0.2%. The audit caught real defects, such as an invalid air index value and future-dated deeds, before launch.</div>
+        </div>
+      </div>
+      <aside class="notes">Nothing is translated or computed at request time except the personal ranking, which uses the same scoring code as the stored score.</aside>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide" data-title="What was built when">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">HackYeah rules · earlier work and on-site work</p><h2>What we brought, and what we built here.</h2></div></div>
+        <div class="table-wrap">
+          <table class="tight">
+            <thead><tr><th>Part</th><th>When</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Data collection and the database (krakow schema)</td><td>Before the event, 29 Sep – 2 Oct 2026</td><td><span class="chip plain">Reused as it is</span></td></tr>
+              <tr><td>Backend API, its contract, tests and migrations</td><td>Before the event, same dates</td><td><span class="chip plain">Reused; every change logged in ON_SITE_CHANGELOG.md</span></td></tr>
+              <tr><td>Frontend: map, district detail, compare, find a district, sources</td><td>On site, 3–4 Oct 2026</td><td><span class="chip todo">Built at HackYeah, in progress</span></td></tr>
+              <tr><td>README, project rules, source and licence document, changelog</td><td>On site, 3 Oct 2026</td><td><span class="chip">Built at HackYeah</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small">The repository's first commit is the import of the earlier work. Every later commit is work done on site. The data pipeline and the raw data stay private.</p>
+      </div>
+      <aside class="notes">Update the frontend row to what is actually finished before you present.</aside>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide band-sand" data-title="How we use AI">
+      <div class="inner">
+        <div><p class="eyebrow">Disclosure</p><h2>How we use artificial intelligence.</h2></div>
+        <div class="grid-4">
+          <div class="card"><span class="step">Not AI</span><h3>The score</h3><p>Computed in code from percentile ranks, and tested. A model never computes or changes it.</p></div>
+          <div class="card"><span class="step">District reports</span><h3>z-ai/glm-5.3-flash</h3><p>Through OpenRouter. Writes each report from a list of facts. Generated ahead of time, checked, stored.</p></div>
+          <div class="card"><span class="step">Translation</span><h3>deepseek/deepseek-v4.1-flash</h3><p>Through OpenRouter. Translates stored notes, after a glossary and with a number check. Never at request time.</p></div>
+          <div class="card"><span class="step">Development</span><h3>Claude Code</h3><p>Helped write and review code and documents. The team reviewed all of it and can explain it.</p></div>
+        </div>
+      </div>
+      <aside class="notes">The event rules require disclosure of significant AI use. The app labels every report as AI-written.</aside>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide band-forest" data-title="Demo story">
+      <div class="inner">
+        <div><p class="eyebrow">A three-minute demo</p><h2>Show how the evidence changes the choice.</h2></div>
+        <div class="grid-4">
+          <div class="card"><span class="step">You choose</span><h3>Set a preference</h3><p>Pick the family persona, or raise the weight of environment and lower nightlife.</p></div>
+          <div class="card"><span class="step">You explore</span><h3>Read the map</h3><p>Colour the map by a metric. Open a district and read its sources and caveats.</p></div>
+          <div class="card"><span class="step">You compare</span><h3>Weigh trade-offs</h3><p>Put two districts side by side, including what is missing and why.</p></div>
+          <div class="card"><span class="step">You decide</span><h3>Read the report</h3><p>Open the AI-written report and see why the rank follows your weights.</p></div>
+        </div>
+        <p class="lede">The proof is not a perfect score. It is a decision the user can understand.</p>
+      </div>
+      <aside class="notes">Rehearse with real districts and the live data. Step one is a scenario, not a claim about measured values.</aside>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide" data-title="Roadmap">
+      <div class="inner">
+        <div><p class="eyebrow">Roadmap</p><h2>Ship a trustworthy slice, then grow with the city.</h2></div>
+        <div class="grid-3">
+          <div class="card"><span class="chip">Phase 1 · HackYeah</span><h3 style="margin-top:var(--space-3)">Demo slice</h3><ul class="bullets"><li>Districts list and map</li><li>District detail with price history, commute and rent versus buy</li><li>Compare, find a district, sources, accessibility statement</li></ul></div>
+          <div class="card"><span class="chip todo">Phase 2</span><h3 style="margin-top:var(--space-3)">Household profile</h3><ul class="bullets"><li>Household type, children's ages, work place, budget</li><li>Turned into weights and filters in the browser; never stored</li><li>Commute from your work district next to each result</li></ul></div>
+          <div class="card"><span class="chip warn">Phase 3 · with the city</span><h3 style="margin-top:var(--space-3)">Public-service features</h3><ul class="bullets"><li>Official notices of planned projects</li><li>Resident feedback with verified identity</li><li>Anonymous demand counts for planning</li></ul></div>
+        </div>
+        <div class="note info"><strong>Beyond Kraków.</strong> One codebase, one deployment per city. A second city is a new database schema, not new code: the same engine already runs on Warsaw data in our private build.</div>
+      </div>
+      <aside class="notes">Phase 3 needs a contract change and a backend service for each feature. We do not build screens against imaginary endpoints.</aside>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide band-bark" data-title="Team and ask">
+      <div class="inner">
+        <div class="head-row"><div><p class="eyebrow">Team · HackYeah 2026 · Open task: Smart City</p><h2>Three people. One ask.</h2></div></div>
+        <div class="grid-2">
+          <div>
+            <div class="decision"><div class="dno"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></div><div><h3>Delta-43</h3><p>Coordinator, data and backend</p></div></div>
+            <div class="decision"><div class="dno"><svg class="ico" aria-hidden="true"><use href="#map-trifold-fill"/></svg></div><div><h3>Rysia</h3><p>Frontend</p></div></div>
+            <div class="decision"><div class="dno"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></div><div><h3>unicorn-alex</h3><p>Polish text and API contract review</p></div></div>
+          </div>
+          <div class="card">
+            <span class="step">What we ask of the city</span>
+            <ul class="bullets">
+              <li>Host the portal as a free public service</li>
+              <li>Name a contact for open data, to close the gaps the portal shows</li>
+              <li>Complete the accessibility statement: scope, contact and complaints procedure</li>
+              <li>Publish official notices through it when phase 3 is ready</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">Close on the ask. Repository: github.com/Delta-43/GdzieZamieszkac.</aside>
+    </section>
+
+    <!-- 16 -->
+    <section class="slide" data-title="Sources and licences">
+      <div class="inner">
+        <div><p class="eyebrow">Source trail</p><h2>Sources and credit lines.</h2></div>
+        <ol class="refs tight">
+          <li><span class="key">Transit</span><a href="https://gtfs.ztp.krakow.pl/" target="_blank" rel="noreferrer">ZTP Kraków GTFS</a> · ZTP Kraków, MPK S.A. w Krakowie, R&amp;G Plus</li>
+          <li><span class="key">Amenities and proxies</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> · © OpenStreetMap contributors, ODbL 1.0</li>
+          <li><span class="key">Air quality</span><a href="https://powietrze.gios.gov.pl/pjp/content/api" target="_blank" rel="noreferrer">GIOŚ</a> · Główny Inspektorat Ochrony Środowiska, Państwowy Monitoring Środowiska</li>
+          <li><span class="key">Tree cover and green space</span><a href="https://land.copernicus.eu/" target="_blank" rel="noreferrer">Copernicus Land Monitoring Service</a> · European Environment Agency</li>
+          <li><span class="key">Noise</span><a href="https://www.krakow.pl/srodowisko/13140,artykul,strategiczna-mapa-halasu-miasta-krakowa.html" target="_blank" rel="noreferrer">Miasto Kraków, Strategiczna mapa hałasu 2022</a></li>
+          <li><span class="key">Registered residents</span><a href="https://www.bip.krakow.pl/?bip_id=1&amp;dok_id=242410" target="_blank" rel="noreferrer">BIP Kraków</a> · <a href="https://otwartedane.um.krakow.pl/zbiory-danych/mieszkancy-zameldowani-na-pobyt-staly" target="_blank" rel="noreferrer">otwartedane.um.krakow.pl</a></li>
+          <li><span class="key">Nurseries</span><a href="https://dane.gov.pl/pl/dataset/29751,rejestr-zlobkow-lista-instytucji" target="_blank" rel="noreferrer">dane.gov.pl</a> · Ministerstwo Rodziny, Pracy i Polityki Społecznej, CC0 1.0</li>
+          <li><span class="key">Sale prices</span><a href="https://www.geoportal.gov.pl/pl/dane/rejestr-cen-nieruchomosci-rcn/" target="_blank" rel="noreferrer">Rejestr Cen Nieruchomości, GUGiK</a></li>
+          <li><span class="key">Road accidents</span><a href="https://obserwatoriumbrd.pl/" target="_blank" rel="noreferrer">Instytut Transportu Samochodowego – Polskie Obserwatorium Bezpieczeństwa Ruchu Drogowego</a> · non-commercial use</li>
+          <li><span class="key">Asking rents</span>Otodom and OLX, one snapshot on 30 Sep 2026 · listings not redistributed</li>
+          <li><span class="key">City price history</span>National Bank of Poland, quarterly prices</li>
+          <li><span class="key">Market scan</span><a href="https://mistopolia.com/en/about/" target="_blank" rel="noreferrer">Mistopolia</a> · <a href="https://polandrent.com/" target="_blank" rel="noreferrer">PolandRent</a> · <a href="https://strado.info/" target="_blank" rel="noreferrer">Strado</a></li>
+        </ol>
+        <p class="small">Data collected 29 Sep – 2 Oct 2026. The road accident data is free for non-commercial use with the credit line above; commercial use needs written approval. Fonts: Chewy (Apache-2.0) and Nunito (OFL). Icons: Phosphor Fill (MIT).</p>
+      </div>
+      <aside class="notes">The full list with licences is in docs/DATA_SOURCES.md. The app shows every credit line in its footer and on the sources page.</aside>
+    </section>
+
+  </main>
+
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <nav class="controls" aria-label="Presentation controls">
+    <button id="prev" type="button" aria-label="Previous slide" title="Previous slide (Left arrow)">←</button>
+    <span class="counter" id="counter" aria-live="polite">01 / 16</span>
+    <button id="next" type="button" aria-label="Next slide" title="Next slide (Right arrow or Space)">→</button>
+    <button id="overviewButton" type="button" aria-label="Open slide overview" title="Overview (O)">▦</button>
+    <button id="notesButton" type="button" aria-label="Toggle presenter notes" title="Presenter notes (N)">N</button>
+    <button id="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">⛶</button>
+  </nav>
+  <div class="overview" id="overview" aria-label="Slide overview" aria-hidden="true">
+    <button class="overview-close" id="overviewClose" type="button">Close overview · Esc</button>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const deck = document.getElementById('deck');
+      const counter = document.getElementById('counter');
+      const progressFill = document.getElementById('progressFill');
+      const overview = document.getElementById('overview');
+      const overviewGrid = document.getElementById('overviewGrid');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let current = 0;
+
+      slides.forEach((slide, i) => {
+        if (i === 0) return;
+        const n = document.createElement('div');
+        n.className = 'slide-no';
+        n.textContent = `${String(i + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        slide.prepend(n);
+      });
+
+      function animateIn(slide) {
+        if (reduce || !window.gsap) return;
+        const items = slide.querySelectorAll('.inner > *, .hero-copy > *');
+        gsap.fromTo(items, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .45, stagger: .06, ease: 'power3.out', clearProps: 'all' });
+      }
+      function show(index, updateHash = true) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === current);
+          slide.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+        });
+        counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+        document.getElementById('prev').disabled = current === 0;
+        document.getElementById('next').disabled = current === slides.length - 1;
+        if (updateHash) history.replaceState(null, '', `#${current + 1}`);
+        animateIn(slides[current]);
+      }
+      function toggleOverview(open) {
+        overview.classList.toggle('open', open);
+        overview.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if (open) document.getElementById('overviewClose').focus();
+      }
+      slides.forEach((slide, i) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.innerHTML = `<span>${String(i + 1).padStart(2, '0')}</span>${slide.dataset.title}`;
+        button.addEventListener('click', () => { show(i); toggleOverview(false); });
+        overviewGrid.append(button);
+      });
+      document.querySelector('[data-next]')?.addEventListener('click', () => show(current + 1));
+      document.getElementById('prev').addEventListener('click', () => show(current - 1));
+      document.getElementById('next').addEventListener('click', () => show(current + 1));
+      document.getElementById('overviewButton').addEventListener('click', () => toggleOverview(true));
+      document.getElementById('overviewClose').addEventListener('click', () => toggleOverview(false));
+      document.getElementById('notesButton').addEventListener('click', () => deck.classList.toggle('show-notes'));
+      document.getElementById('fullscreen').addEventListener('click', async () => {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+        else await document.exitFullscreen?.();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;   // review checkboxes: Space and arrows belong to the control
+        if (overview.classList.contains('open')) {
+          if (event.key === 'Escape') toggleOverview(false);
+          return;
+        }
+        if (['ArrowRight', 'PageDown', ' '].includes(event.key) && event.target.tagName !== 'BUTTON') { event.preventDefault(); show(current + 1); }
+        else if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+        else if (event.key.toLowerCase() === 'o') toggleOverview(true);
+        else if (event.key.toLowerCase() === 'n') deck.classList.toggle('show-notes');
+        else if (event.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
+        else if (event.key === 'Home') show(0);
+        else if (event.key === 'End') show(slides.length - 1);
+      });
+      window.addEventListener('hashchange', () => {
+        const target = Number(location.hash.slice(1));
+        if (Number.isInteger(target) && target > 0) show(target - 1, false);
+      });
+
+      // hero: forest layers drift at three depths with the pointer
+      const hero = slides[0];
+      if (!reduce && window.gsap) {
+        const depth = { '.px-1': 4, '.px-2': 8, '.px-3': 14, '.px-4': 22, '.px-5': 32, '.px-6': 44 };
+        hero.addEventListener('pointermove', e => {
+          const nx = e.clientX / innerWidth - .5;
+          Object.entries(depth).forEach(([sel, d]) => gsap.to(hero.querySelectorAll(sel), { x: -nx * d, duration: 1.2, ease: 'power2.out' }));
+        });
+      }
+      const start = Number(location.hash.slice(1));
+      show(Number.isFinite(start) && start > 0 ? start - 1 : 0, false);
+    })();
+  </script>
+</body>
+</html>
