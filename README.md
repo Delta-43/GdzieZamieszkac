@@ -75,6 +75,8 @@ The data and the backend are done. The frontend is the work of this event. `TODO
 The frontend starts from the guide files in `frontend/`. Read `frontend/AGENTS.md` first.
 It targets WCAG 2.2 level AA, with Polish as the default language and an English toggle.
 
+Libraries and fonts used on site (all open source, installed from npm and listed in `frontend/package.json`): React, React Router, TanStack Query, i18next, `openapi-fetch` and `openapi-typescript`, built with Vite and tested with Vitest, Testing Library and `vitest-axe`. The typeface is Lato, bundled from `@fontsource/lato` under the SIL Open Font Licence 1.1. The look follows krakow.pl in colours and typeface only: no logo, crest or photo of the city is used.
+
 ## Layout
 
 ```

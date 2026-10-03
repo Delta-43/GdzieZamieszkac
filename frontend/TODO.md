@@ -17,7 +17,7 @@ The screen details and the acceptance criteria are in `REQUIREMENTS.md`. The API
 
 ## MVP tasks (P0)
 
-Status on 3 October 2026, late evening. "Done" means merged into `develop`.
+Status on 4 October 2026. "Done" means merged into `develop`.
 
 | ID | Task | Size | Done when | Status |
 |---|---|---|---|---|
@@ -27,7 +27,7 @@ Status on 3 October 2026, late evening. "Done" means merged into `develop`.
 | F4 | Districts screen: accessible table from `/districts`, then the SVG map from `/districts.geojson` coloured by a chosen metric | L | Every district is reachable by keyboard. The table holds everything the map shows. No colour-only signal. | Done (#20, #22, #35). The list was shortened on the developer's decision. |
 | F5 | District detail: all categories with provenance, the report with its AI label, price history with a table and low-confidence marks | L | Every number shows its data kind, source, date and caveat. A missing metric shows its reason. | Done (#24) |
 | F6 | Find a district: persona presets and category sliders to `POST /recommend`, with the top drivers | M | With no weights the ranking equals the default score. The result is announced to screen readers. | Done (#30) |
-| F7 | Compare two to four districts from `/compare` | M | A table with real headers. It marks no safety winner. | Built, in review (issue #49) |
+| F7 | Compare two to four districts from `/compare` | M | A table with real headers. It marks no safety winner. | Done (#51). Open bugs: #56, #57 |
 | F8 | Sources and "how it works" page, and the draft accessibility statement | S | It lists every source and credit line from `/meta`, says where AI is used, and says what it does not do | Open. The footer already lists and links every source. |
 
 ## City service tasks (C4 in `../TODO.md`)
@@ -36,7 +36,7 @@ The city service (`../city-service/`, contract `../city-service/openapi.yaml`) w
 
 | ID | Task | Done when | Status |
 |---|---|---|---|
-| C4-0 | Types from the city service contract, a second API client, the dev proxy | `npm run api:check` covers both contracts | Done on `frontend/c4-city-service` |
+| C4-0 | Types from the city service contract, a second API client, the dev proxy | `npm run api:check` covers both contracts | Done (#41) |
 | C4-1 | AI report card on the find page: a text field, a notice that the text goes to a model provider and is not stored, a button; then the API's label, the text, the three districts and the facts as the basis | The AI label from the API is visible. A `502` or `503` shows a message and the page still works. The ranking shown is the API's. | Done (#47) |
 | C4-2 | Feedback page with two forms: rent paid, and a data problem | The API's "unverified, not published" note is shown before sending. Field errors are named in text. Nothing is stored in the browser. | Next |
 | C4-3 | Notices label: "to be implemented after city approval" | A short, clearly marked section. No endpoint is called and no notice is invented. | After C4-2 |
