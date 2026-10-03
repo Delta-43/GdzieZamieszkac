@@ -11,8 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "api:generate": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts",
-    "api:check": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts --check",
+    "api:generate": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts && openapi-typescript ../city-service/openapi.yaml -o src/api/citySchema.d.ts",
+    "api:check": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts --check && openapi-typescript ../city-service/openapi.yaml -o src/api/citySchema.d.ts --check",
     "check": "npm run api:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
