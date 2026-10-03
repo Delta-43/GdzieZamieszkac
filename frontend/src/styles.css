@@ -704,6 +704,32 @@ main:focus {
   padding-block-start: var(--space-4);
 }
 
+/* A concept shown on the page but not built: a dashed edge and a word, so it is never mistaken for a feature. */
+.concept-note {
+  margin-block-start: var(--space-6);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border-strong);
+}
+
+.concept-note h2 {
+  margin-block-start: 0;
+}
+
+.concept-note p {
+  margin-block-end: 0;
+}
+
+.concept-note__badge {
+  display: inline-block;
+  padding: 0 var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  vertical-align: middle;
+  border: 1px solid var(--color-border-strong);
+}
+
 /* The AI label: a visible line of text beside every area report. */
 .ai-label {
   padding: var(--space-2) var(--space-3);
