@@ -35,6 +35,16 @@ Build phase 1 first. Start phase 2 only when phase 1 passes review. Do not build
 - A **page title** that says what the page is. Set the page language attribute to follow the toggle.
 - After navigation, move focus to the main region.
 
+## Priority order for the MVP
+
+The MVP is one flow a judge can follow in under three minutes. Build in this order. `TODO.md` has the task list.
+
+| Priority | Screens and parts |
+|---|---|
+| P0 | Shared elements, districts list and map, district detail, find a district, compare, sources, accessibility statement draft, accessibility baseline |
+| P1 | Household profile, commute, outlook card, rent versus buy, similar districts |
+| Later | The phase 3 features. Build nothing for them. |
+
 ## Phase 1 screens
 
 ### Home

@@ -64,6 +64,11 @@ curl localhost:8000/v1/meta
 
 `backend/README.md` explains the settings, the security measures and the Docker build.
 
+## Status and priorities
+
+The data and the backend are done. The frontend is the work of this event. `TODO.md` lists the MVP priorities for every module.
+`docs/IDEA.md` describes the full idea, including the city-service concepts that are not built.
+
 ## Frontend
 
 The frontend starts from the guide files in `frontend/`. Read `frontend/AGENTS.md` first.
@@ -77,9 +82,11 @@ frontend/                 guide files and empty folders; the app is built on sit
 docs/                     API contract notes, backend plan, data dictionary, data sources
 server/migrations/krakow/ SQL that created the krakow schema
 data/sources/derived/     scoring.py, the scoring code the backend copies
+TODO.md                   priorities and tasks for every module
 ON_SITE_CHANGELOG.md      what changed during the event
 LICENSE                   proprietary copyright notice
 CODEOWNERS                who reviews what
+presentation.html         the HackYeah pitch deck; open it in a browser
 ```
 
 ## Team
