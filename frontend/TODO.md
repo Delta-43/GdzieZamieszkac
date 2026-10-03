@@ -28,7 +28,7 @@ Status on 4 October 2026. "Done" means merged into `develop`.
 | F5 | District detail: all categories with provenance, the report with its AI label, price history with a table and low-confidence marks | L | Every number shows its data kind, source, date and caveat. A missing metric shows its reason. | Done (#24) |
 | F6 | Find a district: persona presets and category sliders to `POST /recommend`, with the top drivers | M | With no weights the ranking equals the default score. The result is announced to screen readers. | Done (#30) |
 | F7 | Compare two to four districts from `/compare` | M | A table with real headers. It marks no safety winner. | Done (#51). Open bugs: #56, #57 |
-| F8 | Sources and "how it works" page, and the draft accessibility statement | S | It lists every source and credit line from `/meta`, says where AI is used, and says what it does not do | Open. The footer already lists and links every source. |
+| F8 | Sources and "how it works" page, and the draft accessibility statement | S | It lists every source and credit line from `/meta`, says where AI is used, and says what it does not do | Done (PR for issue #66) |
 
 ## City service tasks (C4 in `../TODO.md`)
 

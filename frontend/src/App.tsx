@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { ComparePage } from './pages/ComparePage'
 import { DistrictPage } from './pages/DistrictPage'
 import { FeedbackPage } from './pages/FeedbackPage'
+import { SourcesPage } from './pages/SourcesPage'
 import { DistrictsPage } from './pages/DistrictsPage'
 import { FindPage } from './pages/FindPage'
 import { HomePage } from './pages/HomePage'
@@ -18,6 +19,7 @@ export function App() {
         <Route path="find" element={<FindPage />} />
         <Route path="compare" element={<ComparePage />} />
         <Route path="feedback" element={<FeedbackPage />} />
+        <Route path="sources" element={<SourcesPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
