@@ -95,15 +95,15 @@ class ProblemError(Exception):
 
 FACTS = {
     "en": {
-        "rank": "Rank {rank}: {name}, score {score} out of 100 (a percentile score that compares districts of Krakow only).",
-        "driver": "{name}: {label}, percentile {p} within Krakow (100 is the best, 0 the worst).",
+        "rank": "Rank {rank}: {name}, score {score} out of 100 (a percentile score that compares districts of one city only, {city}).",
+        "driver": "{name}: {label}, percentile {p} within {city} (100 is the best, 0 the worst).",
         "highlight": "{name}: {metric} is {display} ({kind}).",
         "kind": {"observed": "observed", "estimated": "estimated", "proxy": "proxy"},
         "score": "{score} pts (0-100)",
     },
     "pl": {
-        "rank": "Miejsce {rank}: {name}, wynik {score} na 100 (wynik percentylowy, który porównuje wyłącznie dzielnice Krakowa).",
-        "driver": "{name}: {label}, percentyl {p} w Krakowie (100 to najlepiej, 0 najgorzej).",
+        "rank": "Miejsce {rank}: {name}, wynik {score} na 100 (wynik percentylowy, który porównuje wyłącznie dzielnice jednego miasta: {city}).",
+        "driver": "{name}: {label}, percentyl {p} (miasto: {city}; 100 to najlepiej, 0 najgorzej).",
         "highlight": "{name}: {metric} wynosi {display} ({kind}).",
         "kind": {"observed": "dane obserwowane", "estimated": "szacunek", "proxy": "wskaźnik pośredni"},
         "score": "{score} pkt (0-100)",
@@ -121,13 +121,13 @@ def score_display(score: float, lang: str) -> str:
     return FACTS[lang]["score"].format(score=fmt(score, lang))
 
 
-def build_facts(ranking: list[dict], highlights: dict[str, list[dict]], labels: dict[str, str], lang: str = "en") -> list[str]:
+def build_facts(ranking: list[dict], highlights: dict[str, list[dict]], labels: dict[str, str], lang: str = "en", city: str = "") -> list[str]:
     """Plain-text facts for the top three districts, in the request language. Every number the model may use is in this list."""
     t = FACTS[lang]
     facts: list[str] = []
     for row in ranking[:3]:
-        facts.append(t["rank"].format(rank=row["rank"], name=row["name"], score=fmt(row["score"], lang)))
-        facts.extend(t["driver"].format(name=row["name"], label=d["label"], p=fmt(d["percentile"], lang)) for d in row.get("top_drivers", []))
+        facts.append(t["rank"].format(rank=row["rank"], name=row["name"], score=fmt(row["score"], lang), city=city))
+        facts.extend(t["driver"].format(name=row["name"], label=d["label"], p=fmt(d["percentile"], lang), city=city) for d in row.get("top_drivers", []))
         for h in highlights.get(row["code"], []):
             kind = t["kind"].get(h["data_kind"], h["data_kind"])
             facts.append(t["highlight"].format(name=row["name"], metric=labels.get(h["key"], h["key"]), display=h["display"], kind=kind))
@@ -142,7 +142,17 @@ def create_app(settings: Settings | None = None, backend: BackendClient | None =
     feedback = feedback or FeedbackStore(settings.feedback_db_path)
     ai_bucket, fb_bucket = Bucket(settings.ai_rate_limit_per_minute), Bucket(settings.feedback_rate_limit_per_minute)
     cache: dict[str, tuple[float, set[str]]] = {}
+    city_cache: dict[str, tuple[float, str]] = {}
     router = APIRouter()
+
+    async def city_name(lang: str) -> str:
+        """The city name as `GET /meta` of the data API gives it (it is never written into this service). Cached for five minutes."""
+        hit = city_cache.get(lang)
+        if hit and time.monotonic() - hit[0] < 300:
+            return hit[1]
+        name = (await backend.meta(lang))["city_name"]
+        city_cache[lang] = (time.monotonic(), name)
+        return name
 
     async def known(kind: str, lang: str = "en") -> set[str]:
         """District codes or metric keys from the API, cached for five minutes."""
@@ -180,11 +190,12 @@ def create_app(settings: Settings | None = None, backend: BackendClient | None =
             rec = await backend.recommend(weights, body.lang)
             districts = (await backend.districts(body.lang))["districts"]
             metrics = (await backend.metrics(body.lang))["metrics"]
+            city = await city_name(body.lang)
         except BackendError as e:
             raise ProblemError(e.status if e.status in (422, 503) else 502, "Data API error", e.detail) from e
         top = {r["code"] for r in rec["ranking"][:3]}
         highlights = {d["code"]: d.get("highlights", []) for d in districts if d["code"] in top}
-        facts = build_facts(rec["ranking"], highlights, {m["key"]: m["label"] for m in metrics}, body.lang)
+        facts = build_facts(rec["ranking"], highlights, {m["key"]: m["label"] for m in metrics}, body.lang, city)
         try:
             text = await llm.narrate(body.requirements, facts, body.lang)
         except LlmError as e:

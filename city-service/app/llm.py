@@ -8,17 +8,17 @@ import httpx
 
 SYSTEM = {
     "en": (
-        "You write a short, plain summary for someone choosing a district of Krakow. Use ONLY the facts in the user message. "
+        "You write a short, plain summary for someone choosing a district of a city. The city is named in the facts. Use ONLY the facts in the user message. "
         "Rules: do not add or compute any number; copy numbers exactly as given; the ranking and scores are fixed, never change or re-rank them; "
         "a higher percentile is always better, whatever the topic; say when a value is an estimate or a proxy; never call a district safe or dangerous; never suggest choosing by who lives there; "
-        "scores compare districts of Krakow only. Mention the person's requirements only to say which listed facts matter for them. "
+        "scores compare districts of one city only. Mention the person's requirements only to say which listed facts matter for them. "
         "At most 150 words, no lists, no headings."
     ),
     "pl": (
-        "Piszesz krótkie, proste podsumowanie dla osoby wybierającej dzielnicę Krakowa. Używaj WYŁĄCZNIE faktów z wiadomości użytkownika. "
+        "Piszesz krótkie, proste podsumowanie dla osoby wybierającej dzielnicę w mieście. Miasto jest podane w faktach. Używaj WYŁĄCZNIE faktów z wiadomości użytkownika. "
         "Zasady: nie dodawaj ani nie obliczaj żadnych liczb; przepisuj liczby dokładnie tak, jak podano; ranking i wyniki są ustalone, nigdy ich nie zmieniaj; "
         "wyższy percentyl zawsze oznacza lepiej, niezależnie od tematu; zaznacz, gdy wartość jest szacunkiem lub wskaźnikiem pośrednim; nigdy nie nazywaj dzielnicy bezpieczną ani niebezpieczną; "
-        "nigdy nie sugeruj wyboru według tego, kto mieszka w dzielnicy; wyniki porównują wyłącznie dzielnice Krakowa. "
+        "nigdy nie sugeruj wyboru według tego, kto mieszka w dzielnicy; wyniki porównują wyłącznie dzielnice jednego miasta. "
         "Wspomnij o wymaganiach osoby tylko po to, by wskazać, które z podanych faktów są dla niej ważne. "
         "Najwyżej 150 słów, bez list i nagłówków."
     ),

@@ -149,7 +149,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            type: "RentPaid";
+            type: "rent_paid";
             /** @description A district code from the API. */
             district: string;
             /** @description Monthly rent paid */
@@ -167,7 +167,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            type: "DataProblem";
+            type: "data_problem";
             district: string;
             /** @description A metric key from `GET /metrics` of the API. */
             metric_key: string;
@@ -204,6 +204,25 @@ export interface components {
         };
     };
     responses: {
+        /** @description The request body is larger than 8 KB (8192 bytes). Nothing was read or stored. */
+        TooLarge: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
+        /** @description Too many requests. One shared limit per endpoint, per minute, for all clients (10 for `/ai-report`, 30 for `/feedback`). */
+        TooManyRequests: {
+            headers: {
+                "Retry-After": components["headers"]["RetryAfter"];
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
         /** @description Problem details. */
         Problem: {
             headers: {
@@ -216,7 +235,10 @@ export interface components {
     };
     parameters: never;
     requestBodies: never;
-    headers: never;
+    headers: {
+        /** @description Whole seconds to wait before the next request. */
+        RetryAfter: number;
+    };
     pathItems: never;
 }
 export type $defs = Record<string, never>;
@@ -270,8 +292,9 @@ export interface operations {
                     "application/json": components["schemas"]["AiReport"];
                 };
             };
+            413: components["responses"]["TooLarge"];
             422: components["responses"]["Problem"];
-            429: components["responses"]["Problem"];
+            429: components["responses"]["TooManyRequests"];
             /** @description The model failed, or its text was dropped because it held a number that is not a fact. Use the stored area report instead. */
             502: {
                 headers: {
@@ -315,8 +338,9 @@ export interface operations {
                     "application/json": components["schemas"]["FeedbackReceipt"];
                 };
             };
+            413: components["responses"]["TooLarge"];
             422: components["responses"]["Problem"];
-            429: components["responses"]["Problem"];
+            429: components["responses"]["TooManyRequests"];
             503: components["responses"]["Problem"];
             default: components["responses"]["Problem"];
         };
