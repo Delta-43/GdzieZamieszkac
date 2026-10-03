@@ -1,7 +1,7 @@
 import httpx
 
 from app.config import Settings
-from tests.conftest import FakeLlm
+from tests.conftest import FakeLlm, fake_api
 
 
 def post(c, **kw):
@@ -104,3 +104,20 @@ def test_weights_have_a_shape(make_client):
     assert ok.status_code == 200 and ok.json()["basis"]["weights"] == {"category": {"transport": 5.0, "cost": 3.0}, "metric": {"transit_stops_total": 2.0}}
     assert post(c, weights={"categories": {"transport": 5}}).status_code == 422   # unknown top-level key
     assert post(c, weights={"category": {"transport": "high"}}).status_code == 422  # not a number
+
+
+def test_the_city_name_comes_from_meta_in_both_languages(make_client):
+    c, _ = make_client()
+    for lang in ("pl", "en"):
+        facts = post(c, lang=lang).json()["facts"]
+        assert any("Kraków" in f for f in facts)
+        assert not any("Krakow" in f or "Krakowa" in f or "Krakowie" in f for f in facts)
+
+
+def test_another_city_needs_no_code_change(make_client):
+    def api(request):
+        if request.url.path.endswith("/meta"):
+            return httpx.Response(200, json={"city": "warsaw", "city_name": "Warszawa"})
+        return fake_api(request)
+    c, _ = make_client(api=api)
+    assert all("Kraków" not in f for f in post(c).json()["facts"]) and any("Warszawa" in f for f in post(c).json()["facts"])

@@ -31,6 +31,9 @@ class BackendClient:
             raise BackendError(r.status_code, detail)
         return r.json()
 
+    async def meta(self, lang: str) -> dict:
+        return await self._call("GET", "/meta", params={"lang": lang})
+
     async def personas(self, lang: str) -> dict:
         return await self._call("GET", "/personas", params={"lang": lang})
 

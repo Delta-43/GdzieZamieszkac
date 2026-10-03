@@ -28,6 +28,8 @@ def fake_api(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"districts": DISTRICTS})
     if p.endswith("/metrics"):
         return httpx.Response(200, json={"metrics": [{"key": "m1", "label": "Median sale price per m²"}]})
+    if p.endswith("/meta"):
+        return httpx.Response(200, json={"city": "krakow", "city_name": "Kraków"})
     if p.endswith("/personas"):
         return httpx.Response(200, json={"personas": PERSONAS})
     return httpx.Response(404, json={"detail": "no"})
