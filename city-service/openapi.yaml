@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: GdzieZamieszkac city service
+  version: 0.1.0-draft
+  summary: The AI report and resident feedback.
+  description: |
+    A separate service next to the read-only API (`backend/openapi.yaml`). It reads facts from that API, calls a language model, and stores
+    unverified feedback. Rules (see `AGENTS.md` and `docs/CITY_SERVICE_PLAN.md`):
+    - **The score is computed in code.** The AI report only narrates the facts it was given. A text with a number that is not a fact is dropped.
+    - **Every AI report carries `ai_generated: true` and a label** in the requested language.
+    - **The typed text is not stored and not logged.** It goes to the model provider (OpenRouter).
+    - **Feedback is stored `unverified`, never published, and never changes a score,** until identity checks (Gov ID) exist.
+    - Errors are problem+json (RFC 9457).
+servers:
+  - url: /v1
+tags:
+  - name: system
+  - name: ai
+  - name: feedback
+
+paths:
+  /health:
+    get:
+      tags: [system]
+      operationId: getCityServiceHealth
+      summary: Liveness, and whether the data API and the model are configured.
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, api, ai]
+                properties:
+                  status: { type: string, const: ok }
+                  api: { type: string, enum: [reachable, unreachable] }
+                  ai: { type: string, enum: [configured, not_configured] }
+
+  /ai-report:
+    post:
+      tags: [ai]
+      operationId: createAiReport
+      summary: A short narrated summary of the top three districts for the person's priorities.
+      description: |
+        Choose priorities with `persona` (a key from `GET /personas` of the API) or with `weights` (as for `POST /recommend`), or with neither
+        for the default ranking. The ranking and scores come from `POST /recommend`. `requirements` only tells the model which of the supplied
+        facts matter to the person. It never changes the ranking.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AiReportRequest" }
+      responses:
+        "200":
+          description: The report.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AiReport" }
+        "422": { $ref: "#/components/responses/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+        "502":
+          description: The model failed, or its text was dropped because it held a number that is not a fact. Use the stored area report instead.
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+        "503":
+          description: The model is not configured, or the data API is not reachable.
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+        default: { $ref: "#/components/responses/Problem" }
+
+  /feedback:
+    post:
+      tags: [feedback]
+      operationId: createFeedback
+      summary: Send one report from a resident. It is stored as unverified.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - { $ref: "#/components/schemas/RentPaid" }
+                - { $ref: "#/components/schemas/DataProblem" }
+              discriminator: { propertyName: type }
+      responses:
+        "201":
+          description: Stored as unverified.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FeedbackReceipt" }
+        "422": { $ref: "#/components/responses/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+        "503": { $ref: "#/components/responses/Problem" }
+        default: { $ref: "#/components/responses/Problem" }
+
+  /feedback/status:
+    get:
+      tags: [feedback]
+      operationId: getFeedbackStatus
+      summary: What happens to a report today.
+      responses:
+        "200":
+          description: The state of the feedback channel.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FeedbackStatus" }
+
+components:
+  responses:
+    Problem:
+      description: Problem details.
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+
+  schemas:
+    Lang: { type: string, enum: [pl, en], default: pl }
+
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        instance: { type: string }
+        detail: { type: string }
+
+    AiReportRequest:
+      type: object
+      required: [requirements]
+      properties:
+        requirements: { type: string, minLength: 3, maxLength: 1000, description: What matters to the person, in their own words. Sent to the model provider, not stored. }
+        persona: { type: string, maxLength: 40, description: A key from `GET /personas` of the API. Not together with `weights`. }
+        weights: { type: object, description: "Weights as in `POST /recommend` of the API. Not together with `persona`." }
+        lang: { $ref: "#/components/schemas/Lang" }
+
+    AiReport:
+      type: object
+      required: [lang, ai_generated, label, model, generated_at, report, basis, districts, facts]
+      properties:
+        lang: { $ref: "#/components/schemas/Lang" }
+        ai_generated: { type: boolean, const: true }
+        label: { type: string, description: The AI label to show next to the text, in `lang`. }
+        model: { type: string }
+        generated_at: { type: string, format: date-time }
+        report: { type: string, description: The narrated summary. Every number in it is in `facts`. }
+        basis:
+          type: object
+          required: [persona, weights, note]
+          properties:
+            persona: { type: [string, "null"] }
+            weights: { type: [object, "null"] }
+            note: { type: string, description: Says that scores compare districts of one city only. }
+        districts:
+          type: array
+          items:
+            type: object
+            required: [rank, code, name, score]
+            properties:
+              rank: { type: integer, minimum: 1 }
+              code: { type: string }
+              name: { type: string }
+              score: { type: number, minimum: 0, maximum: 100 }
+        facts: { type: array, items: { type: string }, description: The facts the model was given. Show them as the basis of the text. }
+
+    RentPaid:
+      type: object
+      required: [type, district, rent_pln, size_band, month]
+      properties:
+        type: { type: string, const: rent_paid }
+        district: { type: string, description: A district code from the API. }
+        rent_pln: { type: integer, minimum: 100, maximum: 50000, description: Monthly rent paid, in PLN. }
+        size_band: { type: string, enum: [up_to_30, "31_50", "51_70", over_70], description: Flat size in square metres. }
+        month: { type: string, pattern: '^\d{4}-(0[1-9]|1[0-2])$', description: The month the rent was paid, YYYY-MM. }
+
+    DataProblem:
+      type: object
+      required: [type, district, metric_key, message]
+      properties:
+        type: { type: string, const: data_problem }
+        district: { type: string }
+        metric_key: { type: string, description: A metric key from `GET /metrics` of the API. }
+        message: { type: string, minLength: 10, maxLength: 500 }
+
+    FeedbackReceipt:
+      type: object
+      required: [id, status, published, note]
+      properties:
+        id: { type: string, description: A random id. It says nothing about who sent the report. }
+        status: { type: string, const: unverified }
+        published: { type: boolean, const: false }
+        note: { $ref: "#/components/schemas/Note" }
+
+    FeedbackStatus:
+      type: object
+      required: [accepting, identity_check, stored_as, published, affects_scores, note]
+      properties:
+        accepting: { type: boolean }
+        identity_check: { type: string, enum: [not_yet, gov_id], description: "`not_yet` until the national login exists." }
+        stored_as: { type: string, const: unverified }
+        published: { type: boolean, const: false }
+        affects_scores: { type: boolean, const: false }
+        note: { $ref: "#/components/schemas/Note" }
+
+    Note:
+      type: object
+      description: Fixed text in both languages. Not translated at request time.
+      required: [pl, en]
+      properties:
+        pl: { type: string }
+        en: { type: string }

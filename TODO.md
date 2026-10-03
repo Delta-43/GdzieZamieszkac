@@ -95,9 +95,9 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 
 | ID | Task | Owner | Status |
 |---|---|---|---|
-| C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | Open |
-| C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | Open |
-| C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | Open |
+| C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | In progress (branch `backend/city-service`) |
+| C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | In progress (branch `backend/city-service`) |
+| C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | In progress (branch `backend/city-service`) |
 | C4 | Frontend screens for C2 and C3, and the "after city approval" label for notices | `unicorn-alex` | Open, after C1 |
 
 ## P3: after the event
