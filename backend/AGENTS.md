@@ -1,6 +1,6 @@
 # AGENTS.md — backend/ (FastAPI, read-only API)
 
-Read the root `AGENTS.md` first; this file adds what is specific to `backend/`. Also read `openapi.yaml` (the contract), `README.md` here (configuration, deploy, security), and `../docs/BACKEND_PLAN.md`.
+Read the root `AGENTS.md` first, then `../TODO.md` for the priorities; this file adds what is specific to `backend/`. Also read `openapi.yaml` (the contract), `README.md` here (configuration, deploy, security), and `../docs/BACKEND_PLAN.md`.
 
 ## What this module does
 

@@ -1,6 +1,7 @@
 # AGENTS.md: frontend
 
-Read this file first. Then read `README.md`, `REQUIREMENTS.md`, `API.md` and `ACCESSIBILITY.md` in this folder.
+Read this file first. Then read `README.md`, `TODO.md`, `REQUIREMENTS.md`, `API.md` and `ACCESSIBILITY.md` in this folder.
+The tasks and their order are in `TODO.md`. Reviewers use `REVIEW_CHECKLIST.md`. Project priorities are in `../TODO.md`.
 The API contract is `../backend/openapi.yaml`. If a rule here conflicts with the root `../AGENTS.md`, ask the coordinator.
 
 ## What this module is
@@ -52,6 +53,8 @@ Accounts, saved searches, any request that writes data, the personalised AI repo
 - Keep each pull request small, so a review takes minutes.
 
 ## Before you finish a task
+
+- [ ] You ran `REVIEW_CHECKLIST.md` on your own pull request.
 
 - [ ] Types come from the current `openapi.yaml`.
 - [ ] Both languages render, and the page language attribute follows the toggle.
