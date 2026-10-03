@@ -23,6 +23,8 @@ You create the project yourself. The guide files tell you what to build and what
 | `AGENTS.md` | The hard rules. Read it first. |
 | `TODO.md` | The tasks in order, with sizes and the condition for done. |
 | `REVIEW_CHECKLIST.md` | What a reviewer checks. Run it yourself before you ask for a review. |
+| `HANDOFF.md` | State of the work, the design session, what is undecided, and next steps. Read it after `AGENTS.md`. |
+| `design/` | A clickable mock-up of the Districts screen and the proposed Kraków blue tokens. Mock-up values are samples. |
 | `REQUIREMENTS.md` | Screens, elements, states, phases and the definition of done. |
 | `API.md` | How to use the contract, with real example responses and the known gaps. |
 | `ACCESSIBILITY.md` | What WCAG 2.2 level AA means for this app, and how to test it. |

@@ -38,3 +38,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Added `frontend/TODO.md` and `frontend/REVIEW_CHECKLIST.md`, and updated the frontend README, AGENTS and REQUIREMENTS with the start steps, the API access plan and the priority order.
 - Added the next steps for the MVP to `backend/README.md`. No backend code changed.
 - 2026-10-03: added `frontend/PLAN.md`, a proposed stack, screen order and open questions for tasks F1 to F3, for the coordinator to approve before code starts. No imported code changed.
+- 2026-10-03: added `frontend/HANDOFF.md` and `frontend/design/` (a clickable mock-up of the Districts screen with sample values, its screenshot, and proposed Kraków blue colour tokens), and listed them in `frontend/README.md`. Reason: hand the frontend to `Rysia` with the design session recorded. The palette conflicts with the accepted `docs/DESIGN.md` until `Delta-43` decides. No imported code changed.
