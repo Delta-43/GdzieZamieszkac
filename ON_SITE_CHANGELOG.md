@@ -24,3 +24,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
 - Added `presentation.html`, the pitch deck for HackYeah (Kraków only), adapted from the team briefing deck of the earlier stage. Reason: the submission needs a presentation that matches the final idea.
+- Rewrote `presentation.html` along evidence-based slide design rules: one idea per slide, at most four short items, diagrams instead of text, items that build in and dim once discussed, no decorative images, alt text on every diagram, and the narration in the speaker notes and the printed handout. Reason: the earlier version was text-heavy.
