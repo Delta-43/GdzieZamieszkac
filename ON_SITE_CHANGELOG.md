@@ -19,12 +19,17 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 ## 3 October 2026
 
 - Created this repository with a clean history.
+- Added `.github/` issue templates (bug, requirement, contract change) and a pull request template, to track bugs and requirements between backend, frontend and review. No imported code changed. (This line was lost in a merge and is restored here.)
+- Created the `develop` branch. `REVIEW.md` and `AGENTS.md`: work starts from `develop`; agents may merge pull requests of trusted authors into `develop` in their own person's folders, after resolving conflicts, with rollback by revert pull request; only the coordinator merges `develop` into `main`. Folder lock: the coordinator owns `backend/`, `data/`, `server/`, `docs/` and the root; `unicorn-alex` and `Rysia` own `frontend/`. No imported code changed.
 - Added `frontend/BACKEND_CONTRACT.md`: how to reach the development API (the host name is shared privately), CORS, limits, Kraków data gaps and a contract summary. No imported code changed.
 - Added `REVIEW.md` (review procedure and agent routine) and pointers to it in the three `AGENTS.md` files, so reviewers and agents follow one process. No imported code changed. The pointers add lines to `backend/AGENTS.md`, which is imported.
 - Wrote the frontend guide files: `frontend/AGENTS.md`, `README.md`, `REQUIREMENTS.md`, `API.md`, `ACCESSIBILITY.md`, plus empty folders for the app.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
+- Added `presentation.html`, the pitch deck for HackYeah (Kraków only), adapted from the team briefing deck of the earlier stage. Reason: the submission needs a presentation that matches the final idea.
+- Rewrote `presentation.html` along evidence-based slide design rules: one idea per slide, at most four short items, diagrams instead of text, items that build in and dim once discussed, no decorative images, alt text on every diagram, and the narration in the speaker notes and the printed handout. Reason: the earlier version was text-heavy.
+- Changed the headline font of `presentation.html` from Chewy to Reddit Sans Condensed. Reason: team request.
 - Added `presentation.html`, the HackYeah pitch deck for the Kraków edition. It is based on the team briefing deck from before the event, rewritten for the final idea: Kraków only, the offer to the city, what was built when, and the disclosure of AI use. It changes no imported code.
 - Added `TODO.md` with the MVP priorities, `docs/IDEA.md`, `docs/README.md` and `docs/data-review/`.
 - Added `frontend/TODO.md` and `frontend/REVIEW_CHECKLIST.md`, and updated the frontend README, AGENTS and REQUIREMENTS with the start steps, the API access plan and the priority order.
