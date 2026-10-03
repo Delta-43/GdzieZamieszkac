@@ -15,8 +15,52 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Not started.** This folder holds guide files and empty folders. There is no `package.json` yet.
-You create the project yourself. The guide files tell you what to build and what to avoid.
+**Tasks F1 to F4 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
+stale-data notice, loading and error states, and a footer with the credit line of every source.
+The pages are home, districts (map and table) and "page not found". The navigation lists only pages that exist, so it grows with each task.
+The other screens are tasks F5 to F8 in `TODO.md`.
+
+On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
+The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
+from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value, and it prints its class number,
+so nothing depends on colour. A panel beside the map has two tabs: "Lista" is the table with the same values, and "Szczegóły" shows the chosen district:
+its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
+
+A category score is asked from `POST /recommend` with that one category switched on and the others off. The answers are cached for five minutes, because that endpoint is rate limited.
+
+## Theme
+
+All colours, fonts and sizes are in `src/theme/tokens.ts`. Stylesheets and components use them as CSS custom properties and never write a colour.
+`src/theme/theme.test.ts` checks every colour pair in use (4.5:1 for text, 3:1 for interface parts) and fails if a colour appears outside the theme folder.
+To put a colour on a new background, add the pair to `CONTRAST_PAIRS` first.
+
+The theme is a **proposal** that merges two team documents (3 October 2026):
+
+- **Colours:** the Kraków blue tokens in `design/krakow-blue.tokens.css` (light theme only). The coordinator accepted the Field Journal palette in `../docs/DESIGN.md` and has not yet said whether the blue replaces it. Changing the palette means changing the values in `tokens.ts`.
+- **Fonts, type scale and spacing:** the accepted `../docs/DESIGN.md`. Literata is for headings and running text. IBM Plex Sans is for the interface.
+- **Layout of the districts page:** the mock-up in `design/districts-mockup.html` (map with category buttons, a tabbed panel beside it). The header keeps a white bar over a blue navigation band, and the map prints class numbers, not dots or names.
+
+The fonts are served from `public/fonts/`, copied from `../docs/design/fonts/`. Both are under the SIL Open Font Licence 1.1, and each folder keeps its `LICENSE.txt`.
+Only the upright styles are shipped, in the Latin and Latin Extended ranges. Nothing loads from a third party.
+
+## Commands
+
+Run them from this folder. Tested with Node 26 and npm 11.
+
+| Command | What it does |
+|---|---|
+| `npm install` | Installs the packages. |
+| `npm run dev` | Starts the dev server on port 5173, on the network. It forwards `/v1` to `VITE_DEV_API`. |
+| `npm run build` | Checks the types and builds the app into `dist/`. |
+| `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
+| `npm run typecheck` | Checks the types only. |
+| `npm test` | Runs the tests once, with an automated accessibility check on each rendered page. |
+| `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml`. Run it after every contract change and commit the result. |
+| `npm run api:check` | Fails when the committed types differ from a fresh run. |
+| `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
+
+Copy `.env.example` to `.env.local` and put the API address there. Git ignores `.env.local`, so the address stays private.
 
 | File | What it covers |
 |---|---|
@@ -97,6 +141,7 @@ Every user shares one rate limit, about 600 requests a minute, so cache (the ans
 | Variable | Meaning |
 |---|---|
 | `VITE_DEV_API` | Development only. The address the dev server forwards `/v1` to. Defaults to `http://localhost:8000`. Never shipped. |
+| `DEV_ALLOWED_HOSTS` | Development only. Extra host names the dev server answers to, comma separated. Names ending in `.ts.net` are always allowed. |
 | `VITE_API_URL` | Build argument. Origin of the API. Empty means the same origin as the page. The client adds the `/v1` prefix. |
 
 Every `VITE_` variable is public. Never put a secret in one.

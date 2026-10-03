@@ -1,0 +1,703 @@
+/*
+  Structure and component styles. Every colour, font and size is a custom property from src/theme/.
+  Never write a colour here: theme.test.ts fails if one appears outside the theme folder.
+  Literata (--font-body) is for headings and running text. IBM Plex Sans (--font-ui) is for the interface:
+  navigation, buttons, labels, tables and data captions.
+*/
+
+:root {
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: var(--line-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+h1 {
+  margin-block: 0 var(--space-4);
+  max-inline-size: 28ch;
+  font-size: clamp(var(--text-xl), 1.2rem + 2vw, var(--text-2xl));
+  font-weight: 500;
+  line-height: var(--line-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h2 {
+  margin-block: var(--space-5) var(--space-3);
+  padding-inline-start: var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: var(--line-tight);
+  /* Section headings carry a short bar in the accent colour. */
+  border-inline-start: 0.25rem solid var(--color-accent);
+}
+
+h3 {
+  margin-block: 0 var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: var(--line-tight);
+}
+
+h4 {
+  margin-block: var(--space-5) var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+p {
+  margin-block: 0 var(--space-4);
+  max-inline-size: var(--measure);
+}
+
+a {
+  color: var(--color-link);
+  text-underline-offset: 0.15em;
+}
+
+button,
+select {
+  font-family: var(--font-ui);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* The skip link is the first focusable element. It is off screen until it has focus. */
+.skip-link {
+  position: absolute;
+  inset-block-start: -10rem;
+  inset-inline-start: var(--space-2);
+  z-index: 1;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-ui);
+  background: var(--color-surface);
+  border: 2px solid var(--color-focus);
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  inset-block-start: var(--space-2);
+}
+
+/* Shared page column: the same width and side gutter for the header bar, the navigation, the content and the footer. */
+.site-header__bar,
+.site-nav ul,
+main,
+.site-footer__inner,
+.stale-notice {
+  box-sizing: border-box;
+  max-inline-size: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.site-header {
+  font-family: var(--font-ui);
+  background: var(--color-surface);
+}
+
+.site-header__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-3);
+}
+
+.site-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  max-inline-size: none;
+}
+
+.site-name a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Data caption style: the interface font, small and muted. Used for the city name, notes and provenance lines. */
+.site-city,
+.note,
+.no-data {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* The navigation is a full-width band in the accent colour. */
+.site-nav {
+  background: var(--color-accent);
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-5);
+  margin-block: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-accent-contrast);
+}
+
+.site-nav a:hover {
+  text-decoration: underline;
+}
+
+/* On the blue band the orange ring would not show, so the ring is light there. */
+.site-nav a:focus-visible {
+  outline-color: var(--color-focus-on-accent);
+}
+
+/* The current page is marked by a thick underline, not by colour. */
+.site-nav a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-thickness: 0.2em;
+  text-underline-offset: 0.4em;
+}
+
+.language-toggle {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.language-toggle button,
+.error-message button,
+.button-secondary,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target);
+  padding-inline: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--duration-fast);
+}
+
+.language-toggle button:hover,
+.error-message button:hover,
+.button-secondary:hover,
+.pill:hover {
+  background: var(--color-bg);
+}
+
+/* The chosen language and the chosen map view are filled and bold, so they do not rely on colour alone. */
+.language-toggle button[aria-pressed='true'],
+.pill[aria-pressed='true'] {
+  font-weight: 600;
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.pill {
+  border-radius: var(--radius-pill);
+}
+
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target);
+  padding-inline: var(--space-5);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+}
+
+.button-primary:hover {
+  text-decoration: underline;
+}
+
+/* A button that reads as a link: the district names in the list. */
+.link-button {
+  min-block-size: var(--target);
+  padding: 0;
+  font-size: inherit;
+  font-weight: 600;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  color: var(--color-link);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Notices: a card with a rule in a status colour and the message in words. */
+.stale-notice,
+.notice,
+.error-message {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.stale-notice {
+  margin-block-start: var(--space-4);
+  padding-block: var(--space-3);
+  border-inline-start: 0.25rem solid var(--color-warning);
+}
+
+.notice {
+  padding: var(--space-3) var(--space-4);
+  border-inline-start: 0.25rem solid var(--color-info);
+}
+
+.error-message {
+  padding: var(--space-3) var(--space-4);
+  border-inline-start: 0.25rem solid var(--color-danger);
+}
+
+.stale-notice p,
+.error-message p {
+  margin-block-end: var(--space-2);
+}
+
+.stale-notice ul {
+  margin-block: var(--space-2) 0;
+  padding-inline-start: var(--space-5);
+}
+
+main {
+  padding-block: var(--space-6) var(--space-7);
+}
+
+/* main takes focus after navigation; it is not a control, so it shows no focus ring. */
+main:focus {
+  outline: none;
+}
+
+.site-footer {
+  font-family: var(--font-ui);
+  background: var(--color-surface);
+  border-block-start: 1px solid var(--color-border);
+  overflow-wrap: anywhere;
+}
+
+.site-footer__inner {
+  padding-block: var(--space-5) var(--space-6);
+  font-size: var(--text-sm);
+}
+
+/* The footer label is not a section heading of the page, so it has no accent bar. */
+.site-footer h2 {
+  margin-block: 0 var(--space-3);
+  padding-inline-start: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-inline-start: 0;
+}
+
+.site-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer li {
+  padding-block: var(--space-2);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* A white card on the pale page. */
+.card {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* The data kind badge: a shape and a word in a pill. */
+.data-kind {
+  display: inline-block;
+  padding-inline: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+}
+
+/* The districts page: the map card and the list card side by side on a wide screen, stacked on a narrow one. */
+.districts-layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+}
+
+@media (max-width: 60rem) {
+  .districts-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.map-picker {
+  display: grid;
+  gap: var(--space-4);
+  font-family: var(--font-ui);
+}
+
+.map-picker__label,
+.field label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.map-picker__group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.map-picker__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field select {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 28rem;
+  min-block-size: var(--target);
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.map-stage {
+  margin-block: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.district-map {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.map-district {
+  cursor: pointer;
+}
+
+/* The fill carries a light halo. The dark line is drawn on top of it. One of the two shows on every step of the ramp. */
+.map-district__fill {
+  stroke: var(--color-surface);
+  stroke-width: 5;
+  stroke-linejoin: round;
+  transition: fill var(--duration-base);
+}
+
+.map-district__line {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.map-district text {
+  font-family: var(--font-ui);
+  font-size: 30px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  fill: var(--color-text);
+}
+
+.map-district--c1 .map-district__fill {
+  fill: var(--color-map-ramp1);
+}
+
+.map-district--c2 .map-district__fill {
+  fill: var(--color-map-ramp2);
+}
+
+.map-district--c3 .map-district__fill {
+  fill: var(--color-map-ramp3);
+}
+
+.map-district--c4 .map-district__fill {
+  fill: var(--color-map-ramp4);
+}
+
+.map-district--c5 .map-district__fill {
+  fill: var(--color-map-ramp5);
+}
+
+.map-district--c4 text,
+.map-district--c5 text {
+  fill: var(--color-accent-contrast);
+}
+
+.map-district--none .map-district__fill {
+  fill: url('#map-no-data');
+}
+
+.map-no-data__ground {
+  fill: var(--color-surface);
+}
+
+.map-no-data__line {
+  stroke: var(--color-no-data-stripe);
+  stroke-width: 6;
+}
+
+/* Hover and the chosen district are shown by a thick outline, never by a new colour. */
+.map-district:hover .map-district__line,
+.map-district[aria-pressed='true'] .map-district__line {
+  stroke-width: 6;
+}
+
+.map-district:focus {
+  outline: none;
+}
+
+/* Keyboard focus: a thick ring in the focus colour, dashed so it also differs in shape from the chosen outline. */
+.map-district:focus-visible .map-district__line {
+  stroke: var(--color-focus);
+  stroke-width: 7;
+  stroke-dasharray: 16 7;
+}
+
+.map-legend {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.map-legend h3 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.map-legend p {
+  margin-block-end: var(--space-3);
+}
+
+.map-legend ul {
+  display: grid;
+  gap: var(--space-2) var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.map-legend__swatch {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+.map-legend__swatch--c1 {
+  background: var(--color-map-ramp1);
+}
+
+.map-legend__swatch--c2 {
+  background: var(--color-map-ramp2);
+}
+
+.map-legend__swatch--c3 {
+  background: var(--color-map-ramp3);
+}
+
+.map-legend__swatch--c4 {
+  color: var(--color-accent-contrast);
+  background: var(--color-map-ramp4);
+}
+
+.map-legend__swatch--c5 {
+  color: var(--color-accent-contrast);
+  background: var(--color-map-ramp5);
+}
+
+.map-legend__swatch--none {
+  background: repeating-linear-gradient(45deg, var(--color-surface) 0 0.3rem, var(--color-no-data-stripe) 0.3rem 0.5rem);
+}
+
+.provenance {
+  display: grid;
+  gap: var(--space-1);
+  margin-block: var(--space-4);
+  padding-block: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  border-block: 1px solid var(--color-border);
+}
+
+.provenance:empty {
+  display: none;
+}
+
+.provenance div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+}
+
+.provenance dt {
+  color: var(--color-text-muted);
+}
+
+.provenance dt::after {
+  content: ':';
+}
+
+.provenance dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Tabs: the chosen tab has a thick underline and bold text. */
+.tabs__list {
+  display: flex;
+  gap: var(--space-2);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.tabs__list button {
+  min-block-size: var(--target);
+  padding-inline: var(--space-4);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background: none;
+  border: 0;
+  border-block-end: 0.2rem solid transparent;
+  cursor: pointer;
+}
+
+.tabs__list button[aria-selected='true'] {
+  font-weight: 600;
+  border-block-end-color: var(--color-accent);
+}
+
+.tabs__panel {
+  padding-block-start: var(--space-4);
+}
+
+/* The AI label: a visible line of text beside every area report. */
+.ai-label {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.report p {
+  max-inline-size: none;
+}
+
+/* A wide table scrolls inside its own region, so the page never scrolls sideways. */
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+caption {
+  padding-block-end: var(--space-3);
+  font-weight: 600;
+  text-align: start;
+}
+
+th,
+td {
+  padding: var(--space-2) var(--space-3);
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--color-border);
+}
+
+thead th {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border-block-end: 1px solid var(--color-border-strong);
+}
+
+tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The chosen district's row: a tinted background, an accent bar and the word "selected". */
+tbody tr[aria-current='true'] {
+  background: var(--color-bg);
+  box-shadow: inset 0.25rem 0 0 var(--color-accent);
+}
+
+.selected-mark {
+  font-weight: 400;
+}
