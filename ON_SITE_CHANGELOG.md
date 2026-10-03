@@ -23,3 +23,6 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
+- Added `TODO.md` with the MVP priorities, `docs/IDEA.md`, `docs/README.md` and `docs/data-review/`.
+- Added `frontend/TODO.md` and `frontend/REVIEW_CHECKLIST.md`, and updated the frontend README, AGENTS and REQUIREMENTS with the start steps, the API access plan and the priority order.
+- Added the next steps for the MVP to `backend/README.md`. No backend code changed.
