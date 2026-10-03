@@ -18,7 +18,7 @@ export function Layout() {
   const menuId = useId()
   const mainRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-  const firstRender = useRef(true)
+  const lastPath = useRef(pathname)
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Closing the menu gives the focus back to the button that opened it.
@@ -27,14 +27,15 @@ export function Layout() {
     menuButtonRef.current?.focus()
   }, [])
 
-  // After navigation, close the menu and move focus to the main region, so keyboard and screen reader users land on the new page.
+  // After navigation, close the menu, go to the top of the new page and move focus to the main region, so keyboard and
+  // screen reader users land on the new page. The first load is not a navigation: the address is compared with the
+  // last one, so nothing moves when the page opens (React runs effects twice in development).
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false
-      return
-    }
+    if (lastPath.current === pathname) return
+    lastPath.current = pathname
     setMenuOpen(false)
-    mainRef.current?.focus()
+    document.documentElement.scrollTop = 0
+    mainRef.current?.focus({ preventScroll: true })
   }, [pathname])
 
   return (

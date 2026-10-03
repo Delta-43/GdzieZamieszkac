@@ -4,8 +4,8 @@ import { useSearchParams } from 'react-router'
 import {
   SCORED_CATEGORIES,
   useBoundaries,
+  useCategoryLabels,
   useCategoryScores,
-  useDistrictDetail,
   useDistricts,
   useMetrics,
   useMetricValues,
@@ -53,11 +53,9 @@ export function DistrictsPage() {
   const boundaries = useBoundaries()
   const metrics = useMetrics()
   const meta = useMeta()
-  // The category names arrive only inside a district's detail, so the first district is read for them.
-  const labels = useDistrictDetail(districts.data?.districts[0]?.code)
+  const categoryLabels = useCategoryLabels()
 
   const metricsByKey = useMemo(() => new Map(metrics.data?.map((m) => [m.key, m])), [metrics.data])
-  const categoryLabels = useMemo(() => new Map(labels.data?.categories.map((c) => [c.category as string, c.label])), [labels.data])
   const metric = choice.kind === 'category' ? undefined : (metricsByKey.get(choice.kind === 'metric' ? choice.key : SCORE_KEY) ?? metricsByKey.get(SCORE_KEY))
   const metricValues = useMetricValues(metric?.key ?? '', metric?.available === true)
   const categoryScores = useCategoryScores(choice.kind === 'category' ? choice.category : null)

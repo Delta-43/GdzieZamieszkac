@@ -15,7 +15,8 @@
     "city": "Miasto",
     "groupPortal": "Portal",
     "groupDistricts": "Dzielnice",
-    "noMatch": "Nie ma dzielnicy o takiej nazwie."
+    "noMatch": "Nie ma dzielnicy o takiej nazwie.",
+    "findDistrict": "Znajdź dzielnicę"
   },
   "language": {
     "label": "Język"
@@ -155,6 +156,33 @@
       "confidence": "Wiarygodność",
       "low": "niska",
       "enough": "wystarczająca"
+    }
+  },
+  "find": {
+    "title": "Znajdź dzielnicę",
+    "heading": "Znajdź dzielnicę dla siebie",
+    "intro": "Wybierz gotowy profil albo ustaw, jak ważna jest dla Ciebie każda kategoria. Ranking oblicza API na podstawie danych publicznych.",
+    "priorities": "Twoje priorytety",
+    "presets": "Gotowe profile",
+    "hint": "Skala od 0 do 5. Wartość 0 pomija kategorię. Wartość 5 liczy się pięć razy mocniej niż 1.",
+    "weight": "{{value}} z {{max}}",
+    "left_out": "0 – kategoria pominięta",
+    "allZero": "Wszystkie kategorie mają wartość 0. Ustaw co najmniej jedną kategorię powyżej zera.",
+    "submit": "Pokaż ranking",
+    "reset": "Przywróć domyślne",
+    "ranking": "Ranking dzielnic",
+    "ready": "Ranking gotowy. Pierwsze miejsce: {{name}}.",
+    "readyDefault": "Ranking domyślny, bez wag. Pierwsze miejsce: {{name}}.",
+    "percentile": "percentyl {{value}}",
+    "used": "Liczba miar w wyniku: {{count}}.",
+    "missing": "Miary bez danych w tym mieście są pominięte w wyniku:",
+    "table": {
+      "region": "Tabela z rankingiem dzielnic. Można ją przewijać.",
+      "caption": "Ranking dla Twoich priorytetów",
+      "captionDefault": "Ranking domyślny: wskaźnik jakości życia",
+      "rank": "Miejsce",
+      "score": "Wynik (0–100)",
+      "drivers": "Co najbardziej wpływa na wynik"
     }
   }
 }
