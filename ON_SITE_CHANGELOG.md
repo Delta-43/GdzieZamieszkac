@@ -19,7 +19,7 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 ## 3 October 2026
 
 - Created this repository with a clean history.
-- Added `docs/DESIGN.md` and `docs/design/field-journal.tokens.css`: a design proposal (the Field Journal system from the team design library, adapted for contrast, no theme toggle, and self-hosted fonts). It waits for the coordinator's decision. No imported code changed.
+- Added `docs/DESIGN.md` and `docs/design/field-journal.tokens.css`: a design proposal (the Field Journal system from the team design library, adapted for contrast, no theme toggle, and self-hosted fonts), accepted by the coordinator for now. Added `docs/design/fonts/` with Literata, IBM Plex Sans and JetBrains Mono (all SIL OFL). General Sans is not included, because its licence forbids distribution through a repository. No imported code changed.
 - `TODO.md`: added the way of working (`develop`, issues, `REVIEW.md`), key times to fill in, a status column, and corrected the API access and rate-limit notes to match the Tailscale setup. No imported code changed.
 - `TODO.md`: the owner of the frontend tasks (P0-2 to P0-8, P1-1 to P1-4) changed from `Rysia` to `unicorn-alex`, because `Rysia` is on break. No imported code changed.
 - Added `.github/` issue templates (bug, requirement, contract change) and a pull request template, to track bugs and requirements between backend, frontend and review. No imported code changed. (This line was lost in a merge and is restored here.)

@@ -3,7 +3,8 @@
  * Source: the team design library, system "field-journal" (tokens.css export, 3 October 2026).
  *
  * Changes from the library, each marked CHANGED or ADDED:
- *   - font URLs point to /fonts/<family>/ (self-hosted copies in frontend/public/fonts/, with their LICENSE.txt)
+ *   - font URLs point to /fonts/<family>/ (self-hosted copies in frontend/public/fonts/, with their LICENSE.txt; the sources are in docs/design/fonts/)
+ *   - CHANGED: the interface font is IBM Plex Sans (OFL) in place of General Sans (its licence bars distribution in a repository)
  *   - ADDED --color-border-strong and --color-warning-text (the library's border and warning colours fail WCAG 2.2 AA for our uses)
  *   - no [data-theme] selectors: the browser stores only the language choice, so the theme follows prefers-color-scheme
  * Do not hard-code a colour in a component. Use these tokens, and keep the contrast test in sync with this file.
@@ -41,18 +42,20 @@
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
   font-display: swap;
 }
-@font-face { /* CHANGED: URL. Check that it covers ą ć ę ł ń ś ź ż before release */
-  font-family: "General Sans";
-  src: url("/fonts/general-sans/GeneralSans-Variable.woff2") format("woff2");
-  font-weight: 200 700;
+@font-face { /* CHANGED: IBM Plex Sans replaces General Sans. Latin range */
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans/ibm-plex-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 700;
   font-style: normal;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
   font-display: swap;
 }
-@font-face { /* CHANGED: URL */
-  font-family: "General Sans";
-  src: url("/fonts/general-sans/GeneralSans-VariableItalic.woff2") format("woff2");
-  font-weight: 200 700;
-  font-style: italic;
+@font-face { /* Latin Extended: ą ć ę ł ń ś ź ż */
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans/ibm-plex-sans-latin-ext-wght-normal.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
   font-display: swap;
 }
 /* JetBrains Mono is optional for the MVP. Add its @font-face rules only if a code or an ID is shown. */
@@ -63,7 +66,7 @@
   --font-display-features: "kern", "liga", "onum";
   --font-body: Literata, Georgia, 'Times New Roman', serif;
   --font-body-features: "kern", "liga", "onum";
-  --font-ui: "General Sans", 'Segoe UI', sans-serif;
+  --font-ui: "IBM Plex Sans", 'Segoe UI', sans-serif;
   --font-ui-features: "tnum";
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 

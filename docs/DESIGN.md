@@ -1,6 +1,6 @@
 # Design requirements (proposal)
 
-Status: **proposal, waiting for the coordinator's yes.** Until it is accepted, the frontend keeps the placeholder theme (`frontend/REQUIREMENTS.md`, "Visual design").
+Status: **accepted for now by the coordinator, 3 October 2026.** The coordinator may replace it later. The font change below (IBM Plex Sans in place of General Sans) comes from a licence check and is part of this status.
 Owner of the decision: `Delta-43`. Builder: `unicorn-alex` (task F3 and every screen after it).
 
 ## Decision proposed
@@ -11,6 +11,7 @@ Use the **Field Journal** design system from the team's design library as the ba
 |---|---|
 | **Why Field Journal** | The users are residents who are not data experts. The system is calm, warm and made for reading. Its copy voice has a trait "Honest about limits", which is our data rule. Tables with right-aligned tabular figures, flat surfaces and hairline borders suit a data portal. It has light and dark themes. |
 | **What we take from Midnight Instrument** | The status chip pattern (icon plus label, never colour alone) for the data kind badges, and tabular figures for numbers. Nothing else. It is dark-first and written for operators. |
+| **Fonts** | Literata, IBM Plex Sans and JetBrains Mono, all under the SIL OFL, so they can live in this public repository. See "Changes our rules force". |
 | **Why not a stock look** | A city service must feel trustworthy and plain. A decorative or playful system would work against the pitch. |
 
 The tokens are in `docs/design/field-journal.tokens.css`. They are the library's tokens with the changes below, each marked in the file.
@@ -18,7 +19,11 @@ The tokens are in `docs/design/field-journal.tokens.css`. They are the library's
 ## Changes our rules force
 
 1. **No theme toggle.** `AGENTS.md` allows the browser to store only the language choice. The app follows the system setting (`prefers-color-scheme`) and stores nothing. Do not use the `data-theme` attribute.
-2. **Fonts are self-hosted.** No font is loaded from a third party. Copy the font files into `frontend/public/fonts/` with each `LICENSE.txt`, and list the fonts in the `README.md` disclosure. Literata and JetBrains Mono are under the SIL OFL. General Sans is under the ITF Free Font License. Check that its terms allow bundling in a public product before the first release.
+2. **Fonts are self-hosted, and General Sans is replaced.** No font is loaded from a third party.
+   - The library's UI font, General Sans, is under the ITF Free Font License 2.0. It allows self-hosting on our own site, but it forbids distributing the font files through "a repository" and giving them to contractors. This repository is public, and the frontend developer is a separate person, so we cannot ship General Sans here.
+   - **We use IBM Plex Sans** (SIL Open Font License) for the interface instead. It is in the same library, it has the same Latin and Latin Extended split that covers the Polish letters, and it supports tabular figures. Literata (headings and body) and JetBrains Mono are also OFL.
+   - The OFL fonts, with their licences, are in `docs/design/fonts/`. When task F3 starts, copy the files you need into `frontend/public/fonts/`, keep every `LICENSE.txt`, and list the fonts in the `README.md` disclosure.
+   - A private backup of General Sans is kept outside the repository by the coordinator. Do not copy it into the repository, an issue or a pull request.
 3. **Stronger colours where the library is too weak.** Two library tokens fail WCAG 2.2 AA for our uses (measured on 3 October 2026 with the library's contrast tool):
 
 | Pair | Library value | Result | Our fix |
@@ -34,9 +39,9 @@ Pairs that already pass: `text` on `bg` 16.9:1, `text-muted` on `bg` 5.99:1, `ac
 ## Type
 
 - **Literata** for headings and body text, 18 px body on a 1.65 line, headings at weight 500. Use old-style figures in prose.
-- **General Sans** for the interface: navigation, buttons, labels, table headers. Use tabular figures, so numbers line up.
+- **IBM Plex Sans** for the interface: navigation, buttons, labels, table headers. Use tabular figures (`font-variant-numeric: tabular-nums`), so numbers line up.
 - **JetBrains Mono** only where a code or an ID is shown. It is optional for the MVP, so leave it out if it costs weight.
-- **Polish letters.** Literata's Latin Extended file covers ą, ć, ę, ł, ń, ś, ź and ż. Check the same in General Sans on the first Polish page, because its font file is not split by range. Fix a gap with a fallback font in the stack.
+- **Polish letters.** The Latin Extended files of Literata and IBM Plex Sans declare the range that contains ą, ć, ę, ł, ń, ś, ź and ż, and ó is in the Latin file. Confirm on the first Polish page that all nine letters render in the chosen font and not in a fallback.
 - Subset the files to Latin and Latin Extended, and keep the payload small (`REQUIREMENTS.md` sets the budget for JavaScript only; measure the fonts too).
 
 ## Layout
@@ -78,7 +83,7 @@ Never write "safe" or "dangerous" about a district.
 
 - [ ] The coordinator accepts this proposal (or replaces it).
 - [ ] The font files are in `frontend/public/fonts/` with their licences, and the README lists them.
-- [ ] General Sans shows all nine Polish letters.
+- [ ] All nine Polish letters render in Literata and IBM Plex Sans.
 - [ ] The F3 contrast test passes for every pair in both themes.
 - [ ] The map outline and the five ramp classes pass the checks above.
 - [ ] No request goes to a third party (check the Network tab).
