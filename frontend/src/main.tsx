@@ -4,10 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import { App } from './App'
 import './i18n'
-// Self-hosted fonts: the files are bundled with the app, so nothing loads from a third party.
-import '@fontsource-variable/schibsted-grotesk/wght.css'
-import '@fontsource/dm-mono/400.css'
-import '@fontsource/dm-mono/500.css'
+import './theme/fonts.css'
 import './styles.css'
 import { applyTheme } from './theme'
 

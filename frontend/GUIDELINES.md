@@ -81,3 +81,13 @@ Newest entry last. Each entry has the date, the branch, what was done and any de
   - The workflow now asks for an issue per task and a status edit in `../TODO.md`. The four tasks above have neither.
   - Not checked by hand on any page: a keyboard pass, 200 and 400 percent zoom, and a screen reader. The districts page was not checked at 320 pixels.
 - **Workflow change.** Aryna told the assistant to follow `../REVIEW.md` section 7 from now on (see "Team workflow").
+- **`frontend/design-merge`.** Merged `develop` (Aleksandra's hand-off, mock-up and Kraków blue tokens; the coordinator's Field Journal design and fonts) and rebuilt the theme and the districts page from both. Aryna decided each conflict:
+  - Colours: Aleksandra's Kraków blue tokens, with the pale page, white cards and the orange focus ring.
+  - Header: ours, a white bar over a blue navigation band.
+  - Fonts: Literata and IBM Plex Sans, from `docs/design/fonts/`, as the accepted design says.
+  - Districts layout: Aleksandra's, the map with a tabbed panel ("Lista", "Szczegóły") beside it.
+  - Map picker: both, her category buttons and our list of single measures.
+  - Map labels: ours, the class number only.
+  - Added by the assistant to meet `docs/DESIGN.md`: a light halo under the dark district outline, so the outline reaches 3:1 on every step of the ramp, with a test.
+  - Still open: the coordinator has not said whether the blue replaces the Field Journal palette.
+

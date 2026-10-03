@@ -56,7 +56,9 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, selec
               }
             }}
           >
-            <path d={shape.path} fillRule="evenodd" />
+            {/* A light halo under a dark line: one of the two shows against every fill of the ramp. */}
+            <path className="map-district__fill" d={shape.path} fillRule="evenodd" />
+            <path className="map-district__line" d={shape.path} />
             {value && (
               <text x={shape.label.x} y={shape.label.y} aria-hidden="true">
                 {value.classNumber}

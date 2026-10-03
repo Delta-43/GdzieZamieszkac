@@ -52,13 +52,11 @@
   },
   "districts": {
     "title": "Dzielnice",
-    "heading": "Dzielnice na mapie i w tabeli",
-    "intro": "Wybierz miarę, aby pokolorować mapę. Te same wartości są w tabeli pod mapą.",
-    "measure": "Miara pokazana na mapie",
+    "heading": "Dzielnice na mapie i na liście",
+    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Te same wartości są na liście obok mapy.",
     "optionNoData": "{{label}} (brak danych)",
     "unavailable": "Brak danych dla tej miary.",
     "noData": "brak danych",
-    "pick": "Wybierz dzielnicę na mapie, aby zobaczyć jej wartość.",
     "rank": "Pozycja {{position}} z {{of}}",
     "higherIsBetter": "wyższa wartość to lepsza pozycja",
     "lowerIsBetter": "niższa wartość to lepsza pozycja",
@@ -77,13 +75,38 @@
     },
     "table": {
       "region": "Tabela dzielnic. Można ją przewijać w poziomie.",
-      "caption": "Dzielnice: wskaźnik jakości życia, powierzchnia, ceny oraz miara z mapy ({{metric}})",
+      "caption": "Dzielnice: {{metric}}, wskaźnik jakości życia, powierzchnia i ceny",
       "district": "Dzielnica",
       "score": "Wskaźnik jakości życia (0–100)",
       "area": "Powierzchnia (km²)",
       "rank": "Pozycja",
       "class": "Przedział na mapie",
       "selected": "wybrana"
+    },
+    "colourBy": "Koloruj mapę według",
+    "overall": "Wynik ogólny",
+    "moreMeasures": "Inna miara",
+    "chooseMeasure": "— wybierz miarę —",
+    "categoryScore": "Wynik kategorii: {{category}} (0–100)",
+    "categoryMethod": "Wynik od 0 do 100 obliczony przez API tylko z miar tej kategorii. Porównuje dzielnice jednego miasta.",
+    "tabs": {
+      "label": "Dane dzielnic",
+      "list": "Lista",
+      "details": "Szczegóły"
+    },
+    "details": {
+      "none": "Wybierz dzielnicę na mapie albo na liście, aby zobaczyć jej szczegóły.",
+      "profile": "Profil dzielnicy: wyniki kategorii",
+      "category": "Kategoria",
+      "score": "Wynik (0–100)",
+      "classShort": "{{number}} z {{count}}",
+      "backToList": "Wróć do listy"
     }
+  },
+  "report": {
+    "heading": "Opis dzielnicy",
+    "label": "Raport napisany przez sztuczną inteligencję na podstawie danych.",
+    "fallback": "Ten tekst jest dostępny tylko po angielsku.",
+    "generated": "Wygenerowano: {{date}}"
   }
 }

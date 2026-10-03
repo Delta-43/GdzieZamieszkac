@@ -52,13 +52,11 @@
   },
   "districts": {
     "title": "Districts",
-    "heading": "Districts on the map and in the table",
-    "intro": "Pick a measure to colour the map. The same values are in the table under the map.",
-    "measure": "Measure shown on the map",
+    "heading": "Districts on the map and in the list",
+    "intro": "Pick a category or a measure to colour the map. The same values are in the list beside the map.",
     "optionNoData": "{{label}} (no data)",
     "unavailable": "No data for this measure.",
     "noData": "no data",
-    "pick": "Choose a district on the map to see its value.",
     "rank": "Rank {{position}} of {{of}}",
     "higherIsBetter": "a higher value ranks better",
     "lowerIsBetter": "a lower value ranks better",
@@ -77,13 +75,38 @@
     },
     "table": {
       "region": "Table of the districts. It scrolls sideways.",
-      "caption": "Districts: livability score, area, prices and the measure on the map ({{metric}})",
+      "caption": "Districts: {{metric}}, livability score, area and prices",
       "district": "District",
       "score": "Livability score (0–100)",
       "area": "Area (km²)",
       "rank": "Rank",
       "class": "Class on the map",
       "selected": "selected"
+    },
+    "colourBy": "Colour the map by",
+    "overall": "Overall score",
+    "moreMeasures": "Another measure",
+    "chooseMeasure": "— pick a measure —",
+    "categoryScore": "Category score: {{category}} (0–100)",
+    "categoryMethod": "A score from 0 to 100 that the API computes from the measures of this category only. It compares the districts of one city.",
+    "tabs": {
+      "label": "District data",
+      "list": "List",
+      "details": "Details"
+    },
+    "details": {
+      "none": "Choose a district on the map or in the list to see its details.",
+      "profile": "District profile: category scores",
+      "category": "Category",
+      "score": "Score (0–100)",
+      "classShort": "{{number}} of {{count}}",
+      "backToList": "Back to the list"
     }
+  },
+  "report": {
+    "heading": "About the district",
+    "label": "This report was written by artificial intelligence from the data.",
+    "fallback": "This text is available in English only.",
+    "generated": "Generated: {{date}}"
   }
 }

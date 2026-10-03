@@ -99,6 +99,43 @@ export const metricValuesFixture: Schemas['MetricValues'] = {
   values: [value('alpha', 100, 1), value('beta', 200, 2), value('gamma', 300, 3)],
 }
 
+const CATEGORY_KEYS = ['transport', 'demographics', 'livability', 'amenities', 'environment', 'cost', 'safety'] as const
+
+/** A district detail with no metrics: the districts page reads only the category labels from it. */
+export const detailFixture: Schemas['DistrictDetail'] = {
+  code: 'alpha',
+  name: 'Alpha',
+  area_km2: 10.5,
+  lang: 'pl',
+  livability_score: 61.5,
+  categories: CATEGORY_KEYS.map((category) => ({ category, label: `Test ${category} label`, metrics: [] })),
+}
+
+export const reportFixture: Schemas['Report'] = {
+  district: 'beta',
+  lang: 'pl',
+  lang_fallback: false,
+  livability_score: 40,
+  body: 'Test report first paragraph.\n\nTest report second paragraph.',
+  model: 'test-model',
+  generated_at: '2026-09-30T12:00:00+00:00',
+}
+
+/** Category scores for the four districts, as /recommend answers them. */
+export const recommendFixture: Schemas['RecommendResponse'] = {
+  lang: 'pl',
+  weights_normalised: true,
+  metrics_used: 2,
+  missing_metrics: [],
+  note: 'Test recommend note from the API.',
+  ranking: [
+    { rank: 1, code: 'delta', name: 'Delta', score: 80.5, top_drivers: [] },
+    { rank: 2, code: 'gamma', name: 'Gamma', score: 60, top_drivers: [] },
+    { rank: 3, code: 'beta', name: 'Beta', score: 40, top_drivers: [] },
+    { rank: 4, code: 'alpha', name: 'Alpha', score: 0, top_drivers: [] },
+  ],
+}
+
 /** Answers every endpoint the districts page calls, from the fixtures above. */
 export function districtsApi(request: Request): Response {
   const { pathname } = new URL(request.url)
@@ -110,6 +147,10 @@ export function districtsApi(request: Request): Response {
   }
   if (pathname === '/v1/districts') return jsonResponse(districtsFixture)
   if (pathname === '/v1/districts.geojson') return jsonResponse(boundariesFixture)
+  if (pathname === '/v1/recommend') return jsonResponse(recommendFixture)
+  if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
+  if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
+  if (pathname.startsWith('/v1/districts/')) return jsonResponse(detailFixture)
   if (pathname === '/v1/metrics') return jsonResponse(metricsFixture)
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)
   if (pathname.startsWith('/v1/metrics/')) return jsonResponse({ ...metricValuesFixture, key: 'other', values: [] })

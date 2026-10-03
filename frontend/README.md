@@ -21,10 +21,13 @@ stale-data notice, loading and error states, and a footer with the credit line o
 The pages are home, districts (map and table) and "page not found". The navigation lists only pages that exist, so it grows with each task.
 The other screens are tasks F5 to F8 in `TODO.md`.
 
-On the districts page the user picks a measure. The map is an SVG drawn from `/districts.geojson`, with no map tiles.
-It splits the districts into at most five classes of equal count, from the lowest values (class 1) to the highest (class 5).
-Each district is a keyboard-reachable button named with its value, and it prints its class number, so nothing depends on colour.
-The table under the map holds the same values. A measure or a district without data is hatched and says "no data" with the API's reason.
+On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
+The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
+from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value, and it prints its class number,
+so nothing depends on colour. A panel beside the map has two tabs: "Lista" is the table with the same values, and "Szczegóły" shows the chosen district:
+its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
+
+A category score is asked from `POST /recommend` with that one category switched on and the others off. The answers are cached for five minutes, because that endpoint is rate limited.
 
 ## Theme
 
@@ -32,11 +35,14 @@ All colours, fonts and sizes are in `src/theme/tokens.ts`. Stylesheets and compo
 `src/theme/theme.test.ts` checks every colour pair in use (4.5:1 for text, 3:1 for interface parts) and fails if a colour appears outside the theme folder.
 To put a colour on a new background, add the pair to `CONTRAST_PAIRS` first.
 
-The theme is **provisional**. It follows a design system proposal that the design library owner had not approved on 3 October 2026.
-Replace the values in `tokens.ts` when a system is approved. The contrast test will say if a new value breaks a pair.
+The theme is a **proposal** that merges two team documents (3 October 2026):
 
-The fonts are Schibsted Grotesk and DM Mono, both under the SIL Open Font Licence 1.1. They are bundled from the
-`@fontsource-variable/schibsted-grotesk` and `@fontsource/dm-mono` packages and served with the app. Nothing loads from a third party.
+- **Colours:** the Kraków blue tokens in `design/krakow-blue.tokens.css` (light theme only). The coordinator accepted the Field Journal palette in `../docs/DESIGN.md` and has not yet said whether the blue replaces it. Changing the palette means changing the values in `tokens.ts`.
+- **Fonts, type scale and spacing:** the accepted `../docs/DESIGN.md`. Literata is for headings and running text. IBM Plex Sans is for the interface.
+- **Layout of the districts page:** the mock-up in `design/districts-mockup.html` (map with category buttons, a tabbed panel beside it). The header keeps a white bar over a blue navigation band, and the map prints class numbers, not dots or names.
+
+The fonts are served from `public/fonts/`, copied from `../docs/design/fonts/`. Both are under the SIL Open Font Licence 1.1, and each folder keeps its `LICENSE.txt`.
+Only the upright styles are shipped, in the Latin and Latin Extended ranges. Nothing loads from a third party.
 
 ## Commands
 
