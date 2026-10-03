@@ -123,7 +123,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 
 - Whether one project may be entered in both tasks. Ask the organisers.
 - How the AI task sees a meaningful, checkable role for AI. Today it narrates reports and translates, and it never computes the score.
-- The visual design. The coordinator accepted `docs/DESIGN.md` for now (3 October): the Field Journal system with our changes. Build task F3 from `docs/design/field-journal.tokens.css`. The placeholder theme is only a fallback.
+- The visual design is decided (4 October): the look of krakow.pl, in `docs/DESIGN.md` and `frontend/src/theme/tokens.ts`. A logo, a favicon or a crest would come from the city.
 - Which licence terms apply if the project ever becomes commercial: the road accident data needs written approval.
 
 ## Risks

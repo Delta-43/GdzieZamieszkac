@@ -30,7 +30,7 @@ Serves the audited data of **one city per deployment** (`CITY`) over a read-only
 
 ```
 .venv/bin/ruff check .
-.venv/bin/python -m pytest -q -m "not live"     # the check to run before a pull request (there is no CI yet)
+.venv/bin/python -m pytest -q -m "not live"     # the check to run before a pull request; CI runs it too (.github/workflows/ci.yml)
 .venv/bin/python -m pytest -q -m live           # real data, read-only; needs API_DB_URL or SUPABASE_DB_URL
 CITY=warsaw .venv/bin/uvicorn app.main:app_from_env --factory --port 8000
 ```

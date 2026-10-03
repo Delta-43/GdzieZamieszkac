@@ -47,7 +47,7 @@ curl localhost:8000/v1/meta
 ## Test
 
 ```bash
-.venv/bin/ruff check .                        # lint (run it before a pull request; there is no CI yet)
+.venv/bin/ruff check .                        # lint (run it before a pull request; CI runs it too, see .github/workflows/ci.yml)
 .venv/bin/python -m pytest -q -m "not live"   # offline: synthetic snapshot, contract, behaviour, languages, hardening, store
 .venv/bin/python -m pytest -q -m live         # read-only, real schemas of both cities: golden score test, contract, EN and PL structure, formats, read-only session
 ```

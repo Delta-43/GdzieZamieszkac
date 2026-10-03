@@ -1,0 +1,1 @@
+- `.github/workflows/ci.yml`: a CI workflow that runs on every pull request and push to `develop` and `main`: backend lint and offline tests, city service lint and tests, and the frontend `npm run check` (contracts, lint, types, tests, build). `backend/AGENTS.md` and `backend/README.md` (imported) now point to it instead of saying there is no CI. No imported code changed.
