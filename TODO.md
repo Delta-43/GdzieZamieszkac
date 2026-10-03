@@ -37,7 +37,7 @@ A judge can follow one flow in under three minutes:
 4. Compare two districts.
 
 It runs against a live Kraków API, in Polish by default, and it meets the WCAG 2.2 AA basics.
-The pitch features (personalised AI report, official notices, resident feedback) are shown as clearly labelled concepts. We do not build fake endpoints for them.
+The personalised AI report and resident feedback are real, in the separate `city-service/` (tasks C1 to C4). Official notices and demand counts are shown as clearly labelled concepts, and we build no fake endpoints for them.
 
 ## How we are judged
 
@@ -57,12 +57,12 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 
 | ID | Task | Owner | Done when | Status |
 |---|---|---|---|---|
-| P0-1 | A live Kraków API the frontend can reach: the coordinator runs the backend and shares it over the team Tailscale network | `Delta-43` | The frontend developer's agent gets `{"status":"ok","database":"reachable"}` from `/v1/health` and `"city": "krakow"` from `/v1/meta`, from the frontend machine. Done so far: all 16 contract operations answer from the coordinator's machine. See `frontend/README.md`. | Live. Not yet checked from the frontend machine |
-| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `unicorn-alex` | `frontend/TODO.md` tasks F1 to F3 pass review | Open |
-| P0-3 | Districts screen: accessible table and SVG map | `unicorn-alex` | Task F4 passes review | Open |
-| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `unicorn-alex` | Task F5 passes review | Open |
-| P0-5 | Find a district: personas and sliders to `POST /recommend` | `unicorn-alex` | Task F6 passes review | Open |
-| P0-6 | Compare two to four districts | `unicorn-alex` | Task F7 passes review | Open |
+| P0-1 | A live Kraków API the frontend can reach: the coordinator runs the backend and shares it over the team Tailscale network | `Delta-43` | The frontend developer's agent gets `{"status":"ok","database":"reachable"}` from `/v1/health` and `"city": "krakow"` from `/v1/meta`, from the frontend machine. All 16 contract operations answer, and the city service (port 8100) runs next to it. Checked from the frontend machine in the test runs of 3 and 4 October 2026. See `frontend/README.md`. | Done. Live while the coordinator's machine is awake |
+| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `unicorn-alex` | `frontend/TODO.md` tasks F1 to F3 pass review | Done |
+| P0-3 | Districts screen: accessible table and SVG map | `unicorn-alex` | Task F4 passes review | Done |
+| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `unicorn-alex` | Task F5 passes review | Done |
+| P0-5 | Find a district: personas and sliders to `POST /recommend` | `unicorn-alex` | Task F6 passes review | Done |
+| P0-6 | Compare two to four districts | `unicorn-alex` | Task F7 passes review | Done |
 | P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `unicorn-alex` | Task F8 passes review | Open |
 | P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `unicorn-alex`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow | Open |
 | P0-9 | Apply the data verification feedback: fix a value, or add a caveat, for each "Fix" | `Delta-43`, with `unicorn-alex` | `docs/data-review/` records every finding and what changed | Open |
@@ -95,9 +95,9 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 
 | ID | Task | Owner | Status |
 |---|---|---|---|
-| C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | In progress (branch `backend/city-service`) |
-| C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | In progress (branch `backend/city-service`) |
-| C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | In progress (branch `backend/city-service`) |
+| C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | Done |
+| C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | Done |
+| C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | Done |
 | C4 | Frontend screens for C2 and C3, and the "after city approval" label for notices | `unicorn-alex` | Open, after C1 |
 
 ## P3: after the event
@@ -115,7 +115,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 |---|---|---|
 | B1 | Kraków runs behind Tailscale serve, which is tailnet only, with `TRUSTED_PROXY_HOPS=0`. All clients share one rate-limit bucket (about 600 requests a minute, and 60 for `POST /recommend`). Check whether the proxy sets `X-Forwarded-For`. If it does, set `TRUSTED_PROXY_HOPS=1` so limits count real clients. If not, keep `0`. | P0, open |
 | B2 | Add `*_display` fields for district score, area, commute minutes, recommend score and percentile, similarity. Contract first | P1 |
-| B3 | Add couple and newly married presets to `app/data/personas.json`, with Polish text reviewed by `unicorn-alex` | P1 |
+| B3 | Add couple and newly married presets to `backend/app/data/personas.json`, with Polish text reviewed by `unicorn-alex` | P1 |
 | B4 | Keep the offline tests green. Record any change to imported code in `ON_SITE_CHANGELOG.md` | Always |
 | B5 | Services for the P2 features. Notices and demand counts stay concepts. The AI report and feedback are tasks C1 to C3 | P3 |
 

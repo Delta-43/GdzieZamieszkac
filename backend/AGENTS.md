@@ -30,18 +30,18 @@ Serves the audited data of **one city per deployment** (`CITY`) over a read-only
 
 ```
 .venv/bin/ruff check .
-.venv/bin/python -m pytest -q -m "not live"     # also run by scripts/validate.sh and CI
+.venv/bin/python -m pytest -q -m "not live"     # the check to run before a pull request (there is no CI yet)
 .venv/bin/python -m pytest -q -m live           # real data, read-only; needs API_DB_URL or SUPABASE_DB_URL
 CITY=warsaw .venv/bin/uvicorn app.main:app_from_env --factory --port 8000
 ```
-- **Portable:** the image builds from `backend/` alone and is configured only by environment (`API_DB_URL`, `CITY`, ...). Do not add a dependency on files outside this folder; the scoring copy and its sync test are the pattern. Next: `*_FILE` secrets and a multi-architecture build (`docs/DEPLOYMENT_PLAN.md` G3).
+- **Portable:** the image builds from `backend/` alone and is configured only by environment (`API_DB_URL`, `CITY`, ...). Do not add a dependency on files outside this folder; the scoring copy and its sync test are the pattern. Next: a multi-architecture build. (`*_FILE` secrets are done.)
 
 ## Before you finish
 
 - Lint clean, offline tests pass, and the live tests pass if you touched data access, scoring or presentation. Add tests for what you add (contract, both languages, limits).
 - Keep `README.md`, this file and `openapi.yaml` in step with the code. Note decisions in the private decision log.
 - A change to a response shape is cross-cutting: flag it in the PR for `frontend/` (`unicorn-alex`) and `data/` if it needs new stored data.
-- Branch `backend/<short-description>`, open a PR, run `scripts/validate.sh`. Do not push to `main`.
+- Branch `backend/<short-description>`, open a PR, and run the lint and the offline tests above. Do not push to `main`.
 
 ## Issues and pull requests
 
