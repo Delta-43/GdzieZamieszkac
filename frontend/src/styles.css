@@ -1321,15 +1321,32 @@ main > .ai-report-card {
   color: var(--color-text-muted);
 }
 
-/* The measure column stays narrow enough for four districts beside it; a cell keeps a readable width and the region scrolls. */
+/*
+  Every column has the same width, at least 8rem, so at 320 pixels a measure and one district's value are on screen
+  together. The measure column stays in place while the region scrolls sideways, so a value is never without its name.
+*/
+.compare-table {
+  table-layout: fixed;
+  min-inline-size: calc(var(--columns, 3) * 8rem);
+}
+
 .compare-table th,
 .compare-table td {
-  min-inline-size: 9rem;
+  padding-inline: var(--space-2);
   vertical-align: top;
+  /* Row headers elsewhere stay on one line. Here a long measure name wraps inside its column. */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .compare-table thead th {
   font-size: var(--text-sm);
+}
+
+.compare-table tr > :first-child {
+  position: sticky;
+  inset-inline-start: 0;
+  background: var(--color-surface-raised);
 }
 
 .compare-table__value {

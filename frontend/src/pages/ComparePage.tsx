@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId, useRef, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router'
 import { ApiError } from '../api/client'
@@ -52,9 +52,22 @@ export function ComparePage() {
   const full = codes.length >= MAX_DISTRICTS
   const unknown = compare.error instanceof ApiError && (compare.error.status === 404 || compare.error.status === 422)
 
-  function toggle(code: string, chosen: boolean) {
-    const next = chosen ? [...codes, code] : codes.filter((other) => other !== code)
+  // The choice as last asked for. The address changes a moment after a tick, so a second tick that arrives before
+  // then builds on this list and not on the address, which is still the old one.
+  const asked = useRef<string[] | null>(null)
+  useEffect(() => {
+    asked.current = null
+  }, [params])
+
+  function choose(next: string[]) {
+    asked.current = next
     setParams(next.length > 0 ? { codes: next.join(',') } : {}, { replace: true })
+  }
+
+  function toggle(code: string, chosen: boolean) {
+    const current = asked.current ?? codes
+    if (chosen && (current.includes(code) || current.length >= MAX_DISTRICTS)) return
+    choose(chosen ? [...current, code] : current.filter((other) => other !== code))
   }
 
   const chosen = compare.data?.districts ?? []
@@ -81,10 +94,7 @@ export function ComparePage() {
                     checked={checked}
                     aria-disabled={(full && !checked) || undefined}
                     aria-describedby={`${id}-count`}
-                    onChange={(event) => {
-                      if (event.target.checked && full) return
-                      toggle(district.code, event.target.checked)
-                    }}
+                    onChange={(event) => toggle(district.code, event.target.checked)}
                   />
                   <span>{district.name}</span>
                 </label>
@@ -97,7 +107,7 @@ export function ComparePage() {
         </p>
         {codes.length > 0 && (
           <p className="find-actions">
-            <button type="button" className="button-secondary" onClick={() => setParams({}, { replace: true })}>
+            <button type="button" className="button-secondary" onClick={() => choose([])}>
               {t('compare.clear')}
             </button>
           </p>
@@ -128,7 +138,8 @@ export function ComparePage() {
           <h2 id={`${id}-${group.id}`}>{group.label}</h2>
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable */}
           <div className="table-scroll" role="region" aria-label={t('compare.region', { label: group.label })} tabIndex={0}>
-            <table className="compare-table" aria-labelledby={`${id}-${group.id}`}>
+            {/* The number of columns sets the least width of the table, so every column keeps a readable width. */}
+            <table className="compare-table" aria-labelledby={`${id}-${group.id}`} style={{ '--columns': chosen.length + 1 } as CSSProperties}>
               <thead>
                 <tr>
                   <th scope="col">{t('compare.metric')}</th>

@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, within } from '@testing-library/react'
 import { expect, test } from 'vitest'
 import { axe } from 'vitest-axe'
 import { districtsApi } from '../test/fixtures'
@@ -47,6 +47,23 @@ test('two ticked districts are asked for in the order chosen and shown as tables
   expect(screen.getByText('Test score note from the API.')).toBeInTheDocument()
   // The choice is kept in the address only.
   expect(window.localStorage).toHaveLength(0)
+})
+
+test('two ticks with no pause between them are both kept', async () => {
+  mockFetch(districtsApi)
+  renderApp('/compare')
+  const alpha = await screen.findByRole('checkbox', { name: 'Alpha' })
+  const gamma = screen.getByRole('checkbox', { name: 'Gamma' })
+
+  // Both clicks arrive before the page has rendered the first one (issue #56).
+  act(() => {
+    alpha.click()
+    gamma.click()
+  })
+
+  expect(await screen.findByText('Porównanie gotowe: Alpha, Gamma.')).toBeInTheDocument()
+  expect(alpha).toBeChecked()
+  expect(gamma).toBeChecked()
 })
 
 test('a district that lacks a value others have shows "no data" in its place', async () => {
