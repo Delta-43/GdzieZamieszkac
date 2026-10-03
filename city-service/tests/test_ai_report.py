@@ -96,3 +96,11 @@ def test_polish_decimal_comma_passes_the_guard(make_client):
 def test_unknown_field_is_rejected(make_client):
     c, _ = make_client()
     assert post(c, address="x").status_code == 422
+
+
+def test_weights_have_a_shape(make_client):
+    c, _ = make_client()
+    ok = post(c, weights={"category": {"transport": 5, "cost": 3}, "metric": {"transit_stops_total": 2}})
+    assert ok.status_code == 200 and ok.json()["basis"]["weights"] == {"category": {"transport": 5.0, "cost": 3.0}, "metric": {"transit_stops_total": 2.0}}
+    assert post(c, weights={"categories": {"transport": 5}}).status_code == 422   # unknown top-level key
+    assert post(c, weights={"category": {"transport": "high"}}).status_code == 422  # not a number

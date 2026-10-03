@@ -21,9 +21,8 @@ export function useAiReport() {
         body: {
           requirements,
           lang: currentLanguage(),
-          // The contract gives `weights` no shape ("as in POST /recommend", issue #46), so the value is cast.
           // With no weights the service uses the default ranking.
-          ...(weights ? { weights: { category: weights } as unknown as Record<string, never> } : {}),
+          ...(weights ? { weights: { category: weights } } : {}),
         },
       })
       if (error) throw new ApiError(response.status, error.title, retryAfter(response))
