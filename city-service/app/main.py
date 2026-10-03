@@ -16,7 +16,7 @@ from fastapi import APIRouter, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .backend_client import BackendClient, BackendError
@@ -42,6 +42,8 @@ Lang = Literal["pl", "en"]
 
 
 class AiReportRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     requirements: str = Field(min_length=3, max_length=1000)
     persona: str | None = Field(default=None, max_length=40)
     weights: dict | None = None
@@ -49,6 +51,8 @@ class AiReportRequest(BaseModel):
 
 
 class RentPaid(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     type: Literal["rent_paid"]
     district: str = Field(max_length=60)
     rent_pln: int = Field(ge=100, le=50_000)
@@ -57,6 +61,8 @@ class RentPaid(BaseModel):
 
 
 class DataProblem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     type: Literal["data_problem"]
     district: str = Field(max_length=60)
     metric_key: str = Field(max_length=80)
@@ -79,15 +85,44 @@ class ProblemError(Exception):
         self.status, self.title, self.detail = status, title, detail
 
 
-def build_facts(ranking: list[dict], highlights: dict[str, list[dict]], labels: dict[str, str]) -> list[str]:
-    """Plain-text facts for the top three districts. Every number the model may use is in this list."""
+FACTS = {
+    "en": {
+        "rank": "Rank {rank}: {name}, score {score} out of 100 (a percentile score that compares districts of Krakow only).",
+        "driver": "{name}: {label}, percentile {p} within Krakow (100 is the best, 0 the worst).",
+        "highlight": "{name}: {metric} is {display} ({kind}).",
+        "kind": {"observed": "observed", "estimated": "estimated", "proxy": "proxy"},
+        "score": "{score} pts (0-100)",
+    },
+    "pl": {
+        "rank": "Miejsce {rank}: {name}, wynik {score} na 100 (wynik percentylowy, który porównuje wyłącznie dzielnice Krakowa).",
+        "driver": "{name}: {label}, percentyl {p} w Krakowie (100 to najlepiej, 0 najgorzej).",
+        "highlight": "{name}: {metric} wynosi {display} ({kind}).",
+        "kind": {"observed": "dane obserwowane", "estimated": "szacunek", "proxy": "wskaźnik pośredni"},
+        "score": "{score} pkt (0-100)",
+    },
+}
+
+
+def fmt(value: float, lang: str) -> str:
+    """One decimal, with the decimal mark of the language (a comma in Polish, as in the API's display strings)."""
+    text = f"{value:.1f}"
+    return text.replace(".", ",") if lang == "pl" else text
+
+
+def score_display(score: float, lang: str) -> str:
+    return FACTS[lang]["score"].format(score=fmt(score, lang))
+
+
+def build_facts(ranking: list[dict], highlights: dict[str, list[dict]], labels: dict[str, str], lang: str = "en") -> list[str]:
+    """Plain-text facts for the top three districts, in the request language. Every number the model may use is in this list."""
+    t = FACTS[lang]
     facts: list[str] = []
     for row in ranking[:3]:
-        facts.append(f"Rank {row['rank']}: {row['name']}, score {row['score']} out of 100 (a percentile score that compares districts of Krakow only).")
-        for d in row.get("top_drivers", []):
-            facts.append(f"{row['name']}: {d['label']}, percentile {d['percentile']} within Krakow (100 is the best, 0 the worst).")
+        facts.append(t["rank"].format(rank=row["rank"], name=row["name"], score=fmt(row["score"], lang)))
+        facts.extend(t["driver"].format(name=row["name"], label=d["label"], p=fmt(d["percentile"], lang)) for d in row.get("top_drivers", []))
         for h in highlights.get(row["code"], []):
-            facts.append(f"{row['name']}: {labels.get(h['key'], h['key'])} is {h['display']} ({h['data_kind']}).")
+            kind = t["kind"].get(h["data_kind"], h["data_kind"])
+            facts.append(t["highlight"].format(name=row["name"], metric=labels.get(h["key"], h["key"]), display=h["display"], kind=kind))
     return facts
 
 
@@ -141,7 +176,7 @@ def create_app(settings: Settings | None = None, backend: BackendClient | None =
             raise ProblemError(e.status if e.status in (422, 503) else 502, "Data API error", e.detail) from e
         top = {r["code"] for r in rec["ranking"][:3]}
         highlights = {d["code"]: d.get("highlights", []) for d in districts if d["code"] in top}
-        facts = build_facts(rec["ranking"], highlights, {m["key"]: m["label"] for m in metrics})
+        facts = build_facts(rec["ranking"], highlights, {m["key"]: m["label"] for m in metrics}, body.lang)
         try:
             text = await llm.narrate(body.requirements, facts, body.lang)
         except LlmError as e:
@@ -153,7 +188,8 @@ def create_app(settings: Settings | None = None, backend: BackendClient | None =
             "lang": body.lang, "ai_generated": True, "label": LABEL[body.lang], "model": settings.model,
             "generated_at": datetime.now(UTC).isoformat(timespec="seconds"), "report": text,
             "basis": {"persona": body.persona, "weights": weights, "note": rec["note"]},
-            "districts": [{"rank": r["rank"], "code": r["code"], "name": r["name"], "score": r["score"]} for r in rec["ranking"][:3]],
+            "districts": [{"rank": r["rank"], "code": r["code"], "name": r["name"], "score": r["score"], "score_display": score_display(r["score"], body.lang)}
+                          for r in rec["ranking"][:3]],
             "facts": facts,
         }
 

@@ -40,3 +40,10 @@ def test_nothing_identifying_is_stored(make_client):
     c.post("/v1/feedback", json=RENT, headers={"X-Forwarded-For": "1.2.3.4", "User-Agent": "x"})
     row = store._connect().execute("SELECT * FROM feedback").fetchone()
     assert "1.2.3.4" not in str(row)
+
+
+def test_unknown_field_is_rejected_and_nothing_is_stored(make_client):
+    c, store = make_client()
+    assert c.post("/v1/feedback", json={**RENT, "address": "TEST street 1"}).status_code == 422
+    assert c.post("/v1/feedback", json={**PROBLEM, "email": "a@b.c"}).status_code == 422
+    assert store.count() == 0
