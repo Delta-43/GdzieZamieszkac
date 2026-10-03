@@ -10,6 +10,7 @@ info:
     - **Every AI report carries `ai_generated: true` and a label** in the requested language.
     - **The typed text is not stored and not logged.** It goes to the model provider (OpenRouter).
     - **Feedback is stored `unverified`, never published, and never changes a score,** until identity checks (Gov ID) exist.
+    - Request bodies reject unknown fields with 422.
     - Errors are problem+json (RFC 9457).
 servers:
   - url: /v1
@@ -159,13 +160,14 @@ components:
           type: array
           items:
             type: object
-            required: [rank, code, name, score]
+            required: [rank, code, name, score, score_display]
             properties:
               rank: { type: integer, minimum: 1 }
               code: { type: string }
               name: { type: string }
               score: { type: number, minimum: 0, maximum: 100 }
-        facts: { type: array, items: { type: string }, description: The facts the model was given. Show them as the basis of the text. }
+              score_display: { type: string, description: 'The score as text in `lang`, with that language''s decimal mark, for example `62,1 pkt (0-100)`.' }
+        facts: { type: array, items: { type: string }, description: The facts the model was given, written in `lang`. Show them as the basis of the text. }
 
     RentPaid:
       type: object
