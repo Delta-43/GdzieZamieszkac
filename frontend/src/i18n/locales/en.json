@@ -41,7 +41,12 @@
     "heading": "Compare the districts before you look for a flat",
     "what": "This portal shows public data about the districts: transport, amenities, environment, prices and rents. Every number comes with its source and date.",
     "notListings": "This is not a listings site. We show no flats for sale or rent, and no brokers.",
-    "cta": "See the districts"
+    "cta": "See the districts",
+    "notices": {
+      "heading": "Official notices",
+      "badge": "Concept",
+      "text": "Notices of planned projects and infrastructure, published by the city, are to be implemented after city approval. They do not exist yet: this section shows no notices and no data."
+    }
   },
   "notFound": {
     "title": "Page not found",

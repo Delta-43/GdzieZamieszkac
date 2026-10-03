@@ -41,7 +41,12 @@
     "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
     "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
     "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników.",
-    "cta": "Zobacz dzielnice"
+    "cta": "Zobacz dzielnice",
+    "notices": {
+      "heading": "Oficjalne komunikaty miasta",
+      "badge": "Koncepcja",
+      "text": "Komunikaty o planowanych inwestycjach i infrastrukturze, publikowane przez miasto, zostaną wdrożone po zatwierdzeniu przez miasto. Jeszcze ich nie ma: ta sekcja nie pokazuje żadnych komunikatów ani danych."
+    }
   },
   "notFound": {
     "title": "Nie znaleziono strony",

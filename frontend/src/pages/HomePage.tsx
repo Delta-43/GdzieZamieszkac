@@ -18,6 +18,13 @@ export function HomePage() {
           {t('nav.findDistrict')}
         </Link>
       </p>
+      {/* A concept, not a feature: the city has not approved it, so there is no endpoint and no data (../../TODO.md, P2). */}
+      <section className="concept-note" aria-labelledby="notices-heading">
+        <h2 id="notices-heading">
+          {t('home.notices.heading')} <span className="concept-note__badge">{t('home.notices.badge')}</span>
+        </h2>
+        <p>{t('home.notices.text')}</p>
+      </section>
     </>
   )
 }
