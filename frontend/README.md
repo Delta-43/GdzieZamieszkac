@@ -15,17 +15,22 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Tasks F1 to F4 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+**Tasks F1 to F5 are done.** The project builds, lints and tests, and the API types are generated from the contract.
 The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
 stale-data notice, loading and error states, and a footer with the credit line of every source.
-The pages are home, districts (map and table) and "page not found". The navigation lists only pages that exist, so it grows with each task.
-The other screens are tasks F5 to F8 in `TODO.md`.
+The pages are home, districts (map and list), one district, and "page not found". The navigation lists only pages that exist, so it grows with each task.
+The other screens are tasks F6 to F8 in `TODO.md`.
 
 On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
 The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
 from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value, and it prints its class number,
 so nothing depends on colour. A panel beside the map has two tabs: "Lista" is the table with the same values, and "Szczegóły" shows the chosen district:
 its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
+
+The page of one district (`/districts/<code>`) shows the area, the livability score, the area report with its AI label, the price history, and every metric by category.
+Each metric shows the API's display string, the data kind, the as-of date, the source, the rank, the sample size and the caveat; the method, the licence and the credit line open in a detail.
+A metric without data shows its reason in a dashed frame. The price history is a line chart with a sentence that sums it up and a table with every value; a quarter with low confidence has a hollow marker and the word "low" in the table.
+The chart formats no number: its two gridlines are labelled with the API's display strings of the lowest and the highest value.
 
 A category score is asked from `POST /recommend` with that one category switched on and the others off. The answers are cached for five minutes, because that endpoint is rate limited.
 

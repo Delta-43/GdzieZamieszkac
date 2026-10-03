@@ -762,3 +762,196 @@ tbody tr[aria-current='true'] {
 .selected-mark {
   font-weight: 400;
 }
+
+/* The district page: metric rows with their provenance. */
+main section {
+  margin-block-start: var(--space-6);
+}
+
+main > .card {
+  margin-block: var(--space-4);
+}
+
+.metrics {
+  margin: 0;
+}
+
+.metric {
+  display: grid;
+  gap: var(--space-1) var(--space-5);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  padding-block: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.metric:first-child {
+  border-block-start: 0;
+}
+
+@media (max-width: 40rem) {
+  .metric {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.metric > dt {
+  font-weight: 600;
+}
+
+.metric dd {
+  margin: 0;
+}
+
+.metric p {
+  margin-block-end: var(--space-1);
+  max-inline-size: none;
+}
+
+.metric__value {
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+/* As-of date, source, rank and sample size: small, muted, each on its own line when the row is narrow. */
+.metric__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.metric__caveat {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+/* A metric without data: a dashed frame, the label and the API's reason. No value and no zero. */
+.metric--missing {
+  margin-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 1px dashed var(--color-border-strong);
+}
+
+.metric--missing:first-child {
+  border-block-start: 1px dashed var(--color-border-strong);
+}
+
+details {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+summary {
+  inline-size: fit-content;
+  min-block-size: var(--target);
+  align-content: center;
+  color: var(--color-link);
+  cursor: pointer;
+}
+
+.metric__more {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--color-border);
+}
+
+.metric__more dt {
+  font-weight: 600;
+}
+
+.metric__more dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The price history: the chart card and the table card side by side on a wide screen. */
+.history-layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+}
+
+@media (max-width: 60rem) {
+  .history-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.table-scroll--tall {
+  max-block-size: 28rem;
+  overflow-y: auto;
+}
+
+.price-chart {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.price-chart svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  touch-action: pan-y;
+}
+
+/* Gridlines and the crosshair are quiet hairlines; the data is the only loud thing. */
+.chart-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.chart-crosshair {
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* A marker carries a ring in the surface colour, so it stays readable where it sits on the line. */
+.chart-marker {
+  fill: var(--color-accent);
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+
+/* Low confidence: hollow and larger. The difference is the shape, not the colour. */
+.chart-marker--low {
+  fill: var(--color-surface);
+  stroke: var(--color-accent);
+}
+
+.chart-marker--active {
+  stroke: var(--color-text);
+}
+
+/* Chart text wears the text colours, never the colour of the data. */
+.chart-label {
+  font-size: 13px;
+  fill: var(--color-text-muted);
+}
+
+.chart-label--end {
+  text-anchor: end;
+}
+
+.chart-readout {
+  min-block-size: 1.5em;
+  margin-block: var(--space-2);
+  font-weight: 500;
+}
+
+.price-chart figcaption {
+  color: var(--color-text-muted);
+}

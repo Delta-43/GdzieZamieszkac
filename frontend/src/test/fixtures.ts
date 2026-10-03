@@ -99,6 +99,33 @@ export const metricValuesFixture: Schemas['MetricValues'] = {
   values: [value('alpha', 100, 1), value('beta', 200, 2), value('gamma', 300, 3)],
 }
 
+const saleMetricBase: Schemas['MetricValue'] = {
+  key: 'test_sale',
+  available: true,
+  label: 'Test sale label',
+  display: '100 test',
+  value: 100,
+  unit: 'test unit',
+  data_kind: 'observed',
+  n_obs: 42,
+  as_of: '2026-09-30',
+  source: { name: 'Test source A', licence: 'Test licence text', attribution: 'Test credit line A' },
+  method: 'Test method text.',
+  caveat: 'Test caveat from the API.',
+  rank: { position: 2, of: 4, direction: 'lower is better' },
+}
+const saleMetric = saleMetricBase
+const gapMetric: Schemas['UnavailableMetric'] = { key: 'test_gap', available: false, label: 'Test gap label', reason: 'Test reason for the gap.' }
+const scoreMetric: Schemas['MetricValue'] = {
+  ...saleMetricBase,
+  key: 'livability_score_default',
+  label: 'Test score label',
+  display: '61,5 test points',
+  data_kind: 'estimated',
+  caveat: null,
+  rank: { position: 1, of: 4, direction: 'higher is better' },
+}
+
 const CATEGORY_KEYS = ['transport', 'demographics', 'livability', 'amenities', 'environment', 'cost', 'safety'] as const
 
 /** A district detail with no metrics: the districts page reads only the category labels from it. */
@@ -108,7 +135,33 @@ export const detailFixture: Schemas['DistrictDetail'] = {
   area_km2: 10.5,
   lang: 'pl',
   livability_score: 61.5,
-  categories: CATEGORY_KEYS.map((category) => ({ category, label: `Test ${category} label`, metrics: [] })),
+  score_note: 'Test score note from the API.',
+  categories: CATEGORY_KEYS.map((category) => ({
+    category,
+    label: `Test ${category} label`,
+    metrics: category === 'cost' ? [saleMetric, gapMetric] : category === 'livability' ? [scoreMetric] : [],
+  })),
+  yield_gross: { ...saleMetricBase, key: 'yield_gross', label: 'Test yield label', display: '5 test percent', data_kind: 'estimated' },
+  payback_years: null,
+}
+
+/** Three quarters. The second rests on few observations and is marked low confidence. */
+export const seriesFixture: Schemas['Series'] = {
+  district: 'alpha',
+  key: 'sale_price_median_m2',
+  label: 'Test series label',
+  lang: 'pl',
+  unit: 'test unit',
+  data_kind: 'observed',
+  min_obs: 30,
+  source: { name: 'Test series source', licence: 'Test series licence', attribution: 'Test series credit' },
+  method: 'Test series method.',
+  caveat: 'Test series caveat from the API.',
+  points: [
+    { period_start: '2025-01-01', period_end: '2025-03-31', value: 100, display: '100 test', n_obs: 40, low_confidence: false },
+    { period_start: '2025-04-01', period_end: '2025-06-30', value: 80, display: '80 test', n_obs: 7, low_confidence: true },
+    { period_start: '2025-07-01', period_end: '2025-09-30', value: 120, display: '120 test', n_obs: 55, low_confidence: false },
+  ],
 }
 
 export const reportFixture: Schemas['Report'] = {
@@ -150,6 +203,9 @@ export function districtsApi(request: Request): Response {
   if (pathname === '/v1/recommend') return jsonResponse(recommendFixture)
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
+  if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)
+  if (pathname.includes('/series/')) return jsonResponse({ type: 'about:blank', title: 'No history', status: 404 }, 404)
+  if (pathname === '/v1/districts/nope') return jsonResponse({ type: 'about:blank', title: 'Unknown district', status: 404 }, 404)
   if (pathname.startsWith('/v1/districts/')) return jsonResponse(detailFixture)
   if (pathname === '/v1/metrics') return jsonResponse(metricsFixture)
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)

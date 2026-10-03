@@ -109,5 +109,42 @@
     "label": "Raport napisany przez sztuczną inteligencję na podstawie danych.",
     "fallback": "Ten tekst jest dostępny tylko po angielsku.",
     "generated": "Wygenerowano: {{date}}"
+  },
+  "detail": {
+    "back": "Wróć do listy dzielnic",
+    "area": "Powierzchnia",
+    "areaValue": "{{value}} km²",
+    "notFoundTitle": "Nie ma takiej dzielnicy",
+    "notFoundText": "Sprawdź adres albo wybierz dzielnicę z listy.",
+    "fullProfile": "Zobacz pełny profil dzielnicy",
+    "rental": "Najem a cena zakupu"
+  },
+  "metric": {
+    "noData": "Brak danych.",
+    "sample": "Liczba obserwacji",
+    "caveat": "Zastrzeżenie",
+    "more": "Metoda, licencja i oznaczenie źródła",
+    "method": "Metoda",
+    "licence": "Licencja",
+    "attribution": "Oznaczenie źródła"
+  },
+  "series": {
+    "heading": "Historia: {{label}}",
+    "highest": "najwyższa: {{value}}",
+    "lowest": "najniższa: {{value}}",
+    "summary": "Pierwszy kwartał ({{from}}): {{first}}. Ostatni kwartał (do {{to}}): {{last}}. Liczba kwartałów: {{count}}.",
+    "lowKey": "Puste, większe kółko oznacza kwartał o niskiej wiarygodności.",
+    "lowMark": "(niska wiarygodność)",
+    "readout": "{{from}} – {{to}}: {{value}}, liczba obserwacji: {{n}}",
+    "hint": "Wskaż punkt na wykresie, aby zobaczyć wartość. Wszystkie wartości są w tabeli.",
+    "table": {
+      "region": "Tabela z historią cen. Można ją przewijać.",
+      "caption": "Wartości z wykresu, kwartał po kwartale",
+      "period": "Kwartał (od – do)",
+      "value": "Wartość",
+      "confidence": "Wiarygodność",
+      "low": "niska",
+      "enough": "wystarczająca"
+    }
   }
 }
