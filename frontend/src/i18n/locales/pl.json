@@ -1,0 +1,112 @@
+{
+  "site": {
+    "name": "GdzieZamieszkać",
+    "city": "Miasto: {{city}}"
+  },
+  "skipLink": "Przejdź do treści głównej",
+  "nav": {
+    "label": "Nawigacja główna",
+    "home": "Strona główna",
+    "districts": "Dzielnice"
+  },
+  "language": {
+    "label": "Język"
+  },
+  "states": {
+    "loading": "Wczytywanie danych…",
+    "retry": "Spróbuj ponownie",
+    "error": {
+      "generic": "Nie udało się wczytać danych. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "tooManyRequests": "Zbyt wiele zapytań w krótkim czasie. Odczekaj chwilę i spróbuj ponownie.",
+      "unavailable": "Serwis z danymi jest chwilowo niedostępny. Spróbuj ponownie za chwilę."
+    }
+  },
+  "stale": {
+    "notice": "Część danych może być nieaktualna. Nadal pokazujemy ostatnią sprawdzoną wersję."
+  },
+  "footer": {
+    "sources": "Źródła danych"
+  },
+  "home": {
+    "title": "Strona główna",
+    "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
+    "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
+    "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników.",
+    "cta": "Zobacz dzielnice"
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "text": "Strona pod tym adresem nie istnieje.",
+    "back": "Wróć na stronę główną"
+  },
+  "dataKind": {
+    "observed": "obserwowane",
+    "estimated": "szacowane",
+    "proxy": "pośrednie"
+  },
+  "provenance": {
+    "dataKind": "Rodzaj danych",
+    "unit": "Jednostka",
+    "source": "Źródło",
+    "asOf": "Stan na"
+  },
+  "districts": {
+    "title": "Dzielnice",
+    "heading": "Dzielnice na mapie i na liście",
+    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Te same wartości są na liście obok mapy.",
+    "optionNoData": "{{label}} (brak danych)",
+    "unavailable": "Brak danych dla tej miary.",
+    "noData": "brak danych",
+    "rank": "Pozycja {{position}} z {{of}}",
+    "higherIsBetter": "wyższa wartość to lepsza pozycja",
+    "lowerIsBetter": "niższa wartość to lepsza pozycja",
+    "classOf": "Przedział {{number}} z {{count}} na mapie",
+    "map": {
+      "label": "Mapa dzielnic. Miara: {{metric}}",
+      "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
+      "districtNoData": "{{name}}: brak danych"
+    },
+    "legend": {
+      "title": "Legenda",
+      "direction": "Ciemniejszy kolor i wyższy numer oznaczają wyższą wartość.",
+      "range": "Przedział {{number}}: od {{min}} do {{max}}",
+      "single": "Przedział {{number}}: {{value}}",
+      "noData": "Pole kreskowane: brak danych"
+    },
+    "table": {
+      "region": "Tabela dzielnic. Można ją przewijać w poziomie.",
+      "caption": "Dzielnice: {{metric}}, wskaźnik jakości życia, powierzchnia i ceny",
+      "district": "Dzielnica",
+      "score": "Wskaźnik jakości życia (0–100)",
+      "area": "Powierzchnia (km²)",
+      "rank": "Pozycja",
+      "class": "Przedział na mapie",
+      "selected": "wybrana"
+    },
+    "colourBy": "Koloruj mapę według",
+    "overall": "Wynik ogólny",
+    "moreMeasures": "Inna miara",
+    "chooseMeasure": "— wybierz miarę —",
+    "categoryScore": "Wynik kategorii: {{category}} (0–100)",
+    "categoryMethod": "Wynik od 0 do 100 obliczony przez API tylko z miar tej kategorii. Porównuje dzielnice jednego miasta.",
+    "tabs": {
+      "label": "Dane dzielnic",
+      "list": "Lista",
+      "details": "Szczegóły"
+    },
+    "details": {
+      "none": "Wybierz dzielnicę na mapie albo na liście, aby zobaczyć jej szczegóły.",
+      "profile": "Profil dzielnicy: wyniki kategorii",
+      "category": "Kategoria",
+      "score": "Wynik (0–100)",
+      "classShort": "{{number}} z {{count}}",
+      "backToList": "Wróć do listy"
+    }
+  },
+  "report": {
+    "heading": "Opis dzielnicy",
+    "label": "Raport napisany przez sztuczną inteligencję na podstawie danych.",
+    "fallback": "Ten tekst jest dostępny tylko po angielsku.",
+    "generated": "Wygenerowano: {{date}}"
+  }
+}
