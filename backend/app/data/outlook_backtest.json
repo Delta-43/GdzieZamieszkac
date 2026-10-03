@@ -1,0 +1,118 @@
+{
+ "generated": "2026-10-02",
+ "source": "Narodowy Bank Polski, BaRN: transaction prices, existing-stock flats",
+ "source_file": "nbp_prices_tidy_2026-09-30.parquet",
+ "cities": 17,
+ "quarters": 80,
+ "period": [
+  "2006-08-31",
+  "2026-05-31"
+ ],
+ "min_history_quarters": 28,
+ "gate": {
+  "beats_both_baselines_on_mae": true,
+  "coverage_80_between": [
+   0.7,
+   0.9
+  ]
+ },
+ "methods": {
+  "history_range": "10th, 50th and 90th percentiles of the city's own past growth over the horizon",
+  "damped_momentum": "damped trailing 4-quarter growth, with the 10th and 90th percentiles of past errors"
+ },
+ "horizons": {
+  "4": {
+   "history_range": {
+    "origins": 816,
+    "mae_method": 0.0619,
+    "mae_no_change": 0.0712,
+    "mae_last_year_continues": 0.0415,
+    "coverage_80": 0.686,
+    "warsaw": {
+     "origins": 48,
+     "mae_method": 0.0571,
+     "mae_no_change": 0.0696,
+     "mae_last_year_continues": 0.034,
+     "coverage_80": 0.625
+    },
+    "krakow": {
+     "origins": 48,
+     "mae_method": 0.066,
+     "mae_no_change": 0.0729,
+     "mae_last_year_continues": 0.0464,
+     "coverage_80": 0.521
+    },
+    "passes": false
+   },
+   "damped_momentum": {
+    "origins": 816,
+    "mae_method": 0.0627,
+    "mae_no_change": 0.0712,
+    "mae_last_year_continues": 0.0415,
+    "coverage_80": 0.534,
+    "warsaw": {
+     "origins": 48,
+     "mae_method": 0.0628,
+     "mae_no_change": 0.0696,
+     "mae_last_year_continues": 0.034,
+     "coverage_80": 0.5
+    },
+    "krakow": {
+     "origins": 48,
+     "mae_method": 0.0671,
+     "mae_no_change": 0.0729,
+     "mae_last_year_continues": 0.0464,
+     "coverage_80": 0.458
+    },
+    "passes": false
+   }
+  },
+  "8": {
+   "history_range": {
+    "origins": 748,
+    "mae_method": 0.1564,
+    "mae_no_change": 0.1772,
+    "mae_last_year_continues": 0.0647,
+    "coverage_80": 0.54,
+    "warsaw": {
+     "origins": 44,
+     "mae_method": 0.1507,
+     "mae_no_change": 0.1733,
+     "mae_last_year_continues": 0.0501,
+     "coverage_80": 0.386
+    },
+    "krakow": {
+     "origins": 44,
+     "mae_method": 0.187,
+     "mae_no_change": 0.2,
+     "mae_last_year_continues": 0.0645,
+     "coverage_80": 0.295
+    },
+    "passes": false
+   },
+   "damped_momentum": {
+    "origins": 748,
+    "mae_method": 0.1685,
+    "mae_no_change": 0.1772,
+    "mae_last_year_continues": 0.0647,
+    "coverage_80": 0.405,
+    "warsaw": {
+     "origins": 44,
+     "mae_method": 0.1736,
+     "mae_no_change": 0.1733,
+     "mae_last_year_continues": 0.0501,
+     "coverage_80": 0.409
+    },
+    "krakow": {
+     "origins": 44,
+     "mae_method": 0.1931,
+     "mae_no_change": 0.2,
+     "mae_last_year_continues": 0.0645,
+     "coverage_80": 0.273
+    },
+    "passes": false
+   }
+  }
+ },
+ "any_horizon_passes": false
+}

@@ -1,0 +1,110 @@
+{
+  "_comment": "Weight presets for /recommend (category weights 0-5; a category not listed counts as 1). Stored as data, reviewed like data. Polish text needs a native-speaker check.",
+  "personas": [
+    {
+      "key": "student",
+      "label": {
+        "en": "Student",
+        "pl": "Student"
+      },
+      "description": {
+        "en": "Cheap and well connected, with things to do nearby.",
+        "pl": "Tanio i z dobrym dojazdem, z atrakcjami w pobliżu."
+      },
+      "weights": {
+        "category": {
+          "cost": 5,
+          "transport": 5,
+          "amenities": 3,
+          "livability": 3,
+          "safety": 2,
+          "environment": 1
+        }
+      }
+    },
+    {
+      "key": "family",
+      "label": {
+        "en": "Family",
+        "pl": "Rodzina"
+      },
+      "description": {
+        "en": "Safe, green and close to schools, health care and shops.",
+        "pl": "Bezpiecznie, zielono i blisko szkół, opieki zdrowotnej i sklepów."
+      },
+      "weights": {
+        "category": {
+          "safety": 5,
+          "environment": 4,
+          "amenities": 4,
+          "livability": 3,
+          "transport": 3,
+          "cost": 3
+        }
+      }
+    },
+    {
+      "key": "remote_worker",
+      "label": {
+        "en": "Remote worker",
+        "pl": "Osoba pracująca zdalnie"
+      },
+      "description": {
+        "en": "Quiet, pleasant and well supplied, without needing to commute.",
+        "pl": "Spokojnie, przyjemnie i z dobrym zapleczem, bez codziennych dojazdów."
+      },
+      "weights": {
+        "category": {
+          "livability": 4,
+          "amenities": 4,
+          "environment": 3,
+          "safety": 3,
+          "cost": 3,
+          "transport": 2
+        }
+      }
+    },
+    {
+      "key": "senior",
+      "label": {
+        "en": "Senior",
+        "pl": "Senior"
+      },
+      "description": {
+        "en": "Safe, quiet and near health care and public transport.",
+        "pl": "Bezpiecznie, spokojnie i blisko opieki zdrowotnej oraz komunikacji miejskiej."
+      },
+      "weights": {
+        "category": {
+          "safety": 5,
+          "amenities": 5,
+          "transport": 4,
+          "environment": 4,
+          "livability": 3,
+          "cost": 3
+        }
+      }
+    },
+    {
+      "key": "budget",
+      "label": {
+        "en": "Tight budget",
+        "pl": "Ograniczony budżet"
+      },
+      "description": {
+        "en": "Lowest rent and prices first, then transport.",
+        "pl": "Najpierw najniższe czynsze i ceny, potem komunikacja."
+      },
+      "weights": {
+        "category": {
+          "cost": 5,
+          "transport": 4,
+          "safety": 2,
+          "amenities": 2,
+          "livability": 1,
+          "environment": 1
+        }
+      }
+    }
+  ]
+}

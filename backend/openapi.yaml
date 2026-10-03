@@ -1,0 +1,948 @@
+openapi: 3.1.0
+info:
+  title: GdzieZamieszkac API
+  version: 1.0.0-draft
+  summary: Read-only district data for one city per deployment.
+  description: |
+    Serves the audited district data of one city (Warsaw or Krakow, chosen by the `CITY` setting of the deployment). There is no city
+    parameter and no `/cities` endpoint: each deployment is a separate product.
+
+    Rules that hold for every endpoint (see `docs/BACKEND_PLAN.md` and `docs/API_CONTRACT_DRAFT.md`):
+    - **Read-only, no accounts, no personal data.** The only request-time computation is `/recommend` (and the small stateless
+      calculation in `rent-vs-buy`); everything else is a stored value.
+    - **Nothing is translated or formatted live.** Display strings, labels, descriptions, notes and reports are stored in English and Polish.
+    - **Provenance travels with every value:** data kind (`observed`, `estimated`, `proxy`), source, licence, attribution, as-of date,
+      method and caveat.
+    - **Honest gaps:** a metric without data in this city is reported as unavailable with a reason, never as zero or an empty value.
+    - **Scores compare districts of one city only.**
+    - **Stale data is served with a warning:** if the data audit failed or reports are stale, responses carry the `X-Data-Warning`
+      header and `/meta` sets `stale.is_stale`; the service does not refuse to start.
+
+    Status: draft for review. Decisions behind it are in the private decision log (2026-09-30). The price outlook (scenario range) is not part of
+    this version: it ships only after a backtest passes (`docs/BACKEND_PLAN.md` section 5) and will be added as a new path.
+  license:
+    name: Data licences differ per source; see `/meta` sources and each value's `source.licence`.
+servers:
+  - url: /v1
+    description: Path prefix of the current API version; the host is the deployment of one city.
+tags:
+  - name: system
+  - name: districts
+  - name: metrics
+  - name: tools
+    description: Comparison, recommendation and calculators.
+
+paths:
+  /health:
+    get:
+      tags: [system]
+      operationId: getHealth
+      summary: Liveness and database reachability.
+      responses:
+        "200":
+          description: Service and database are reachable.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /meta:
+    get:
+      tags: [system]
+      operationId: getMeta
+      summary: City, languages, data version, freshness and the attribution lines for the footer.
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Metadata of this deployment.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Meta" }
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts:
+    get:
+      tags: [districts]
+      operationId: listDistricts
+      summary: All districts with the default livability score and two highlight values.
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Districts of the city (18 for Warsaw and for Krakow).
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+            X-Data-Warning: { $ref: "#/components/headers/DataWarning" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [lang, districts, score_note]
+                properties:
+                  lang: { $ref: "#/components/schemas/Lang" }
+                  score_note: { type: string, description: 'Always says that scores compare districts of this city only.' }
+                  districts:
+                    type: array
+                    items: { $ref: "#/components/schemas/DistrictListItem" }
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts.geojson:
+    get:
+      tags: [districts]
+      operationId: getDistrictBoundaries
+      summary: Simplified district boundaries for the map.
+      description: One simplified polygon per district, with the district `code` in `properties`. Cached; changes only when boundaries are reloaded.
+      responses:
+        "200":
+          description: A GeoJSON FeatureCollection.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+          content:
+            application/geo+json:
+              schema: { $ref: "#/components/schemas/BoundaryCollection" }
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}:
+    get:
+      tags: [districts]
+      operationId: getDistrict
+      summary: Everything about one district, grouped by category, with the rank of each metric within the city.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The district.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+            X-Data-Warning: { $ref: "#/components/headers/DataWarning" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DistrictDetail" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}/report:
+    get:
+      tags: [districts]
+      operationId: getDistrictReport
+      summary: The stored area report and the default livability score.
+      description: The report is generated at ingestion and stored in both languages. If the Polish text is missing, English is returned and `lang_fallback` is true.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The report.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            X-Data-Warning: { $ref: "#/components/headers/DataWarning" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Report" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}/similar:
+    get:
+      tags: [districts]
+      operationId: getSimilarDistricts
+      summary: Districts of the same city with the most similar profile.
+      description: Cosine similarity of the percentile vectors of the scored metrics (the ones the livability score uses). Neutral metrics are not used.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/Lang"
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 10, default: 3 }
+      responses:
+        "200":
+          description: Similar districts, most similar first.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [district, lang, similar, method]
+                properties:
+                  district: { $ref: "#/components/schemas/DistrictCode" }
+                  lang: { $ref: "#/components/schemas/Lang" }
+                  method: { type: string }
+                  similar:
+                    type: array
+                    items:
+                      type: object
+                      required: [code, name, similarity]
+                      properties:
+                        code: { $ref: "#/components/schemas/DistrictCode" }
+                        name: { type: string }
+                        similarity: { type: number, minimum: 0, maximum: 1 }
+                        closest_on: { type: array, items: { type: string }, description: 'Metric keys where the two districts are closest.' }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}/series/{key}:
+    get:
+      tags: [districts]
+      operationId: getDistrictSeries
+      summary: Quarterly history of one metric for a district (price charts).
+      description: |
+        Only metrics with a stored history are available (the first is `sale_price_median_m2`, quarterly from 2021 in Kraków and from 2022Q4 in Warsaw, because earlier
+        register records are incomplete). Quarters with fewer deeds than `min_obs` are returned with `low_confidence: true`, never dropped silently.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/MetricKey"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The series.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Series" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}/outlook:
+    get:
+      tags: [districts]
+      operationId: getDistrictOutlook
+      summary: Price momentum and historical range for a district. No forecast.
+      description: |
+        Momentum is read from the stored quarterly district history (`/series`): the change over the last four quarters and since the first stored
+        quarter. The historical range is the spread of past one- and two-year price changes in the whole city (NBP data), shown as history.
+        **No forward scenario is published:** the backtest in `scenario.backtest` shows that no tested method beat the naive baselines, so
+        `scenario.published` is false. If a later method passes, `published` becomes true and `scenario.ranges` is filled. Never a single number,
+        never a ranking of districts by predicted growth, not financial advice.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The outlook.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Outlook" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /districts/{code}/rent-vs-buy:
+    get:
+      tags: [tools]
+      operationId: getRentVsBuy
+      summary: Gross yield and payback for a flat of a given size (stateless calculation).
+      description: |
+        Uses the stored district medians: price = sale price per m2 x area, rent = rent per m2 x area, yield = rent x 12 / price,
+        payback = price / (rent x 12). Asking rent over transaction price; no mortgage, tax, costs or price change. Values are `estimated`.
+      parameters:
+        - $ref: "#/components/parameters/DistrictCode"
+        - $ref: "#/components/parameters/Lang"
+        - name: area_m2
+          in: query
+          required: true
+          schema: { type: number, minimum: 15, maximum: 250 }
+      responses:
+        "200":
+          description: The comparison.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RentVsBuy" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /metrics:
+    get:
+      tags: [metrics]
+      operationId: listMetrics
+      summary: The metric catalogue with availability in this city.
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: All catalogue metrics, including those without data here.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [lang, metrics]
+                properties:
+                  lang: { $ref: "#/components/schemas/Lang" }
+                  metrics:
+                    type: array
+                    items: { $ref: "#/components/schemas/MetricDefinition" }
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /metrics/{key}/values:
+    get:
+      tags: [metrics]
+      operationId: getMetricValues
+      summary: One metric for all districts (choropleth and sorting), with rank.
+      parameters:
+        - $ref: "#/components/parameters/MetricKey"
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Values, best first for directional metrics, else in descending order.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+            Cache-Control: { $ref: "#/components/headers/CacheControl" }
+            X-Data-Warning: { $ref: "#/components/headers/DataWarning" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/MetricValues" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /compare:
+    get:
+      tags: [tools]
+      operationId: compareDistricts
+      summary: Side-by-side values of two to four districts.
+      parameters:
+        - name: codes
+          in: query
+          required: true
+          description: Comma-separated district codes, two to four.
+          schema: { type: string, examples: ["srodmiescie,mokotow,wola"] }
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: The chosen districts in the request order, same metric shape as the district detail.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [lang, districts]
+                properties:
+                  lang: { $ref: "#/components/schemas/Lang" }
+                  districts:
+                    type: array
+                    minItems: 2
+                    maxItems: 4
+                    items: { $ref: "#/components/schemas/DistrictDetail" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /commute:
+    get:
+      tags: [tools]
+      operationId: getCommute
+      summary: Public-transport time from one district to every district.
+      description: |
+        Read from a precomputed table: simple routing over the city's GTFS, one representative weekday morning, district centroids, walking to
+        and from stops. Values are `estimated` and describe typical access between areas, not a journey plan.
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema: { $ref: "#/components/schemas/DistrictCode" }
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Minutes to each destination district.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Commute" }
+        "404":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /personas:
+    get:
+      tags: [tools]
+      operationId: listPersonas
+      summary: Named weight presets for the recommender.
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Presets, stored as data. Send `weights` to `/recommend` as they are, or let the user adjust them.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [lang, personas]
+                properties:
+                  lang: { $ref: "#/components/schemas/Lang" }
+                  personas:
+                    type: array
+                    items: { $ref: "#/components/schemas/Persona" }
+        default:
+          $ref: "#/components/responses/Problem"
+
+  /recommend:
+    post:
+      tags: [tools]
+      operationId: recommend
+      summary: Rank the districts for the user's weights and explain the ranking.
+      description: |
+        Percentile ranks within the city, 100 = best, weighted as requested and renormalised. Without weights the result equals the stored
+        `livability_score_default`. Neutral metrics and composite indices are never inputs. Metrics without data in this city are ignored and
+        listed in `missing_metrics`.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RecommendRequest" }
+            examples:
+              balanced:
+                summary: Transport and cost first
+                value:
+                  weights:
+                    category: { transport: 3, cost: 3, safety: 2, environment: 1, amenities: 1, livability: 1 }
+      responses:
+        "200":
+          description: Ranked districts.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RecommendResponse" }
+        "422":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+
+components:
+  parameters:
+    Lang:
+      name: lang
+      in: query
+      description: Response language. If absent, the `Accept-Language` header is used, then English. Every response echoes the language used in `lang`.
+      schema: { $ref: "#/components/schemas/Lang" }
+    DistrictCode:
+      name: code
+      in: path
+      required: true
+      schema: { $ref: "#/components/schemas/DistrictCode" }
+    MetricKey:
+      name: key
+      in: path
+      required: true
+      schema: { type: string, examples: [sale_price_median_m2] }
+
+  headers:
+    ETag:
+      description: Derived from `data_version`. Send it back in `If-None-Match` to get 304.
+      schema: { type: string }
+    CacheControl:
+      description: '`public, max-age=300`; shorter for weekly-refresh metrics.'
+      schema: { type: string }
+    DataWarning:
+      description: Present when the data is stale or the last audit failed. The reasons are in `/meta` under `stale`.
+      schema: { type: string }
+
+  responses:
+    Problem:
+      description: Error, as RFC 9457 problem details.
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+
+  schemas:
+    Lang: { type: string, enum: [en, pl] }
+    DistrictCode:
+      type: string
+      description: Stable slug of the district, for example `srodmiescie`.
+      pattern: "^[a-z0-9-]+$"
+    Category:
+      type: string
+      enum: [transport, demographics, livability, amenities, environment, cost, safety]
+    DataKind:
+      type: string
+      enum: [observed, estimated, proxy]
+      description: Measured or officially reported, calculated from real inputs, or an indirect indicator. Show it beside every value.
+
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri-reference }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+
+    Health:
+      type: object
+      required: [status, database]
+      properties:
+        status: { type: string, enum: [ok, degraded] }
+        database: { type: string, enum: [reachable, unreachable] }
+
+    Source:
+      type: object
+      required: [name, licence, attribution]
+      properties:
+        name: { type: string }
+        url: { type: string, format: uri }
+        licence: { type: string }
+        attribution: { type: string, description: 'The credit line the source requires; show it beside the value or in the footer.' }
+
+    Meta:
+      type: object
+      required: [city, default_lang, languages, district_count, data_version, stale, sources]
+      properties:
+        city: { type: string, examples: [warsaw] }
+        city_name: { type: string, examples: [Warszawa] }
+        default_lang: { $ref: "#/components/schemas/Lang" }
+        languages: { type: array, items: { $ref: "#/components/schemas/Lang" } }
+        district_count: { type: integer }
+        data_version: { type: string, description: 'Hash of the latest fetch times and report versions; also the ETag source.' }
+        latest_ingestion_run: { type: [string, "null"], format: date-time }
+        stale:
+          type: object
+          required: [is_stale, reasons]
+          properties:
+            is_stale: { type: boolean }
+            reasons:
+              type: array
+              items: { type: string }
+              description: For example a failed audit, reports older than their data, or a weekly source that did not refresh.
+        sources:
+          type: array
+          description: One entry per source in use, with the newest as-of date, for the footer.
+          items:
+            allOf:
+              - { $ref: "#/components/schemas/Source" }
+              - type: object
+                properties:
+                  as_of: { type: string, format: date }
+                  metric_keys: { type: array, items: { type: string } }
+        score_note: { type: string }
+
+    Rank:
+      type: object
+      required: [position, of, direction]
+      properties:
+        position: { type: integer, minimum: 1, description: '1 is the best district after applying the direction.' }
+        of: { type: integer }
+        direction: { type: string, enum: [higher is better, lower is better] }
+
+    MetricValue:
+      type: object
+      required: [key, label, value, display, data_kind, as_of, source]
+      properties:
+        key: { type: string }
+        available: { type: boolean, const: true, default: true }
+        label: { type: string }
+        display: { type: string, description: 'The stored display string in the requested language. Clients never format numbers.' }
+        value: { type: number }
+        unit: { type: string }
+        data_kind: { $ref: "#/components/schemas/DataKind" }
+        n_obs: { type: [integer, "null"], description: 'Sample size behind the value; a small number means low confidence.' }
+        as_of: { type: string, format: date }
+        updated_at: { type: [string, "null"], format: date-time, description: 'Only for weekly-refresh metrics.' }
+        source: { $ref: "#/components/schemas/Source" }
+        method: { type: string }
+        caveat: { type: [string, "null"] }
+        rank:
+          description: Omitted for neutral metrics, which are shown but never ranked.
+          $ref: "#/components/schemas/Rank"
+      examples:
+        - key: crimes_per_10k
+          label: Recorded crimes per 10,000 residents
+          display: 862 per 10,000 residents
+          value: 862.5
+          unit: per 10,000
+          data_kind: observed
+          n_obs: 8299
+          as_of: "2024-12-31"
+          source:
+            name: Panorama dzielnic Warszawy w 2024 r.
+            licence: Public statistics of Urząd Statystyczny w Warszawie (source must be cited)
+            attribution: "Urząd Statystyczny w Warszawie, Panorama dzielnic Warszawy w 2024 r.; crime data: Komenda Główna Policji"
+          caveat: Recorded crimes, not risk. Inflated in districts with many visitors and commuters.
+          rank: { position: 18, of: 18, direction: lower is better }
+
+    UnavailableMetric:
+      type: object
+      required: [key, available, reason]
+      properties:
+        key: { type: string }
+        available: { type: boolean, const: false }
+        label: { type: string }
+        reason: { type: string, description: 'Why this city has no data for the metric. Stored as data, in the requested language.' }
+
+    MetricEntry:
+      oneOf:
+        - $ref: "#/components/schemas/MetricValue"
+        - $ref: "#/components/schemas/UnavailableMetric"
+
+    CategoryGroup:
+      type: object
+      required: [category, label, metrics]
+      properties:
+        category: { $ref: "#/components/schemas/Category" }
+        label: { type: string }
+        metrics:
+          type: array
+          items: { $ref: "#/components/schemas/MetricEntry" }
+
+    Highlight:
+      type: object
+      required: [key, display, data_kind]
+      properties:
+        key: { type: string }
+        display: { type: string }
+        data_kind: { $ref: "#/components/schemas/DataKind" }
+
+    DistrictListItem:
+      type: object
+      required: [code, name, area_km2, livability_score, highlights]
+      properties:
+        code: { $ref: "#/components/schemas/DistrictCode" }
+        name: { type: string, description: 'A proper noun; the same in both languages.' }
+        area_km2: { type: number }
+        livability_score: { type: [number, "null"], minimum: 0, maximum: 100 }
+        highlights:
+          type: array
+          description: Sale price and rent per m2, so the map list loads fast.
+          items: { $ref: "#/components/schemas/Highlight" }
+
+    DistrictDetail:
+      type: object
+      required: [code, name, area_km2, lang, livability_score, categories]
+      properties:
+        code: { $ref: "#/components/schemas/DistrictCode" }
+        name: { type: string }
+        area_km2: { type: number }
+        lang: { $ref: "#/components/schemas/Lang" }
+        livability_score: { type: [number, "null"], minimum: 0, maximum: 100 }
+        score_note: { type: string }
+        categories:
+          type: array
+          items: { $ref: "#/components/schemas/CategoryGroup" }
+        yield_gross:
+          description: Gross rental yield (rent x 12 / price) from the district medians; null if either input is missing.
+          oneOf: [{ $ref: "#/components/schemas/MetricValue" }, { type: "null" }]
+        payback_years:
+          oneOf: [{ $ref: "#/components/schemas/MetricValue" }, { type: "null" }]
+
+    BoundaryCollection:
+      type: object
+      required: [type, features]
+      properties:
+        type: { const: FeatureCollection }
+        features:
+          type: array
+          items:
+            type: object
+            required: [type, geometry, properties]
+            properties:
+              type: { const: Feature }
+              geometry: { type: object, description: 'A GeoJSON Polygon or MultiPolygon, simplified.' }
+              properties:
+                type: object
+                required: [code, name]
+                properties:
+                  code: { $ref: "#/components/schemas/DistrictCode" }
+                  name: { type: string }
+
+    Report:
+      type: object
+      required: [district, lang, lang_fallback, livability_score, body, generated_at]
+      properties:
+        district: { $ref: "#/components/schemas/DistrictCode" }
+        lang: { $ref: "#/components/schemas/Lang" }
+        lang_fallback: { type: boolean, description: 'True if the requested language was missing and English is returned.' }
+        livability_score: { type: [number, "null"] }
+        body: { type: string }
+        model: { type: string }
+        generated_at: { type: string, format: date-time }
+        estimated_or_proxy_values_flagged: { type: boolean }
+
+    MetricDefinition:
+      type: object
+      required: [key, category, label, description, unit, higher_is, refresh_cadence, data_kind, available]
+      properties:
+        key: { type: string }
+        category: { $ref: "#/components/schemas/Category" }
+        label: { type: string }
+        description: { type: string }
+        unit: { type: string }
+        higher_is: { type: string, enum: [better, worse, neutral] }
+        refresh_cadence: { type: string, enum: [weekly, static] }
+        data_kind: { $ref: "#/components/schemas/DataKind" }
+        available: { type: boolean, description: 'False if this city has no data for the metric.' }
+        reason: { type: [string, "null"], description: 'Set when `available` is false.' }
+        has_series: { type: boolean, description: 'True if `/districts/{code}/series/{key}` returns history.' }
+
+    MetricValues:
+      type: object
+      required: [key, lang, values]
+      properties:
+        key: { type: string }
+        label: { type: string }
+        lang: { $ref: "#/components/schemas/Lang" }
+        higher_is: { type: string, enum: [better, worse, neutral] }
+        values:
+          type: array
+          items:
+            type: object
+            required: [district, value, display]
+            properties:
+              district: { $ref: "#/components/schemas/DistrictCode" }
+              value: { type: number }
+              display: { type: string }
+              data_kind: { $ref: "#/components/schemas/DataKind" }
+              n_obs: { type: [integer, "null"] }
+              rank: { $ref: "#/components/schemas/Rank" }
+          examples:
+            - [{ district: zoliborz, value: 22434, display: "22,434 PLN/m²" }, { district: srodmiescie, value: 21117, display: "21,117 PLN/m²" }]
+
+    Series:
+      type: object
+      required: [district, key, lang, min_obs, points]
+      properties:
+        district: { $ref: "#/components/schemas/DistrictCode" }
+        key: { type: string }
+        label: { type: string }
+        lang: { $ref: "#/components/schemas/Lang" }
+        unit: { type: string }
+        data_kind: { $ref: "#/components/schemas/DataKind" }
+        min_obs: { type: integer, description: 'Quarters with fewer observations are marked low confidence. Proposal 30.' }
+        source: { $ref: "#/components/schemas/Source" }
+        method: { type: string }
+        caveat: { type: [string, "null"] }
+        points:
+          type: array
+          items:
+            type: object
+            required: [period_start, period_end, value, display, n_obs, low_confidence]
+            properties:
+              period_start: { type: string, format: date }
+              period_end: { type: string, format: date }
+              value: { type: number }
+              display: { type: string }
+              n_obs: { type: integer }
+              low_confidence: { type: boolean }
+
+    Outlook:
+      type: object
+      required: [district, lang, momentum, city_history, scenario, method, caveat]
+      properties:
+        district: { $ref: "#/components/schemas/DistrictCode" }
+        lang: { $ref: "#/components/schemas/Lang" }
+        data_kind: { const: observed }
+        momentum:
+          type: object
+          required: [growth_12m, growth_since_start]
+          properties:
+            growth_12m: { oneOf: [{ $ref: "#/components/schemas/Growth" }, { type: "null" }], description: 'Null if the history has no quarter one year before the newest one.' }
+            growth_since_start: { oneOf: [{ $ref: "#/components/schemas/Growth" }, { type: "null" }] }
+        city_history:
+          type: object
+          description: How much prices in the whole city changed over past windows. A record of the past, not a forecast.
+          required: [available]
+          properties:
+            available: { type: boolean }
+            period_start: { type: string, format: date }
+            period_end: { type: string, format: date }
+            windows:
+              type: array
+              items:
+                type: object
+                required: [quarters, label, low, median, high, low_display, median_display, high_display, n_windows]
+                properties:
+                  quarters: { type: integer, description: 'Length of the window: 4 or 8 quarters.' }
+                  label: { type: string }
+                  low: { type: number, description: '10th percentile of past price changes, as a fraction.' }
+                  median: { type: number }
+                  high: { type: number, description: '90th percentile.' }
+                  low_display: { type: string }
+                  median_display: { type: string }
+                  high_display: { type: string }
+                  n_windows: { type: integer, description: 'Overlapping windows behind the figures; far fewer are independent.' }
+            source: { $ref: "#/components/schemas/Source" }
+            method: { type: string }
+        scenario:
+          type: object
+          required: [published, reason]
+          properties:
+            published: { type: boolean, description: 'False while no tested method passes the backtest.' }
+            reason: { type: string }
+            ranges: { type: array, items: {}, description: 'Reserved for a passing method; empty while `published` is false.' }
+            backtest:
+              type: object
+              properties:
+                period_start: { type: string, format: date }
+                period_end: { type: string, format: date }
+                cities: { type: integer }
+                results:
+                  type: array
+                  items:
+                    type: object
+                    required: [quarters, method, mae_method, mae_no_change, mae_last_year_continues, coverage_80, passes]
+                    properties:
+                      quarters: { type: integer }
+                      method: { type: string }
+                      origins: { type: integer }
+                      mae_method: { type: number, description: 'Median absolute error of the method, in log growth.' }
+                      mae_no_change: { type: number }
+                      mae_last_year_continues: { type: number }
+                      coverage_80: { type: number, description: 'Share of outcomes inside the 10th-90th percentile range; 0.8 is ideal.' }
+                      passes: { type: boolean }
+        method: { type: string }
+        caveat: { type: string }
+
+    Growth:
+      type: object
+      required: [value, display, from, to, from_display, to_display, low_confidence]
+      properties:
+        value: { type: number, description: 'Change as a fraction, for example 0.05 for +5 percent.' }
+        display: { type: string }
+        annualised: { type: [number, "null"], description: 'Per-year rate; only for growth since the first stored quarter.' }
+        annualised_display: { type: [string, "null"] }
+        from: { type: string, format: date, description: 'Start of the first quarter compared.' }
+        to: { type: string, format: date, description: 'Start of the second quarter compared.' }
+        from_display: { type: string }
+        to_display: { type: string }
+        n_obs_from: { type: integer }
+        n_obs_to: { type: integer }
+        low_confidence: { type: boolean, description: 'True if either quarter has fewer deeds than `min_obs` of the series.' }
+
+    RentVsBuy:
+      type: object
+      required: [district, lang, area_m2, price, monthly_rent, yield_gross, payback_years, data_kind, caveat]
+      properties:
+        district: { $ref: "#/components/schemas/DistrictCode" }
+        lang: { $ref: "#/components/schemas/Lang" }
+        area_m2: { type: number }
+        price: { $ref: "#/components/schemas/Amount" }
+        monthly_rent: { $ref: "#/components/schemas/Amount" }
+        yield_gross: { type: number, description: 'A fraction, for example 0.055 for 5.5 percent.' }
+        yield_display: { type: string }
+        payback_years: { type: number }
+        payback_display: { type: string }
+        data_kind: { const: estimated }
+        based_on: { type: array, items: { $ref: "#/components/schemas/Highlight" }, description: 'The stored medians used, with counts in `n_obs` of each.' }
+        caveat: { type: string, description: 'Asking rent over transaction price; no mortgage, tax, costs or price change.' }
+
+    Amount:
+      type: object
+      required: [value, display]
+      properties:
+        value: { type: number }
+        currency: { type: string, default: PLN }
+        display: { type: string }
+
+    Commute:
+      type: object
+      required: [from, lang, method, as_of, destinations]
+      properties:
+        from: { $ref: "#/components/schemas/DistrictCode" }
+        lang: { $ref: "#/components/schemas/Lang" }
+        data_kind: { const: estimated }
+        method: { type: string }
+        as_of: { type: string, format: date }
+        caveat: { type: string }
+        destinations:
+          type: array
+          items:
+            type: object
+            required: [code, minutes]
+            properties:
+              code: { $ref: "#/components/schemas/DistrictCode" }
+              minutes: { type: [number, "null"], description: 'Null if no public-transport connection was found within the search limit.' }
+
+    Persona:
+      type: object
+      required: [key, label, description, weights]
+      properties:
+        key: { type: string, examples: [student] }
+        label: { type: string }
+        description: { type: string }
+        weights: { $ref: "#/components/schemas/Weights" }
+
+    Weights:
+      type: object
+      description: |
+        Category weights 0 to 5 and optional per-metric overrides 0 to 5. Direction is fixed by the catalogue; negative weights are rejected.
+        Weights scale the default weights, which give every category the same total: a category not mentioned counts as 1, a metric not
+        mentioned as 1, 0 leaves a category or metric out, 5 counts five times as much. A metric override multiplies that metric's share
+        inside its category. With no weights the result equals the stored default livability score. Metrics that are not scored (neutral
+        or composite) and unknown keys are rejected.
+      properties:
+        category:
+          type: object
+          propertyNames: { $ref: "#/components/schemas/Category" }
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+        metric:
+          type: object
+          description: Overrides for single metrics, keyed by metric key. Unknown keys are rejected.
+          additionalProperties: { type: number, minimum: 0, maximum: 5 }
+
+    RecommendRequest:
+      type: object
+      properties:
+        weights: { $ref: "#/components/schemas/Weights" }
+        lang: { $ref: "#/components/schemas/Lang" }
+
+    RecommendResponse:
+      type: object
+      required: [lang, weights_normalised, ranking, metrics_used, missing_metrics, note]
+      properties:
+        lang: { $ref: "#/components/schemas/Lang" }
+        weights_normalised: { type: boolean }
+        metrics_used: { type: integer }
+        missing_metrics: { type: array, items: { type: string } }
+        note: { type: string, description: 'Says that scores compare districts of this city only.' }
+        ranking:
+          type: array
+          items:
+            type: object
+            required: [rank, code, name, score, top_drivers]
+            properties:
+              rank: { type: integer, minimum: 1 }
+              code: { $ref: "#/components/schemas/DistrictCode" }
+              name: { type: string }
+              score: { type: number, minimum: 0, maximum: 100 }
+              top_drivers:
+                type: array
+                description: Metrics that contribute most to this district's score under the given weights.
+                items:
+                  type: object
+                  required: [key, percentile]
+                  properties:
+                    key: { type: string }
+                    label: { type: string }
+                    percentile: { type: number, minimum: 0, maximum: 100 }

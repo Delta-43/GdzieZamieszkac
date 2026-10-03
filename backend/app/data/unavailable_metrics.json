@@ -1,0 +1,35 @@
+{
+  "_comment": "Why a catalogue metric has no data in a city. Reviewed like data: change it when a gap is closed. Polish text needs a native-speaker check.",
+  "krakow": {
+    "crimes_per_10k": {
+      "en": "Recorded crime is not part of the data for this city.",
+      "pl": "Zarejestrowane przestępstwa nie są częścią danych dla tego miasta."
+    },
+    "crime_detection_rate": {
+      "en": "Recorded crime is not part of the data for this city.",
+      "pl": "Zarejestrowane przestępstwa nie są częścią danych dla tego miasta."
+    },
+    "transit_stops_rail_metro": {
+      "en": "Kraków's public timetable feeds contain no rail or metro stops.",
+      "pl": "Publiczne rozkłady jazdy Krakowa nie zawierają przystanków kolejowych ani metra."
+    },
+    "population_total": {
+      "en": "Kraków publishes registered residents per district, which is not a population count, so no total population is shown.",
+      "pl": "Kraków publikuje liczbę zameldowanych mieszkańców w dzielnicach, co nie jest liczbą ludności, dlatego nie pokazujemy łącznej liczby ludności."
+    },
+    "amenity_open_sports_grounds": {
+      "en": "This metric comes from an open-data source that exists only for Warsaw (dane.um.warszawa.pl).",
+      "pl": "Ta miara pochodzi ze źródła otwartych danych dostępnego tylko dla Warszawy (dane.um.warszawa.pl)."
+    },
+    "amenity_aed_public": {
+      "en": "This metric comes from an open-data source that exists only for Warsaw (dane.um.warszawa.pl).",
+      "pl": "Ta miara pochodzi ze źródła otwartych danych dostępnego tylko dla Warszawy (dane.um.warszawa.pl)."
+    }
+  },
+  "warsaw": {
+    "residents_registered": {
+      "en": "The Warsaw source (Panorama dzielnic) has no count of registered residents; see total population instead.",
+      "pl": "Źródło dla Warszawy (Panorama dzielnic) nie zawiera liczby zameldowanych mieszkańców; zobacz łączną liczbę ludności."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Runtime dependencies of the FastAPI backend (versions the tests ran with, 2026-09-30).
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
+psycopg[binary]==3.3.6
+pandas==3.0.6
+pydantic==2.13.5

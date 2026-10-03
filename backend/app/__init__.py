@@ -1,0 +1,1 @@
+"""GdzieZamieszkac backend application package."""

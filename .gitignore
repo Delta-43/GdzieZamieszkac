@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.secret
+*token*.json
+.DS_Store
