@@ -98,6 +98,8 @@ export function useDistrictDetail(code: string | undefined) {
   return useQuery({
     queryKey: ['district', code, i18n.language],
     enabled: Boolean(code),
+    // An unknown district answers 404. Asking again would not help.
+    retry: (count, error) => !(error instanceof ApiError && error.status === 404) && count < 1,
     queryFn: async () => {
       const { data, error, response } = await api.GET('/districts/{code}', { params: { path: { code: code ?? '' } } })
       if (error) throw new ApiError(response.status, error.title)
@@ -115,6 +117,21 @@ export function useDistrictReport(code: string | undefined) {
     retry: false,
     queryFn: async () => {
       const { data, error, response } = await api.GET('/districts/{code}/report', { params: { path: { code: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
+/** The quarterly history of one metric for a district. A metric without history answers 404, which is not retried. */
+export function useDistrictSeries(code: string | undefined, key: string) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['series', code, key, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/series/{key}', { params: { path: { code: code ?? '', key } } })
       if (error) throw new ApiError(response.status, error.title)
       return data
     },

@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
-import { SCORED_CATEGORIES, useAllCategoryScores, useDistrictReport } from '../api/useDistrictsData'
+import { Link } from 'react-router'
+import { SCORED_CATEGORIES, useAllCategoryScores } from '../api/useDistrictsData'
 import { CLASS_COUNT, classify } from '../lib/classes'
 import type { MapView, ViewValue } from '../lib/mapView'
 import { plainNumber } from '../lib/plainNumber'
+import { AreaReport } from './AreaReport'
 import { DataKindBadge } from './DataKindBadge'
-import { Loading } from './Loading'
 
 type District = components['schemas']['DistrictListItem']
 
@@ -22,7 +23,6 @@ type Props = {
 export function DistrictDetails({ district, view, value, classNumber, categoryLabels, onBack }: Props) {
   const { t, i18n } = useTranslation()
   const profile = useAllCategoryScores(Boolean(district))
-  const report = useDistrictReport(district?.code)
 
   if (!district) return <p>{t('districts.details.none')}</p>
 
@@ -86,28 +86,13 @@ export function DistrictDetails({ district, view, value, classNumber, categoryLa
       </table>
       {profile[0]?.data?.note && <p className="note">{profile[0].data.note}</p>}
 
-      {report.isPending && <Loading />}
-      {/* A district without a stored report shows no report section. */}
-      {report.data && (
-        <section className="report" aria-labelledby={`report-${district.code}`}>
-          <h4 id={`report-${district.code}`}>{t('report.heading')}</h4>
-          {/* Required label: the text was written by artificial intelligence from the data. */}
-          <p className="ai-label">{t('report.label')}</p>
-          {report.data.lang_fallback && (
-            <p className="notice" role="status">
-              {t('report.fallback')}
-            </p>
-          )}
-          {/* The body is plain text. Paragraphs are split on blank lines and it is never inserted as HTML. */}
-          <div lang={report.data.lang}>
-            {report.data.body.split(/\n\s*\n/).map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
-          <p className="note">{t('report.generated', { date: report.data.generated_at.slice(0, 10) })}</p>
-        </section>
-      )}
+      <AreaReport code={district.code} headingLevel="h4" />
 
+      <p>
+        <Link className="button-primary" to={`/districts/${district.code}`}>
+          {t('detail.fullProfile')}
+        </Link>
+      </p>
       <p>
         <button type="button" className="button-secondary" onClick={onBack}>
           {t('districts.details.backToList')}

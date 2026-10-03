@@ -109,5 +109,42 @@
     "label": "This report was written by artificial intelligence from the data.",
     "fallback": "This text is available in English only.",
     "generated": "Generated: {{date}}"
+  },
+  "detail": {
+    "back": "Back to the list of districts",
+    "area": "Area",
+    "areaValue": "{{value}} km²",
+    "notFoundTitle": "There is no such district",
+    "notFoundText": "Check the address, or choose a district from the list.",
+    "fullProfile": "See the full district profile",
+    "rental": "Rent against purchase price"
+  },
+  "metric": {
+    "noData": "No data.",
+    "sample": "Sample size",
+    "caveat": "Caveat",
+    "more": "Method, licence and credit line",
+    "method": "Method",
+    "licence": "Licence",
+    "attribution": "Credit line"
+  },
+  "series": {
+    "heading": "History: {{label}}",
+    "highest": "highest: {{value}}",
+    "lowest": "lowest: {{value}}",
+    "summary": "First quarter ({{from}}): {{first}}. Last quarter (to {{to}}): {{last}}. Number of quarters: {{count}}.",
+    "lowKey": "A hollow, larger circle marks a quarter with low confidence.",
+    "lowMark": "(low confidence)",
+    "readout": "{{from}} – {{to}}: {{value}}, sample size: {{n}}",
+    "hint": "Point at the chart to see a value. Every value is in the table.",
+    "table": {
+      "region": "Table of the price history. It scrolls.",
+      "caption": "The values of the chart, quarter by quarter",
+      "period": "Quarter (from – to)",
+      "value": "Value",
+      "confidence": "Confidence",
+      "low": "low",
+      "enough": "sufficient"
+    }
   }
 }
