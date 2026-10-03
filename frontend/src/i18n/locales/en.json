@@ -48,6 +48,10 @@
       "heading": "Official notices",
       "badge": "Concept",
       "text": "Notices of planned projects and infrastructure, published by the city, are to be implemented after city approval. They do not exist yet: this section shows no notices and no data."
+    },
+    "map": {
+      "heading": "Map of the districts: {{metric}}",
+      "hint": "The darker the colour, the higher the value. Choose a district on the map to see its details. Every district is also in the list on the page Districts on the map."
     }
   },
   "notFound": {
@@ -81,7 +85,18 @@
       "label": "Map of the districts. Measure: {{metric}}",
       "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
       "districtNoData": "{{name}}: no data",
-      "districtLoading": "{{name}}: loading the data"
+      "districtLoading": "{{name}}: loading the data",
+      "controls": "Zoom and move the map",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "panLeft": "Move the map left",
+      "panRight": "Move the map right",
+      "panUp": "Move the map up",
+      "panDown": "Move the map down",
+      "reset": "Whole city",
+      "wholeCity": "The whole city is shown.",
+      "zoomLevel": "Zoom {{zoom}} times.",
+      "zoomedTo": "Zoomed to {{name}}."
     },
     "legend": {
       "title": "Legend",
@@ -96,7 +111,9 @@
       "district": "District",
       "score": "Overall score (0–100)",
       "selected": "selected",
-      "captionScore": "Districts: overall score"
+      "captionScore": "Districts: overall score",
+      "rank": "Ranking",
+      "class": "Class"
     },
     "colourBy": "Colour the map by",
     "overall": "Overall score",
@@ -116,7 +133,8 @@
       "score": "Score (0–100)",
       "classShort": "{{number}} of {{count}}",
       "backToList": "Back to the list"
-    }
+    },
+    "pickerLabel": "What colours the map"
   },
   "report": {
     "heading": "About the district",
@@ -338,5 +356,14 @@
       "reportText": "The city that hosts the service will give a contact for accessibility problems. During the event, report a problem to the project team, or as an issue in the project repository on GitHub.",
       "todoKeyboard": "A full check with the keyboard alone on each page."
     }
+  },
+  "search": {
+    "region": "Search for a district",
+    "label": "Type a district name",
+    "hint": "For example: {{example}}. The district is shown on the map.",
+    "submit": "Show on the map",
+    "list": "Districts that match what you typed",
+    "count": "Suggestions: {{count}}.",
+    "missed": "There is no district with that name. Check the spelling, or choose a district on the map."
   }
 }

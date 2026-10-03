@@ -11,6 +11,7 @@ import {
   useMetricValues,
   type ScoredCategory,
 } from '../api/useDistrictsData'
+import { useBasemap } from '../api/useBasemap'
 import { useMeta } from '../api/useMeta'
 import { DataKindBadge } from '../components/DataKindBadge'
 import { DistrictDetails } from '../components/DistrictDetails'
@@ -45,14 +46,17 @@ export function DistrictsPage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('districts.title'))
   const [params, setParams] = useSearchParams()
-  const [selected, setSelected] = useState<string | null>(null)
-  const [tab, setTab] = useState<'list' | 'details'>('list')
+  // ?district= comes from the search on the home page: that district is selected, shown in the details and zoomed to.
+  const districtParam = params.get('district')
+  const [selected, setSelected] = useState<string | null>(districtParam)
+  const [tab, setTab] = useState<'list' | 'details'>(districtParam ? 'details' : 'list')
   const choice = choiceFrom(params)
 
   const districts = useDistricts()
   const boundaries = useBoundaries()
   const metrics = useMetrics()
   const meta = useMeta()
+  const basemap = useBasemap()
   const categoryLabels = useCategoryLabels()
 
   const metricsByKey = useMemo(() => new Map(metrics.data?.map((m) => [m.key, m])), [metrics.data])
@@ -61,11 +65,14 @@ export function DistrictsPage() {
   const categoryScores = useCategoryScores(choice.kind === 'category' ? choice.category : null)
   const values = choice.kind === 'category' ? categoryScores : metricValues
 
+  // The parts of `choice` the view depends on: `choice` itself is rebuilt on every render.
+  const category = choice.kind === 'category' ? choice.category : null
+  const kind = choice.kind
   const view: MapView | undefined = useMemo(() => {
-    if (choice.kind === 'category') {
+    if (kind === 'category' && category) {
       const ranking = categoryScores.data?.ranking ?? []
       return {
-        label: t('districts.categoryScore', { category: categoryLabels.get(choice.category) ?? choice.category }),
+        label: t('districts.categoryScore', { category: categoryLabels.get(category) ?? category }),
         description: t('districts.categoryMethod'),
         note: categoryScores.data?.note,
         // The recommend answer has no display string for the score (a known contract gap): shown as sent.
@@ -88,8 +95,17 @@ export function DistrictsPage() {
       unavailableReason: metric.available ? undefined : (metric.reason ?? t('districts.unavailable')),
       values: (metricValues.data?.values ?? []).map((v) => ({ district: v.district, value: v.value, display: v.display, dataKind: v.data_kind, rank: v.rank })),
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- choice is rebuilt each render; its parts are listed
-  }, [choice.kind, choice.kind === 'category' ? choice.category : '', categoryScores.data, categoryLabels, metric, metricValues.data, meta.data, i18n.language, t])
+  }, [
+    kind,
+    category,
+    categoryScores.data,
+    categoryLabels,
+    metric,
+    metricValues.data,
+    meta.data,
+    i18n.language,
+    t,
+  ])
 
   const { valueOf, classOf, classes } = useMemo(() => {
     const list = view?.values ?? []
@@ -121,11 +137,9 @@ export function DistrictsPage() {
       <p>{t('districts.intro')}</p>
 
       <div className="districts-layout">
+        {/* The map comes first: it is what people come for. Then the choice of what colours it, the method and the list. */}
         <section className="card map-card" aria-labelledby="map-heading">
-          <MapPicker choice={choice} onChange={choose} categoryLabels={categoryLabels} metrics={metrics.data} />
-
           <h2 id="map-heading">{view.label}</h2>
-          {view.description && <p>{view.description}</p>}
 
           {/* A measure without data in this city shows the API's reason, never a zero. */}
           {view.unavailableReason && (
@@ -137,84 +151,103 @@ export function DistrictsPage() {
           {waiting && <Loading />}
 
           <div className="map-stage">
-            <DistrictMap boundaries={boundaries.data} values={mapValues} classCount={CLASS_COUNT} metricLabel={view.label} loading={waiting} selected={selected} onSelect={select} />
+            <DistrictMap
+              boundaries={boundaries.data}
+              values={mapValues}
+              classCount={CLASS_COUNT}
+              metricLabel={view.label}
+              loading={waiting}
+              selected={selected}
+              onSelect={select}
+              basemap={basemap}
+              focusCode={districtParam}
+            />
           </div>
 
           {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} />}
-
-          <dl className="provenance">
-            {view.dataKind && (
-              <div>
-                <dt>{t('provenance.dataKind')}</dt>
-                <dd>
-                  <DataKindBadge kind={view.dataKind} />
-                </dd>
-              </div>
-            )}
-            {view.unit && (
-              <div>
-                <dt>{t('provenance.unit')}</dt>
-                <dd>{view.unit}</dd>
-              </div>
-            )}
-            {view.source && (
-              <div>
-                <dt>{t('provenance.source')}</dt>
-                <dd>{view.source.name}</dd>
-              </div>
-            )}
-            {view.source?.asOf && (
-              <div>
-                <dt>{t('provenance.asOf')}</dt>
-                <dd>{view.source.asOf}</dd>
-              </div>
-            )}
-          </dl>
-          {/* The API's own note: scores compare the districts of this city only. */}
-          <p className="note">{view.note ?? districts.data.score_note}</p>
         </section>
 
-        <section className="card" aria-label={t('districts.tabs.label')}>
-          <Tabs
-            label={t('districts.tabs.label')}
-            active={tab}
-            onChange={setTab}
-            tabs={[
-              {
-                key: 'list',
-                label: t('districts.tabs.list'),
-                panel: (
-                  <DistrictsTable
-                    districts={districts.data.districts}
-                    metricsByKey={metricsByKey}
-                    scoreKey={SCORE_KEY}
-                    view={view}
-                    showView={choice.kind !== 'overall'}
-                    valueOf={valueOf}
-                    selected={selected}
-                    onSelect={select}
-                  />
-                ),
-              },
-              {
-                key: 'details',
-                label: t('districts.tabs.details'),
-                panel: (
-                  <div role="status">
-                    <DistrictDetails
-                      district={districts.data.districts.find((d) => d.code === selected)}
+        <div className="districts-side">
+          <section className="card" aria-label={t('districts.pickerLabel')}>
+            <MapPicker choice={choice} onChange={choose} categoryLabels={categoryLabels} metrics={metrics.data} />
+
+            {/* The method comes after the map: this is what stands behind it. */}
+            {view.description && <p>{view.description}</p>}
+
+            <dl className="provenance">
+              {view.dataKind && (
+                <div>
+                  <dt>{t('provenance.dataKind')}</dt>
+                  <dd>
+                    <DataKindBadge kind={view.dataKind} />
+                  </dd>
+                </div>
+              )}
+              {view.unit && (
+                <div>
+                  <dt>{t('provenance.unit')}</dt>
+                  <dd>{view.unit}</dd>
+                </div>
+              )}
+              {view.source && (
+                <div>
+                  <dt>{t('provenance.source')}</dt>
+                  <dd>{view.source.name}</dd>
+                </div>
+              )}
+              {view.source?.asOf && (
+                <div>
+                  <dt>{t('provenance.asOf')}</dt>
+                  <dd>{view.source.asOf}</dd>
+                </div>
+              )}
+            </dl>
+            {/* The API's own note: scores compare the districts of this city only. */}
+            <p className="note">{view.note ?? districts.data.score_note}</p>
+          </section>
+
+          <section className="card" aria-label={t('districts.tabs.label')}>
+            <Tabs
+              label={t('districts.tabs.label')}
+              active={tab}
+              onChange={setTab}
+              tabs={[
+                {
+                  key: 'list',
+                  label: t('districts.tabs.list'),
+                  panel: (
+                    <DistrictsTable
+                      districts={districts.data.districts}
+                      metricsByKey={metricsByKey}
+                      scoreKey={SCORE_KEY}
                       view={view}
-                      value={selected ? valueOf.get(selected) : undefined}
-                      classNumber={selected ? classOf.get(selected) : undefined}
-                      categoryLabels={categoryLabels}
-                      onBack={() => setTab('list')}
+                      showView={choice.kind !== 'overall'}
+                      valueOf={valueOf}
+                      selected={selected}
+                      onSelect={select}
                     />
-                  </div>
-                ),
-              },
-            ]}
-          />
-        </section>
+                  ),
+                },
+                {
+                  key: 'details',
+                  label: t('districts.tabs.details'),
+                  panel: (
+                    <div role="status">
+                      <DistrictDetails
+                        district={districts.data.districts.find((d) => d.code === selected)}
+                        view={view}
+                        value={selected ? valueOf.get(selected) : undefined}
+                        classNumber={selected ? classOf.get(selected) : undefined}
+                        categoryLabels={categoryLabels}
+                        onBack={() => setTab('list')}
+                      />
+                    </div>
+                  ),
+                },
+              ]}
+            />
+          </section>
+        </div>
       </div>
     </>
   )

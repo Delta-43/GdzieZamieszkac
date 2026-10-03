@@ -403,8 +403,13 @@ main:focus {
 .districts-layout {
   display: grid;
   gap: var(--space-5);
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   align-items: start;
+}
+
+.districts-side {
+  display: grid;
+  gap: var(--space-5);
 }
 
 @media (max-width: 60rem) {
@@ -491,10 +496,116 @@ main:focus {
   transition: fill var(--duration-base);
 }
 
+/* The zoom buttons sit in a row above the map, never over it, so they cannot cover a focused district (WCAG 2.4.11). */
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-block-end: var(--space-2);
+}
+
+.map-controls button {
+  min-inline-size: var(--target);
+  min-block-size: var(--target);
+  padding-inline: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-accent);
+  background: var(--color-surface-raised);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.map-controls button:hover:not(:disabled) {
+  color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* A disabled control is dimmed, and it is exempt from the contrast rules (WCAG 1.4.3). It says why by being at the limit. */
+.map-controls button:disabled {
+  color: var(--color-text-muted);
+  border-color: var(--color-border-strong);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.map-controls .map-controls__reset {
+  font-size: var(--text-sm);
+}
+
+/* The context of the map: thin and see-through over the districts, so it helps to find one's way without hiding the colours. */
+.map-context {
+  pointer-events: none;
+  fill: none;
+}
+
+.map-context path {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.map-context__lake {
+  fill: var(--color-map-water);
+  fill-opacity: 0.9;
+}
+
+.map-context__river {
+  stroke: var(--color-map-water);
+  stroke-opacity: 0.95;
+  stroke-width: 3px;
+}
+
+.map-context__rail {
+  stroke: var(--color-map-rail);
+  stroke-opacity: 0.4;
+  stroke-width: 1px;
+  stroke-dasharray: 4 3;
+}
+
+.map-context__road {
+  stroke: var(--color-map-road);
+  stroke-opacity: 0.3;
+  stroke-width: 1px;
+}
+
+.map-context__road--major {
+  stroke-opacity: 0.5;
+  stroke-width: 2px;
+}
+
+/* A landmark: a dot and its name with a halo, so the name reads on any step. Hidden on a narrow screen, like the district names. */
+.map-places {
+  pointer-events: none;
+}
+
+.map-place__dot {
+  fill: var(--color-text);
+  stroke: var(--color-bg);
+}
+
+.map-place__name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  fill: var(--color-text);
+  stroke: var(--color-bg);
+  paint-order: stroke;
+  stroke-linejoin: round;
+  dominant-baseline: central;
+}
+
+@media (max-width: 40rem) {
+  .map-place__name {
+    display: none;
+  }
+}
+
 /* The district's name. Dark on the pale steps, light on the deep ones. */
 .map-label {
   font-family: var(--font-ui);
-  font-size: 15px;
   font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
@@ -513,29 +624,9 @@ main:focus {
   }
 }
 
-.map-district--c1 path {
-  fill: var(--color-map-ramp1);
-}
-
-.map-district--c2 path {
-  fill: var(--color-map-ramp2);
-}
-
-.map-district--c3 path {
-  fill: var(--color-map-ramp3);
-}
-
-.map-district--c4 path {
-  fill: var(--color-map-ramp4);
-}
-
-.map-district--c5 path {
-  fill: var(--color-map-ramp5);
-}
-
-/* Values on their way: a plain fill. The hatch is kept for "no data" only. */
-.map-district--loading path {
-  fill: var(--color-surface-raised);
+.map-district path {
+  /* Transparent, not none: the district still takes the click and the touch. The colour is in the pixels below. */
+  fill: transparent;
 }
 
 .map-district--none path {
@@ -913,8 +1004,13 @@ summary:hover {
 .history-layout {
   display: grid;
   gap: var(--space-5);
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   align-items: start;
+}
+
+.districts-side {
+  display: grid;
+  gap: var(--space-5);
 }
 
 @media (max-width: 60rem) {
@@ -1410,4 +1506,126 @@ main > .ai-report-card {
 .source-list p {
   max-inline-size: none;
   margin-block: var(--space-1);
+}
+
+/* The search by district name: a field with its button, and the suggestions under the field. */
+.search {
+  margin-block: var(--space-5);
+  max-inline-size: 44rem;
+}
+
+.search label {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.search .note {
+  margin-block: var(--space-1) var(--space-2);
+}
+
+.search__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.search__field {
+  position: relative;
+  flex: 1 1 14rem;
+}
+
+.search input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--target);
+  padding-inline: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.search [role='listbox'] {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 5;
+  max-block-size: 16rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  font-family: var(--font-ui);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-menu);
+}
+
+.search [role='listbox'][hidden] {
+  display: none;
+}
+
+.search [role='option'] {
+  padding: var(--space-3);
+  min-block-size: var(--target);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.search [role='option']:hover {
+  background: var(--color-surface);
+}
+
+/* The suggestion the arrow keys are on: a thick edge as well as a fill, so it does not depend on colour. */
+.search [role='option'][aria-selected='true'] {
+  background: var(--color-surface);
+  box-shadow: inset 4px 0 0 var(--color-accent);
+  font-weight: 700;
+}
+
+/* The first screen: what it is and the search on the left, the map on the right. Narrow screens stack them. */
+.home-hero {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: start;
+}
+
+.home-hero__intro > :first-child {
+  margin-block-start: 0;
+}
+
+@media (max-width: 60rem) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.home-map {
+  margin-block: 0;
+}
+
+/* The map is a canvas of pixels under an SVG. The canvas only colours; the SVG above it carries the districts, their outlines and the clicks. */
+.district-map-stack {
+  position: relative;
+}
+
+.map-pixels-canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.district-map {
+  position: relative;
+}
+
+.map-attribution {
+  margin-block: var(--space-1) 0;
+  text-align: end;
 }

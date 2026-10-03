@@ -48,6 +48,10 @@
       "heading": "Oficjalne komunikaty miasta",
       "badge": "Koncepcja",
       "text": "Komunikaty o planowanych inwestycjach i infrastrukturze, publikowane przez miasto, zostaną wdrożone po zatwierdzeniu przez miasto. Jeszcze ich nie ma: ta sekcja nie pokazuje żadnych komunikatów ani danych."
+    },
+    "map": {
+      "heading": "Mapa dzielnic: {{metric}}",
+      "hint": "Im ciemniejszy kolor, tym wyższa wartość. Wybierz dzielnicę na mapie, aby zobaczyć jej szczegóły. Każda dzielnica jest też na liście na stronie Dzielnice na mapie."
     }
   },
   "notFound": {
@@ -81,7 +85,18 @@
       "label": "Mapa dzielnic. Miara: {{metric}}",
       "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
       "districtNoData": "{{name}}: brak danych",
-      "districtLoading": "{{name}}: wczytywanie danych"
+      "districtLoading": "{{name}}: wczytywanie danych",
+      "controls": "Przybliżanie i przesuwanie mapy",
+      "zoomIn": "Przybliż",
+      "zoomOut": "Oddal",
+      "panLeft": "Przesuń mapę w lewo",
+      "panRight": "Przesuń mapę w prawo",
+      "panUp": "Przesuń mapę w górę",
+      "panDown": "Przesuń mapę w dół",
+      "reset": "Całe miasto",
+      "wholeCity": "Widać całe miasto.",
+      "zoomLevel": "Powiększenie {{zoom}} razy.",
+      "zoomedTo": "Przybliżono do dzielnicy: {{name}}."
     },
     "legend": {
       "title": "Legenda",
@@ -96,7 +111,9 @@
       "district": "Dzielnica",
       "score": "Wynik ogólny (0–100)",
       "selected": "wybrana",
-      "captionScore": "Dzielnice: wynik ogólny"
+      "captionScore": "Dzielnice: wynik ogólny",
+      "rank": "Ranking",
+      "class": "Przedział"
     },
     "colourBy": "Koloruj mapę według",
     "overall": "Wynik ogólny",
@@ -116,7 +133,8 @@
       "score": "Wynik (0–100)",
       "classShort": "{{number}} z {{count}}",
       "backToList": "Wróć do listy"
-    }
+    },
+    "pickerLabel": "Co koloruje mapę"
   },
   "report": {
     "heading": "Opis dzielnicy",
@@ -338,5 +356,14 @@
       "reportText": "Miasto, które będzie prowadzić usługę, poda kontakt w sprawie problemów z dostępnością. W czasie wydarzenia zgłoś problem zespołowi projektu albo jako zgłoszenie w repozytorium projektu na GitHubie.",
       "todoKeyboard": "Pełnego sprawdzenia samą klawiaturą na każdej stronie."
     }
+  },
+  "search": {
+    "region": "Wyszukiwanie dzielnicy",
+    "label": "Wpisz nazwę dzielnicy",
+    "hint": "Na przykład: {{example}}. Dzielnica zostanie pokazana na mapie.",
+    "submit": "Pokaż na mapie",
+    "list": "Dzielnice pasujące do wpisanego tekstu",
+    "count": "Podpowiedzi: {{count}}.",
+    "missed": "Nie ma dzielnicy o takiej nazwie. Sprawdź pisownię albo wybierz dzielnicę na mapie."
   }
 }
