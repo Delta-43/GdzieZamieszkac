@@ -40,3 +40,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Added the next steps for the MVP to `backend/README.md`. No backend code changed.
 - 2026-10-03: added `frontend/PLAN.md`, a proposed stack, screen order and open questions for tasks F1 to F3, for the coordinator to approve before code starts. No imported code changed.
 - 2026-10-03: added `frontend/HANDOFF.md` and `frontend/design/` (a clickable mock-up of the Districts screen with sample values, its screenshot, and proposed Kraków blue colour tokens), and listed them in `frontend/README.md`. Reason: hand the frontend to `Rysia` with the design session recorded. The palette conflicts with the accepted `docs/DESIGN.md` until `Delta-43` decides. No imported code changed.
+- 2026-10-03: added `docs/CITY_SERVICE_PLAN.md`, a proposal for official notices, the personalised AI report and resident feedback as real features in a separate `city-service/`. Nothing is built. No imported code changed.
