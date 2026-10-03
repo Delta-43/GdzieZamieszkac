@@ -290,6 +290,21 @@ button.reserve-bold {
   gap: var(--space-2);
 }
 
+/* On a narrow screen the two language buttons would push the header wider than the screen (issue #45): they move to a row of their own. */
+@media (max-width: 26rem) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .language-toggle {
+    flex: 1 0 100%;
+    justify-content: flex-end;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-4);
+    box-sizing: border-box;
+  }
+}
+
 /* A button that reads as a link: the district names in the list. */
 .link-button {
   min-block-size: var(--target);
