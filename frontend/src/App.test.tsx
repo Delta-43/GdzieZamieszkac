@@ -194,3 +194,15 @@ test('the footer lists the pages and every credit line, each linked to where its
   expect(within(footer).getByText('Test listings credit')).toBeInTheDocument()
   expect(within(footer).queryByRole('link', { name: /Test listings credit/ })).not.toBeInTheDocument()
 })
+
+test.each(['pl', 'en'] as const)('the home page marks official notices as a concept and calls no endpoint for them in %s', async (language) => {
+  const fetchMock = mockFetch(() => jsonResponse(metaFixture))
+  renderApp('/')
+  if (language === 'en') fireEvent.click(screen.getByRole('button', { name: 'English' }))
+  const section = (await screen.findByRole('heading', { level: 2, name: language === 'pl' ? /Oficjalne komunikaty miasta/ : /Official notices/ })).closest('section')!
+  expect(section).toHaveTextContent(language === 'pl' ? 'Koncepcja' : 'Concept')
+  expect(section).toHaveTextContent(language === 'pl' ? 'po zatwierdzeniu przez miasto' : 'after city approval')
+  // Nothing is asked for notices, and nothing goes to the city service.
+  const paths = fetchMock.mock.calls.map(([input]) => new URL((input as Request).url).pathname)
+  expect(paths.some((path) => /notice/i.test(path) || path === '/v1/ai-report' || path.startsWith('/v1/feedback'))).toBe(false)
+})
