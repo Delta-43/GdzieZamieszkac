@@ -7,7 +7,7 @@
 <title>GdzieZamieszkać Kraków Pitch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Reddit+Sans+Condensed:wght@700;800&display=swap">
 <style>
   /* Layout: one idea per full-screen slide; items build in on each click and dim once discussed. Forest-and-cream identity from the team deck, single light look by design. */
   :root {
@@ -19,7 +19,7 @@
     --paper: #fffdf8; --ink: var(--forest-950); --muted: #45564b; --line: #ddd1b9;
     --focus: #1f6fb8; --estimated: #c08414; --proxy: #3a7ca5; --observed: #2e7d4f;
 
-    --font-display: "Chewy", "Nunito", "Trebuchet MS", system-ui, sans-serif;
+    --font-display: "Reddit Sans Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
     --font-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
 
     --t-label: .8rem; --t-body: 1.15rem; --t-big: clamp(1.25rem, 2.1vw, 1.7rem);
@@ -35,7 +35,7 @@
   a { color: var(--forest-700); text-underline-offset: 3px; }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   h1, h2, h3, p, ul, ol, figure { margin: 0; }
-  h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: .01em; text-wrap: balance; }
+  h1, h2 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
   h1 { font-size: var(--t-h1); line-height: 1; }
   h2 { font-size: var(--t-h2); line-height: 1.1; max-width: 22ch; }
   h3 { font-size: var(--t-big); line-height: 1.25; font-weight: 800; }
@@ -104,7 +104,7 @@
   .target { padding: var(--s3) var(--s4); border-radius: var(--radius); background: var(--forest-950); color: var(--cream-50); font-size: var(--t-big); font-weight: 800; text-align: center; }
 
   /* big numbers */
-  .num { font: 400 var(--t-num)/1 var(--font-display); color: var(--rust-600); }
+  .num { font: 800 var(--t-num)/1 var(--font-display); color: var(--rust-600); }
   .dark .num { color: var(--rust-300); }
   .num-item { display: grid; gap: var(--s1); }
   .num-item p { font-size: var(--t-big); font-weight: 700; }
@@ -117,7 +117,7 @@
   .anatomy { display: grid; grid-template-columns: 1fr minmax(0, 1.1fr) 1fr; gap: var(--s3); align-items: center; }
   .anatomy .col { display: grid; gap: var(--s4); }
   .value-card { padding: var(--s4); border-radius: 22px; background: var(--paper); border: 2px solid var(--forest-700); text-align: center; }
-  .value-card .v { font: 400 var(--t-num)/1 var(--font-display); color: var(--forest-950); }
+  .value-card .v { font: 800 var(--t-num)/1 var(--font-display); color: var(--forest-950); }
   .value-card p { margin-top: var(--s2); font-weight: 700; }
   .callout { position: relative; padding: var(--s2) var(--s3); border-radius: 12px; background: var(--paper); border: 1px solid var(--line); }
   .callout .eyebrow { display: block; }
@@ -517,7 +517,7 @@
         <li><span class="k">City price history</span>National Bank of Poland, quarterly prices</li>
         <li><span class="k">Market scan</span><a href="https://mistopolia.com/en/about/" target="_blank" rel="noreferrer">Mistopolia</a> · <a href="https://polandrent.com/" target="_blank" rel="noreferrer">PolandRent</a> · <a href="https://strado.info/" target="_blank" rel="noreferrer">Strado</a></li>
       </ol>
-      <p class="muted" style="font-size:.9rem">Data collected 29 Sep – 2 Oct 2026. Road accident data: free for non-commercial use with the credit line above; commercial use needs written approval. Fonts: Chewy (Apache-2.0), Nunito (OFL). Icons: Phosphor (MIT). All diagrams drawn by the team.</p>
+      <p class="muted" style="font-size:.9rem">Data collected 29 Sep – 2 Oct 2026. Road accident data: free for non-commercial use with the credit line above; commercial use needs written approval. Fonts: Reddit Sans Condensed (OFL), Nunito (OFL). Icons: Phosphor (MIT). All diagrams drawn by the team.</p>
     </div>
     <aside class="notes">Every source with its credit line. The full list with licences is in docs/DATA_SOURCES.md.</aside>
   </section>
