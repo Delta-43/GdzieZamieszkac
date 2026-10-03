@@ -441,6 +441,15 @@ main:focus {
   gap: var(--space-1);
 }
 
+.field + .field {
+  margin-block-start: var(--space-4);
+}
+
+.notice + .note {
+  margin-block-start: var(--space-3);
+}
+
+.field input,
 .field select,
 .field textarea {
   box-sizing: border-box;
