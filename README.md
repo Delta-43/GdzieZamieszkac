@@ -39,6 +39,7 @@ We disclose all significant use, as the event rules require.
 
 - **The score is not AI.** It is computed in code and tested.
 - **District reports.** A language model (`z-ai/glm-5.3-flash`, through OpenRouter) writes each report from a structured list of facts. A guard rejects any text that contains a number that is not in the facts. Reports are generated ahead of time and stored. The frontend must label every report as AI-written.
+- **Personalised AI report (new on site, `city-service/`).** The same model (`z-ai/glm-5.3-flash`, through OpenRouter) narrates the top three districts for a person's priorities, at request time. The ranking is computed in code and the model only writes text from a fixed fact list. The same number guard drops any text with a number outside the facts. Every answer carries an AI label. The typed text goes to OpenRouter and is neither stored nor logged by us.
 - **Translation.** A language model (`deepseek/deepseek-v4.1-flash`, through OpenRouter) translates stored text between English and Polish. A glossary and a number check come first. Nothing is translated at request time.
 - **Development.** We used Claude Code (Anthropic) to help write and review code and documents. We review and can explain all of it.
 

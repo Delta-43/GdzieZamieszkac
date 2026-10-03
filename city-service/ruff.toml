@@ -1,0 +1,10 @@
+line-length = 160
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4", "SIM", "S", "PL"]
+ignore = ["S101", "PLR2004", "PLR0913", "PLR0912", "PLR0915", "PLR0911", "B008"]
+
+[lint.per-file-ignores]
+"tests/*" = ["S", "PLC0415", "E501"]
+"app/llm.py" = ["E501"]  # the prompts are long prose
