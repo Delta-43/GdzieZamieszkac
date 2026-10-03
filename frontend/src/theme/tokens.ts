@@ -26,6 +26,15 @@ export const colors = {
   warning: '#aa6a00',
   danger: '#be2f2c',
   info: '#286cab',
+  /**
+   * The map ramp: five ordered steps of the accent blue, from a pale tint to a deep shade. Lightness falls in one
+   * direction, so the order still reads in greyscale. It means "more" or "less" of a measure, never "good" or "bad".
+   */
+  mapRamp1: '#dceeff',
+  mapRamp2: '#a6d0f6',
+  mapRamp3: '#6faae0',
+  mapRamp4: '#196ba9',
+  mapRamp5: '#003f6e',
 } as const
 
 export type ColorToken = keyof typeof colors
@@ -62,7 +71,16 @@ export const CONTRAST_PAIRS: ContrastPair[] = [
   pair('danger', 'surface', UI_MIN, 'status rule on a panel'),
   pair('info', 'bg', UI_MIN, 'status rule on the page'),
   pair('info', 'surface', UI_MIN, 'status rule on a panel'),
+  // The class number printed on each district of the map: dark on the pale steps, light on the deep ones.
+  pair('text', 'mapRamp1', TEXT_MIN, 'class number on map step 1'),
+  pair('text', 'mapRamp2', TEXT_MIN, 'class number on map step 2'),
+  pair('text', 'mapRamp3', TEXT_MIN, 'class number on map step 3'),
+  pair('accentContrast', 'mapRamp4', TEXT_MIN, 'class number on map step 4'),
+  pair('accentContrast', 'mapRamp5', TEXT_MIN, 'class number on map step 5'),
 ]
+
+/** The ramp steps in order, palest first. */
+export const MAP_RAMP: ColorToken[] = ['mapRamp1', 'mapRamp2', 'mapRamp3', 'mapRamp4', 'mapRamp5']
 
 /** Fonts are self-hosted (bundled from the fontsource packages, SIL Open Font Licence). Nothing loads from a third party. */
 export const fonts = {

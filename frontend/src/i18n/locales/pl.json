@@ -6,7 +6,8 @@
   "skipLink": "Przejdź do treści głównej",
   "nav": {
     "label": "Nawigacja główna",
-    "home": "Strona główna"
+    "home": "Strona główna",
+    "districts": "Dzielnice"
   },
   "language": {
     "label": "Język"
@@ -30,11 +31,59 @@
     "title": "Strona główna",
     "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
     "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
-    "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników."
+    "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników.",
+    "cta": "Zobacz dzielnice"
   },
   "notFound": {
     "title": "Nie znaleziono strony",
     "text": "Strona pod tym adresem nie istnieje.",
     "back": "Wróć na stronę główną"
+  },
+  "dataKind": {
+    "observed": "obserwowane",
+    "estimated": "szacowane",
+    "proxy": "pośrednie"
+  },
+  "provenance": {
+    "dataKind": "Rodzaj danych",
+    "unit": "Jednostka",
+    "source": "Źródło",
+    "asOf": "Stan na"
+  },
+  "districts": {
+    "title": "Dzielnice",
+    "heading": "Dzielnice na mapie i w tabeli",
+    "intro": "Wybierz miarę, aby pokolorować mapę. Te same wartości są w tabeli pod mapą.",
+    "measure": "Miara pokazana na mapie",
+    "optionNoData": "{{label}} (brak danych)",
+    "unavailable": "Brak danych dla tej miary.",
+    "noData": "brak danych",
+    "pick": "Wybierz dzielnicę na mapie, aby zobaczyć jej wartość.",
+    "rank": "Pozycja {{position}} z {{of}}",
+    "higherIsBetter": "wyższa wartość to lepsza pozycja",
+    "lowerIsBetter": "niższa wartość to lepsza pozycja",
+    "classOf": "Przedział {{number}} z {{count}} na mapie",
+    "map": {
+      "label": "Mapa dzielnic. Miara: {{metric}}",
+      "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
+      "districtNoData": "{{name}}: brak danych"
+    },
+    "legend": {
+      "title": "Legenda",
+      "direction": "Ciemniejszy kolor i wyższy numer oznaczają wyższą wartość.",
+      "range": "Przedział {{number}}: od {{min}} do {{max}}",
+      "single": "Przedział {{number}}: {{value}}",
+      "noData": "Pole kreskowane: brak danych"
+    },
+    "table": {
+      "region": "Tabela dzielnic. Można ją przewijać w poziomie.",
+      "caption": "Dzielnice: wskaźnik jakości życia, powierzchnia, ceny oraz miara z mapy ({{metric}})",
+      "district": "Dzielnica",
+      "score": "Wskaźnik jakości życia (0–100)",
+      "area": "Powierzchnia (km²)",
+      "rank": "Pozycja",
+      "class": "Przedział na mapie",
+      "selected": "wybrana"
+    }
   }
 }

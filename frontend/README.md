@@ -15,11 +15,16 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Status
 
-**Tasks F1, F2 and F3 are done.** The project builds, lints and tests, and the API types are generated from the contract.
+**Tasks F1 to F4 are done.** The project builds, lints and tests, and the API types are generated from the contract.
 The shared parts exist: skip link, header with the city name from `/meta`, navigation, language toggle (Polish default),
 stale-data notice, loading and error states, and a footer with the credit line of every source.
-There are two pages, home and "page not found". The navigation lists only pages that exist, so it grows with each task.
-The real screens are tasks F4 to F8 in `TODO.md`.
+The pages are home, districts (map and table) and "page not found". The navigation lists only pages that exist, so it grows with each task.
+The other screens are tasks F5 to F8 in `TODO.md`.
+
+On the districts page the user picks a measure. The map is an SVG drawn from `/districts.geojson`, with no map tiles.
+It splits the districts into at most five classes of equal count, from the lowest values (class 1) to the highest (class 5).
+Each district is a keyboard-reachable button named with its value, and it prints its class number, so nothing depends on colour.
+The table under the map holds the same values. A measure or a district without data is hatched and says "no data" with the API's reason.
 
 ## Theme
 

@@ -6,7 +6,8 @@
   "skipLink": "Skip to main content",
   "nav": {
     "label": "Main navigation",
-    "home": "Home"
+    "home": "Home",
+    "districts": "Districts"
   },
   "language": {
     "label": "Language"
@@ -30,11 +31,59 @@
     "title": "Home",
     "heading": "Compare the districts before you look for a flat",
     "what": "This portal shows public data about the districts: transport, amenities, environment, prices and rents. Every number comes with its source and date.",
-    "notListings": "This is not a listings site. We show no flats for sale or rent, and no brokers."
+    "notListings": "This is not a listings site. We show no flats for sale or rent, and no brokers.",
+    "cta": "See the districts"
   },
   "notFound": {
     "title": "Page not found",
     "text": "There is no page at this address.",
     "back": "Back to the home page"
+  },
+  "dataKind": {
+    "observed": "observed",
+    "estimated": "estimated",
+    "proxy": "proxy"
+  },
+  "provenance": {
+    "dataKind": "Data kind",
+    "unit": "Unit",
+    "source": "Source",
+    "asOf": "As of"
+  },
+  "districts": {
+    "title": "Districts",
+    "heading": "Districts on the map and in the table",
+    "intro": "Pick a measure to colour the map. The same values are in the table under the map.",
+    "measure": "Measure shown on the map",
+    "optionNoData": "{{label}} (no data)",
+    "unavailable": "No data for this measure.",
+    "noData": "no data",
+    "pick": "Choose a district on the map to see its value.",
+    "rank": "Rank {{position}} of {{of}}",
+    "higherIsBetter": "a higher value ranks better",
+    "lowerIsBetter": "a lower value ranks better",
+    "classOf": "Class {{number}} of {{count}} on the map",
+    "map": {
+      "label": "Map of the districts. Measure: {{metric}}",
+      "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
+      "districtNoData": "{{name}}: no data"
+    },
+    "legend": {
+      "title": "Legend",
+      "direction": "A darker colour and a higher number mean a higher value.",
+      "range": "Class {{number}}: from {{min}} to {{max}}",
+      "single": "Class {{number}}: {{value}}",
+      "noData": "Hatched area: no data"
+    },
+    "table": {
+      "region": "Table of the districts. It scrolls sideways.",
+      "caption": "Districts: livability score, area, prices and the measure on the map ({{metric}})",
+      "district": "District",
+      "score": "Livability score (0–100)",
+      "area": "Area (km²)",
+      "rank": "Rank",
+      "class": "Class on the map",
+      "selected": "selected"
+    }
   }
 }

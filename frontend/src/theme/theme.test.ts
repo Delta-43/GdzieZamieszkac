@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { contrastRatio } from './contrast'
 import { themeCss } from './index'
-import { colors, CONTRAST_PAIRS, TEXT_MIN, UI_MIN } from './tokens'
+import { colors, CONTRAST_PAIRS, MAP_RAMP, TEXT_MIN, UI_MIN } from './tokens'
 
 test('the contrast formula matches the known WCAG values', () => {
   expect(contrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 5)
@@ -17,12 +17,19 @@ test.each(CONTRAST_PAIRS)('$fg on $bg reaches $min:1 ($use)', ({ fg, bg, min }) 
 })
 
 test('every colour that can sit on a background is covered by a contrast pair', () => {
-  const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent'])
+  const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent', ...MAP_RAMP])
   // "border" is a decorative hairline and carries no meaning, so it is the one colour with no requirement.
   const exempt = new Set<string>(['border'])
   const covered = new Set<string>(CONTRAST_PAIRS.map((pair) => pair.fg))
   const uncovered = Object.keys(colors).filter((name) => !backgrounds.has(name) && !exempt.has(name) && !covered.has(name))
   expect(uncovered).toEqual([])
+})
+
+test('the map ramp gets darker with every step, so its order does not depend on hue', () => {
+  const againstWhite = MAP_RAMP.map((step) => contrastRatio(colors[step], '#ffffff'))
+  expect(MAP_RAMP).toHaveLength(5)
+  expect([...againstWhite].sort((a, b) => a - b)).toEqual(againstWhite)
+  expect(new Set(againstWhite).size).toBe(5)
 })
 
 test('the theme stylesheet defines a custom property for every colour', () => {

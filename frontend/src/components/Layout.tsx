@@ -46,6 +46,9 @@ export function Layout() {
                 {t('nav.home')}
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/districts">{t('nav.districts')}</NavLink>
+            </li>
           </ul>
         </nav>
       </header>

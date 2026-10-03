@@ -238,3 +238,356 @@ main:focus {
   padding-block: var(--space-2);
   border-block-start: 1px solid var(--color-border);
 }
+
+h2 {
+  margin-block: var(--space-6) var(--space-3);
+  padding-inline-start: var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--line-tight);
+  /* Section headings carry a short bar in the accent colour. */
+  border-inline-start: 0.25rem solid var(--color-accent);
+}
+
+h3 {
+  margin-block: 0 var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.note,
+.data-kind,
+.provenance,
+.map-legend,
+.no-data {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.note,
+.no-data {
+  color: var(--color-text-muted);
+}
+
+/* The data kind badge: a shape and a word in a hairline box. */
+.data-kind {
+  display: inline-block;
+  padding-inline: var(--space-2);
+  white-space: nowrap;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.notice {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border-inline-start: 0.25rem solid var(--color-info);
+}
+
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target);
+  padding-inline: var(--space-5);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.button-primary:hover {
+  text-decoration: underline;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+  margin-block: var(--space-5);
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field select {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+  min-block-size: var(--target);
+  padding-inline: var(--space-3);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* The map and its side panel: side by side on a wide screen, stacked on a narrow one. */
+.map-layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: start;
+}
+
+.map-stage {
+  grid-column: span 2;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 48rem) {
+  .map-stage {
+    grid-column: auto;
+  }
+}
+
+.district-map {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.map-district {
+  cursor: pointer;
+}
+
+.map-district path {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: fill var(--duration-base);
+}
+
+.map-district text {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  fill: var(--color-text);
+}
+
+.map-district--c1 path {
+  fill: var(--color-map-ramp1);
+}
+
+.map-district--c2 path {
+  fill: var(--color-map-ramp2);
+}
+
+.map-district--c3 path {
+  fill: var(--color-map-ramp3);
+}
+
+.map-district--c4 path {
+  fill: var(--color-map-ramp4);
+}
+
+.map-district--c5 path {
+  fill: var(--color-map-ramp5);
+}
+
+.map-district--c4 text,
+.map-district--c5 text {
+  fill: var(--color-accent-contrast);
+}
+
+.map-district--none path {
+  fill: url('#map-no-data');
+}
+
+.map-no-data__ground {
+  fill: var(--color-surface-raised);
+}
+
+.map-no-data__line {
+  stroke: var(--color-border-strong);
+  stroke-width: 6;
+}
+
+/* Hover, keyboard focus and the chosen district are all shown by a thick outline, never by a new colour. */
+.map-district:hover path,
+.map-district:focus-visible path,
+.map-district[aria-pressed='true'] path {
+  stroke-width: 7;
+}
+
+.map-district:focus {
+  outline: none;
+}
+
+.map-district:focus-visible path {
+  stroke: var(--color-focus);
+  stroke-dasharray: 14 6;
+}
+
+.map-side {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.map-legend ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.map-legend p {
+  margin-block-end: var(--space-3);
+}
+
+.map-legend__swatch {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  font-weight: 500;
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+.map-legend__swatch--c1 {
+  background: var(--color-map-ramp1);
+}
+
+.map-legend__swatch--c2 {
+  background: var(--color-map-ramp2);
+}
+
+.map-legend__swatch--c3 {
+  background: var(--color-map-ramp3);
+}
+
+.map-legend__swatch--c4 {
+  color: var(--color-accent-contrast);
+  background: var(--color-map-ramp4);
+}
+
+.map-legend__swatch--c5 {
+  color: var(--color-accent-contrast);
+  background: var(--color-map-ramp5);
+}
+
+.map-legend__swatch--none {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-surface-raised) 0 0.3rem,
+    var(--color-border-strong) 0.3rem 0.5rem
+  );
+}
+
+.provenance {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-block: var(--space-3);
+  border-block: 1px solid var(--color-border);
+}
+
+.provenance div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+}
+
+.provenance dt {
+  color: var(--color-text-muted);
+}
+
+.provenance dt::after {
+  content: ':';
+}
+
+.provenance dd {
+  margin: 0;
+}
+
+.district-panel {
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.district-panel p {
+  margin-block-end: var(--space-2);
+}
+
+.district-panel p:last-child {
+  margin-block-end: 0;
+}
+
+.district-panel__value {
+  font-size: var(--text-lg);
+}
+
+/* A wide table scrolls inside its own region, so the page never scrolls sideways. */
+.table-scroll {
+  margin-block-start: var(--space-6);
+  overflow-x: auto;
+}
+
+table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+caption {
+  padding-block-end: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-align: start;
+}
+
+th,
+td {
+  padding: var(--space-2) var(--space-3);
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--color-border);
+}
+
+thead th {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-block-end: 1px solid var(--color-border-strong);
+}
+
+tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The chosen district's row: a panel background, an accent bar and the word "selected". */
+tbody tr[aria-current='true'] {
+  background: var(--color-surface);
+  box-shadow: inset 0.25rem 0 0 var(--color-accent);
+}
+
+.selected-mark {
+  font-weight: 400;
+}
+
+/* The footer label is not a section heading of the page, so it has no accent bar. */
+.site-footer h2 {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
