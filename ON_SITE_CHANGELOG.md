@@ -23,3 +23,4 @@ No code logic changed. The 153 offline backend tests pass on the copy.
 - Wrote this changelog, the root `README.md` and `AGENTS.md`, and `docs/DATA_SOURCES.md`.
 - Added the proprietary `LICENSE`, `CODEOWNERS`, and enabled protection on `main`.
 - Removed the pointers in `frontend/` to two note files that are not part of this repository.
+- Added `presentation.html`, the HackYeah pitch deck for the Kraków edition. It is based on the team briefing deck from before the event, rewritten for the final idea: Kraków only, the offer to the city, what was built when, and the disclosure of AI use. It changes no imported code.

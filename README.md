@@ -80,6 +80,7 @@ data/sources/derived/     scoring.py, the scoring code the backend copies
 ON_SITE_CHANGELOG.md      what changed during the event
 LICENSE                   proprietary copyright notice
 CODEOWNERS                who reviews what
+presentation.html         the HackYeah pitch deck; open it in a browser
 ```
 
 ## Team
