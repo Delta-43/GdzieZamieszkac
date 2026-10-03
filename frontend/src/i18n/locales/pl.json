@@ -64,7 +64,8 @@
     "map": {
       "label": "Mapa dzielnic. Miara: {{metric}}",
       "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
-      "districtNoData": "{{name}}: brak danych"
+      "districtNoData": "{{name}}: brak danych",
+      "districtLoading": "{{name}}: wczytywanie danych"
     },
     "legend": {
       "title": "Legenda",

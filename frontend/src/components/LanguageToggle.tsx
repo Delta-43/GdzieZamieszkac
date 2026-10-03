@@ -13,10 +13,12 @@ export function LanguageToggle() {
           key={language}
           type="button"
           lang={language}
+          className="reserve-bold"
+          data-label={NAMES[language]}
           aria-pressed={i18n.language === language}
           onClick={() => void i18n.changeLanguage(language)}
         >
-          {NAMES[language]}
+          <span>{NAMES[language]}</span>
         </button>
       ))}
     </div>

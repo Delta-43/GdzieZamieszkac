@@ -64,7 +64,8 @@
     "map": {
       "label": "Map of the districts. Measure: {{metric}}",
       "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
-      "districtNoData": "{{name}}: no data"
+      "districtNoData": "{{name}}: no data",
+      "districtLoading": "{{name}}: loading the data"
     },
     "legend": {
       "title": "Legend",

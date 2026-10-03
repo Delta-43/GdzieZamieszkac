@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import { districtsApi, jsonResponse, problemFixture } from '../test/fixtures'
 import { mockFetch, renderApp } from '../test/render'
@@ -20,6 +20,29 @@ test('the map gives every district a keyboard-reachable button whose name holds 
   expect(within(map).getByRole('button', { name: 'Delta: brak danych' })).toBeInTheDocument()
 })
 
+test('while the values are loading, districts say so and are not shown as "no data"', async () => {
+  let release: (response: Response) => void = () => {}
+  const pending = new Promise<Response>((resolve) => {
+    release = resolve
+  })
+  vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
+    const request = input as Request
+    return new URL(request.url).pathname === '/v1/metrics/test_sale/values' ? pending : districtsApi(request)
+  })
+  renderApp(PAGE)
+
+  const map = await screen.findByRole('group', { name: 'Mapa dzielnic. Miara: Test sale label' })
+  expect(within(map).getByRole('button', { name: 'Alpha: wczytywanie danych' })).toHaveClass('map-district--loading')
+  expect(within(map).queryByRole('button', { name: /brak danych/ })).not.toBeInTheDocument()
+  expect(screen.queryByText('Pole kreskowane: brak danych')).not.toBeInTheDocument()
+
+  release(districtsApi(new Request('http://api.test/v1/metrics/test_sale/values')))
+
+  expect(await within(map).findByRole('button', { name: 'Alpha: 100 test, przedział 1 z 5' })).toBeInTheDocument()
+  // Now the gap is real: Delta has no value, and only now is it called "no data".
+  expect(within(map).getByRole('button', { name: 'Delta: brak danych' })).toHaveClass('map-district--none')
+})
+
 test('the list tab holds everything the map shows, with labels from the catalogue', async () => {
   mockFetch(districtsApi)
   renderApp(PAGE)
@@ -37,6 +60,8 @@ test('the list tab holds everything the map shows, with labels from the catalogu
   expect(alpha).toHaveTextContent('10,5')
   expect(alpha).toHaveTextContent('100 test')
   expect(alpha).toHaveTextContent('obserwowane')
+  // The data kind badge is a shape and a word: the shape is an SVG hidden from screen readers.
+  expect(alpha.querySelector('.data-kind svg[aria-hidden="true"]')).not.toBeNull()
   expect(alpha).toHaveTextContent('Pozycja 1 z 3')
   expect(rowOf('Delta')).toHaveTextContent('brak danych')
   expect(rowOf('Gamma')).toHaveTextContent('brak danych')

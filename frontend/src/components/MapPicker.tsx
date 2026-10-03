@@ -26,18 +26,25 @@ export function MapPicker({ choice, onChange, categoryLabels, metrics }: Props) 
           {t('districts.colourBy')}
         </span>
         <div className="map-picker__pills">
-          <button type="button" className="pill" aria-pressed={choice.kind === 'overall'} onClick={() => onChange({ kind: 'overall' })}>
-            {t('districts.overall')}
+          <button
+            type="button"
+            className="pill reserve-bold"
+            data-label={t('districts.overall')}
+            aria-pressed={choice.kind === 'overall'}
+            onClick={() => onChange({ kind: 'overall' })}
+          >
+            <span>{t('districts.overall')}</span>
           </button>
           {SCORED_CATEGORIES.map((category) => (
             <button
               key={category}
               type="button"
-              className="pill"
+              className="pill reserve-bold"
+              data-label={categoryLabels.get(category) ?? category}
               aria-pressed={choice.kind === 'category' && choice.category === category}
               onClick={() => onChange({ kind: 'category', category })}
             >
-              {categoryLabels.get(category) ?? category}
+              <span>{categoryLabels.get(category) ?? category}</span>
             </button>
           ))}
         </div>
