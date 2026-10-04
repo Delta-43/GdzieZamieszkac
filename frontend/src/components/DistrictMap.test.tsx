@@ -94,7 +94,7 @@ test('?district= selects that district, opens its details and zooms the map to i
   serve()
   renderApp('/districts?district=delta')
   expect(await screen.findByText('Przybliżono do dzielnicy: Delta.')).toBeInTheDocument()
-  expect(screen.getByRole('tab', { name: 'Szczegóły' })).toHaveAttribute('aria-selected', 'true')
+  expect(within(screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })).getByRole('heading', { level: 3, name: 'Delta' })).toBeInTheDocument()
   const map = within(svg())
   expect(map.getByRole('button', { name: /^Delta/ })).toHaveAttribute('aria-pressed', 'true')
 })

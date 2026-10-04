@@ -1,14 +1,11 @@
-/**
- * The pages of the portal, in one place for the header, the menu and the footer. A page is listed here only when it
- * exists. The pages marked `quick` are the steps of the main flow: they are also shortcuts in the header on a wide screen.
- */
+/** The pages of the portal, in one place for the menu. A page is listed here only when it exists. */
 export const PAGES = [
-  { to: '/', labelKey: 'nav.home', end: true, quick: false },
-  { to: '/districts', labelKey: 'nav.districts', end: true, quick: true },
-  { to: '/find', labelKey: 'nav.findDistrict', end: true, quick: true },
-  { to: '/compare', labelKey: 'nav.compare', end: true, quick: true },
-  { to: '/feedback', labelKey: 'nav.feedback', end: true, quick: false },
-  { to: '/sources', labelKey: 'nav.sources', end: true, quick: false },
+  { to: '/', labelKey: 'nav.home', end: true },
+  { to: '/districts', labelKey: 'nav.districts', end: true },
+  { to: '/find', labelKey: 'nav.findDistrict', end: true },
+  { to: '/compare', labelKey: 'nav.compare', end: true },
+  { to: '/feedback', labelKey: 'nav.feedback', end: true },
+  { to: '/sources', labelKey: 'nav.sources', end: true },
 ] as const
 
 /** Lower case and without diacritics, so "lagiewniki" finds "Łagiewniki". */

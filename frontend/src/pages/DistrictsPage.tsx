@@ -21,7 +21,6 @@ import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { MapLegend } from '../components/MapLegend'
 import { MapPicker, type Choice } from '../components/MapPicker'
-import { Tabs } from '../components/Tabs'
 import { CLASS_COUNT, classify } from '../lib/classes'
 import type { MapView } from '../lib/mapView'
 import { plainNumber } from '../lib/plainNumber'
@@ -48,8 +47,8 @@ export function DistrictsPage() {
   const [params, setParams] = useSearchParams()
   // ?district= comes from the search on the home page: that district is selected, shown in the details and zoomed to.
   const districtParam = params.get('district')
+  // The chosen district. Its details are on the page only while one is chosen.
   const [selected, setSelected] = useState<string | null>(districtParam)
-  const [tab, setTab] = useState<'list' | 'details'>(districtParam ? 'details' : 'list')
   const choice = choiceFrom(params)
 
   const districts = useDistricts()
@@ -126,21 +125,27 @@ export function DistrictsPage() {
     setParams(next.kind === 'category' ? { category: next.category } : next.kind === 'metric' ? { metric: next.key } : {}, { replace: true })
   }
 
-  function select(code: string) {
-    setSelected(code)
-    setTab('details')
-  }
+  // The overall score and the category scores are scores, where higher is better: red to green. A single measure
+  // (a price, a count) is only more or less of something: steps of one blue.
+  const palette = choice.kind === 'metric' && metric?.key !== SCORE_KEY ? 'measure' : 'score'
+  // The two values every district carries (the prices), for its card on the map.
+  const extras = new Map(
+    districts.data.districts.map((district) => [
+      district.code,
+      (district.highlights ?? []).map((highlight) => ({ label: metricsByKey.get(highlight.key)?.label ?? highlight.key, display: highlight.display })),
+    ]),
+  )
+  const chosen = districts.data.districts.find((district) => district.code === selected)
 
   return (
     <>
       <h1>{t('districts.heading')}</h1>
       <p>{t('districts.intro')}</p>
 
-      <div className="districts-layout">
-        {/* The map comes first: it is what people come for. Then the choice of what colours it, the method and the list. */}
+      <div className={`districts-layout${chosen ? ' districts-layout--details' : ''}`}>
+        {/* The map comes first and alone: it is what people come for. */}
         <section className="card map-card" aria-labelledby="map-heading">
           <h2 id="map-heading">{view.label}</h2>
-
           {/* A measure without data in this city shows the API's reason, never a zero. */}
           {view.unavailableReason && (
             <p className="notice" role="status">
@@ -149,7 +154,6 @@ export function DistrictsPage() {
           )}
           {values.isError && <ErrorMessage error={values.error} onRetry={() => void values.refetch()} />}
           {waiting && <Loading />}
-
           <div className="map-stage">
             <DistrictMap
               boundaries={boundaries.data}
@@ -158,96 +162,84 @@ export function DistrictsPage() {
               metricLabel={view.label}
               loading={waiting}
               selected={selected}
-              onSelect={select}
+              onSelect={setSelected}
               basemap={basemap}
               focusCode={districtParam}
+              palette={palette}
+              classes={classes}
+              extras={extras}
             />
           </div>
-
-          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} />}
+          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} palette={palette} />}
         </section>
 
-        <div className="districts-side">
-          <section className="card" aria-label={t('districts.pickerLabel')}>
-            <MapPicker choice={choice} onChange={choose} categoryLabels={categoryLabels} metrics={metrics.data} />
-
-            {/* The method comes after the map: this is what stands behind it. */}
-            {view.description && <p>{view.description}</p>}
-
-            <dl className="provenance">
-              {view.dataKind && (
-                <div>
-                  <dt>{t('provenance.dataKind')}</dt>
-                  <dd>
-                    <DataKindBadge kind={view.dataKind} />
-                  </dd>
-                </div>
-              )}
-              {view.unit && (
-                <div>
-                  <dt>{t('provenance.unit')}</dt>
-                  <dd>{view.unit}</dd>
-                </div>
-              )}
-              {view.source && (
-                <div>
-                  <dt>{t('provenance.source')}</dt>
-                  <dd>{view.source.name}</dd>
-                </div>
-              )}
-              {view.source?.asOf && (
-                <div>
-                  <dt>{t('provenance.asOf')}</dt>
-                  <dd>{view.source.asOf}</dd>
-                </div>
-              )}
-            </dl>
-            {/* The API's own note: scores compare the districts of this city only. */}
-            <p className="note">{view.note ?? districts.data.score_note}</p>
+        {/* The details of the chosen district: on the page only after a district is chosen, and announced politely when it changes. */}
+        {chosen && (
+          <section className="card" aria-label={t('districts.detailsLabel')}>
+            <div role="status">
+              <DistrictDetails
+                district={chosen}
+                view={view}
+                value={valueOf.get(chosen.code)}
+                classNumber={classOf.get(chosen.code)}
+                categoryLabels={categoryLabels}
+                onBack={() => setSelected(null)}
+              />
+            </div>
           </section>
+        )}
+      </div>
 
-          <section className="card" aria-label={t('districts.tabs.label')}>
-            <Tabs
-              label={t('districts.tabs.label')}
-              active={tab}
-              onChange={setTab}
-              tabs={[
-                {
-                  key: 'list',
-                  label: t('districts.tabs.list'),
-                  panel: (
-                    <DistrictsTable
-                      districts={districts.data.districts}
-                      metricsByKey={metricsByKey}
-                      scoreKey={SCORE_KEY}
-                      view={view}
-                      showView={choice.kind !== 'overall'}
-                      valueOf={valueOf}
-                      selected={selected}
-                      onSelect={select}
-                    />
-                  ),
-                },
-                {
-                  key: 'details',
-                  label: t('districts.tabs.details'),
-                  panel: (
-                    <div role="status">
-                      <DistrictDetails
-                        district={districts.data.districts.find((d) => d.code === selected)}
-                        view={view}
-                        value={selected ? valueOf.get(selected) : undefined}
-                        classNumber={selected ? classOf.get(selected) : undefined}
-                        categoryLabels={categoryLabels}
-                        onBack={() => setTab('list')}
-                      />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </section>
-        </div>
+      <div className="districts-below">
+        <section className="card" aria-label={t('districts.pickerLabel')}>
+          <MapPicker choice={choice} onChange={choose} categoryLabels={categoryLabels} metrics={metrics.data} />
+          {/* The method comes after the choice: this is what stands behind the map. */}
+          {view.description && <p>{view.description}</p>}
+          <dl className="provenance">
+            {view.dataKind && (
+              <div>
+                <dt>{t('provenance.dataKind')}</dt>
+                <dd>
+                  <DataKindBadge kind={view.dataKind} />
+                </dd>
+              </div>
+            )}
+            {view.unit && (
+              <div>
+                <dt>{t('provenance.unit')}</dt>
+                <dd>{view.unit}</dd>
+              </div>
+            )}
+            {view.source && (
+              <div>
+                <dt>{t('provenance.source')}</dt>
+                <dd>{view.source.name}</dd>
+              </div>
+            )}
+            {view.source?.asOf && (
+              <div>
+                <dt>{t('provenance.asOf')}</dt>
+                <dd>{view.source.asOf}</dd>
+              </div>
+            )}
+          </dl>
+          {/* The API's own note: scores compare the districts of this city only. */}
+          <p className="note">{view.note ?? districts.data.score_note}</p>
+        </section>
+
+        <section className="card" aria-labelledby="list-heading">
+          <h2 id="list-heading">{t('districts.listHeading')}</h2>
+          <DistrictsTable
+            districts={districts.data.districts}
+            metricsByKey={metricsByKey}
+            scoreKey={SCORE_KEY}
+            view={view}
+            showView={choice.kind !== 'overall'}
+            valueOf={valueOf}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        </section>
       </div>
     </>
   )

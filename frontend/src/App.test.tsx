@@ -189,14 +189,14 @@ test('a mouse over the menu button opens the menu, a click pins it, and a press 
   expect(button).toHaveAttribute('aria-expanded', 'false')
 })
 
-test('the header has shortcuts to the three steps of the main flow, with the current page marked', async () => {
+test('the header holds the menu, the site name and the languages, and no second row of page links', async () => {
   mockFetch(districtsApi)
   renderApp('/find')
 
-  const quick = await screen.findByRole('navigation', { name: 'Skróty' })
-  expect(within(quick).getAllByRole('link').map((link) => link.textContent)).toEqual(['Dzielnice na mapie', 'Znajdź dzielnicę', 'Porównaj dzielnice'])
-  expect(within(quick).getByRole('link', { name: 'Znajdź dzielnicę' })).toHaveAttribute('aria-current', 'page')
-  expect(within(quick).getByRole('link', { name: 'Dzielnice na mapie' })).not.toHaveAttribute('aria-current')
+  const header = await screen.findByRole('banner')
+  // Closed, the menu is the only way to the pages, and it is one press away.
+  expect(within(header).queryByRole('navigation')).not.toBeInTheDocument()
+  expect(within(header).getAllByRole('link').map((link) => link.textContent)).toEqual(['GdzieZamieszkać'])
 })
 
 test('the menu lists every district, and choosing one opens its page and closes the menu', async () => {
@@ -214,14 +214,14 @@ test('the menu lists every district, and choosing one opens its page and closes 
   expect(screen.getByRole('main')).toHaveFocus()
 })
 
-test('the footer lists the pages and every credit line, each linked to where its data comes from', async () => {
+test('the footer is small print: every credit line, each linked to where its data comes from, and no list of pages', async () => {
   mockFetch(districtsApi)
   renderApp()
 
   const footer = await screen.findByRole('contentinfo')
-  expect(within(footer).getByText('Poznaj dzielnice, zanim zaczniesz szukać mieszkania.')).toBeInTheDocument()
-  expect(within(footer).getByRole('navigation', { name: 'Nawigacja w stopce' })).toBeInTheDocument()
-  // The footer has no list of districts: only the sources.
+  // The pages are in the menu: the footer has no navigation, no list of pages and no list of districts. Only the sources.
+  expect(within(footer).queryByRole('navigation')).not.toBeInTheDocument()
+  expect(within(footer).queryByRole('link', { name: 'Znajdź dzielnicę' })).not.toBeInTheDocument()
   expect(within(footer).queryByRole('link', { name: 'Gamma' })).not.toBeInTheDocument()
   expect(within(footer).getByRole('heading', { name: 'Źródła danych' })).toBeInTheDocument()
 
