@@ -252,6 +252,7 @@
     "noIdentity": "No identity is asked for today. A report cannot yet be checked, so it is not used.",
     "privacy": "Do not enter your name, address, telephone number or anything that identifies a person or a landlord. Crime reports are not collected here.",
     "choose": "Choose…",
+    "required": "All fields are required.",
     "sending": "Sending…",
     "submit": "Send the report",
     "sent": "The report was sent.",

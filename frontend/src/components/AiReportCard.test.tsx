@@ -44,9 +44,12 @@ test('the button sends the text to the city service with the language and no wei
   write('  TEST quiet and green  ')
 
   expect(section.getByText('Piszemy podsumowanie. To trwa kilka sekund…')).toHaveAttribute('role', 'status')
+  // While the report is written the button is marked as not available, and it keeps the focus.
+  expect(screen.getByRole('button', { name: 'Napisz podsumowanie' })).toHaveAttribute('aria-disabled', 'true')
   // The AI label is the API's text.
   expect(await section.findByText('Test AI label from the API.')).toBeInTheDocument()
   expect(section.getByText('Podsumowanie jest gotowe.')).toHaveAttribute('role', 'status')
+  expect(screen.getByRole('button', { name: 'Napisz podsumowanie' })).not.toHaveAttribute('aria-disabled')
   const requests = reportRequests(fetchMock)
   expect(requests.map((request) => request.url)).toEqual(['http://city.test/v1/ai-report'])
   expect(await requests[0]?.clone().json()).toEqual({ requirements: 'TEST quiet and green', lang: 'pl' })

@@ -53,10 +53,9 @@ Changing the look means changing the values in `tokens.ts`.
 
 ## The map
 
-The map is the centre of the app. It is built from three layers, with no map library and no request to a map server:
+The map is the centre of the app. It is built from two layers, with no map library and no request to a map server:
 
-- **Pixels** (`src/components/PixelLayer.tsx`): the colour of each district as small squares on a canvas, glided to the new colours in a wave when the measure changes. It is only a picture, hidden from assistive technology. With reduced motion the colours change at once.
-- **Districts** (`src/components/DistrictMap.tsx`): the SVG above the pixels. Each district is a button with its value and class in its name, with an exact outline, the hatch for "no data", and the focus ring. This is what carries the meaning.
+- **Districts** (`src/components/DistrictMap.tsx`): an SVG. Each district is a button with its value and class in its name, filled with its step of the colour ramp, with an exact outline, the hatch for "no data", and the focus ring. When the measure changes, the new colours spread from the middle of the city to its edge in about half a second (a CSS transition with a delay per district). With reduced motion the colours change at once. An earlier version drew the colours as small squares on a canvas; it was removed on 4 October because it slowed the page down.
 - **Context**: rivers, lakes, main roads, railways and a few landmarks from OpenStreetMap, thin and see-through over the districts, with the credit under the map. The file is made once by `scripts/build_basemap.py` (see `public/basemap/README.md`) and is not committed, because it is under the ODbL. Without it the map shows the districts alone.
 
 Zoom and move are buttons above the map (never over it, never a drag), so they cannot cover a focused district. `?district=<code>` on the page Districts on the map selects a district and zooms to it. The home page has a search by district name that leads there.

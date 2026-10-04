@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import { buildMap, type Basemap } from '../lib/geo'
-import { PixelLayer } from './PixelLayer'
 
 type Boundaries = components['schemas']['BoundaryCollection']
 
@@ -16,8 +15,6 @@ const PLACE_SIZE = 13
 const MAX_ZOOM = 6
 // From this zoom on, the landmarks are named.
 const LABEL_ZOOM = 2
-// How long the wave of colour takes to cross the map when the measure changes, in milliseconds.
-const WAVE = 650
 
 const reducedMotion = () => typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
 
@@ -127,51 +124,42 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
     }
   }
 
-  // The colours of the districts as small squares, one kind per square. The canvas under the map draws them and glides them to new colours.
-  const pixelKinds = useMemo(
-    () =>
-      map.pixels.cells.map((cell) => {
-        const value = values.get(cell.code)
-        return value ? `c${value.classNumber}` : loading ? 'loading' : 'none'
-      }),
-    [map, values, loading],
-  )
-  const cityPath = useMemo(() => map.shapes.map((shape) => shape.path).join(''), [map])
-
   // Draw the selected district last, so its thick outline is not covered by its neighbours.
   const shapes = [...map.shapes].sort((a, b) => Number(a.code === selected) - Number(b.code === selected))
+
+  const atFull = !view
+  const controls: { text: string; label: string; off: boolean; run: () => void; className?: string }[] = [
+    { text: '+', label: t('districts.map.zoomIn'), off: full.w / asked.w >= MAX_ZOOM - 0.01, run: () => zoomBy(1.6) },
+    { text: '−', label: t('districts.map.zoomOut'), off: atFull, run: () => zoomBy(1 / 1.6) },
+    { text: '←', label: t('districts.map.panLeft'), off: atFull, run: () => pan(-0.3, 0) },
+    { text: '→', label: t('districts.map.panRight'), off: atFull, run: () => pan(0.3, 0) },
+    { text: '↑', label: t('districts.map.panUp'), off: atFull, run: () => pan(0, -0.3) },
+    { text: '↓', label: t('districts.map.panDown'), off: atFull, run: () => pan(0, 0.3) },
+    { text: t('districts.map.reset'), label: t('districts.map.reset'), off: atFull, run: () => show(null, t('districts.map.wholeCity')), className: 'map-controls__reset' },
+  ]
 
   return (
     <div className="district-map-frame">
       {/* Zoom and pan are buttons, so nothing needs a drag or a pinch (WCAG 2.5.7). They come first in the tab order. */}
       <div className="map-controls" role="group" aria-label={t('districts.map.controls')}>
-        <button type="button" onClick={() => zoomBy(1.6)} disabled={full.w / asked.w >= MAX_ZOOM - 0.01} aria-label={t('districts.map.zoomIn')}>
-          +
-        </button>
-        <button type="button" onClick={() => zoomBy(1 / 1.6)} disabled={!view} aria-label={t('districts.map.zoomOut')}>
-          −
-        </button>
-        <button type="button" onClick={() => pan(-0.3, 0)} disabled={!view} aria-label={t('districts.map.panLeft')}>
-          ←
-        </button>
-        <button type="button" onClick={() => pan(0.3, 0)} disabled={!view} aria-label={t('districts.map.panRight')}>
-          →
-        </button>
-        <button type="button" onClick={() => pan(0, -0.3)} disabled={!view} aria-label={t('districts.map.panUp')}>
-          ↑
-        </button>
-        <button type="button" onClick={() => pan(0, 0.3)} disabled={!view} aria-label={t('districts.map.panDown')}>
-          ↓
-        </button>
-        <button type="button" className="map-controls__reset" onClick={() => show(null, t('districts.map.wholeCity'))} disabled={!view}>
-          {t('districts.map.reset')}
-        </button>
+        {controls.map((control) => (
+          // At a limit the button is aria-disabled, not disabled: a disabled button would drop the keyboard focus.
+          <button
+            key={control.label}
+            type="button"
+            className={control.className}
+            aria-label={control.text === control.label ? undefined : control.label}
+            aria-disabled={control.off || undefined}
+            onClick={control.off ? undefined : control.run}
+          >
+            {control.text}
+          </button>
+        ))}
       </div>
       <p className="visually-hidden" role="status">
         {note}
       </p>
       <div className="district-map-stack">
-        <PixelLayer size={map.pixels.size} cells={map.pixels.cells} kinds={pixelKinds} view={current} cityPath={cityPath} wave={WAVE} />
         <svg
           className={`district-map${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}`}
           viewBox={`${current.x} ${current.y} ${current.w} ${current.h}`}
@@ -200,6 +188,8 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
                 aria-label={name}
                 aria-pressed={shape.code === selected}
                 className={`map-district map-district--${value ? `c${value.classNumber}` : loading ? 'loading' : 'none'}`}
+                // The district's place in the wave: when the measure changes, the colour reaches the middle of the map first.
+                style={{ '--wave': shape.wave } as CSSProperties}
                 onClick={() => onSelect(shape.code)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {

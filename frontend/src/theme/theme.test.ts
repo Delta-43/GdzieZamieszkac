@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { contrastRatio } from './contrast'
 import { themeCss } from './index'
-import { colors, CONTRAST_PAIRS, MAP_RAMP, TEXT_MIN, UI_MIN } from './tokens'
+import { colors, CONTRAST_PAIRS, MAP_RAMP, scale, TEXT_MIN, UI_MIN } from './tokens'
 
 test('the contrast formula matches the known WCAG values', () => {
   expect(contrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 5)
@@ -48,6 +48,20 @@ test('the theme stylesheet defines a custom property for every colour', () => {
   expect(css).toContain('--font-body:')
   expect(css).toContain('--font-ui:')
   expect(css).toContain('prefers-reduced-motion')
+})
+
+test('with reduced motion every duration token is zero, and the stylesheet writes no duration of its own', () => {
+  const reduced = themeCss().split('prefers-reduced-motion')[1] ?? ''
+  const durations = Object.keys(scale).filter((name) => name.startsWith('duration-'))
+  expect(durations.length).toBeGreaterThan(0)
+  for (const name of durations) expect(reduced).toContain(`--${name}: 0ms;`)
+  // A duration typed into the stylesheet would keep moving for a person who asked for less motion.
+  const styles = import.meta.glob('/src/styles.css', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+  const typed = Object.values(styles)
+    .join('\n')
+    .split('\n')
+    .filter((line) => /transition|animation/.test(line) && /\b\d+m?s\b/.test(line) && !/\b0s\b/.test(line.replace(/var\([^)]*\)/g, '')))
+  expect(typed).toEqual([])
 })
 
 test('no colour is written outside the theme folder', () => {

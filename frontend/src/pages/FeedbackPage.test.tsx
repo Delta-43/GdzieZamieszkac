@@ -38,6 +38,15 @@ async function ready() {
   await within(problemForm()).findByRole('option', { name: 'Test sale label' })
 }
 
+test('both forms say that every field is required, in text and to assistive technology', async () => {
+  withService()
+  renderApp('/feedback')
+  await ready()
+
+  expect(screen.getAllByText('Wszystkie pola są wymagane.')).toHaveLength(2)
+  for (const control of [...screen.getAllByRole('combobox'), ...screen.getAllByRole('textbox')]) expect(control).toBeRequired()
+})
+
 test('the note of the service is shown first, and nothing can be sent until it has loaded', async () => {
   // The status never answers, so the page stays in its first state.
   const fetchMock = mockFetch((request) => districtsApi(request))

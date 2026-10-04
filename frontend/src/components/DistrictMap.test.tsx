@@ -47,9 +47,26 @@ test('the zoom buttons come before the map, name what they do, and are limited a
   expect(controls.compareDocumentPosition(svg()) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   // At the whole-city view there is nothing to zoom out to or to move.
   for (const name of ['Oddal', 'Przesuń mapę w lewo', 'Przesuń mapę w prawo', 'Przesuń mapę w górę', 'Przesuń mapę w dół', 'Całe miasto']) {
-    expect(within(controls).getByRole('button', { name })).toBeDisabled()
+    expect(within(controls).getByRole('button', { name })).toHaveAttribute('aria-disabled', 'true')
   }
-  expect(within(controls).getByRole('button', { name: 'Przybliż' })).toBeEnabled()
+  expect(within(controls).getByRole('button', { name: 'Przybliż' })).not.toHaveAttribute('aria-disabled')
+})
+
+test('a control that reaches its limit keeps the keyboard focus', async () => {
+  serve()
+  renderApp('/districts')
+  const controls = await screen.findByRole('group', { name: 'Przybliżanie i przesuwanie mapy' })
+  fireEvent.click(within(controls).getByRole('button', { name: 'Przybliż' }))
+  const out = within(controls).getByRole('button', { name: 'Oddal' })
+  await waitFor(() => expect(out).not.toHaveAttribute('aria-disabled'))
+
+  out.focus()
+  fireEvent.click(out)
+
+  // Back at the whole city there is nothing to zoom out to. The button says so and is still the focused element.
+  await waitFor(() => expect(out).toHaveAttribute('aria-disabled', 'true'))
+  expect(out).toHaveFocus()
+  expect(out).not.toBeDisabled()
 })
 
 test('zooming in narrows the view, moving shifts it, and "whole city" brings it back, with each step said politely', async () => {
@@ -63,7 +80,7 @@ test('zooming in narrows the view, moving shifts it, and "whole city" brings it 
   await waitFor(() => expect(width(viewBox())).toBeLessThan(width(whole) * 0.7))
   expect(await screen.findByText(/Powiększenie 1,6 razy|Powiększenie 1.6 razy/)).toBeInTheDocument()
   const zoomed = viewBox()
-  expect(within(controls).getByRole('button', { name: 'Przesuń mapę w prawo' })).toBeEnabled()
+  expect(within(controls).getByRole('button', { name: 'Przesuń mapę w prawo' })).not.toHaveAttribute('aria-disabled')
 
   fireEvent.click(within(controls).getByRole('button', { name: 'Przesuń mapę w prawo' }))
   await waitFor(() => expect(viewBox()).not.toBe(zoomed))

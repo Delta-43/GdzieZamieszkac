@@ -12,6 +12,8 @@ export type Shape = {
   label: { x: number; y: number }
   /** The extent of the district in the drawing, to zoom to it. */
   box: { x0: number; y0: number; x1: number; y1: number }
+  /** How far the district is from the middle of the map, 0 to 1: its place in the wave of colour when the measure changes. */
+  wave: number
 }
 
 /** The context layers of the map, as the app's own file gives them: lines and rings of [lon, lat]. */
@@ -36,13 +38,8 @@ export type MapContext = {
   attribution: string
 }
 
-/** One square of the pixel layer: its place, the district it belongs to, and how far it is from the middle of the map (0 to 1), for the wave. */
-export type Pixel = { x: number; y: number; code: string; distance: number }
+export type MapGeometry = { width: number; height: number; shapes: Shape[]; context: MapContext | null }
 
-export type MapGeometry = { width: number; height: number; shapes: Shape[]; context: MapContext | null; pixels: { size: number; cells: Pixel[] } }
-
-// The pixel layer: squares of this many units (the drawing is 1000 units wide).
-const PIXEL = 10
 
 const WIDTH = 1000
 
@@ -116,64 +113,6 @@ function labelPoint(ring: Ring): Position {
 
 const round = (value: number) => Math.round(value * 10) / 10
 
-/** The stretches of a horizontal line at height `y` that lie inside the rings of one district (even-odd rule). */
-function rowStretches(rings: Position[][], y: number): [number, number][] {
-  const crossings: number[] = []
-  for (const ring of rings) {
-    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
-      const [xi, yi] = ring[i] as Position
-      const [xj, yj] = ring[j] as Position
-      if (yi > y !== yj > y) crossings.push(xi + ((y - yi) / (yj - yi)) * (xj - xi))
-    }
-  }
-  crossings.sort((a, b) => a - b)
-  const stretches: [number, number][] = []
-  for (let i = 0; i + 1 < crossings.length; i += 2) stretches.push([crossings[i] as number, crossings[i + 1] as number])
-  return stretches
-}
-
-// Each square is looked at in a grid of SAMPLES by SAMPLES points, and belongs to the district that holds most of them.
-const SAMPLES = 3
-
-/**
- * The squares that make up the districts. A square takes the district that covers most of it, so the staircase of squares follows the
- * true border as closely as a grid can. The border itself is drawn exactly, over the squares. Done row by row, so it takes a few milliseconds.
- */
-function pixelCells(districts: { code: string; rings: Position[][] }[], width: number, height: number): Pixel[] {
-  const cells: Pixel[] = []
-  const [cx, cy] = [width / 2, height / 2]
-  const reach = Math.hypot(cx, cy) || 1
-  const columns = Math.ceil(width / PIXEL)
-  for (let y = 0; y < height; y += PIXEL) {
-    // For each of the sample rows of this row of squares: where every district lies.
-    const rows = Array.from({ length: SAMPLES }, (_, k) => {
-      const py = y + ((k + 0.5) / SAMPLES) * PIXEL
-      return districts.map((district) => ({ code: district.code, stretches: rowStretches(district.rings, py) }))
-    })
-    for (let column = 0; column < columns; column += 1) {
-      const x = column * PIXEL
-      const votes = new Map<string, number>()
-      for (const row of rows) {
-        for (let k = 0; k < SAMPLES; k += 1) {
-          const px = x + ((k + 0.5) / SAMPLES) * PIXEL
-          const hit = row.find((entry) => entry.stretches.some(([from, to]) => px >= from && px <= to))
-          if (hit) votes.set(hit.code, (votes.get(hit.code) ?? 0) + 1)
-        }
-      }
-      let code: string | undefined
-      let most = 0
-      votes.forEach((count, candidate) => {
-        if (count > most) {
-          most = count
-          code = candidate
-        }
-      })
-      if (code) cells.push({ x, y, code, distance: Math.min(1, Math.hypot(x + PIXEL / 2 - cx, y + PIXEL / 2 - cy) / reach) })
-    }
-  }
-  return cells
-}
-
 /**
  * Projects longitude and latitude onto a flat drawing. At the size of one city a simple projection is enough:
  * longitude is shrunk by the cosine of the city's latitude, so the shapes are not stretched sideways.
@@ -181,7 +120,7 @@ function pixelCells(districts: { code: string; rings: Position[][] }[], width: n
 export function buildMap(features: { geometry: unknown; properties: { code: string; name: string } }[], basemap: Basemap | null = null): MapGeometry {
   const districts = features.map((feature) => ({ ...feature.properties, rings: ringsOf(feature.geometry) })).filter((d) => d.rings.length > 0)
   const all = districts.flatMap((d) => d.rings.flat())
-  if (all.length === 0) return { width: WIDTH, height: WIDTH, shapes: [], context: null, pixels: { size: PIXEL, cells: [] } }
+  if (all.length === 0) return { width: WIDTH, height: WIDTH, shapes: [], context: null }
 
   const lons = all.map(([lon]) => lon)
   const lats = all.map(([, lat]) => lat)
@@ -190,10 +129,11 @@ export function buildMap(features: { geometry: unknown; properties: { code: stri
   const scale = WIDTH / ((maxLon - minLon) * squeeze || 1)
   const project = ([lon, lat]: Position): Position => [(lon - minLon) * squeeze * scale, (maxLat - lat) * scale]
 
-  const projected: { code: string; rings: Position[][] }[] = []
+  const height = Math.ceil((maxLat - minLat) * scale)
+  const [cx, cy] = [WIDTH / 2, height / 2]
+  const reach = Math.hypot(cx, cy) || 1
   const shapes = districts.map((district) => {
     const rings = district.rings.map((ring) => ring.map(project))
-    projected.push({ code: district.code, rings })
     const largest = rings.reduce((a, b) => (Math.abs(area(b)) > Math.abs(area(a)) ? b : a))
     const [x, y] = labelPoint(largest)
     const path = rings.map((ring) => `M${ring.map(([px, py]) => `${round(px)} ${round(py)}`).join('L')}Z`).join('')
@@ -201,7 +141,8 @@ export function buildMap(features: { geometry: unknown; properties: { code: stri
     const xs = flat.map(([px]) => px)
     const ys = flat.map(([, py]) => py)
     const box = { x0: round(Math.min(...xs)), y0: round(Math.min(...ys)), x1: round(Math.max(...xs)), y1: round(Math.max(...ys)) }
-    return { code: district.code, name: district.name, path, label: { x: round(x), y: round(y) }, box }
+    const wave = Math.round(Math.min(1, Math.hypot(x - cx, y - cy) / reach) * 100) / 100
+    return { code: district.code, name: district.name, path, label: { x: round(x), y: round(y) }, box, wave }
   })
 
   const lines = (list: Position[][]) => list.map((line) => `M${line.map((point) => project(point)).map(([x, y]) => `${round(x)} ${round(y)}`).join('L')}`).join('')
@@ -218,8 +159,7 @@ export function buildMap(features: { geometry: unknown; properties: { code: stri
     attribution: basemap.attribution,
   }
 
-  const height = Math.ceil((maxLat - minLat) * scale)
-  return { width: WIDTH, height, shapes, context, pixels: { size: PIXEL, cells: pixelCells(projected, WIDTH, height) } }
+  return { width: WIDTH, height, shapes, context }
 }
 
 function isLine(value: unknown): value is Position[] {

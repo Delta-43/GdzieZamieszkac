@@ -17,16 +17,13 @@ const square = (code: string, x: number, y: number) => ({
   properties: { code, name: code.toUpperCase() },
 })
 
-test('the pixels cover each district with squares that belong to it, and none outside the districts', () => {
-  const map = buildMap([square('a', 20, 50), square('b', 20.011, 50)])
-  const codes = new Set(map.pixels.cells.map((cell) => cell.code))
-  expect([...codes].sort()).toEqual(['a', 'b'])
-  expect(map.pixels.cells.length).toBeGreaterThan(50)
-  // The squares on the left half belong to a, those on the right half to b (the gap between the districts holds none).
-  const a = map.pixels.cells.filter((cell) => cell.code === 'a')
-  const b = map.pixels.cells.filter((cell) => cell.code === 'b')
-  expect(Math.max(...a.map((cell) => cell.x))).toBeLessThan(Math.min(...b.map((cell) => cell.x)) + map.pixels.size)
-  expect(map.pixels.cells.every((cell) => cell.distance >= 0 && cell.distance <= 1)).toBe(true)
+test('every shape knows how far it is from the middle of the map, for the wave of colour', () => {
+  const map = buildMap([square('a', 20, 50), square('b', 20.011, 50), square('c', 20.022, 50)])
+  const wave = Object.fromEntries(map.shapes.map((shape) => [shape.code, shape.wave]))
+  // The middle district changes first, its two neighbours after it, and every place is between 0 and 1.
+  expect(wave.b).toBeLessThan(wave.a as number)
+  expect(wave.b).toBeLessThan(wave.c as number)
+  expect(map.shapes.every((shape) => shape.wave >= 0 && shape.wave <= 1)).toBe(true)
 })
 
 test('every shape knows its extent, for zooming to it', () => {
