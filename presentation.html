@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#fbf5e9">
-<title>GdzieZamieszkać Kraków Pitch</title>
+<title>GdzieZamieszkać Pitch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Reddit+Sans+Condensed:wght@700;800&display=swap">
@@ -157,6 +157,10 @@
   .seg h3 { margin-bottom: var(--s1); }
   .seg ul { margin: 0; padding-left: 1.1em; }
 
+  /* competition list */
+  .cmp li { padding: var(--s2) var(--s3); border: 1px solid var(--line); border-radius: 12px; background: var(--paper); font-size: var(--t-body); }
+  .cmp li b { margin-right: var(--s1); }
+
   /* lists */
   .list { list-style: none; padding: 0; display: grid; gap: var(--s4); }
 
@@ -186,7 +190,7 @@
   .overview-close { position: fixed; top: var(--s3); right: var(--s3); padding: var(--s2) var(--s3); border-radius: 999px; }
 
   @media (max-width: 900px) {
-    .g2, .g3, .g4, .flow, .anatomy, .split, .funnel, .refs { grid-template-columns: 1fr; }
+    .g2, .g3, .g4, .flow, .anatomy, .split, .funnel, .refs { grid-template-columns: 1fr !important; }
     .sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .arrow { transform: rotate(90deg); }
     .callout.l::after, .callout.r::after { display: none; }
@@ -239,294 +243,188 @@
 
 <main class="deck" id="deck" aria-label="GdzieZamieszkać pitch, HackYeah 2026">
 
-  <!-- 1 -->
-  <section class="slide dark title-slide active" data-title="GdzieZamieszkać">
+  <!-- 1 · Problem -->
+  <section class="slide dark title-slide active" data-title="The problem">
     <div class="inner">
-      <p class="eyebrow">HackYeah 2026 · Open task: Smart City</p>
-      <h1>Find where<br>life fits.</h1>
-      <p class="lead">Kraków's 18 districts, compared on public data.</p>
-    </div>
-    <aside class="notes">GdzieZamieszkać means "where to live". We help people choose a district of Kraków before they start looking for a flat, and we built it as a public service the city can host.</aside>
-  </section>
-
-  <!-- 2 -->
-  <section class="slide" data-title="The problem">
-    <div class="inner">
-      <h2>The answer is spread across eight sources.</h2>
-      <div class="funnel">
-        <div class="sources" role="img" aria-label="Eight separate public sources with different dates: timetables 2026, air stations 2026, OpenStreetMap 2026, satellite land cover 2018 and 2024, noise map 2022, residents register 2025, road accidents 2024, price register 2026.">
-          <div class="src"><b>Timetables</b><span>2026</span></div>
-          <div class="src"><b>Air stations</b><span>2026</span></div>
-          <div class="src"><b>OpenStreetMap</b><span>2026</span></div>
-          <div class="src"><b>Satellite land cover</b><span>2018 · 2024</span></div>
-          <div class="src"><b>Noise map</b><span>2022</span></div>
-          <div class="src"><b>Residents register</b><span>2025</span></div>
-          <div class="src"><b>Road accidents</b><span>2024</span></div>
-          <div class="src"><b>Price register</b><span>2026</span></div>
-        </div>
-        <div class="arrow" data-step="1" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="target" data-step="1">One page<br>per district</div>
-      </div>
-    </div>
-    <aside class="notes">Choosing a flat is easy to research. Choosing the district around it is not. Transport, air, noise, green space, road accidents and prices are published by different institutions, in different formats, with different dates. Listing sites show offers, not what a district is like. <span class="cue">(Click) </span>We bring all of it into one page per district. <span class="presenter">Add one real statistic here, with its source, on how many people move to or within Kraków.</span></aside>
-  </section>
-
-  <!-- 3 -->
-  <section class="slide sand" data-title="What we built">
-    <div class="inner">
-      <h2>One place to compare districts.</h2>
+      <p class="eyebrow">GdzieZamieszkać · HackYeah 2026 · Smart City</p>
+      <h1 style="font-size: clamp(2.6rem, 6vw, 4.6rem)">Flat first.<br>District second.</h1>
+      <p class="lead">A family moving to Kraków picks a flat first, and only then asks what the district around it is like.</p>
       <div class="grid g3">
-        <div class="num-item" data-step="1" data-dim><span class="num tnum">18</span><p>districts</p></div>
-        <div class="num-item" data-step="2" data-dim><span class="num tnum">45</span><p>metrics with data</p></div>
-        <div class="num-item" data-step="3"><span class="num">0</span><p>logins, ads or listings</p></div>
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">Choose</span><h3>A flat on a listing site</h3></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">Missing</span><h3>Noise, air, schools, commute: eight sources, eight formats</h3></div>
+        <div class="tile" data-step="3"><span class="eyebrow">Result</span><h3>No trusted, simple way to compare districts</h3></div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>All 18 districts of Kraków. <span class="cue">(Click) </span>45 metrics with data, in seven categories: transport, demographics, amenities, environment, livability, cost and safety. <span class="cue">(Click) </span>It is free, needs no login, and is not a listings site. It shows data about districts, never offers.</aside>
+    <aside class="notes">Picture a couple with two children who move to Kraków for work. They open a listing site and choose a flat, and only then ask what the district around it is like. <span class="cue">(Click) </span>Listing sites show offers, not districts. <span class="cue">(Click) </span>The answers exist, but they sit in different public sources: timetables, air stations, the noise map, the residents register, road accidents and the price register, each with its own date and format. <span class="cue">(Click) </span>So people choose a flat before a district, and have no trusted, simple source to compare districts. <span class="presenter">Optional: add one real statistic with its source on how many people move to or within Kraków.</span></aside>
   </section>
 
-  <!-- 4 -->
-  <section class="slide" data-title="Who it is for">
+  <!-- 2 · Idea and audience -->
+  <section class="slide sand" data-title="Idea and audience">
     <div class="inner">
-      <h2>For people choosing where to live.</h2>
+      <h2>Choose the district before you look at flats.</h2>
+      <div class="grid g2">
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">It is</span><h3>A comparison of Kraków's 18 districts on public data</h3></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">It is not</span><h3>No listings, no brokers, no links to offers</h3></div>
+      </div>
       <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Families<small>schools, nurseries, parks</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Students and newcomers<small>night transport, rents</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#person-simple-walk-fill"/></svg></span><span>Seniors<small>clinics, quiet, walkability</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>Buyers<small>price history, rent versus buy</small></span></div>
+        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Residents and newcomers<small>singles, couples, families, seniors, students</small></span></div>
+        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>The city<small>as host and owner of official content</small></span></div>
       </div>
     </div>
-    <aside class="notes">Our users are not data experts. <span class="cue">(Click) </span>A family looks at schools, nurseries and parks. <span class="cue">(Click) </span>A student or newcomer looks at night transport and rents. <span class="cue">(Click) </span>A senior looks at clinics, quiet streets and walkability. <span class="cue">(Click) </span>A buyer looks at price history and a rent-versus-buy estimate. Five persona presets exist today. The app is built for a phone first, for screen readers and keyboards, to WCAG 2.2 level AA, in Polish with an English toggle.</aside>
+    <aside class="notes"><span class="cue">(Click) </span>GdzieZamieszkać helps you choose a district before you look at flats. <span class="cue">(Click) </span>It has no listings, no brokers and no links to offers, so nobody should mistake it for another property portal. <span class="cue">(Click) </span>It serves residents and newcomers: single people, couples, families with children, seniors and students. <span class="cue">(Click) </span>And it serves a second beneficiary, the city. People get a tool, and the city gets a public service.</aside>
   </section>
 
-  <!-- 5 -->
-  <section class="slide sand" data-title="How it works">
+  <!-- 3 · City-hosted service -->
+  <section class="slide dark" data-title="City-hosted service">
     <div class="inner">
-      <h2>Four steps to a shortlist.</h2>
-      <div class="flow">
-        <div class="tile" data-step="1" data-dim><span class="eyebrow">1 · Explore</span><h3>Colour the map</h3></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="2" data-dim><span class="eyebrow">2 · Inspect</span><h3>Open a district</h3></div>
-        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3" data-dim><span class="eyebrow">3 · Compare</span><h3>Two to four, side by side</h3></div>
-        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="4"><span class="eyebrow">4 · Find</span><h3>Rank by your weights</h3></div>
-      </div>
-    </div>
-    <aside class="notes"><span class="cue">(Click) </span>You colour the map of the 18 districts by any metric, with a full table beside it. <span class="cue">(Click) </span>You open a district and see every metric with its source, rank and caveat, plus price history, commute times and rent versus buy. <span class="cue">(Click) </span>You compare two to four districts side by side, including what is missing. <span class="cue">(Click) </span>You pick a persona or set six category weights from 0 to 5, and get a ranking that names the metrics behind it.</aside>
-  </section>
-
-  <!-- 6 -->
-  <section class="slide" data-title="Every number has a trail">
-    <div class="inner">
-      <h2>Every number carries its trail.</h2>
-      <div class="anatomy" role="img" aria-label="The stored value 74.5 PLN per square metre, median asking rent in Stare Miasto, with four labels: source Otodom and OLX, date 30 September 2026, kind observed, caveat asking rents not signed leases.">
-        <div class="col">
-          <div class="callout l" data-step="1" data-dim><span class="eyebrow">Source</span><b>Otodom + OLX</b></div>
-          <div class="callout l" data-step="2" data-dim><span class="eyebrow">Date</span><b>30 Sep 2026</b></div>
-        </div>
-        <div class="value-card"><div class="v tnum">74.5</div><p>PLN/m² · median asking rent<br>Stare Miasto</p></div>
-        <div class="col">
-          <div class="callout r" data-step="3" data-dim><span class="eyebrow">Kind</span><b><span class="chip">observed</span></b></div>
-          <div class="callout r" data-step="4"><span class="eyebrow">Caveat</span><b><span class="hl">Asking rents, not signed leases</span></b></div>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">This is a real stored value: the median asking rent in Stare Miasto, 74.5 złoty per square metre, the highest of the 18 districts. <span class="cue">(Click) </span>It names its source, Otodom and OLX listings pooled. <span class="cue">(Click) </span>Its date, one snapshot on 30 September 2026. <span class="cue">(Click) </span>Its kind: observed. <span class="cue">(Click) </span>And its caveat: these are asking rents, not signed leases. Every value the portal shows carries the same trail, plus its licence and method.</aside>
-  </section>
-
-  <!-- 7 -->
-  <section class="slide sand" data-title="Three kinds of data">
-    <div class="inner">
-      <h2>Three kinds of data, always labelled.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="chip">Observed</span><span>Measured or officially reported<small>sale prices from the national register</small></span></li>
-        <li class="big-item" data-step="2" data-dim><span class="chip est">Estimated</span><span>Calculated from real inputs<small>air quality between monitoring stations</small></span></li>
-        <li class="big-item" data-step="3"><span class="chip proxy">Proxy</span><span>An indirect indicator<small>night noise from bars and clubs</small></span></li>
-      </ul>
-    </div>
-    <aside class="notes">We never invent a number, but not every number is a direct measurement. <span class="cue">(Click) </span>Observed values are measured or officially reported, such as sale prices from the national register. <span class="cue">(Click) </span>Estimated values are calculated from real inputs, such as air quality interpolated between monitoring stations. <span class="cue">(Click) </span>Proxies are indirect indicators, such as night noise inferred from bars and clubs per square kilometre. The label always travels with the value.</aside>
-  </section>
-
-  <!-- 8 -->
-  <section class="slide gaps-print" data-title="Coverage and gaps">
-    <div class="inner">
-      <h2>45 of 51 metrics have data. Gaps say why.</h2>
-      <div class="units-chart" role="img" aria-label="Metrics with data per category in Kraków: transport 7 of 8, demographics 5 of 6, amenities 9 of 10, environment 7 of 7, livability 7 of 7, cost 5 of 5, safety 5 of 8.">
-        <div class="u-row"><span class="name">Transport</span><span class="units" data-have="7" data-miss="1"></span><span class="reason" data-step="1">no rail stops in the feeds</span></div>
-        <div class="u-row"><span class="name">Demographics<small>shown, not scored</small></span><span class="units" data-have="5" data-miss="1"></span><span class="reason" data-step="1">registrations, not a population count</span></div>
-        <div class="u-row"><span class="name">Amenities</span><span class="units" data-have="9" data-miss="1"></span><span class="reason" data-step="1">no sports-ground source</span></div>
-        <div class="u-row"><span class="name">Environment</span><span class="units" data-have="7" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Livability</span><span class="units" data-have="7" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Cost</span><span class="units" data-have="5" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Safety</span><span class="units" data-have="5" data-miss="3"></span><span class="reason" data-step="1"><span class="hl">no recorded crime data</span></span></div>
-      </div>
-      <p class="legend" aria-hidden="true"><span><i></i>metric with data</span><span><i class="miss"></i>no data, reason shown</span></p>
-    </div>
-    <aside class="notes">Each square is one metric in our catalogue. Kraków has data for 45 of 51. <span class="cue">(Click) </span>The six gaps are not zeros. Each one shows its reason. The biggest: Kraków has no recorded crime data by district, so safety uses road accidents and proxies. We report road accident indicators and make no safety verdict. The data was audited on 30 September with zero errors and zero warnings.</aside>
-  </section>
-
-  <!-- 9 -->
-  <section class="slide dark" data-title="Score and report">
-    <div class="inner">
-      <h2>Code computes the score. AI only tells the story.</h2>
-      <div class="split">
-        <div class="panel" data-step="1" data-dim><span class="eyebrow">Code · tested</span><span class="num tnum">40.9</span><p>Stare Miasto, out of 100. 16th of 18.</p></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="panel" data-step="2" data-dim><span class="eyebrow">AI-written report · stored</span><blockquote>“Stare Miasto scores <span class="hl">40.9</span> out of 100, placing it <span class="hl">16th</span> among Kraków's 18 districts.”</blockquote></div>
-      </div>
-      <p class="guard" data-step="3"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg>A report with any number not in the facts is rejected.</p>
-    </div>
-    <aside class="notes"><span class="cue">(Click) </span>The score is computed in code: percentile ranks within Kraków, from 0 to 100, each category counting equally, or with your own weights. It is tested. <span class="cue">(Click) </span>A language model only narrates the facts, in Polish and in English, 36 reports in total. They are written ahead of time, stored, and labelled as AI-written in the app. <span class="cue">(Click) </span>A guard rejects any report that contains a number that is not in the facts.</aside>
-  </section>
-
-  <!-- 10 -->
-  <section class="slide" data-title="No forecasts">
-    <div class="inner">
-      <h2>We show price history, not forecasts.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#flask-fill"/></svg></span><span>We tested two forecasting methods</span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#warning-circle-fill"/></svg></span><span>Neither beat the naive baseline</span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span><span class="hl">So we publish history and the backtest</span></span></li>
-      </ul>
-    </div>
-    <aside class="notes">People want to know where prices are going. <span class="cue">(Click) </span>We tested two forecasting methods. <span class="cue">(Click) </span>Neither beat the naive baseline. <span class="cue">(Click) </span>So the portal shows quarterly sale price history since 2021, momentum, the city's past range and the backtest, and never a predicted number.</aside>
-  </section>
-
-  <!-- 11 -->
-  <section class="slide dark" data-title="What the city gets">
-    <div class="inner">
-      <h2>A public service Kraków can host.</h2>
+      <h2>A public service a city can host.</h2>
       <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Ready to host<small>free, no login, Docker image</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg></span><span>Private by design<small>read-only, stores nothing</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span>Accessible<small>WCAG 2.2 level AA</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#map-trifold-fill"/></svg></span><span>A map of data gaps<small>what to publish next</small></span></div>
+        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span>Free, no login<small>the free tier is open to everyone</small></span></div>
+        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>The city is the natural owner<small>it holds official records</small></span></div>
+        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>It can publish notices<small>concept, after city approval</small></span></div>
+        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>It can collect verified feedback<small>later, once identity checks exist</small></span></div>
       </div>
     </div>
-    <aside class="notes">What does the city get? <span class="cue">(Click) </span>A free portal it can run on its own servers, built on its own open data and national registers. The backend ships as a Docker image. <span class="cue">(Click) </span>It is read-only and stores nothing about its users: no accounts, cookies, analytics or third-party requests. <span class="cue">(Click) </span>It is built to WCAG 2.2 level AA, as Polish law requires of public bodies, with a draft accessibility statement for the city to complete. <span class="cue">(Click) </span>And every gap says why, which tells the city which datasets to publish next, such as crime figures by district.</aside>
+    <aside class="notes">This is our main difference from commercial products. <span class="cue">(Click) </span>The free tier needs no login. <span class="cue">(Click) </span>A city is the natural owner, because it holds the official records. <span class="cue">(Click) </span>It can publish official notices of planned projects. That is a concept, and we do not demo it. <span class="cue">(Click) </span>And later it can collect verified feedback from residents. This is the Smart City story: open data and a public service, run by the public body.</aside>
   </section>
 
-  <!-- 12 -->
-  <section class="slide sand" data-title="Next, with the city">
+  <!-- 4 · Score and recommender -->
+  <section class="slide" data-title="Score and recommender">
     <div class="inner">
-      <p><span class="chip plan">Planned · not in the demo</span></p>
-      <h2>Next, built with the city.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Official notices<small>planned projects, dated and sourced</small></span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Residents' feedback<small>identity via Profil Zaufany</small></span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Anonymous demand counts<small>for housing and transport planning</small></span></li>
-      </ul>
-    </div>
-    <aside class="notes">These are planned, not in the demo. Each needs an API change and a new service first. <span class="cue">(Click) </span>The city publishes official notices of planned projects and infrastructure, dated and sourced, never as price forecasts. <span class="cue">(Click) </span>Residents report the rent they pay or a data error, with identity checked through the national login. <span class="cue">(Click) </span>Anonymous, aggregate counts of what people look for help the city plan housing and transport.</aside>
-  </section>
-
-  <!-- 13 -->
-  <section class="slide" data-title="Market gap">
-    <div class="inner">
-      <h2>Others cover part of the picture.</h2>
-      <ul class="list" style="gap: var(--s3)">
-        <li class="big-item" data-step="1" data-dim><span style="min-width:11rem">Mistopolia</span><small>compares cities, not districts</small></li>
-        <li class="big-item" data-step="2" data-dim><span style="min-width:11rem">PolandRent</span><small>rents, not livability</small></li>
-        <li class="big-item" data-step="3" data-dim><span style="min-width:11rem">AreaVibes, Niche</span><small>scores, no Polish data</small></li>
-        <li class="big-item" data-step="4"><span style="min-width:11rem" class="hl">GdzieZamieszkać</span><small>districts, full picture, every source shown</small></li>
-      </ul>
-    </div>
-    <aside class="notes">This is a preliminary scan, not an exhaustive one. <span class="cue">(Click) </span>Mistopolia compares Polish cities. <span class="cue">(Click) </span>PolandRent tracks district rents. <span class="cue">(Click) </span>AreaVibes and Niche have composite scores, but not Polish data. Otodom Analytics and Strado cover the market and walkability. <span class="cue">(Click) </span>Our gap is the combination: district level, livability beyond price, visible sources, and a public service rather than a lead-selling portal.</aside>
-  </section>
-
-  <!-- 14 -->
-  <section class="slide sand" data-title="What was built when">
-    <div class="inner">
-      <h2>What we brought, and what we built here.</h2>
-      <div class="timeline" role="img" aria-label="Timeline. Before the event, 29 September to 2 October 2026: data, database and backend API. On site, 3 and 4 October 2026: frontend and documents.">
-        <span class="day">29 Sep</span><span class="day">30 Sep</span><span class="day">1 Oct</span><span class="day">2 Oct</span><span class="day">3 Oct</span><span class="day">4 Oct</span>
-        <div class="seg before" data-step="1" data-dim><h3>Before the event</h3><ul><li>Data and database</li><li>Backend API, 153 tests</li></ul></div>
-        <div class="seg onsite" data-step="2"><h3>At HackYeah</h3><ul><li>Frontend</li><li>Documents, changelog</li></ul></div>
-      </div>
-    </div>
-    <aside class="notes">HackYeah asks teams to separate earlier work from on-site work. <span class="cue">(Click) </span>Before the event, from 29 September to 2 October, we collected the data, built the database and the read-only backend API: 16 operations under an OpenAPI contract, with 153 offline tests. <span class="cue">(Click) </span>Here at HackYeah we are building the frontend and wrote the project documents. The repository's first commit is the import of the earlier work, and every change to it is logged in the on-site changelog. <span class="presenter">Update this slide to what is finished before you present.</span></aside>
-  </section>
-
-  <!-- 15 -->
-  <section class="slide" data-title="How we use AI">
-    <div class="inner">
-      <h2>How we use AI.</h2>
-      <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Score: <span class="hl">no AI</span><small>computed in code, tested</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg></span><span>Reports<small>z-ai/glm-5.3-flash</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Translation<small>deepseek/deepseek-v4.1-flash</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Development<small>Claude Code, reviewed by us</small></span></div>
-      </div>
-    </div>
-    <aside class="notes">We disclose all significant AI use. <span class="cue">(Click) </span>The score is not AI: it is computed in code and tested. <span class="cue">(Click) </span>District reports are written ahead of time by z-ai/glm-5.3-flash through OpenRouter, from a list of facts. <span class="cue">(Click) </span>Stored notes are translated by deepseek/deepseek-v4.1-flash through OpenRouter, after a glossary and with a number check. Nothing is translated at request time. <span class="cue">(Click) </span>We used Claude Code to help write and review code and documents. We reviewed all of it and can explain it.</aside>
-  </section>
-
-  <!-- 16 -->
-  <section class="slide dark" data-title="Live demo">
-    <div class="inner">
-      <p class="eyebrow">Live demo</p>
-      <h2>A family chooses a district.</h2>
-    </div>
-    <aside class="notes">Pick the family persona. Colour the map by a metric. Open one district and read its sources and caveats. Compare it with a second district, including what is missing. Open the AI-written report and show why the rank follows the weights. <span class="presenter">Use real districts and the live data.</span></aside>
-  </section>
-
-  <!-- 17 -->
-  <section class="slide sand" data-title="Roadmap">
-    <div class="inner">
-      <h2>Ship a trustworthy slice, then grow.</h2>
+      <h2>45 metrics, 7 categories, one score you can explain.</h2>
       <div class="flow" style="grid-template-columns: 1fr auto 1fr auto 1fr">
-        <div class="tile" data-step="1" data-dim><span class="chip">Phase 1 · now</span><h3>Map, detail, compare, find</h3></div>
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">1 · Set what matters</span><h3>Pick a persona preset, or weight the categories</h3></div>
         <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="2" data-dim><span class="chip est">Phase 2</span><h3>Household profile</h3></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">2 · Code computes</span><h3>A livability score per district, from percentile ranks</h3></div>
         <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3"><span class="chip plan">Phase 3 · with the city</span><h3>Notices, feedback, demand</h3></div>
+        <div class="tile" data-step="3"><span class="eyebrow">3 · Ranked districts</span><h3>A ranking that names the metrics behind it</h3></div>
+      </div>
+      <p class="guard" data-step="4"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg><span><span class="hl">AI never computes the score.</span> Code does, and it is tested.</span></p>
+    </div>
+    <aside class="notes"><span class="cue">(Click) </span>Each district gets a livability score from 45 metrics in seven categories: transport, demographics, livability, amenities, environment, cost and safety indicators. You set what matters to you, or pick a persona preset. <span class="cue">(Click) </span>The score is computed in code, from percentile ranks within Kraków, and it is tested. <span class="cue">(Click) </span>You get a ranking that names the metrics behind each place, so it is explainable. <span class="cue">(Click) </span>AI never computes the score. For the AI category, this is the trust point: the model has no say in the number.</aside>
+  </section>
+
+  <!-- 5 · Provenance and honesty -->
+  <section class="slide sand" data-title="Provenance and honesty">
+    <div class="inner">
+      <h2>Every number shows its trail. Every limit is shown too.</h2>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="stack">
+          <div class="tile" data-step="1" data-dim><span class="eyebrow">On every value</span><p><span class="chip">observed</span> <span class="chip est">estimated</span> <span class="chip proxy">proxy</span></p><p>plus source, licence, date, method and caveat</p></div>
+          <div class="tile" data-step="2" data-dim><span class="eyebrow">Where there is no data</span><p>The app says why. It never shows a zero.</p></div>
+        </div>
+        <ul class="list" style="gap: var(--s3)">
+          <li class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#map-trifold-fill"/></svg></span><span>District level, not address level<small>an address score implies precision the data lacks</small></span></li>
+          <li class="big-item" data-step="4" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#flask-fill"/></svg></span><span>No price forecast<small>two methods failed against naive baselines; we publish history and the backtest</small></span></li>
+          <li class="big-item" data-step="5"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg></span><span>Safety wording<small>“recorded crimes per 10 000 residents”, never “safe” or “dangerous”</small></span></li>
+        </ul>
+      </div>
+      <p class="muted" data-step="5">Known limits are shown in the app: rents are one snapshot of asking rents, and long commute times run fast.</p>
+    </div>
+    <aside class="notes">This is probably our strongest differentiator, because most tools show numbers with no explanation. <span class="cue">(Click) </span>Every value shows its kind: observed, estimated or proxy. It also shows its source, licence, date, method and caveat. <span class="cue">(Click) </span>Where there is no data, the app says why and shows no zero. <span class="cue">(Click) </span>We score districts, not addresses, because an address score implies a precision the data does not have. <span class="cue">(Click) </span>We show no price forecast, because two methods failed against naive baselines; we publish the history and the backtest. <span class="cue">(Click) </span>On safety we say "recorded crimes per 10 000 residents" and never "safe" or "dangerous". Known limits are shown openly, and admitting them is why you can trust the rest.<span class="presenter"> Check this wording against docs/DATA_SOURCES.md before the pitch: the data notes say Kraków has no recorded crime data by district yet, so safety uses road accidents and proxies.</span></aside>
+  </section>
+
+  <!-- 6 · Real data -->
+  <section class="slide" data-title="Real data">
+    <div class="inner">
+      <h2>Real data, real prices.</h2>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Sale prices from actual deeds<small>the national price register, not asking prices</small></span></div>
+        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Commute matrix<small>public transport time between districts</small></span></div>
+        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Rent versus buy<small>an estimate, with its caveats</small></span></div>
+        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Polish and English<small>Polish by default, English on a toggle</small></span></div>
+      </div>
+      <p class="muted" data-step="4">Sources and credit lines: docs/DATA_SOURCES.md and the sources page in the app.</p>
+    </div>
+    <aside class="notes">This proves the data is real and practical. <span class="cue">(Click) </span>Sale prices come from actual deeds in the national register, not from asking prices. Quarterly history is shown with a table. <span class="cue">(Click) </span>A commute matrix gives public transport time between districts; long trips run fast, and the app says so. <span class="cue">(Click) </span>A rent-versus-buy estimate helps with the real decision. <span class="cue">(Click) </span>The text is in Polish by default, with an English toggle.</aside>
+  </section>
+
+  <!-- 7 · AI role, privacy and ethics -->
+  <section class="slide dark" data-title="AI, privacy and ethics">
+    <div class="inner">
+      <h2>AI narrates the facts. It never decides them.</h2>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="stack">
+          <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg></span><span>A language model writes the district report<small>from stored facts, with an AI label on every report</small></span></div>
+          <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg></span><span>A guard checks it<small>the model may only cite supplied numbers</small></span></div>
+          <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>A personalised report<small>built in the city service</small></span></div>
+        </div>
+        <div class="stack">
+          <div class="big-item" data-step="4" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>The backend stores nothing about users<small>it is read-only</small></span></div>
+          <div class="big-item" data-step="5" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>The household profile stays in the browser<small>it sets weights only</small></span></div>
+          <div class="big-item" data-step="6"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#warning-circle-fill"/></svg></span><span>Never filters by who lives there<small>that is a legal risk</small></span></div>
+        </div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Phase 1 is the demo: map, district detail, compare, find a district, sources and an accessibility statement. <span class="cue">(Click) </span>Phase 2 adds a household profile: household type, children's ages, work place and budget, turned into weights and filters in the browser and never stored. <span class="cue">(Click) </span>Phase 3 is built with the city: official notices, verified feedback and demand counts. Beyond Kraków, a second city is a new database schema, not new code. The same engine already runs on Warsaw data in our private build.</aside>
+    <aside class="notes"><span class="cue">(Click) </span>A language model writes the district report from stored facts, in Polish and English, and every report carries an AI label. <span class="cue">(Click) </span>A guard checks the report: the model may only cite the numbers it was given, and a report with any other number is rejected. <span class="cue">(Click) </span>The personalised report, where you type your requirements, is built in the separate city service. It narrates computed facts and makes no safety verdict. Models run through OpenRouter, and we disclose them in the README. <span class="cue">(Click) </span>On privacy: the backend is read-only and stores nothing about its users. <span class="cue">(Click) </span>The household profile stays in the browser and only sets weights. <span class="cue">(Click) </span>It never filters by who lives in a district, because steering by demographics is a legal risk. <span class="presenter">Agree the AI wording as a team before the pitch: TODO.md lists it as an open decision. Suggested line: AI narrates and translates, code scores.</span></aside>
   </section>
 
-  <!-- 18 -->
-  <section class="slide dark" data-title="Our ask">
+  <!-- 8 · Demo, design and accessibility -->
+  <section class="slide sand" data-title="Demo, design, accessibility">
     <div class="inner">
-      <h2>Our ask to Kraków.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Host it as a free public service</span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Name an open-data contact</span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span>Complete the accessibility statement</span></li>
-      </ul>
-      <p class="muted">Delta-43 · Rysia · unicorn-alex · github.com/Delta-43/GdzieZamieszkac</p>
+      <h2>Live demo: three minutes.</h2>
+      <div class="flow" style="grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr">
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">1 · Choose</span><h3>A persona, or your priorities</h3></div>
+        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">2 · See</span><h3>Ranked districts on the accessible map</h3></div>
+        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="3" data-dim><span class="eyebrow">3 · Open</span><h3>Provenance, AI report, price history</h3></div>
+        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="4" data-dim><span class="eyebrow">4 · Compare</span><h3>Districts side by side</h3></div>
+      </div>
+      <p class="muted" data-step="5"><span class="hl">Design</span> follows krakow.pl · <span class="hl">WCAG 2.2 AA</span> target · works with a keyboard and on small screens. Accessibility is a legal duty for a public service.</p>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Host the portal as a free public service. <span class="cue">(Click) </span>Name a contact for open data, so we can close the gaps the portal shows. <span class="cue">(Click) </span>Complete the accessibility statement: scope, contact details and the complaints procedure. We are Delta-43 on data and backend, Rysia on the frontend, and unicorn-alex on the Polish text and the API contract. Thank you.</aside>
+    <aside class="notes"><span class="cue">(Click) </span>Choose a persona, for example the family, or set your own priorities. <span class="cue">(Click) </span>See the ranked districts on the accessible map, with a table beside it. <span class="cue">(Click) </span>Open one district: every number with its provenance, the AI-labelled report and the price history. <span class="cue">(Click) </span>Compare districts side by side, including what is missing. <span class="cue">(Click) </span>The look follows krakow.pl. We target WCAG 2.2 level AA, and the app works with a keyboard and on small screens. For a public service, accessibility is a legal duty, which supports the city story. <span class="presenter">The demo runs on the coordinator's machine over Tailscale. Record a backup video and keep a few screenshots. Show only finished screens.</span></aside>
   </section>
 
-  <!-- 19 -->
-  <section class="slide" data-title="Appendix: sources">
+  <!-- 9 · City concepts and competition -->
+  <section class="slide" data-title="City concepts and competition">
     <div class="inner">
-      <p class="eyebrow">Appendix · sources and credit lines</p>
-      <ol class="refs">
-        <li><span class="k">Transit</span><a href="https://gtfs.ztp.krakow.pl/" target="_blank" rel="noreferrer">ZTP Kraków GTFS</a> · ZTP Kraków, MPK S.A. w Krakowie, R&amp;G Plus</li>
-        <li><span class="k">Amenities and proxies</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> · © OpenStreetMap contributors, ODbL 1.0</li>
-        <li><span class="k">Air quality</span><a href="https://powietrze.gios.gov.pl/pjp/content/api" target="_blank" rel="noreferrer">GIOŚ</a> · Główny Inspektorat Ochrony Środowiska, Państwowy Monitoring Środowiska</li>
-        <li><span class="k">Tree cover and green space</span><a href="https://land.copernicus.eu/" target="_blank" rel="noreferrer">Copernicus Land Monitoring Service</a> · European Environment Agency</li>
-        <li><span class="k">Noise</span><a href="https://www.krakow.pl/srodowisko/13140,artykul,strategiczna-mapa-halasu-miasta-krakowa.html" target="_blank" rel="noreferrer">Miasto Kraków, Strategiczna mapa hałasu 2022</a></li>
-        <li><span class="k">Registered residents</span><a href="https://www.bip.krakow.pl/?bip_id=1&amp;dok_id=242410" target="_blank" rel="noreferrer">BIP Kraków</a> · <a href="https://otwartedane.um.krakow.pl/zbiory-danych/mieszkancy-zameldowani-na-pobyt-staly" target="_blank" rel="noreferrer">otwartedane.um.krakow.pl</a></li>
-        <li><span class="k">Nurseries</span><a href="https://dane.gov.pl/pl/dataset/29751,rejestr-zlobkow-lista-instytucji" target="_blank" rel="noreferrer">dane.gov.pl</a> · Ministerstwo Rodziny, Pracy i Polityki Społecznej, CC0 1.0</li>
-        <li><span class="k">Sale prices</span><a href="https://www.geoportal.gov.pl/pl/dane/rejestr-cen-nieruchomosci-rcn/" target="_blank" rel="noreferrer">Rejestr Cen Nieruchomości, GUGiK</a></li>
-        <li><span class="k">Road accidents · non-commercial use</span><a href="https://obserwatoriumbrd.pl/" target="_blank" rel="noreferrer">Instytut Transportu Samochodowego – Polskie Obserwatorium Bezpieczeństwa Ruchu Drogowego</a></li>
-        <li><span class="k">Asking rents</span>Otodom and OLX, one snapshot on 30 Sep 2026 · listings not redistributed</li>
-        <li><span class="k">City price history</span>National Bank of Poland, quarterly prices</li>
-        <li><span class="k">Market scan</span><a href="https://mistopolia.com/en/about/" target="_blank" rel="noreferrer">Mistopolia</a> · <a href="https://polandrent.com/" target="_blank" rel="noreferrer">PolandRent</a> · <a href="https://strado.info/" target="_blank" rel="noreferrer">Strado</a></li>
-      </ol>
-      <p class="muted" style="font-size:.9rem">Data collected 29 Sep – 2 Oct 2026. Road accident data: free for non-commercial use with the credit line above; commercial use needs written approval. Fonts: Reddit Sans Condensed (OFL), Nunito (OFL). Icons: Phosphor (MIT). All diagrams drawn by the team.</p>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="stack">
+          <p><span class="chip plan">Concepts · not in the demo</span></p>
+          <h2>What a city could add.</h2>
+          <ul class="list" style="gap: var(--s3)">
+            <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Official notices<small>no dataset or endpoint exists yet</small></span></li>
+            <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Verified resident feedback<small>identity checked; a salted token, so a landlord cannot trace a report</small></span></li>
+            <li class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Anonymous demand counts<small>by district</small></span></li>
+          </ul>
+          <p class="muted" data-step="3">Built today in the city service: resident feedback, stored as unverified and never published, and the personalised AI report.</p>
+        </div>
+        <div class="stack">
+          <p class="eyebrow">Competition and our edge</p>
+          <ul class="list cmp" style="gap: var(--s2)">
+            <li data-step="4" data-dim><b>MiejscoMetr</b> <span class="muted">scores one address</span></li>
+            <li data-step="4" data-dim><b>Locumo</b> <span class="muted">property reports</span></li>
+            <li data-step="4" data-dim><b>Dobra Lokacja</b> <span class="muted">a free map</span></li>
+            <li data-step="4" data-dim><b>PolandRent, Otodom Analytics</b> <span class="muted">prices</span></li>
+            <li data-step="5"><b class="hl">Our edge</b> <span>a district recommender with household profiles, provenance on every number, deed-based prices, a commute matrix, and a city behind it</span></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <aside class="notes">Every source with its credit line. The full list with licences is in docs/DATA_SOURCES.md.</aside>
+    <aside class="notes">The left side is the vision, clearly marked as concepts, because we build no fake endpoints and no fake data. <span class="cue">(Click) </span>Official notices from the city: no dataset exists yet. <span class="cue">(Click) </span>Verified resident feedback: identity checked, with a salted token so a landlord cannot trace a report to a tenant. <span class="cue">(Click) </span>Anonymous demand counts by district. Two things are real today in the separate city service: resident feedback, stored but never published and never changing a score, and the personalised AI report. <span class="cue">(Click) </span>On the market: MiejscoMetr scores one address, Locumo writes property reports, Dobra Lokacja is a free map, and PolandRent and Otodom Analytics cover prices. <span class="cue">(Click) </span>Our edge is a district recommender with household profiles, provenance on every number, deed-based prices, a commute matrix, and a city behind it. <span class="presenter">The household profile is planned, so say so if asked.</span></aside>
+  </section>
+
+  <!-- 10 · Earlier vs on-site, roadmap -->
+  <section class="slide sand" data-title="Earlier work, on-site work, roadmap">
+    <div class="inner">
+      <h2>What we brought, what we built, what comes next.</h2>
+      <div class="grid g3">
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">Before HackYeah · 29 Sep to 2 Oct</span><h3>Data and backend</h3><p>Database, read-only API, tests</p></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">On site · 3 and 4 Oct</span><h3>Frontend and city service</h3><p>Personalised AI report, resident feedback, documents</p></div>
+        <div class="tile" data-step="3"><span class="eyebrow">Roadmap</span><h3>To real use</h3><p>Deploy on a server · Polish legal opinion (fees, AI transparency under EU AI Act Article 50) · national login node · a second city · data-sharing agreements in place of the rent snapshot</p></div>
+      </div>
+      <p class="muted" data-step="3">Delta-43 · unicorn-alex · Rysia · github.com/Delta-43/GdzieZamieszkac</p>
+    </div>
+    <aside class="notes">HackYeah asks us to separate earlier work from on-site work. <span class="cue">(Click) </span>Before the event we built the data, the database and the read-only backend API with its tests. The repository's first commit is the import of that work, and every change to it is logged in the on-site changelog. <span class="cue">(Click) </span>At HackYeah we built the frontend and the city service, with the personalised AI report and resident feedback, and wrote the documents. <span class="cue">(Click) </span>Next: deploy on a server, get a Polish legal opinion on fees and on AI transparency under Article 50 of the EU AI Act, connect the national login node, add a second city, and replace the one-time rent snapshot with data-sharing agreements. That also answers who operates the service and who pays: it is an open question we want to settle with a city. Thank you. <span class="presenter">Update this slide to what is finished at submission time.</span></aside>
   </section>
 </main>
 
 <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
 <nav class="controls" aria-label="Presentation controls">
   <button id="prev" type="button" aria-label="Previous" title="Previous (Left arrow)">←</button>
-  <span class="counter" id="counter" aria-live="polite">01 / 19</span>
+  <span class="counter" id="counter" aria-live="polite">01 / 10</span>
   <button id="next" type="button" aria-label="Next" title="Next (Right arrow or Space)">→</button>
   <button id="overviewButton" type="button" aria-label="Open slide overview" title="Overview (O)">▦</button>
   <button id="notesButton" type="button" aria-label="Toggle narration" title="Narration (N)">N</button>
