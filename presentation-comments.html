@@ -37,7 +37,7 @@
   h1, h2, h3, p, ul, ol, figure { margin: 0; }
   h1, h2 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
   h1 { font-size: var(--t-h1); line-height: 1; }
-  h2 { font-size: var(--t-h2); line-height: 1.1; max-width: 30ch; }
+  h2 { font-size: clamp(1.8rem, 3.4vw, 2.8rem); line-height: 1.12; max-width: 34ch; }
   h3 { font-size: var(--t-big); line-height: 1.25; font-weight: 800; }
   .ico { width: 1.2em; height: 1.2em; flex: none; fill: currentColor; }
   .eyebrow { font-size: var(--t-label); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--olive-text); }
@@ -95,14 +95,6 @@
   .title-slide h1 { margin: var(--s3) 0; }
   .title-slide .lead { font-size: var(--t-big); max-width: 30ch; }
 
-  /* sources scatter */
-  .sources { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
-  .src { padding: var(--s2) var(--s3); border: 1px dashed var(--muted); border-radius: var(--radius); background: var(--paper); }
-  .src b { display: block; font-size: 1.05rem; }
-  .src span { font-size: var(--t-label); font-weight: 800; letter-spacing: .06em; color: var(--olive-text); }
-  .funnel { display: grid; grid-template-columns: 1fr auto auto; gap: var(--s3); align-items: center; }
-  .target { padding: var(--s3) var(--s4); border-radius: var(--radius); background: var(--navy-950); color: var(--white); font-size: var(--t-big); font-weight: 800; text-align: center; }
-
   /* big numbers */
   .num { font: 800 var(--t-num)/1 var(--font-display); color: var(--olive); }
   .dark .num { color: var(--gold); }
@@ -113,57 +105,12 @@
   .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: var(--s2); align-items: stretch; }
   .flow .tile h3 { margin-top: var(--s1); }
 
-  /* provenance anatomy */
-  .anatomy { display: grid; grid-template-columns: 1fr minmax(0, 1.1fr) 1fr; gap: var(--s3); align-items: center; }
-  .anatomy .col { display: grid; gap: var(--s4); }
-  .value-card { padding: var(--s4); border-radius: 22px; background: var(--paper); border: 2px solid var(--indigo); text-align: center; }
-  .value-card .v { font: 800 var(--t-num)/1 var(--font-display); color: var(--navy-950); }
-  .value-card p { margin-top: var(--s2); font-weight: 700; }
-  .callout { position: relative; padding: var(--s2) var(--s3); border-radius: 12px; background: var(--paper); border: 1px solid var(--line); }
-  .callout .eyebrow { display: block; }
-  .callout b { font-size: 1.1rem; }
-  .callout.l::after, .callout.r::after { content: ""; position: absolute; top: 50%; width: var(--s3); border-top: 3px solid var(--olive); }
-  .callout.l::after { right: calc(-1 * var(--s3)); }
-  .callout.r::after { left: calc(-1 * var(--s3)); }
-
-  /* unit chart: one square per catalogue metric */
-  .units-chart { display: grid; gap: var(--s2); }
-  .u-row { display: grid; grid-template-columns: 11rem auto 1fr; gap: var(--s3); align-items: center; }
-  .u-row .name { font-weight: 800; }
-  .u-row .name small { display: block; font-weight: 400; font-size: var(--t-label); color: var(--muted); }
-  .units { display: flex; gap: 5px; }
-  .units i { width: 26px; height: 26px; border-radius: 6px; background: var(--indigo); }
-  .units i.miss { background: transparent; border: 2px dashed var(--olive); }
-  .gaps-on .units i.miss { background: var(--gold); border-style: solid; }
-  .reason { font-size: 1rem; color: var(--olive-text); font-weight: 700; }
-  .legend { display: flex; flex-wrap: wrap; gap: var(--s3); font-size: var(--t-label); font-weight: 800; color: var(--muted); }
-  .legend i { display: inline-block; width: 16px; height: 16px; border-radius: 4px; vertical-align: -3px; margin-right: 6px; background: var(--indigo); }
-  .legend i.miss { background: transparent; border: 2px dashed var(--olive); }
-
   /* code vs model */
-  .split { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--s3); align-items: stretch; }
-  .panel { padding: var(--s4); border-radius: 22px; border: 1px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .07); display: grid; gap: var(--s2); align-content: start; }
-  .panel .num { font-size: clamp(2.6rem, 5vw, 4.2rem); }
-  .panel blockquote { margin: 0; font-size: var(--t-big); line-height: 1.4; }
   .guard { display: flex; gap: var(--s2); align-items: center; font-size: var(--t-big); font-weight: 700; }
   .guard .ico { color: var(--gold); width: 32px; height: 32px; }
 
-  /* timeline */
-  .timeline { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; }
-  .timeline .day { padding: var(--s1) 0; border-left: 2px solid var(--line); padding-left: var(--s1); font-size: var(--t-label); font-weight: 800; color: var(--muted); }
-  .seg { margin-top: var(--s2); padding: var(--s3); border-radius: 14px; }
-  .seg.before { grid-column: 1 / 5; background: var(--indigo-100); }
-  .seg.onsite { grid-column: 5 / 7; background: var(--olive); color: var(--white); }
-  .seg h3 { margin-bottom: var(--s1); }
-  .seg ul { margin: 0; padding-left: 1.1em; }
-
   /* lists */
   .list { list-style: none; padding: 0; display: grid; gap: var(--s4); }
-
-  /* appendix */
-  .refs { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--s4); font-size: .92rem; line-height: 1.4; }
-  .refs li { padding: var(--s1) 0; border-bottom: 1px solid var(--line); }
-  .refs .k { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
   /* presenter notes, controls, overview */
   .notes { display: none; position: absolute; z-index: 9; left: var(--gutter); right: var(--gutter); bottom: 92px; max-width: 900px; padding: var(--s2) var(--s3); border: 2px solid var(--olive); border-radius: 12px; background: var(--paper); color: var(--ink); font-size: 1rem; line-height: 1.45; }
@@ -185,39 +132,39 @@
   .overview-grid button:hover, .overview-close:hover { background: var(--indigo); }
   .overview-close { position: fixed; top: var(--s3); right: var(--s3); padding: var(--s2) var(--s3); border-radius: 999px; }
 
-  /* review comments: a side panel per slide, kept in this browser, exported as Markdown or JSON */
-  .cbadge { display: none; margin-left: 4px; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--gold); color: var(--navy-950); font-size: var(--t-label); line-height: 20px; }
-  .cbadge.on { display: inline-block; }
-  .cpanel { position: fixed; z-index: 25; top: 0; right: 0; bottom: 0; width: min(420px, 100%); display: none; flex-direction: column; gap: var(--s2); padding: var(--s3); background: var(--paper); color: var(--ink); border-left: 3px solid var(--olive); box-shadow: -8px 0 24px rgba(30, 35, 75, .25); font-size: 1rem; }
-  .cpanel.open { display: flex; }
-  .cpanel header { display: flex; justify-content: space-between; align-items: start; gap: var(--s2); }
-  .cpanel h2 { font-size: 1.3rem; max-width: none; }
-  .cpanel .where { font-size: var(--t-label); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--olive-text); }
-  .cpanel button { min-height: 44px; padding: 0 var(--s2); border: 1px solid var(--indigo); border-radius: 10px; background: var(--paper); color: var(--indigo); font-weight: 800; cursor: pointer; }
-  .cpanel button:hover { background: var(--indigo-100); }
-  .cpanel button.primary { background: var(--navy-950); color: var(--white); border-color: var(--navy-950); }
-  .cpanel button.primary:hover { background: var(--indigo); }
-  .clist { list-style: none; margin: 0; padding: 0; flex: 1; overflow: auto; display: grid; gap: var(--s2); align-content: start; }
-  .clist li { padding: var(--s2); border: 1px solid var(--line); border-radius: 12px; background: var(--grey-50); }
-  .clist .meta { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); font-size: var(--t-label); font-weight: 800; color: var(--muted); }
-  .clist .meta button { min-height: 32px; padding: 0 var(--s2); font-size: var(--t-label); }
-  .clist p { margin-top: var(--s1); white-space: pre-wrap; overflow-wrap: anywhere; }
-  .cpanel label { font-weight: 800; font-size: var(--t-label); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-  .cpanel input, .cpanel textarea { width: 100%; padding: var(--s1) var(--s2); border: 1px solid var(--muted); border-radius: 10px; font: inherit; color: var(--ink); background: var(--white); }
-  .cpanel textarea { min-height: 96px; resize: vertical; }
-  .cform, .ctools { display: grid; gap: var(--s1); }
-  .ctools { grid-template-columns: repeat(3, 1fr); }
-  .cstatus { min-height: 1.4em; font-size: var(--t-label); font-weight: 700; color: var(--olive-text); }
+
+  /* deck-specific pieces */
+  .title-slide h1 { margin: var(--s2) 0 var(--s3); font-size: clamp(2.4rem, 5.6vw, 4.6rem); }
+  .tight { gap: var(--s3); }
+  .tile p { font-size: var(--t-big); font-weight: 700; line-height: 1.3; }
+  .small { font-size: 1rem; }
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); align-items: start; }
+  .col-block { display: grid; gap: var(--s2); align-content: start; }
+  .col-block h3 { display: flex; align-items: center; gap: var(--s1); flex-wrap: wrap; }
+  .col-block h3 .ico { color: var(--olive); }
+  .dark .col-block h3 .ico { color: var(--gold); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .trail { font: 800 1.35rem/1.3 var(--font-display); }
+  .ticks { list-style: none; padding: 0; display: grid; gap: var(--s2); font-size: 1.3rem; line-height: 1.4; }
+  .ticks li { padding-left: 1.4em; position: relative; }
+  .ticks li::before { content: ""; position: absolute; left: 0; top: .5em; width: .7em; height: .7em; border-radius: 50%; background: var(--olive); }
+  .dark .ticks li::before { background: var(--gold); }
+  .ticks.no li::before { background: transparent; border: 2px solid var(--olive); }
+  .ticks.inline { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); font-weight: 800; }
+  .flowlist { margin: 0; padding-left: 1.5em; display: grid; gap: var(--s1); font-size: 1.3rem; line-height: 1.4; }
+  .demo .tile h3 { font-size: 1.15rem; }
+  .tag { display: inline-block; padding: 1px 10px; border: 1px solid var(--olive); border-radius: 999px; color: var(--olive-text); font: 800 .72rem/1.6 var(--font-body); letter-spacing: .08em; text-transform: uppercase; vertical-align: middle; }
+  .dark .tag { color: var(--gold); border-color: var(--gold); }
+  .cmp { width: 100%; border-collapse: collapse; font-size: 1.15rem; }
+  .cmp th, .cmp td { text-align: left; padding: var(--s1) var(--s2) var(--s1) 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .cmp th { font-weight: 800; white-space: nowrap; }
+  .cmp tr.us th, .cmp tr.us td { background: var(--gold); color: var(--navy-950); font-weight: 800; padding: var(--s1) var(--s2); }
+  .cmp tr.us th { border-radius: 8px 0 0 8px; white-space: normal; }
+  .cmp tr.us td { border-radius: 0 8px 8px 0; }
 
   @media (max-width: 900px) {
-    .g2, .g3, .g4, .flow, .anatomy, .split, .funnel, .refs { grid-template-columns: 1fr; }
-    .sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .g2, .g3, .g4, .flow, .cols { grid-template-columns: 1fr; }
     .arrow { transform: rotate(90deg); }
-    .callout.l::after, .callout.r::after { display: none; }
-    .u-row { grid-template-columns: 1fr; gap: var(--s1); }
-    .units i { width: 18px; height: 18px; }
-    .timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .seg.before, .seg.onsite { grid-column: 1 / -1; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
@@ -227,12 +174,35 @@
     .slide, .slide.active { position: relative; display: flex !important; height: 100vh; overflow: hidden; padding-bottom: var(--s3); page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     [data-step].pending { visibility: visible; opacity: 1; }
     [data-step].done[data-dim] { opacity: 1; }
-    .gaps-print .units i.miss { background: var(--gold); border-style: solid; }
     .notes { display: block !important; position: static; max-width: 1180px; width: 100%; margin: 0 auto; border-width: 0 0 0 4px; border-radius: 0; background: transparent; color: inherit; font-size: 1.05rem; }
     .notes::before { content: "Narration"; display: block; font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--olive-text); }
     .dark .notes::before { color: var(--gold); }
-    .controls, .progress, .overview, .cue, .presenter, .cpanel { display: none !important; }
+    .controls, .progress, .overview, .cue, .presenter, .comments { display: none !important; }
   }
+
+  /* slide comments: a side panel, one thread per slide, kept in this browser */
+  .comments { position: fixed; z-index: 25; top: var(--s3); right: var(--s3); bottom: 88px; width: min(380px, calc(100vw - 2 * var(--s3))); display: none; flex-direction: column; gap: var(--s2); padding: var(--s3); border: 2px solid var(--indigo); border-radius: var(--radius); background: var(--paper); color: var(--ink); box-shadow: 0 8px 32px rgba(30, 35, 75, .3); font-size: 1rem; line-height: 1.4; }
+  .comments.open { display: flex; }
+  .comments-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+  .comments-head h2 { font-size: 1.15rem; max-width: none; }
+  .comments button { min-height: 36px; padding: 0 var(--s2); border: 1px solid var(--indigo); border-radius: 999px; background: var(--paper); color: var(--indigo); font-weight: 800; cursor: pointer; }
+  .comments button:hover { background: var(--indigo-100); }
+  .comments button.primary { background: var(--navy-950); color: var(--white); border-color: var(--navy-950); }
+  .comments button.primary:hover { background: var(--indigo); }
+  .comments-list { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 80px; overflow: auto; display: grid; gap: var(--s2); align-content: start; }
+  .comments-list li { padding: var(--s2); border: 1px solid var(--line); border-radius: 12px; background: var(--grey-50); }
+  .comments-list .meta { display: flex; justify-content: space-between; align-items: center; gap: var(--s1); margin-bottom: 4px; font-size: .8rem; font-weight: 800; color: var(--olive-text); }
+  .comments-list .meta button { min-height: 28px; font-size: .8rem; }
+  .comments-list p { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .comments-empty { color: var(--muted); }
+  .comments label { display: grid; gap: 4px; font-size: .8rem; font-weight: 800; color: var(--olive-text); }
+  .comments input, .comments textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--muted); border-radius: 8px; font: inherit; color: var(--ink); background: var(--white); }
+  .comments textarea { min-height: 84px; resize: vertical; }
+  .comments-actions { display: flex; flex-wrap: wrap; gap: var(--s1); justify-content: space-between; }
+  .comments-status { min-height: 1.2em; font-size: .8rem; color: var(--muted); }
+  .badge-count { display: inline-block; min-width: 1.4em; margin-left: 4px; padding: 0 5px; border-radius: 999px; background: var(--gold); color: var(--navy-950); font-size: .75rem; line-height: 1.5; }
+  .badge-count:empty { display: none; }
+  .overview-grid button .badge-count { margin-left: var(--s1); }
 </style>
   </head>
 <body>
@@ -261,322 +231,254 @@
 </svg>
 
 
+
 <main class="deck" id="deck" aria-label="GdzieZamieszkać pitch, HackYeah 2026">
 
-  <!-- 1 -->
-  <section class="slide dark title-slide active" data-title="GdzieZamieszkać">
+  <!-- 1 · Problem -->
+  <section class="slide dark title-slide active" data-title="The problem">
     <div class="inner">
-      <p class="eyebrow">HackYeah 2026 · Open task: Smart City</p>
-      <h1>Find where<br>life fits.</h1>
-      <p class="lead">Kraków's 18 districts, compared on public data.</p>
-    </div>
-    <aside class="notes">GdzieZamieszkać means "where to live". We help people choose a district of Kraków before they start looking for a flat, and we built it as a public service the city can host.</aside>
-  </section>
-
-  <!-- 2 -->
-  <section class="slide" data-title="The problem">
-    <div class="inner">
-      <h2>The answer is spread across eight sources.</h2>
-      <div class="funnel">
-        <div class="sources" role="img" aria-label="Eight separate public sources with different dates: timetables 2026, air stations 2026, OpenStreetMap 2026, satellite land cover 2018 and 2024, noise map 2022, residents register 2025, road accidents 2024, price register 2026.">
-          <div class="src"><b>Timetables</b><span>2026</span></div>
-          <div class="src"><b>Air stations</b><span>2026</span></div>
-          <div class="src"><b>OpenStreetMap</b><span>2026</span></div>
-          <div class="src"><b>Satellite land cover</b><span>2018 · 2024</span></div>
-          <div class="src"><b>Noise map</b><span>2022</span></div>
-          <div class="src"><b>Residents register</b><span>2025</span></div>
-          <div class="src"><b>Road accidents</b><span>2024</span></div>
-          <div class="src"><b>Price register</b><span>2026</span></div>
-        </div>
-        <div class="arrow" data-step="1" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="target" data-step="1">One page<br>per district</div>
+      <p class="eyebrow">GdzieZamieszkać · HackYeah 2026 · Smart City</p>
+      <h1>Which district first.<br>Then the flat.</h1>
+      <div class="grid g3 tight">
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">A family, new to Kraków</span><p>“Two kids, one job in Podgórze. Where do we even look?”</p></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">What they find</span><p>Thousands of listings. Nothing on schools, air, noise or commute.</p></div>
+        <div class="tile" data-step="3"><span class="eyebrow">What is missing</span><p><span class="hl">One trusted, simple way to compare districts.</span></p></div>
       </div>
     </div>
-    <aside class="notes">Choosing a flat is easy to research. Choosing the district around it is not. Transport, air, noise, green space, road accidents and prices are published by different institutions, in different formats, with different dates. Listing sites show offers, not what a district is like. <span class="cue">(Click) </span>We bring all of it into one page per district. <span class="presenter">Add one real statistic here, with its source, on how many people move to or within Kraków.</span></aside>
+    <aside class="notes"><span class="cue">(Click) </span>Picture a family with two kids who are new to Kraków. <span class="cue">(Click) </span>People choose a flat before they choose a district, and every site they open shows offers, not what living in a district is like. The answers exist, but sit in separate public sources with different dates and formats. <span class="cue">(Click) </span>There is no trusted, simple source for comparing districts. That is the gap. <span class="presenter">Optional: add one real statistic, with its source, on how many people move to or within Kraków. The family is an illustration, not data.</span></aside>
   </section>
 
-  <!-- 3 -->
-  <section class="slide sand" data-title="What we built">
+  <!-- 2 · Idea and audience -->
+  <section class="slide sand" data-title="The idea and who it is for">
     <div class="inner">
-      <h2>One place to compare districts.</h2>
+      <p class="eyebrow">The idea in one sentence</p>
+      <h2>GdzieZamieszkać helps you choose a district before you look at flats.</h2>
+      <div class="grid g2">
+        <div class="tile" data-step="1" data-dim>
+          <span class="eyebrow">It is not</span>
+          <ul class="ticks no"><li>a listings site</li><li>brokers or agents</li><li>links to offers</li></ul>
+        </div>
+        <div class="tile" data-step="2" data-dim>
+          <span class="eyebrow">Who it is for</span>
+          <p><b>Residents and newcomers:</b> singles, couples, families, seniors, students.</p>
+          <p><b>The city:</b> as host and owner.</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes"><span class="cue">(Click) </span>Say what it is not first, so nobody files us under property portals: no listings, no brokers, no links to offers. <span class="cue">(Click) </span>Two beneficiaries. People get a tool to choose where to live: single people, couples, families, seniors and students. The city gets a public service it can host and own.</aside>
+  </section>
+
+  <!-- 3 · City-hosted service -->
+  <section class="slide dark" data-title="A city-hosted public service">
+    <div class="inner">
+      <p class="eyebrow">Smart City</p>
+      <h2>A public service, not a product. The city is the natural owner.</h2>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Free, no login<small>open to every resident</small></span></div>
+        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Holds official records<small>city and national open data</small></span></div>
+        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Can publish notices<small>concept, after city approval</small></span></div>
+        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Can collect verified feedback<small>later, once identity checks exist</small></span></div>
+      </div>
+    </div>
+    <aside class="notes">This is our main difference from commercial products. <span class="cue">(Click) </span>The free tier needs no login. <span class="cue">(Click) </span>A city can hold official records. <span class="cue">(Click) </span>It can publish official notices; that is a concept and we do not demo it. <span class="cue">(Click) </span>And later it can collect verified feedback from residents. A commercial portal has none of this trust, and none of this reach. It is what ties the project to the Smart City category.</aside>
+  </section>
+
+  <!-- 4 · Score and recommender -->
+  <section class="slide" data-title="Score and recommender">
+    <div class="inner">
+      <h2>One livability score per district, tuned to what matters to you.</h2>
       <div class="grid g3">
-        <div class="num-item" data-step="1" data-dim><span class="num tnum">18</span><p>districts</p></div>
-        <div class="num-item" data-step="2" data-dim><span class="num tnum">45</span><p>metrics with data</p></div>
-        <div class="num-item" data-step="3"><span class="num">0</span><p>logins, ads or listings</p></div>
+        <div class="num-item" data-step="1" data-dim><span class="num tnum">18</span><p>districts of Kraków</p></div>
+        <div class="num-item" data-step="1" data-dim><span class="num tnum">45</span><p>metrics with data</p></div>
+        <div class="num-item" data-step="1" data-dim><span class="num tnum">7</span><p>categories</p></div>
       </div>
-    </div>
-    <aside class="notes"><span class="cue">(Click) </span>All 18 districts of Kraków. <span class="cue">(Click) </span>45 metrics with data, in seven categories: transport, demographics, amenities, environment, livability, cost and safety. <span class="cue">(Click) </span>It is free, needs no login, and is not a listings site. It shows data about districts, never offers.</aside>
-  </section>
-
-  <!-- 4 -->
-  <section class="slide" data-title="Who it is for">
-    <div class="inner">
-      <h2>For people choosing where to live.</h2>
-      <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Families<small>schools, nurseries, parks</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Students and newcomers<small>night transport, rents</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#person-simple-walk-fill"/></svg></span><span>Seniors<small>clinics, quiet, walkability</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>Buyers<small>price history, rent versus buy</small></span></div>
-      </div>
-    </div>
-    <aside class="notes">Our users are not data experts. <span class="cue">(Click) </span>A family looks at schools, nurseries and parks. <span class="cue">(Click) </span>A student or newcomer looks at night transport and rents. <span class="cue">(Click) </span>A senior looks at clinics, quiet streets and walkability. <span class="cue">(Click) </span>A buyer looks at price history and a rent-versus-buy estimate. Five persona presets exist today. The app is built for a phone first, for screen readers and keyboards, to WCAG 2.2 level AA, in Polish with an English toggle.</aside>
-  </section>
-
-  <!-- 5 -->
-  <section class="slide sand" data-title="How it works">
-    <div class="inner">
-      <h2>Four steps to a shortlist.</h2>
-      <div class="flow">
-        <div class="tile" data-step="1" data-dim><span class="eyebrow">1 · Explore</span><h3>Colour the map</h3></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="2" data-dim><span class="eyebrow">2 · Inspect</span><h3>Open a district</h3></div>
-        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3" data-dim><span class="eyebrow">3 · Compare</span><h3>Two to four, side by side</h3></div>
-        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="4"><span class="eyebrow">4 · Find</span><h3>Rank by your weights</h3></div>
-      </div>
-    </div>
-    <aside class="notes"><span class="cue">(Click) </span>You colour the map of the 18 districts by any metric, with a full table beside it. <span class="cue">(Click) </span>You open a district and see every metric with its source, rank and caveat, plus price history, commute times and rent versus buy. <span class="cue">(Click) </span>You compare two to four districts side by side, including what is missing. <span class="cue">(Click) </span>You pick a persona or set six category weights from 0 to 5, and get a ranking that names the metrics behind it.</aside>
-  </section>
-
-  <!-- 6 -->
-  <section class="slide" data-title="Every number has a trail">
-    <div class="inner">
-      <h2>Every number carries its trail.</h2>
-      <div class="anatomy" role="img" aria-label="The stored value 74.5 PLN per square metre, median asking rent in Stare Miasto, with four labels: source Otodom and OLX, date 30 September 2026, kind observed, caveat asking rents not signed leases.">
-        <div class="col">
-          <div class="callout l" data-step="1" data-dim><span class="eyebrow">Source</span><b>Otodom + OLX</b></div>
-          <div class="callout l" data-step="2" data-dim><span class="eyebrow">Date</span><b>30 Sep 2026</b></div>
-        </div>
-        <div class="value-card"><div class="v tnum">74.5</div><p>PLN/m² · median asking rent<br>Stare Miasto</p></div>
-        <div class="col">
-          <div class="callout r" data-step="3" data-dim><span class="eyebrow">Kind</span><b><span class="chip">observed</span></b></div>
-          <div class="callout r" data-step="4"><span class="eyebrow">Caveat</span><b><span class="hl">Asking rents, not signed leases</span></b></div>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">This is a real stored value: the median asking rent in Stare Miasto, 74.5 złoty per square metre, the highest of the 18 districts. <span class="cue">(Click) </span>It names its source, Otodom and OLX listings pooled. <span class="cue">(Click) </span>Its date, one snapshot on 30 September 2026. <span class="cue">(Click) </span>Its kind: observed. <span class="cue">(Click) </span>And its caveat: these are asking rents, not signed leases. Every value the portal shows carries the same trail, plus its licence and method.</aside>
-  </section>
-
-  <!-- 7 -->
-  <section class="slide sand" data-title="Three kinds of data">
-    <div class="inner">
-      <h2>Three kinds of data, always labelled.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="chip">Observed</span><span>Measured or officially reported<small>sale prices from the national register</small></span></li>
-        <li class="big-item" data-step="2" data-dim><span class="chip est">Estimated</span><span>Calculated from real inputs<small>air quality between monitoring stations</small></span></li>
-        <li class="big-item" data-step="3"><span class="chip proxy">Proxy</span><span>An indirect indicator<small>night noise from bars and clubs</small></span></li>
-      </ul>
-    </div>
-    <aside class="notes">We never invent a number, but not every number is a direct measurement. <span class="cue">(Click) </span>Observed values are measured or officially reported, such as sale prices from the national register. <span class="cue">(Click) </span>Estimated values are calculated from real inputs, such as air quality interpolated between monitoring stations. <span class="cue">(Click) </span>Proxies are indirect indicators, such as night noise inferred from bars and clubs per square kilometre. The label always travels with the value.</aside>
-  </section>
-
-  <!-- 8 -->
-  <section class="slide gaps-print" data-title="Coverage and gaps">
-    <div class="inner">
-      <h2>45 of 51 metrics have data. Gaps say why.</h2>
-      <div class="units-chart" role="img" aria-label="Metrics with data per category in Kraków: transport 7 of 8, demographics 5 of 6, amenities 9 of 10, environment 7 of 7, livability 7 of 7, cost 5 of 5, safety 5 of 8.">
-        <div class="u-row"><span class="name">Transport</span><span class="units" data-have="7" data-miss="1"></span><span class="reason" data-step="1">no rail stops in the feeds</span></div>
-        <div class="u-row"><span class="name">Demographics<small>shown, not scored</small></span><span class="units" data-have="5" data-miss="1"></span><span class="reason" data-step="1">registrations, not a population count</span></div>
-        <div class="u-row"><span class="name">Amenities</span><span class="units" data-have="9" data-miss="1"></span><span class="reason" data-step="1">no sports-ground source</span></div>
-        <div class="u-row"><span class="name">Environment</span><span class="units" data-have="7" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Livability</span><span class="units" data-have="7" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Cost</span><span class="units" data-have="5" data-miss="0"></span><span></span></div>
-        <div class="u-row"><span class="name">Safety</span><span class="units" data-have="5" data-miss="3"></span><span class="reason" data-step="1"><span class="hl">no recorded crime data</span></span></div>
-      </div>
-      <p class="legend" aria-hidden="true"><span><i></i>metric with data</span><span><i class="miss"></i>no data, reason shown</span></p>
-    </div>
-    <aside class="notes">Each square is one metric in our catalogue. Kraków has data for 45 of 51. <span class="cue">(Click) </span>The six gaps are not zeros. Each one shows its reason. The biggest: Kraków has no recorded crime data by district, so safety uses road accidents and proxies. We report road accident indicators and make no safety verdict. The data was audited on 30 September with zero errors and zero warnings.</aside>
-  </section>
-
-  <!-- 9 -->
-  <section class="slide dark" data-title="Score and report">
-    <div class="inner">
-      <h2>Code computes the score. AI only tells the story.</h2>
-      <div class="split">
-        <div class="panel" data-step="1" data-dim><span class="eyebrow">Code · tested</span><span class="num tnum">40.9</span><p>Stare Miasto, out of 100. 16th of 18.</p></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="panel" data-step="2" data-dim><span class="eyebrow">AI-written report · stored</span><blockquote>“Stare Miasto scores <span class="hl">40.9</span> out of 100, placing it <span class="hl">16th</span> among Kraków's 18 districts.”</blockquote></div>
-      </div>
-      <p class="guard" data-step="3"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg>A report with any number not in the facts is rejected.</p>
-    </div>
-    <aside class="notes"><span class="cue">(Click) </span>The score is computed in code: percentile ranks within Kraków, from 0 to 100, each category counting equally, or with your own weights. It is tested. <span class="cue">(Click) </span>A language model only narrates the facts, in Polish and in English, 36 reports in total. They are written ahead of time, stored, and labelled as AI-written in the app. <span class="cue">(Click) </span>A guard rejects any report that contains a number that is not in the facts.</aside>
-  </section>
-
-  <!-- 10 -->
-  <section class="slide" data-title="No forecasts">
-    <div class="inner">
-      <h2>We show price history, not forecasts.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#flask-fill"/></svg></span><span>We tested two forecasting methods</span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#warning-circle-fill"/></svg></span><span>Neither beat the naive baseline</span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span><span class="hl">So we publish history and the backtest</span></span></li>
-      </ul>
-    </div>
-    <aside class="notes">People want to know where prices are going. <span class="cue">(Click) </span>We tested two forecasting methods. <span class="cue">(Click) </span>Neither beat the naive baseline. <span class="cue">(Click) </span>So the portal shows quarterly sale price history since 2021, momentum, the city's past range and the backtest, and never a predicted number.</aside>
-  </section>
-
-  <!-- 11 -->
-  <section class="slide dark" data-title="What the city gets">
-    <div class="inner">
-      <h2>A public service Kraków can host.</h2>
-      <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Ready to host<small>free, no login, Docker image</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg></span><span>Private by design<small>read-only, stores nothing</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span>Accessible<small>WCAG 2.2 level AA</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#map-trifold-fill"/></svg></span><span>A map of data gaps<small>what to publish next</small></span></div>
-      </div>
-    </div>
-    <aside class="notes">What does the city get? <span class="cue">(Click) </span>A free portal it can run on its own servers, built on its own open data and national registers. The backend ships as a Docker image. <span class="cue">(Click) </span>It is read-only and stores nothing about its users: no accounts, cookies, analytics or third-party requests. <span class="cue">(Click) </span>It is built to WCAG 2.2 level AA, as Polish law requires of public bodies, with a draft accessibility statement for the city to complete. <span class="cue">(Click) </span>And every gap says why, which tells the city which datasets to publish next, such as crime figures by district.</aside>
-  </section>
-
-  <!-- 12 -->
-  <section class="slide sand" data-title="Next, with the city">
-    <div class="inner">
-      <p><span class="chip plan">Planned · not in the demo</span></p>
-      <h2>Next, built with the city.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Official notices<small>planned projects, dated and sourced</small></span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Residents' feedback<small>identity via Profil Zaufany</small></span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Anonymous demand counts<small>for housing and transport planning</small></span></li>
-      </ul>
-    </div>
-    <aside class="notes">These are planned, not in the demo. Each needs an API change and a new service first. <span class="cue">(Click) </span>The city publishes official notices of planned projects and infrastructure, dated and sourced, never as price forecasts. <span class="cue">(Click) </span>Residents report the rent they pay or a data error, with identity checked through the national login. <span class="cue">(Click) </span>Anonymous, aggregate counts of what people look for help the city plan housing and transport.</aside>
-  </section>
-
-  <!-- 13 -->
-  <section class="slide" data-title="Market gap">
-    <div class="inner">
-      <h2>Others cover part of the picture.</h2>
-      <ul class="list" style="gap: var(--s3)">
-        <li class="big-item" data-step="1" data-dim><span style="min-width:11rem">Mistopolia</span><small>compares cities, not districts</small></li>
-        <li class="big-item" data-step="2" data-dim><span style="min-width:11rem">PolandRent</span><small>rents, not livability</small></li>
-        <li class="big-item" data-step="3" data-dim><span style="min-width:11rem">AreaVibes, Niche</span><small>scores, no Polish data</small></li>
-        <li class="big-item" data-step="4"><span style="min-width:11rem" class="hl">GdzieZamieszkać</span><small>districts, full picture, every source shown</small></li>
-      </ul>
-    </div>
-    <aside class="notes">This is a preliminary scan, not an exhaustive one. <span class="cue">(Click) </span>Mistopolia compares Polish cities. <span class="cue">(Click) </span>PolandRent tracks district rents. <span class="cue">(Click) </span>AreaVibes and Niche have composite scores, but not Polish data. Otodom Analytics and Strado cover the market and walkability. <span class="cue">(Click) </span>Our gap is the combination: district level, livability beyond price, visible sources, and a public service rather than a lead-selling portal.</aside>
-  </section>
-
-  <!-- 14 -->
-  <section class="slide sand" data-title="What was built when">
-    <div class="inner">
-      <h2>What we brought, and what we built here.</h2>
-      <div class="timeline" role="img" aria-label="Timeline. Before the event, 29 September to 2 October 2026: data, database and backend API. On site, 3 and 4 October 2026: frontend and documents.">
-        <span class="day">29 Sep</span><span class="day">30 Sep</span><span class="day">1 Oct</span><span class="day">2 Oct</span><span class="day">3 Oct</span><span class="day">4 Oct</span>
-        <div class="seg before" data-step="1" data-dim><h3>Before the event</h3><ul><li>Data and database</li><li>Backend API, 153 tests</li></ul></div>
-        <div class="seg onsite" data-step="2"><h3>At HackYeah</h3><ul><li>Frontend</li><li>Documents, changelog</li></ul></div>
-      </div>
-    </div>
-    <aside class="notes">HackYeah asks teams to separate earlier work from on-site work. <span class="cue">(Click) </span>Before the event, from 29 September to 2 October, we collected the data, built the database and the read-only backend API: 16 operations under an OpenAPI contract, with 153 offline tests. <span class="cue">(Click) </span>Here at HackYeah we are building the frontend and wrote the project documents. The repository's first commit is the import of the earlier work, and every change to it is logged in the on-site changelog. <span class="presenter">Update this slide to what is finished before you present.</span></aside>
-  </section>
-
-  <!-- 15 -->
-  <section class="slide" data-title="How we use AI">
-    <div class="inner">
-      <h2>How we use AI.</h2>
-      <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Score: <span class="hl">no AI</span><small>computed in code, tested</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg></span><span>Reports<small>z-ai/glm-5.3-flash</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Translation<small>deepseek/deepseek-v4.1-flash</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Development<small>Claude Code, reviewed by us</small></span></div>
-      </div>
-    </div>
-    <aside class="notes">We disclose all significant AI use. <span class="cue">(Click) </span>The score is not AI: it is computed in code and tested. <span class="cue">(Click) </span>District reports are written ahead of time by z-ai/glm-5.3-flash through OpenRouter, from a list of facts. <span class="cue">(Click) </span>Stored notes are translated by deepseek/deepseek-v4.1-flash through OpenRouter, after a glossary and with a number check. Nothing is translated at request time. <span class="cue">(Click) </span>We used Claude Code to help write and review code and documents. We reviewed all of it and can explain it.</aside>
-  </section>
-
-  <!-- 16 -->
-  <section class="slide dark" data-title="Live demo">
-    <div class="inner">
-      <p class="eyebrow">Live demo</p>
-      <h2>A family chooses a district.</h2>
-    </div>
-    <aside class="notes">Pick the family persona. Colour the map by a metric. Open one district and read its sources and caveats. Compare it with a second district, including what is missing. Open the AI-written report and show why the rank follows the weights. <span class="presenter">Use real districts and the live data.</span></aside>
-  </section>
-
-  <!-- 17 -->
-  <section class="slide sand" data-title="Roadmap">
-    <div class="inner">
-      <h2>Ship a trustworthy slice, then grow.</h2>
       <div class="flow" style="grid-template-columns: 1fr auto 1fr auto 1fr">
-        <div class="tile" data-step="1" data-dim><span class="chip">Phase 1 · now</span><h3>Map, detail, compare, find</h3></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="2" data-dim><span class="chip est">Phase 2</span><h3>Household profile</h3></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">You choose</span><h3>A persona preset, or your own weights</h3></div>
         <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3"><span class="chip plan">Phase 3 · with the city</span><h3>Notices, feedback, demand</h3></div>
+        <div class="tile" data-step="3" data-dim><span class="eyebrow">Code computes</span><h3>Percentile ranks, weighted</h3></div>
+        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="4"><span class="eyebrow">You get</span><h3>Ranked districts and the metrics behind them</h3></div>
+      </div>
+      <p class="guard" data-step="4"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg><span><span class="hl">The score is computed in code. AI never computes it.</span></span></p>
+    </div>
+    <aside class="notes"><span class="cue">(Click) </span>18 districts, 45 metrics with data, in seven categories: transport, demographics, amenities, environment, livability, cost and safety indicators. <span class="cue">(Click) </span>Users set what matters to them, or pick one of five persona presets. <span class="cue">(Click) </span>The score is percentile ranks within Kraków, from 0 to 100, with the user's weights. <span class="cue">(Click) </span>It is explainable: every ranking names the metrics behind it. And it is computed in code and tested. A language model never computes the score. If the AI judges ask where AI is used, this is the first answer: not here.</aside>
+  </section>
+
+  <!-- 5 · Provenance and honesty -->
+  <section class="slide sand" data-title="Provenance and honesty">
+    <div class="inner">
+      <h2>Every number shows its trail. And we say what we cannot know.</h2>
+      <div class="cols">
+        <div class="col-block" data-step="1" data-dim>
+          <h3>On every value</h3>
+          <p class="chips"><span class="chip">observed</span><span class="chip est">estimated</span><span class="chip proxy">proxy</span></p>
+          <p class="trail">source · licence · date · method · caveat</p>
+          <p class="muted">No data? The app says why. It shows no zero.</p>
+        </div>
+        <div class="col-block" data-step="2">
+          <h3>Honest by design</h3>
+          <ul class="ticks">
+            <li><b>District level, not address.</b> An address score implies precision the data lacks.</li>
+            <li><b>No price forecast.</b> Two methods failed against naive baselines. We publish history and the backtest.</li>
+            <li><b>“Recorded crimes per 10 000 residents.”</b> Never “safe” or “dangerous”.</li>
+            <li><b>Limits shown openly,</b> in the app.</li>
+          </ul>
+        </div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Phase 1 is the demo: map, district detail, compare, find a district, sources and an accessibility statement. <span class="cue">(Click) </span>Phase 2 adds a household profile: household type, children's ages, work place and budget, turned into weights and filters in the browser and never stored. <span class="cue">(Click) </span>Phase 3 is built with the city: official notices, verified feedback and demand counts. Beyond Kraków, a second city is a new database schema, not new code. The same engine already runs on Warsaw data in our private build.</aside>
+    <aside class="notes">This is probably our strongest differentiator. Most tools show numbers with no explanation. <span class="cue">(Click) </span>Every value carries its kind (observed, estimated or proxy), its source, licence, date, method and caveat. Where there is no data, the app says why and shows no zero. <span class="cue">(Click) </span>And we admit limits. We score districts, not addresses, because an address score would imply precision the data does not have. We show no price forecast: we tested two methods and neither beat a naive baseline, so we publish the history and the backtest. Safety wording is recorded crimes per 10 000 residents; the app never says safe or dangerous. Admitting limits is why you can trust the rest. <span class="presenter">Be ready for the question on crime data: Kraków has none by district, so the safety category leans on road accidents and proxies, and says so.</span></aside>
   </section>
 
-  <!-- 18 -->
-  <section class="slide dark" data-title="Our ask">
+  <!-- 6 · Real data -->
+  <section class="slide" data-title="Real data, real prices">
     <div class="inner">
-      <h2>Our ask to Kraków.</h2>
-      <ul class="list">
-        <li class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Host it as a free public service</span></li>
-        <li class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Name an open-data contact</span></li>
-        <li class="big-item" data-step="3"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#check-circle-fill"/></svg></span><span>Complete the accessibility statement</span></li>
+      <h2>Real deeds, not asking prices.</h2>
+      <div class="grid g2" style="gap: var(--s4)">
+        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Sale prices from actual deeds<small>national price register, quarterly history</small></span></div>
+        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Commute matrix between districts<small>public transport, from timetables</small></span></div>
+        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>Rent versus buy estimate<small>labelled as an estimate</small></span></div>
+        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Polish and English<small>Polish by default</small></span></div>
+      </div>
+      <p class="muted small" data-step="4">Rents are asking rents from a one-time snapshot, and long commutes run fast. Both carry their caveat in the app.</p>
+    </div>
+    <aside class="notes">This proves the data is real and the tool is practical. <span class="cue">(Click) </span>Sale prices come from actual deeds in the national price register, not from asking prices. <span class="cue">(Click) </span>A commute matrix gives public transport time between districts. <span class="cue">(Click) </span>A rent-versus-buy estimate helps with the decision most people actually face. <span class="cue">(Click) </span>Polish by default, with an English toggle for newcomers. Be straight about limits: the rents are a one-time snapshot of asking rents, and commutes above about 60 minutes are lower bounds. <span class="presenter">Check before presenting: price history, commute and rent-versus-buy are served by the API (tasks F10 to F12 in TODO.md are still open for the frontend), so show them only if the screens are merged. Otherwise say they are in the API.</span></aside>
+  </section>
+
+  <!-- 7 · AI role, privacy and ethics -->
+  <section class="slide dark" data-title="AI role, privacy and ethics">
+    <div class="inner">
+      <h2>AI writes the words. Code owns the numbers. Your data stays yours.</h2>
+      <div class="cols">
+        <div class="col-block" data-step="1" data-dim>
+          <h3><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg> The role of AI</h3>
+          <ol class="flowlist">
+            <li>Stored facts, computed in code</li>
+            <li>A language model writes the district report</li>
+            <li><span class="hl">A guard rejects any number not in the facts</span></li>
+            <li>Every report carries an AI label</li>
+          </ol>
+          <p class="muted">The personalised report is built in the city service.</p>
+        </div>
+        <div class="col-block" data-step="2">
+          <h3><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg> Privacy and ethics</h3>
+          <ul class="ticks">
+            <li>The backend stores nothing about users.</li>
+            <li>The household profile stays in the browser. <span class="tag">planned</span></li>
+            <li>It sets weights only. It never filters by who lives in a district: a legal risk.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">The AI task sheet wants a clear and checkable role for AI. <span class="cue">(Click) </span>Ours: a language model writes the district report from stored facts and may only cite the numbers it is given. A guard checks the text and rejects any number that is not in the facts. Every report carries an AI label. The personalised report, where you type what you need, is built in the separate city service, under the same guard. The score itself is never AI. <span class="cue">(Click) </span>Privacy: the backend is read-only and stores nothing about users. The household profile, once built, stays in the browser and only sets weights; it never filters by who lives in a district, because steering by demographics is a legal risk. <span class="presenter">Open decision in TODO.md: agree the exact wording of AI's role for the AI task before you present. This slide is a proposal: narrate and translate, guarded, labelled, never scoring.</span></aside>
+  </section>
+
+  <!-- 8 · Demo, design, accessibility -->
+  <section class="slide" data-title="Demo, design and accessibility">
+    <div class="inner">
+      <p class="eyebrow">Live demo · 3 minutes</p>
+      <h2>From a persona to a shortlist.</h2>
+      <div class="flow demo" style="grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr">
+        <div class="tile" data-step="1" data-dim><span class="eyebrow">1</span><h3>Pick a persona or set priorities</h3></div>
+        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="2" data-dim><span class="eyebrow">2</span><h3>Ranked districts on the accessible map</h3></div>
+        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="3" data-dim><span class="eyebrow">3</span><h3>Open one: provenance, AI report, price history</h3></div>
+        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile" data-step="4" data-dim><span class="eyebrow">4</span><h3>Compare districts</h3></div>
+      </div>
+      <ul class="ticks inline" data-step="5">
+        <li>Look follows krakow.pl</li><li>WCAG 2.2 AA target</li><li>Keyboard and small screens</li>
       </ul>
-      <p class="muted">Delta-43 · Rysia · unicorn-alex · github.com/Delta-43/GdzieZamieszkac</p>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Host the portal as a free public service. <span class="cue">(Click) </span>Name a contact for open data, so we can close the gaps the portal shows. <span class="cue">(Click) </span>Complete the accessibility statement: scope, contact details and the complaints procedure. We are Delta-43 on data and backend, Rysia on the frontend, and unicorn-alex on the Polish text and the API contract. Thank you.</aside>
+    <aside class="notes">Keep the demo to about three minutes. <span class="cue">(Click) </span>Pick a persona, for example the family, or set your own priorities. <span class="cue">(Click) </span>See the districts ranked on the accessible map. <span class="cue">(Click) </span>Open a district: show provenance on a number, the AI-labelled report and the price history. <span class="cue">(Click) </span>Compare two districts, including what is missing. <span class="cue">(Click) </span>On design: the look follows krakow.pl, the target is WCAG 2.2 AA, which is a legal duty for a public service, and the app works with a keyboard and on small screens. <span class="presenter">The demo depends on the coordinator's machine and Tailscale. Record a backup video of this flow and keep it ready. Do not demo notices or demand counts: they are concepts. Say WCAG is the target; the manual keyboard and screen-reader checks are still open in TODO.md.</span></aside>
   </section>
 
-  <!-- 19 -->
-  <section class="slide" data-title="Appendix: sources">
+  <!-- 9 · City concepts and competition -->
+  <section class="slide sand" data-title="City concepts and competition">
     <div class="inner">
-      <p class="eyebrow">Appendix · sources and credit lines</p>
-      <ol class="refs">
-        <li><span class="k">Transit</span><a href="https://gtfs.ztp.krakow.pl/" target="_blank" rel="noreferrer">ZTP Kraków GTFS</a> · ZTP Kraków, MPK S.A. w Krakowie, R&amp;G Plus</li>
-        <li><span class="k">Amenities and proxies</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> · © OpenStreetMap contributors, ODbL 1.0</li>
-        <li><span class="k">Air quality</span><a href="https://powietrze.gios.gov.pl/pjp/content/api" target="_blank" rel="noreferrer">GIOŚ</a> · Główny Inspektorat Ochrony Środowiska, Państwowy Monitoring Środowiska</li>
-        <li><span class="k">Tree cover and green space</span><a href="https://land.copernicus.eu/" target="_blank" rel="noreferrer">Copernicus Land Monitoring Service</a> · European Environment Agency</li>
-        <li><span class="k">Noise</span><a href="https://www.krakow.pl/srodowisko/13140,artykul,strategiczna-mapa-halasu-miasta-krakowa.html" target="_blank" rel="noreferrer">Miasto Kraków, Strategiczna mapa hałasu 2022</a></li>
-        <li><span class="k">Registered residents</span><a href="https://www.bip.krakow.pl/?bip_id=1&amp;dok_id=242410" target="_blank" rel="noreferrer">BIP Kraków</a> · <a href="https://otwartedane.um.krakow.pl/zbiory-danych/mieszkancy-zameldowani-na-pobyt-staly" target="_blank" rel="noreferrer">otwartedane.um.krakow.pl</a></li>
-        <li><span class="k">Nurseries</span><a href="https://dane.gov.pl/pl/dataset/29751,rejestr-zlobkow-lista-instytucji" target="_blank" rel="noreferrer">dane.gov.pl</a> · Ministerstwo Rodziny, Pracy i Polityki Społecznej, CC0 1.0</li>
-        <li><span class="k">Sale prices</span><a href="https://www.geoportal.gov.pl/pl/dane/rejestr-cen-nieruchomosci-rcn/" target="_blank" rel="noreferrer">Rejestr Cen Nieruchomości, GUGiK</a></li>
-        <li><span class="k">Road accidents · non-commercial use</span><a href="https://obserwatoriumbrd.pl/" target="_blank" rel="noreferrer">Instytut Transportu Samochodowego – Polskie Obserwatorium Bezpieczeństwa Ruchu Drogowego</a></li>
-        <li><span class="k">Asking rents</span>Otodom and OLX, one snapshot on 30 Sep 2026 · listings not redistributed</li>
-        <li><span class="k">City price history</span>National Bank of Poland, quarterly prices</li>
-        <li><span class="k">Market scan</span><a href="https://mistopolia.com/en/about/" target="_blank" rel="noreferrer">Mistopolia</a> · <a href="https://polandrent.com/" target="_blank" rel="noreferrer">PolandRent</a> · <a href="https://strado.info/" target="_blank" rel="noreferrer">Strado</a></li>
-      </ol>
-      <p class="muted" style="font-size:.9rem">Data collected 29 Sep – 2 Oct 2026. Road accident data: free for non-commercial use with the credit line above; commercial use needs written approval. Fonts: Inconsolata (OFL), Nunito (OFL). Icons: Phosphor (MIT). All diagrams drawn by the team.</p>
+      <h2>What a city could add. And why we are different.</h2>
+      <div class="cols">
+        <div class="col-block" data-step="1" data-dim>
+          <h3>For the city <span class="tag">concepts</span></h3>
+          <ul class="ticks">
+            <li><b>Official notices</b> of planned projects</li>
+            <li><b>Verified resident feedback:</b> identity checked, salted token, so a landlord cannot trace a report</li>
+            <li><b>Anonymous demand counts</b> by district</li>
+          </ul>
+          <p class="muted small">Built, not published: the feedback form and the personalised AI report, in the city service. Feedback stays unverified and never changes a score.</p>
+        </div>
+        <div class="col-block" data-step="2">
+          <h3>The market</h3>
+          <table class="cmp">
+            <tbody>
+              <tr><th scope="row">MiejscoMetr</th><td>one address</td></tr>
+              <tr><th scope="row">Locumo</th><td>property reports</td></tr>
+              <tr><th scope="row">Dobra Lokacja</th><td>free map</td></tr>
+              <tr><th scope="row">PolandRent, Otodom Analytics</th><td>prices</td></tr>
+              <tr class="us"><th scope="row">GdzieZamieszkać</th><td>district recommender, household profile, provenance, deed prices, commute matrix, a city behind it</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <aside class="notes">Every source with its credit line. The full list with licences is in docs/DATA_SOURCES.md.</aside>
+    <aside class="notes"><span class="cue">(Click) </span>These are concepts and we mark them as such: we build no fake endpoints and show no fake data for them. A city could publish official notices, collect verified feedback with identity checked and a salted token so that a landlord cannot trace a report, and see anonymous demand counts by district. Two pieces are real, in the separate city service: the personalised AI report, and resident feedback, which is stored as unverified and never published. <span class="cue">(Click) </span>The market, in one slide. MiejscoMetr scores a single address. Locumo writes property reports. Dobra Lokacja is a free map. PolandRent and Otodom Analytics cover prices. Our edge: a district recommender with household profiles, provenance on every number, prices from deeds, a commute matrix, and a city behind it. <span class="presenter">Preliminary market scan as of 3 October 2026. Do not claim it is exhaustive. The household profile is planned, not built.</span></aside>
+  </section>
+
+  <!-- 10 · Earlier vs on-site, roadmap -->
+  <section class="slide dark" data-title="Earlier work, on-site work and roadmap">
+    <div class="inner">
+      <h2>What we brought, what we built here, what comes next.</h2>
+      <div class="grid g3">
+        <div class="tile" data-step="1" data-dim>
+          <span class="eyebrow">Before HackYeah · 29 Sep to 2 Oct</span>
+          <ul class="ticks"><li>Data and database</li><li>Read-only backend API, 16 operations, 153 offline tests</li></ul>
+        </div>
+        <div class="tile" data-step="2" data-dim>
+          <span class="eyebrow">At HackYeah · 3 and 4 Oct</span>
+          <ul class="ticks"><li>Frontend</li><li>City service: personalised AI report, resident feedback</li><li>Documents, changelog</li></ul>
+        </div>
+        <div class="tile" data-step="3">
+          <span class="eyebrow">Next</span>
+          <ul class="ticks"><li>Deploy on a server</li><li>Polish legal opinion: fees, AI transparency (EU AI Act, Article 50)</li><li>National login node</li><li>A second city</li><li>Data-sharing agreements for rents</li></ul>
+        </div>
+      </div>
+      <p class="muted small" data-step="3">Open: who operates it, and who pays. Our ask to Kraków: host it as a free public service. · Delta-43 · Rysia · unicorn-alex · github.com/Delta-43/GdzieZamieszkac</p>
+    </div>
+    <aside class="notes">HackYeah asks us to separate earlier work from on-site work. <span class="cue">(Click) </span>Before the event, from 29 September to 2 October, we built the data collection, the database and the read-only backend API. The first commit of the repository is the import of that earlier work, and every change to it is logged in the on-site changelog. <span class="cue">(Click) </span>On site we built the frontend, the city service with the personalised AI report and resident feedback, and the documents. <span class="cue">(Click) </span>The path to real use: deploy on a server, get a Polish legal opinion on fees and on AI transparency under Article 50 of the EU AI Act, connect the national login node, add a second city, and replace the one-time rent snapshot with data-sharing agreements. That also answers who operates it and who pays: the city is the natural host, and the legal opinion settles fees. <span class="presenter">Update the on-site column to what is finished before you present. Full credit lines and licences are in docs/DATA_SOURCES.md and README.md; the AI disclosure is in README.md.</span></aside>
   </section>
 </main>
+
 
 <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
 <nav class="controls" aria-label="Presentation controls">
   <button id="prev" type="button" aria-label="Previous" title="Previous (Left arrow)">←</button>
-  <span class="counter" id="counter" aria-live="polite">01 / 19</span>
+  <span class="counter" id="counter" aria-live="polite">01 / 10</span>
   <button id="next" type="button" aria-label="Next" title="Next (Right arrow or Space)">→</button>
   <button id="overviewButton" type="button" aria-label="Open slide overview" title="Overview (O)">▦</button>
   <button id="notesButton" type="button" aria-label="Toggle narration" title="Narration (N)">N</button>
-  <button id="commentsButton" type="button" aria-label="Comments on this slide" aria-expanded="false" aria-controls="cpanel" title="Comments (C)">💬<span class="cbadge" id="cbadge"></span></button>
+  <button id="commentsButton" type="button" aria-label="Comments on this slide" aria-expanded="false" aria-controls="comments" title="Comments (C)">💬<span class="badge-count" id="commentsBadge"></span></button>
   <button id="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">⛶</button>
 </nav>
-<aside class="cpanel" id="cpanel" aria-label="Slide comments">
-  <header>
-    <div><p class="where" id="cwhere"></p><h2>Comments</h2></div>
-    <button id="cclose" type="button" aria-label="Close comments">Close · Esc</button>
-  </header>
-  <ul class="clist" id="clist"></ul>
-  <form class="cform" id="cform">
-    <label for="cauthor">Your name (optional)</label>
-    <input id="cauthor" autocomplete="off" maxlength="60">
-    <label for="ctext">New comment on this slide</label>
-    <textarea id="ctext" maxlength="2000" required></textarea>
-    <button class="primary" type="submit">Add comment</button>
-  </form>
-  <div class="ctools">
-    <button id="cmd" type="button" title="Copy all comments as Markdown">Copy MD</button>
-    <button id="cexport" type="button" title="Download all comments as JSON">Export</button>
-    <button id="cimport" type="button" title="Merge comments from a JSON file">Import</button>
+<aside class="comments" id="comments" aria-label="Slide comments">
+  <div class="comments-head">
+    <h2 id="commentsTitle">Comments</h2>
+    <button id="commentsClose" type="button" aria-label="Close comments">✕</button>
   </div>
-  <input type="file" id="cfile" accept="application/json" hidden>
-  <p class="cstatus" id="cstatus" role="status"></p>
+  <ul class="comments-list" id="commentsList" aria-labelledby="commentsTitle"></ul>
+  <form id="commentForm" class="stack" style="gap: var(--s2)">
+    <label>Your name (optional)<input id="commentAuthor" type="text" autocomplete="off" maxlength="60"></label>
+    <label>Comment on this slide<textarea id="commentText" required maxlength="2000"></textarea></label>
+    <div class="comments-actions">
+      <button class="primary" type="submit">Add comment</button>
+      <span>
+        <button id="commentsExport" type="button" title="Download all comments as a JSON file">Export</button>
+        <button id="commentsImport" type="button" title="Merge comments from a JSON file">Import</button>
+      </span>
+    </div>
+    <input id="commentsFile" type="file" accept="application/json,.json" hidden>
+    <p class="comments-status" id="commentsStatus" role="status"></p>
+    <p class="comments-status">Saved only in this browser. Use Export to share with the team.</p>
+  </form>
 </aside>
 <div class="overview" id="overview" aria-label="Slide overview" hidden>
   <button class="overview-close" id="overviewClose" type="button">Close overview · Esc</button>
@@ -585,12 +487,6 @@
 
 <script>
   (() => {
-    // unit chart: one square per catalogue metric
-    document.querySelectorAll('.units').forEach(u => {
-      const have = +u.dataset.have, miss = +u.dataset.miss;
-      u.innerHTML = '<i></i>'.repeat(have) + '<i class="miss"></i>'.repeat(miss);
-    });
-
     const slides = [...document.querySelectorAll('.slide')];
     const deck = document.getElementById('deck');
     const counter = document.getElementById('counter');
@@ -621,14 +517,125 @@
         el.classList.toggle('pending', n > step);
         el.classList.toggle('done', n < step);
       });
-      slide.classList.toggle('gaps-on', step >= 1);
       counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
       progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
       document.getElementById('prev').disabled = current === 0 && step === 0;
       document.getElementById('next').disabled = current === slides.length - 1 && step === maxStep(slide);
-      history.replaceState(null, '', `#${current + 1}`);
+      try { history.replaceState(null, '', `#${current + 1}`); } catch (err) { /* sandboxed preview frame: no URL hash */ }
       renderComments();
     }
+
+    // ---- slide comments: stored per slide title in this browser's localStorage ----
+    const STORE = 'gz-pitch-comments-v1';
+    const panel = document.getElementById('comments');
+    const list = document.getElementById('commentsList');
+    const form = document.getElementById('commentForm');
+    const textEl = document.getElementById('commentText');
+    const authorEl = document.getElementById('commentAuthor');
+    const statusEl = document.getElementById('commentsStatus');
+    const fileEl = document.getElementById('commentsFile');
+    const commentsButton = document.getElementById('commentsButton');
+    const key = slide => slide.dataset.title;
+    let comments = {};
+    try { comments = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (err) { comments = {}; }
+    const save = () => {
+      try { localStorage.setItem(STORE, JSON.stringify(comments)); statusEl.textContent = ''; }
+      catch (err) { statusEl.textContent = 'Could not save in this browser. Use Export to keep your comments.'; }
+    };
+    try { authorEl.value = localStorage.getItem(STORE + '-author') || ''; } catch (err) { /* storage blocked */ }
+    const fmt = iso => new Date(iso).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+
+    function renderComments() {
+      const slide = slides[current];
+      const items = comments[key(slide)] || [];
+      document.getElementById('commentsTitle').textContent = `Comments · slide ${pad(current + 1)}`;
+      list.replaceChildren();
+      if (!items.length) {
+        const li = document.createElement('li');
+        li.className = 'comments-empty';
+        li.textContent = 'No comments on this slide yet.';
+        list.append(li);
+      }
+      items.forEach(c => {
+        const li = document.createElement('li');
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const who = document.createElement('span');
+        who.textContent = `${c.author || 'Anonymous'} · ${fmt(c.at)}`;
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.textContent = 'Delete';
+        del.setAttribute('aria-label', `Delete comment by ${c.author || 'Anonymous'}`);
+        del.addEventListener('click', () => {
+          comments[key(slide)] = items.filter(x => x.id !== c.id);
+          if (!comments[key(slide)].length) delete comments[key(slide)];
+          save(); renderComments();
+        });
+        meta.append(who, del);
+        const p = document.createElement('p');
+        p.textContent = c.text;
+        li.append(meta, p);
+        list.append(li);
+      });
+      const total = items.length;
+      document.getElementById('commentsBadge').textContent = total || '';
+      commentsButton.setAttribute('aria-label', `Comments on this slide (${total})`);
+      [...overviewGrid.children].forEach((b, i) => {
+        const n = (comments[key(slides[i])] || []).length;
+        b.querySelector('.badge-count').textContent = n || '';
+      });
+    }
+    function toggleComments(open) {
+      panel.classList.toggle('open', open);
+      commentsButton.setAttribute('aria-expanded', String(open));
+      if (open) textEl.focus(); else commentsButton.focus();
+    }
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = textEl.value.trim();
+      if (!text) return;
+      const k = key(slides[current]);
+      const author = authorEl.value.trim();
+      (comments[k] = comments[k] || []).push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), author, text, at: new Date().toISOString() });
+      try { localStorage.setItem(STORE + '-author', author); } catch (err) { /* storage blocked */ }
+      textEl.value = '';
+      save(); renderComments();
+      textEl.focus();
+    });
+    document.getElementById('commentsClose').addEventListener('click', () => toggleComments(false));
+    commentsButton.addEventListener('click', () => toggleComments(!panel.classList.contains('open')));
+    document.getElementById('commentsExport').addEventListener('click', () => {
+      const out = { exported: new Date().toISOString(), deck: document.title, comments };
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
+      a.download = `pitch-comments-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    document.getElementById('commentsImport').addEventListener('click', () => fileEl.click());
+    fileEl.addEventListener('change', async () => {
+      const file = fileEl.files[0];
+      fileEl.value = '';
+      if (!file) return;
+      try {
+        const incoming = JSON.parse(await file.text()).comments;
+        let added = 0;
+        for (const [k, arr] of Object.entries(incoming || {})) {
+          if (!Array.isArray(arr)) continue;
+          const have = new Set((comments[k] = comments[k] || []).map(c => c.id));
+          arr.forEach(c => {
+            if (c && typeof c.id === 'string' && typeof c.text === 'string' && !have.has(c.id)) {
+              comments[k].push({ id: c.id, author: String(c.author || ''), text: c.text, at: String(c.at || new Date().toISOString()) });
+              added++;
+            }
+          });
+          comments[k].sort((a, b) => a.at.localeCompare(b.at));
+          if (!comments[k].length) delete comments[k];
+        }
+        save(); renderComments();
+        statusEl.textContent = `Imported ${added} new comment${added === 1 ? '' : 's'}.`;
+      } catch (err) { statusEl.textContent = 'That file is not a comments export.'; }
+    });
     function go(index, atEnd = false) {
       current = Math.max(0, Math.min(slides.length - 1, index));
       step = atEnd ? maxStep(slides[current]) : 0;
@@ -652,6 +659,10 @@
       b.type = 'button';
       b.innerHTML = `<span>${pad(i + 1)}</span>`;
       b.append(slide.dataset.title);
+      const bc = document.createElement('span');
+      bc.className = 'badge-count';
+      bc.setAttribute('aria-label', 'comments');
+      b.append(bc);
       b.addEventListener('click', () => { go(i); toggleOverview(false); });
       overviewGrid.append(b);
     });
@@ -666,127 +677,19 @@
         else await document.exitFullscreen?.();
       } catch (err) { /* fullscreen not allowed here */ }
     });
-    // comments: stored in this browser only (localStorage), shared by exporting a file
-    const STORE = 'gz-deck-comments-v1';
-    const panel = document.getElementById('cpanel');
-    const clist = document.getElementById('clist');
-    const cstatus = document.getElementById('cstatus');
-    const cbadge = document.getElementById('cbadge');
-    const cbutton = document.getElementById('commentsButton');
-    let comments = [];
-    try { comments = JSON.parse(localStorage.getItem(STORE) || '[]'); } catch (err) { comments = []; }
-    if (!Array.isArray(comments)) comments = [];
-    const slideKey = i => slides[i].dataset.title;
-    const mine = () => comments.filter(c => c.slide === current + 1);
-    function save() {
-      try { localStorage.setItem(STORE, JSON.stringify(comments)); }
-      catch (err) { say('Could not save in this browser. Export your comments now.'); }
-    }
-    function say(msg) { cstatus.textContent = msg; }
-    function renderComments() {
-      document.getElementById('cwhere').textContent = `Slide ${current + 1} · ${slideKey(current)}`;
-      const list = mine();
-      clist.innerHTML = '';
-      if (!list.length) {
-        const li = document.createElement('li');
-        li.textContent = 'No comments on this slide yet.';
-        clist.append(li);
-      }
-      list.forEach(c => {
-        const li = document.createElement('li');
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        const who = document.createElement('span');
-        who.textContent = `${c.author || 'Anonymous'} · ${new Date(c.at).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}`;
-        const del = document.createElement('button');
-        del.type = 'button';
-        del.textContent = 'Delete';
-        del.setAttribute('aria-label', `Delete comment by ${c.author || 'Anonymous'}`);
-        del.addEventListener('click', () => {
-          comments = comments.filter(x => x.id !== c.id);
-          save(); renderComments();
-        });
-        meta.append(who, del);
-        const p = document.createElement('p');
-        p.textContent = c.text;
-        li.append(meta, p);
-        clist.append(li);
-      });
-      const n = list.length;
-      cbadge.textContent = n;
-      cbadge.classList.toggle('on', n > 0);
-      cbutton.setAttribute('aria-label', n ? `Comments on this slide, ${n}` : 'Comments on this slide');
-    }
-    function toggleComments(open) {
-      panel.classList.toggle('open', open);
-      cbutton.setAttribute('aria-expanded', String(open));
-      if (open) { renderComments(); say(''); document.getElementById('ctext').focus(); }
-      else cbutton.focus();
-    }
-    const asMarkdown = () => {
-      const out = ['# GdzieZamieszkać deck: comments', ''];
-      slides.forEach((s, i) => {
-        const list = comments.filter(c => c.slide === i + 1);
-        if (!list.length) return;
-        out.push(`## ${i + 1}. ${slideKey(i)}`, '');
-        list.forEach(c => out.push(`- **${c.author || 'Anonymous'}** (${c.at.slice(0, 10)}): ${c.text.replace(/\n+/g, ' ')}`));
-        out.push('');
-      });
-      return out.length > 2 ? out.join('\n') : 'No comments yet.';
-    };
-    document.getElementById('cform').addEventListener('submit', e => {
-      e.preventDefault();
-      const text = document.getElementById('ctext').value.trim();
-      if (!text) return;
-      const author = document.getElementById('cauthor').value.trim();
-      comments.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, slide: current + 1, title: slideKey(current), author, text, at: new Date().toISOString() });
-      document.getElementById('ctext').value = '';
-      save(); renderComments(); say('Comment added.');
-    });
-    document.getElementById('cclose').addEventListener('click', () => toggleComments(false));
-    cbutton.addEventListener('click', () => toggleComments(!panel.classList.contains('open')));
-    document.getElementById('cmd').addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(asMarkdown()); say('Markdown copied.'); }
-      catch (err) { say('Copy not allowed here. Use Export instead.'); }
-    });
-    document.getElementById('cexport').addEventListener('click', () => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([JSON.stringify(comments, null, 2)], { type: 'application/json' }));
-      a.download = `deck-comments-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(a.href);
-      say('Exported.');
-    });
-    document.getElementById('cimport').addEventListener('click', () => document.getElementById('cfile').click());
-    document.getElementById('cfile').addEventListener('change', async e => {
-      const file = e.target.files[0];
-      e.target.value = '';
-      if (!file) return;
-      try {
-        const incoming = JSON.parse(await file.text());
-        if (!Array.isArray(incoming)) throw new Error('not a list');
-        const have = new Set(comments.map(c => c.id));
-        let added = 0;
-        incoming.forEach(c => {
-          if (c && typeof c.id === 'string' && typeof c.text === 'string' && Number.isInteger(c.slide) && c.slide >= 1 && c.slide <= slides.length && !have.has(c.id)) {
-            comments.push({ id: c.id, slide: c.slide, title: slideKey(c.slide - 1), author: String(c.author || '').slice(0, 60), text: c.text.slice(0, 2000), at: typeof c.at === 'string' ? c.at : new Date().toISOString() });
-            added++;
-          }
-        });
-        save(); renderComments(); say(`Imported ${added} new comment${added === 1 ? '' : 's'}.`);
-      } catch (err) { say('That file is not a comments export.'); }
-    });
-
     document.addEventListener('keydown', e => {
       if (e.altKey || e.ctrlKey || e.metaKey) return;
-      if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) { if (e.key === 'Escape') toggleComments(false); return; }
-      if (panel.classList.contains('open') && e.key === 'Escape') { toggleComments(false); return; }
-      if (e.key.toLowerCase() === 'c' && overview.hidden) { toggleComments(!panel.classList.contains('open')); return; }
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+        if (e.key === 'Escape') toggleComments(false);
+        return;
+      }
+      if (e.key === 'Escape' && panel.classList.contains('open')) { toggleComments(false); return; }
       if (!overview.hidden) { if (e.key === 'Escape') toggleOverview(false); return; }
-      if (['ArrowRight', 'PageDown', ' '].includes(e.key) && !(e.key === ' ' && e.target.tagName === 'BUTTON')) { e.preventDefault(); next(); }
+      if (['ArrowRight', 'PageDown', ' '].includes(e.key) && e.target.tagName !== 'BUTTON') { e.preventDefault(); next(); }
       else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
       else if (e.key.toLowerCase() === 'o') toggleOverview(true);
       else if (e.key.toLowerCase() === 'n') deck.classList.toggle('show-notes');
+      else if (e.key.toLowerCase() === 'c') { e.preventDefault(); toggleComments(!panel.classList.contains('open')); }
       else if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
       else if (e.key === 'Home') go(0);
       else if (e.key === 'End') go(slides.length - 1, true);
