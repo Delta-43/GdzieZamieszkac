@@ -205,7 +205,8 @@ docs/                     Idea, data sources, data dictionary, design, plans, da
 changelog/                One file per pull request, built into ON_SITE_CHANGELOG.md before each merge into main
 scripts/                  build_changelog.py
 .github/                  CI, issue templates, pull request template
-presentation.html         The HackYeah pitch deck; open it in a browser
+pitch/                    The final pitch decks for the Smart City and Artificial Intelligence tracks (HTML and PDF), and the cover images
+presentation.html         The first draft of the pitch deck
 ```
 
 ## 📚 Documentation
