@@ -259,3 +259,21 @@ export const aiReportFixture: cityComponents['schemas']['AiReport'] = {
   ],
   facts: ['Test fact one.', 'Test fact two.'],
 }
+
+/** What the city service says about a report, as GET /v1/feedback/status answers it. */
+export const feedbackStatusFixture: cityComponents['schemas']['FeedbackStatus'] = {
+  accepting: true,
+  identity_check: 'not_yet',
+  stored_as: 'unverified',
+  published: false,
+  affects_scores: false,
+  note: { pl: 'Test notatka o zgłoszeniach.', en: 'Test note about reports.' },
+}
+
+/** The receipt of POST /v1/feedback. */
+export const feedbackReceiptFixture: cityComponents['schemas']['FeedbackReceipt'] = {
+  id: 'test-id',
+  status: 'unverified',
+  published: false,
+  note: { pl: 'Test notatka po wysłaniu.', en: 'Test note after sending.' },
+}
