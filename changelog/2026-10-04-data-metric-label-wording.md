@@ -1,0 +1,1 @@
+- `server/migrations/krakow/0022_metric_label_wording.sql`: new migration that changes four metric labels (`transit_stops_total`, `transit_stops_rail_metro`, `crime_detection_rate`, `busyness_index`) to the reviewer's wording, at the coordinator's request. Imported migrations 0001 to 0021 are not edited.
