@@ -1,0 +1,1 @@
+- `presentation-comments.html`: slide 1 uses the plain title layout (eyebrow, "Find where life fits.", one-line lead "Compare Kraków's 18 districts based on public data."). The family story and the three build-in tiles that were on slide 1 are removed from this copy; `presentation.html` and other imported code are unchanged.
