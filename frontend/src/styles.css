@@ -143,6 +143,21 @@ main,
   font-size: var(--text-lg);
   font-weight: 700;
   text-decoration: none;
+  /* Room for the logo. */
+  position: relative;
+  padding-inline-start: calc(2rem + var(--space-2));
+}
+
+/*
+  The logo before the site name. 32 pixels: it fits the 40 pixel link of a narrow screen. It is placed outside the flow,
+  so the name keeps the baseline that the city beside it lines up with.
+*/
+.site-logo {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(50% - 1rem);
+  inline-size: 2rem;
+  block-size: 2rem;
 }
 
 @media (min-width: 40rem) and (min-height: 30rem) {
