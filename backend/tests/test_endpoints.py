@@ -172,6 +172,23 @@ def test_personas_are_valid_weight_sets(client):
     assert client.get("/v1/personas?lang=pl").json()["personas"][0]["label"] == "Student"
 
 
+def test_personas_cover_different_priorities_with_text_in_both_languages(client):
+    personas = client.get("/v1/personas").json()["personas"]
+    keys = [p["key"] for p in personas]
+    assert len(keys) == len(set(keys)) and {"couple", "newly_married", "city_life", "quiet_green"} <= set(keys)
+    cats = ("transport", "livability", "amenities", "environment", "cost", "safety")
+    vectors = {p["key"]: [p["weights"]["category"].get(c, 1) for c in cats] for p in personas}
+    # The presets must differ enough for the choice to matter: some pair is far apart, and one leaves cost out altogether.
+    distance = max(sum(abs(a - b) for a, b in zip(vectors[x], vectors[y], strict=True)) for x in vectors for y in vectors)
+    assert distance >= 15
+    assert any(v[cats.index("cost")] == 0 for v in vectors.values())
+    for lang in ("en", "pl"):
+        for p in client.get(f"/v1/personas?lang={lang}").json()["personas"]:
+            assert p["label"].strip() and p["description"].strip()
+    en, pl = client.get("/v1/personas?lang=en").json()["personas"], client.get("/v1/personas?lang=pl").json()["personas"]
+    assert [p["description"] for p in en] != [p["description"] for p in pl]
+
+
 def test_boundaries_are_geojson(client):
     r = client.get("/v1/districts.geojson")
     assert r.headers["content-type"].startswith("application/geo+json")
@@ -233,6 +250,21 @@ def test_cors_allows_the_city_frontend_only(client):
 def test_unknown_path_is_problem_json(client):
     r = client.get("/v1/nothing")
     assert r.status_code == 404 and r.headers["content-type"].startswith("application/problem+json")
+
+
+def test_a_very_long_code_is_not_echoed_back_in_full(client):
+    for path in ("/v1/districts/" + "a" * 5000, "/v1/metrics/" + "b" * 5000 + "/values"):
+        r = client.get(path)
+        assert r.status_code == 404 and len(r.json()["detail"]) < 120
+
+
+def test_a_body_that_is_not_json_gets_a_plain_sentence(client):
+    bad = client.post("/v1/recommend", content=b"{oops", headers={"content-type": "application/json"})
+    assert bad.status_code == 422 and bad.json()["detail"] == "The request body is not valid JSON."
+    wrong = client.post("/v1/recommend", content=b"{}", headers={"content-type": "text/plain"})
+    assert wrong.status_code == 422 and "Content-Type: application/json" in wrong.json()["detail"]
+    # Field errors keep naming the field.
+    assert "cost" in client.post("/v1/recommend", json={"weights": {"category": {"cost": 9}}}).json()["detail"]
 
 
 def test_a_shown_but_not_scored_metric_cannot_be_given_a_weight(client):

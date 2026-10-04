@@ -126,7 +126,6 @@ These are known. Raise each one in a pull request that changes the contract. Unt
 | Dates such as `as_of` are ISO strings with no display form | The date format is not localised | Show the ISO date for now. |
 | The default language is English | The portal default is Polish | Send `lang` on every request. |
 | `/recommend` takes weights only | No budget range, tenure or work place | Do the budget filter and the commute step in the browser. See phase 2 in `REQUIREMENTS.md`. |
-| `/personas` has no couple or newly married preset | Phase 2 needs them | Ask the coordinator to add them to the backend data file. |
 
 ## Not in the contract
 

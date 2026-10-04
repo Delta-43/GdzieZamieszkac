@@ -64,3 +64,37 @@ def test_accept_language_gives_the_same_answer_as_the_query(client):
     via_query = client.get("/v1/districts?lang=pl").json()
     via_header = client.get("/v1/districts", headers={"Accept-Language": "pl-PL,pl;q=0.9,en;q=0.4"}).json()
     assert via_query == via_header
+
+
+def test_source_licence_and_unit_have_a_stored_polish_version_and_fall_back_to_english(client):
+    en, pl = client.get("/v1/districts/alpha?lang=en").json(), client.get("/v1/districts/alpha?lang=pl").json()
+
+    def metric(body, key):
+        return next(m for c in body["categories"] for m in c["metrics"] if m["key"] == key)
+
+    stops_en, stops_pl = metric(en, "transit_stops_total"), metric(pl, "transit_stops_total")
+    assert (stops_en["unit"], stops_pl["unit"]) == ("stops", "przystanki")
+    assert (stops_en["source"]["licence"], stops_pl["source"]["licence"]) == ("Test licence", "Licencja testowa")
+    assert (stops_en["source"]["name"], stops_pl["source"]["name"]) == ("Test source", "Źródło testowe")
+    # A text with no stored Polish version stays as it is (never translated live), here a unit and a credit line.
+    assert metric(pl, "sale_price_median_m2")["unit"] == "PLN/m²"
+    assert metric(pl, "transit_stops_total")["source"]["attribution"] in ("", "Podpis testowy")
+
+
+def test_meta_catalogue_and_series_use_the_polish_texts_too(client):
+    sources = client.get("/v1/meta?lang=pl").json()["sources"]
+    assert {s["licence"] for s in sources} == {"Licencja testowa"} and {s["name"] for s in sources} == {"Źródło testowe"}
+    assert {s["licence"] for s in client.get("/v1/meta?lang=en").json()["sources"]} == {"Test licence"}
+    units = {m["key"]: m["unit"] for m in client.get("/v1/metrics?lang=pl").json()["metrics"]}
+    assert units["transit_stops_total"] == "przystanki" and units["crime_detection_rate"] == "%"
+    series = client.get("/v1/districts/alpha/series/sale_price_median_m2?lang=pl")
+    if series.status_code == 200:
+        assert series.json()["source"]["licence"] == "Licencja testowa"
+
+
+def test_outlook_method_names_follow_the_language(client):
+    for lang, expected in (("en", {"History range", "Damped momentum"}), ("pl", {"Zakres historyczny", "Wygaszone tempo zmian"})):
+        r = client.get(f"/v1/districts/alpha/outlook?lang={lang}")
+        if r.status_code == 200:
+            methods = {x["method"] for x in r.json()["scenario"]["backtest"]["results"]}
+            assert methods <= expected and methods
