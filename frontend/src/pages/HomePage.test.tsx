@@ -23,9 +23,9 @@ test('the home page shows what the portal is, a search by district name, and the
   // The map is the second main part of the page, with the measure in its heading and one button per district.
   const map = await screen.findByRole('group', { name: /Mapa dzielnic\. Miara: Test score label/ })
   expect(within(map).getAllByRole('button')).toHaveLength(4)
-  // The key of the map: one line, from the lower score to the higher one.
-  expect(await screen.findByText('niższy wynik')).toBeInTheDocument()
-  expect(screen.getByText('wyższy wynik')).toBeInTheDocument()
+  // The key of the map: one line, from the lower value to the higher one.
+  expect(await screen.findByText('niższa wartość')).toBeInTheDocument()
+  expect(screen.getByText('wyższa wartość')).toBeInTheDocument()
 })
 
 test('typing shows the matching districts, the arrow keys move through them, and Enter opens the map on that district', async () => {

@@ -101,9 +101,7 @@
       "single": "Przedział {{number}}: {{value}}",
       "noData": "Pole kreskowane: brak danych",
       "lower": "niższa wartość",
-      "higher": "wyższa wartość",
-      "lowerScore": "niższy wynik",
-      "higherScore": "wyższy wynik"
+      "higher": "wyższa wartość"
     },
     "table": {
       "region": "Lista dzielnic. Można ją przewijać.",
@@ -130,7 +128,11 @@
     },
     "pickerLabel": "Co koloruje mapę",
     "listHeading": "Lista dzielnic",
-    "detailsLabel": "Szczegóły wybranej dzielnicy"
+    "detailsLabel": "Szczegóły wybranej dzielnicy",
+    "measureSearch": "Szukaj miary",
+    "measureSearchHint": "Wpisz część nazwy, na przykład „hałas”. Lista poniżej pokaże tylko pasujące miary.",
+    "measureCount": "Pasujące miary: {{count}}.",
+    "measureNone": "Żadna miara nie pasuje. Zmień wpisany tekst."
   },
   "report": {
     "heading": "Opis dzielnicy",
@@ -151,7 +153,7 @@
     "noData": "Brak danych.",
     "sample": "Liczba obserwacji",
     "caveat": "Zastrzeżenie",
-    "more": "Metoda, licencja i oznaczenie źródła",
+    "more": "Rodzaj danych, data, źródło, metoda i licencja",
     "method": "Metoda",
     "licence": "Licencja",
     "attribution": "Oznaczenie źródła"

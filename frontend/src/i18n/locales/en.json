@@ -101,9 +101,7 @@
       "single": "Class {{number}}: {{value}}",
       "noData": "Hatched area: no data",
       "lower": "lower value",
-      "higher": "higher value",
-      "lowerScore": "lower score",
-      "higherScore": "higher score"
+      "higher": "higher value"
     },
     "table": {
       "region": "List of the districts. It scrolls.",
@@ -130,7 +128,11 @@
     },
     "pickerLabel": "What colours the map",
     "listHeading": "List of districts",
-    "detailsLabel": "Details of the chosen district"
+    "detailsLabel": "Details of the chosen district",
+    "measureSearch": "Search for a measure",
+    "measureSearchHint": "Type part of a name, for example \"noise\". The list below then shows only the measures that match.",
+    "measureCount": "Measures that match: {{count}}.",
+    "measureNone": "No measure matches. Change the text."
   },
   "report": {
     "heading": "About the district",
@@ -151,7 +153,7 @@
     "noData": "No data.",
     "sample": "Sample size",
     "caveat": "Caveat",
-    "more": "Method, licence and credit line",
+    "more": "Data kind, date, source, method and licence",
     "method": "Method",
     "licence": "Licence",
     "attribution": "Credit line"

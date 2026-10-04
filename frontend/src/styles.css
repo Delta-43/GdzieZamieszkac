@@ -726,27 +726,6 @@ main:focus {
   stroke-width: 2.5px;
 }
 
-/* The score palette: red through yellow to green, for the scores where higher is better. */
-.district-map--score .map-district--c1 path {
-  fill: var(--color-map-score1);
-}
-
-.district-map--score .map-district--c2 path {
-  fill: var(--color-map-score2);
-}
-
-.district-map--score .map-district--c3 path {
-  fill: var(--color-map-score3);
-}
-
-.district-map--score .map-district--c4 path {
-  fill: var(--color-map-score4);
-}
-
-.district-map--score .map-district--c5 path {
-  fill: var(--color-map-score5);
-}
-
 /* A zoomed map can be dragged with a mouse. */
 .district-map--movable {
   cursor: grab;
@@ -910,26 +889,6 @@ main:focus {
 
 .map-legend__swatch--c5 {
   background: var(--color-map-ramp5);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c1 {
-  background: var(--color-map-score1);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c2 {
-  background: var(--color-map-score2);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c3 {
-  background: var(--color-map-score3);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c4 {
-  background: var(--color-map-score4);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c5 {
-  background: var(--color-map-score5);
 }
 
 .map-legend__swatch--none {
@@ -1447,8 +1406,17 @@ summary:hover {
 
 .site-footer__sources li {
   break-inside: avoid;
-  line-height: 2;
+  padding-block: var(--space-1);
+  line-height: var(--line-base);
   color: var(--color-text-muted);
+}
+
+/* Each credit link is a block of its own height, at least 24 pixels, so small print is still easy to hit (WCAG 2.5.8). */
+.site-footer__sources li > a:first-child {
+  display: inline-block;
+  min-block-size: 1.5rem;
+  padding-block: 0.1875rem;
+  box-sizing: border-box;
 }
 
 .site-footer__more {

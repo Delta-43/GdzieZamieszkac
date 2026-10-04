@@ -66,7 +66,7 @@ test('the list is short: each district with its overall score and the value show
   expect(rowOf('Gamma')).toHaveTextContent('brak danych')
 })
 
-test('with the overall score on the map the list has one value column, the map prints no names, and it is coloured as a score', async () => {
+test('with the overall score on the map the list has one value column, and the map prints no names', async () => {
   mockFetch(districtsApi)
   const { container } = renderApp('/districts')
 
@@ -74,10 +74,28 @@ test('with the overall score on the map the list has one value column, the map p
   expect(within(table).getAllByRole('columnheader')).toHaveLength(2)
   // The names are in each district's button and card, not printed on the map.
   expect(container.querySelectorAll('.map-label')).toHaveLength(0)
-  // The overall score is a score, where higher is better: the red to green palette. A single measure keeps the blue one.
-  expect(container.querySelector('svg.district-map')).toHaveClass('district-map--score')
-  fireEvent.change(screen.getByRole('combobox', { name: 'Inna miara' }), { target: { value: 'test_sale' } })
-  await waitFor(() => expect(container.querySelector('svg.district-map')).toHaveClass('district-map--measure'))
+})
+
+test('typing in the search field narrows the list of measures, without regard to accents or capitals, and says how many match', async () => {
+  mockFetch(districtsApi)
+  renderApp('/districts')
+  const select = await screen.findByRole('combobox', { name: 'Inna miara' })
+  const all = within(select).getAllByRole('option').length
+  expect(all).toBeGreaterThan(2)
+
+  fireEvent.change(screen.getByRole('searchbox', { name: 'Szukaj miary' }), { target: { value: 'SALE' } })
+
+  // The first option is the prompt; the rest are the measures that match.
+  expect(within(select).getAllByRole('option').map((option) => option.textContent)).toEqual(['— wybierz miarę —', 'Test sale label'])
+  expect(screen.getByText('Pasujące miary: 1.')).toHaveAttribute('role', 'status')
+
+  fireEvent.change(select, { target: { value: 'test_sale' } })
+  expect(await screen.findByRole('heading', { level: 2, name: 'Test sale label' })).toBeInTheDocument()
+
+  // A text that matches nothing says so, and the chosen measure stays in the list.
+  fireEvent.change(screen.getByRole('searchbox', { name: 'Szukaj miary' }), { target: { value: 'zzz' } })
+  expect(screen.getByText('Żadna miara nie pasuje. Zmień wpisany tekst.')).toBeInTheDocument()
+  expect(select).toHaveValue('test_sale')
 })
 
 test('the legend and the provenance say what the colours mean, in words', async () => {

@@ -10,7 +10,7 @@ function rowOf(label: string): HTMLElement {
   return screen.getByText(label, { selector: 'dt' }).closest('.metric') as HTMLElement
 }
 
-test('every metric shows its value as given, with data kind, date, source, rank, sample size and caveat', async () => {
+test('every metric shows its value as given, with rank, sample size and caveat; its data kind, date and source are one press away', async () => {
   mockFetch(districtsApi)
   renderApp(PAGE)
 
@@ -18,17 +18,33 @@ test('every metric shows its value as given, with data kind, date, source, rank,
   expect(document.title).toBe('Alpha – GdzieZamieszkać')
   const sale = rowOf('Test sale label')
   expect(sale).toHaveTextContent('100 test')
-  expect(sale).toHaveTextContent('obserwowane')
-  expect(sale).toHaveTextContent('Stan na: 2026-09-30')
-  expect(sale).toHaveTextContent('Źródło: Test source A')
   expect(sale).toHaveTextContent('Pozycja 2 z 4 (niższa wartość to lepsza pozycja)')
   expect(sale).toHaveTextContent('Liczba obserwacji: 42')
   expect(sale).toHaveTextContent('Zastrzeżenie: Test caveat from the API.')
-  // The method, the licence and the credit line sit in a collapsible detail.
-  const more = within(sale).getByText('Metoda, licencja i oznaczenie źródła').closest('details') as HTMLElement
+  // The data kind, the date, the source, the method, the licence and the credit line sit in a collapsible detail.
+  const more = within(sale).getByText('Rodzaj danych, data, źródło, metoda i licencja').closest('details') as HTMLElement
+  expect(more).toHaveTextContent('Rodzaj danych')
+  expect(more).toHaveTextContent('obserwowane')
+  expect(more).toHaveTextContent('2026-09-30')
+  expect(more).toHaveTextContent('Test source A')
   expect(more).toHaveTextContent('Test method text.')
   expect(more).toHaveTextContent('Test licence text')
   expect(more).toHaveTextContent('Test credit line A')
+  // A measured value carries no mark beside the number: the only badge of this row is the one in the detail.
+  expect(sale.querySelectorAll('.data-kind')).toHaveLength(1)
+  expect(more.querySelectorAll('.data-kind')).toHaveLength(1)
+})
+
+test('a value that is an estimate keeps its mark beside the number', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  await screen.findByRole('heading', { level: 1, name: 'Alpha' })
+  // The yield is estimated: the reader sees that without opening anything.
+  const row = rowOf('Test yield label')
+  const value = row.querySelector('.metric__value') as HTMLElement
+  expect(value).toHaveTextContent('5 test percent')
+  expect(value).toHaveTextContent('szacowane')
 })
 
 test('a metric without data shows its reason and no value', async () => {

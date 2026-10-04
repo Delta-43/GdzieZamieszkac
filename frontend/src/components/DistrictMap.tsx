@@ -69,11 +69,6 @@ type Props = {
   basemap?: Basemap | null
   /** A district to zoom to, for example the one a search found. */
   focusCode?: string | null
-  /**
-   * What the colours stand for. `measure`: more or less of something, in steps of one blue. `score`: a score where a
-   * higher value is the better one, from red through yellow to green.
-   */
-  palette?: 'measure' | 'score'
   /** The classes of the map with their ranges, for the card of a district. */
   classes?: ClassInfo[]
   /** A few more values per district for its card, for example the two prices. Label and the API's display string. */
@@ -96,7 +91,6 @@ export function DistrictMap({
   onSelect,
   basemap = null,
   focusCode = null,
-  palette = 'measure',
   classes = [],
   extras,
 }: Props) {
@@ -287,7 +281,7 @@ export function DistrictMap({
       <div className="district-map-stack">
         <svg
           ref={svgRef}
-          className={`district-map district-map--${palette}${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}${view ? ' district-map--movable' : ''}`}
+          className={`district-map${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}${view ? ' district-map--movable' : ''}`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}
@@ -382,7 +376,7 @@ export function DistrictMap({
             {tip.value ? (
               <>
                 <p className="map-tip__value">
-                  <span className={`map-tip__swatch map-legend__swatch--${palette} map-legend__swatch--c${tip.value.classNumber}`} />
+                  <span className={`map-tip__swatch map-legend__swatch--c${tip.value.classNumber}`} />
                   {tip.value.display}
                 </p>
                 <p className="map-tip__line">{metricLabel}</p>
