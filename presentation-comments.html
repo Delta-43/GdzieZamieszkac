@@ -521,7 +521,7 @@
       progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
       document.getElementById('prev').disabled = current === 0 && step === 0;
       document.getElementById('next').disabled = current === slides.length - 1 && step === maxStep(slide);
-      history.replaceState(null, '', `#${current + 1}`);
+      try { history.replaceState(null, '', `#${current + 1}`); } catch (err) { /* sandboxed preview frame: no URL hash */ }
       renderComments();
     }
 
