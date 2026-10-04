@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import type { MapView, ViewValue } from '../lib/mapView'
-import { plainNumber } from '../lib/plainNumber'
 import { DataKindBadge } from './DataKindBadge'
+import { ScoreValue } from './ScoreValue'
 
 type District = components['schemas']['DistrictListItem']
 type MetricDefinition = components['schemas']['MetricDefinition']
@@ -15,16 +15,18 @@ type Props = {
   /** False while the map shows the overall score itself: the list then needs no second value column. */
   showView: boolean
   valueOf: Map<string, ViewValue>
+  /** The place of each district by the overall score, where the API sends one. */
+  rankOf: Map<string, { position: number; of: number } | undefined>
   selected: string | null
   onSelect: (code: string) => void
 }
 
 /**
- * The list beside the map, kept short: each district with its overall score, and the value shown on the map when the
- * map shows something else. Everything else about a district is on its details tab and its page.
+ * The list beside the map, kept short: each district with its place and its overall score (a whole number and a bar),
+ * and the value shown on the map when the map shows something else. Everything else about a district is on its details tab and its page.
  */
-export function DistrictsTable({ districts, metricsByKey, scoreKey, view, showView, valueOf, selected, onSelect }: Props) {
-  const { t, i18n } = useTranslation()
+export function DistrictsTable({ districts, metricsByKey, scoreKey, view, showView, valueOf, rankOf, selected, onSelect }: Props) {
+  const { t } = useTranslation()
   const scoreKind = metricsByKey.get(scoreKey)?.data_kind
   const noData = <span className="no-data">{t('districts.noData')}</span>
 
@@ -57,8 +59,7 @@ export function DistrictsTable({ districts, metricsByKey, scoreKey, view, showVi
                   </button>
                   {isSelected && <span className="selected-mark"> ({t('districts.table.selected')})</span>}
                 </th>
-                {/* The score has no display string in the contract yet: shown as sent. */}
-                <td>{district.livability_score === null ? noData : plainNumber(district.livability_score, i18n.language)}</td>
+                <td>{district.livability_score === null ? noData : <ScoreValue score={district.livability_score} rank={rankOf.get(district.code)} />}</td>
                 {showView && (
                   <td>
                     {value ? (

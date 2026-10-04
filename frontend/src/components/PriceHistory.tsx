@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useDistrictSeries } from '../api/useDistrictsData'
 import { DataKindBadge } from './DataKindBadge'
+import { DateText } from './DateText'
 import { Loading } from './Loading'
 import { PriceChart } from './PriceChart'
 
@@ -84,7 +85,7 @@ export function PriceHistory({ code }: { code: string }) {
               {data.points.map((point) => (
                 <tr key={point.period_start}>
                   <th scope="row">
-                    {point.period_start} – {point.period_end}
+                    <DateText value={point.period_start} /> – <DateText value={point.period_end} />
                   </th>
                   <td>{point.display}</td>
                   <td>{point.n_obs}</td>

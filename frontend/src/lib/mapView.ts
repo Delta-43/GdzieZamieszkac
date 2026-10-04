@@ -18,6 +18,8 @@ export type MapView = {
   description?: string
   unit?: string
   dataKind?: DataKind
+  /** Whether more of the measure is better, from the catalogue. A score is always "better". */
+  higherIs?: 'better' | 'worse' | 'neutral'
   source?: { name: string; asOf?: string }
   /** The API's note for a score: it compares the districts of one city only. */
   note?: string

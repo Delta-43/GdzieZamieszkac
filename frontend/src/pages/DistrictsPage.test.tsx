@@ -1,23 +1,43 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import { axe } from 'vitest-axe'
-import { districtsApi, jsonResponse, problemFixture } from '../test/fixtures'
+import { districtsApi, jsonResponse, metricValuesFixture, problemFixture } from '../test/fixtures'
 import { mockFetch, renderApp } from '../test/render'
 
 const PAGE = '/districts?metric=test_sale'
 
-test('the map gives every district a keyboard-reachable button whose name holds the value and the class', async () => {
+test('the map gives every district a keyboard-reachable button whose name holds the value and the place', async () => {
   mockFetch(districtsApi)
   renderApp(PAGE)
 
   const map = await screen.findByRole('group', { name: 'Mapa dzielnic. Miara: Test sale label' })
-  expect(await within(map).findByRole('button', { name: 'Alpha: 100 test, przedział 1 z 5' })).toBeInTheDocument()
+  expect(await within(map).findByRole('button', { name: 'Alpha: 100 test, miejsce 1 z 3' })).toBeInTheDocument()
   const buttons = within(map).getAllByRole('button')
   expect(buttons).toHaveLength(4)
   buttons.forEach((button) => expect(button).toHaveAttribute('tabindex', '0'))
-  expect(within(map).getByRole('button', { name: 'Gamma: 300 test, przedział 4 z 5' })).toBeInTheDocument()
+  expect(within(map).getByRole('button', { name: 'Gamma: 300 test, miejsce 3 z 3' })).toBeInTheDocument()
   // A district without a value says so. It never shows a zero.
   expect(within(map).getByRole('button', { name: 'Delta: brak danych' })).toBeInTheDocument()
+})
+
+test('a measure the API does not rank says how large the value is in words, and never a class number', async () => {
+  // A neutral measure (more is neither better nor worse) arrives without a rank.
+  mockFetch((request) =>
+    new URL(request.url).pathname === '/v1/metrics/test_sale/values'
+      ? jsonResponse({ ...metricValuesFixture, higher_is: 'neutral', values: metricValuesFixture.values.map((value) => ({ ...value, rank: undefined })) })
+      : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  const map = await screen.findByRole('group', { name: 'Mapa dzielnic. Miara: Test sale label' })
+  const alpha = await within(map).findByRole('button', { name: 'Alpha: 100 test, wartość bardzo niska' })
+  expect(within(map).getByRole('button', { name: 'Gamma: 300 test, wartość wysoka' })).toBeInTheDocument()
+
+  fireEvent.keyDown(alpha, { key: 'Enter' })
+
+  const panel = screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })
+  expect(within(panel).getByText('Na tle innych dzielnic').nextElementSibling).toHaveTextContent('wartość bardzo niska')
+  expect(screen.getByRole('main')).not.toHaveTextContent(/przedział \d/i)
 })
 
 test('while the values are loading, districts say so and are not shown as "no data"', async () => {
@@ -38,7 +58,7 @@ test('while the values are loading, districts say so and are not shown as "no da
 
   release(districtsApi(new Request('http://api.test/v1/metrics/test_sale/values')))
 
-  expect(await within(map).findByRole('button', { name: 'Alpha: 100 test, przedział 1 z 5' })).toBeInTheDocument()
+  expect(await within(map).findByRole('button', { name: 'Alpha: 100 test, miejsce 1 z 3' })).toBeInTheDocument()
   // Now the gap is real: Delta has no value, and only now is it called "no data".
   expect(within(map).getByRole('button', { name: 'Delta: brak danych' })).toHaveClass('map-district--none')
 })
@@ -53,12 +73,13 @@ test('the list is short: each district with its overall score and the value show
   // The list is under the map, with its own heading, and no district is chosen yet: no details on the page.
   expect(screen.getByRole('heading', { level: 2, name: 'Lista dzielnic' })).toBeInTheDocument()
   expect(screen.queryByRole('region', { name: 'Szczegóły wybranej dzielnicy' })).not.toBeInTheDocument()
-  expect(within(table).getAllByRole('columnheader').map((header) => header.textContent)).toEqual(['Dzielnica', 'Wynik ogólny (0–100) szacowane', 'Test sale label'])
+  expect(within(table).getAllByRole('columnheader').map((header) => header.textContent)).toEqual(['Dzielnica', 'Wynik ogólny (miejsce 1 = najlepsze) oszacowane', 'Test sale label'])
   const alpha = rowOf('Alpha')
-  // The score has no display string yet: shown as sent, with a decimal comma in Polish.
-  expect(alpha).toHaveTextContent('61,5')
+  // The score is a whole number with "pkt": 61.5 from the API reads "62 pkt".
+  expect(alpha).toHaveTextContent('62 pkt')
+  expect(alpha).not.toHaveTextContent('61,5')
   expect(alpha).toHaveTextContent('100 test')
-  expect(alpha).toHaveTextContent('obserwowane')
+  expect(alpha).toHaveTextContent('zmierzone')
   // The data kind badge is a shape and a word: the shape is an SVG hidden from screen readers.
   expect(alpha.querySelector('.data-kind svg[aria-hidden="true"]')).not.toBeNull()
   // A district without a value, or without a score, says so. It never shows a zero.
@@ -107,7 +128,9 @@ test('the legend and the provenance say what the colours mean, in words', async 
   expect(screen.getByText('wyższa wartość')).toBeInTheDocument()
   expect(screen.getByText('Pole kreskowane: brak danych')).toBeInTheDocument()
   expect(screen.getByText('Test source A')).toBeInTheDocument()
-  expect(screen.getByText('2026-09-30')).toBeInTheDocument()
+  expect(screen.getByText('30 września 2026')).toHaveAttribute('datetime', '2026-09-30')
+  // What darker means for this measure, and whether more is better, in words.
+  expect(screen.getByText('Ciemniejszy kolor oznacza wyższą wartość: Test sale label. Dla tej miary wyższa wartość jest gorsza.')).toBeInTheDocument()
   expect(screen.getByText('test unit')).toBeInTheDocument()
   expect(screen.getByText('Test score note from the API.')).toBeInTheDocument()
 })
@@ -116,16 +139,16 @@ test('choosing a district with the keyboard opens its details: value, rank, cate
   mockFetch(districtsApi)
   renderApp(PAGE)
 
-  fireEvent.keyDown(await screen.findByRole('button', { name: 'Beta: 200 test, przedział 2 z 5' }), { key: 'Enter' })
+  fireEvent.keyDown(await screen.findByRole('button', { name: 'Beta: 200 test, miejsce 2 z 3' }), { key: 'Enter' })
 
-  expect(screen.getByRole('button', { name: 'Beta: 200 test, przedział 2 z 5' })).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.getByRole('button', { name: 'Beta: 200 test, miejsce 2 z 3' })).toHaveAttribute('aria-pressed', 'true')
   const panel = screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })
   expect(within(panel).getByRole('heading', { level: 3, name: 'Beta' })).toBeInTheDocument()
-  expect(within(panel).getByText(/niższa wartość to lepsza pozycja/)).toBeInTheDocument()
-  // The profile: one row per scored category, with the label the API sends and the score as sent.
+  expect(within(panel).getByText('Miejsce 2 z 3 (1 = najlepsze). Im mniej, tym lepiej.')).toBeInTheDocument()
+  // The profile: one row per scored category, with the label the API sends, the place and the score as a whole number.
   const profile = await within(panel).findByRole('table')
   expect(within(profile).getAllByRole('rowheader')).toHaveLength(6)
-  expect(await within(profile).findAllByText('40')).toHaveLength(6)
+  expect(await within(profile).findAllByText('40 pkt')).toHaveLength(6)
   expect(within(profile).getByRole('rowheader', { name: 'Test cost label' })).toBeInTheDocument()
   // The area report carries the AI label and is split into paragraphs.
   expect(await within(panel).findByText('Raport napisany przez sztuczną inteligencję na podstawie danych.')).toBeInTheDocument()
@@ -141,13 +164,13 @@ test('choosing a district with the keyboard opens its details: value, rank, cate
   fireEvent.click(within(panel).getByRole('button', { name: 'Zamknij szczegóły' }))
 
   expect(screen.queryByRole('region', { name: 'Szczegóły wybranej dzielnicy' })).not.toBeInTheDocument()
-  expect(screen.getByRole('button', { name: 'Beta: 200 test, przedział 2 z 5' })).toHaveAttribute('aria-pressed', 'false')
+  expect(screen.getByRole('button', { name: 'Beta: 200 test, miejsce 2 z 3' })).toHaveAttribute('aria-pressed', 'false')
 })
 
-test('a district under the pointer or the keyboard focus shows a card with its name, value, class and prices; Escape puts it away', async () => {
+test('a district under the pointer or the keyboard focus shows a card with its name, value, step in words and prices; Escape puts it away', async () => {
   mockFetch(districtsApi)
   const { container } = renderApp(PAGE)
-  const beta = await screen.findByRole('button', { name: 'Beta: 200 test, przedział 2 z 5' })
+  const beta = await screen.findByRole('button', { name: 'Beta: 200 test, miejsce 2 z 3' })
   const card = () => container.querySelector('.map-tip')
   expect(card()).toBeNull()
 
@@ -156,7 +179,7 @@ test('a district under the pointer or the keyboard focus shows a card with its n
   expect(card()).toHaveTextContent('Beta')
   expect(card()).toHaveTextContent('200 test')
   expect(card()).toHaveTextContent('Test sale label')
-  expect(card()).toHaveTextContent('Przedział 2: 200 test')
+  expect(card()).toHaveTextContent('Wartość niska: 200 test')
   // The card repeats what the button's name already says, so assistive technology does not get it twice.
   expect(card()).toHaveAttribute('aria-hidden', 'true')
   // The pointer does not choose the district: no details open.
@@ -180,7 +203,7 @@ test('a district can be chosen from the list, and a district without a report sh
 
   const panel = screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })
   expect(within(panel).getByRole('heading', { level: 3, name: 'Alpha' })).toBeInTheDocument()
-  await within(panel).findAllByText('0')
+  await within(panel).findAllByText('0 pkt')
   await waitFor(() => expect(within(panel).queryByText('Wczytywanie danych…')).not.toBeInTheDocument())
   expect(within(panel).queryByText(/sztuczną inteligencję/)).not.toBeInTheDocument()
 })
@@ -191,7 +214,7 @@ test('a category button colours the map with the score of that category alone, a
 
   fireEvent.click(await screen.findByRole('button', { name: 'Test cost label' }))
 
-  expect(await screen.findByRole('button', { name: 'Delta: 80,5, przedział 4 z 5' })).toBeInTheDocument()
+  expect(await screen.findByRole('button', { name: 'Delta: 81 pkt, miejsce 1 z 4' })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Test cost label' })).toHaveAttribute('aria-pressed', 'true')
   expect(screen.getByRole('heading', { level: 2, name: 'Wynik kategorii: Test cost label (0–100)' })).toBeInTheDocument()
   expect(screen.getByText('Test recommend note from the API.')).toBeInTheDocument()

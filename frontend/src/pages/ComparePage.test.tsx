@@ -39,7 +39,7 @@ test('two ticked districts are asked for in the order chosen and shown as tables
   expect(sale).toHaveTextContent('Źródło: Test source A')
   // Each cell: the API's display string, the data kind in words and the date.
   const cells = within(sale.closest('tr') as HTMLElement).getAllByRole('cell')
-  expect(cells.map((cell) => cell.textContent)).toEqual(['100 test obserwowaneStan na: 2026-09-30', '100 test obserwowaneStan na: 2026-09-30'])
+  expect(cells.map((cell) => cell.textContent)).toEqual(['100 test zmierzoneStan na: 30 września 2026', '100 test zmierzoneStan na: 30 września 2026'])
   // A metric without data shows the API's reason, never a zero.
   const gap = within(cost).getByRole('rowheader', { name: 'Test gap label' })
   expect(within(gap.closest('tr') as HTMLElement).getAllByRole('cell')[0]).toHaveTextContent('Brak danych. Test reason for the gap.')
