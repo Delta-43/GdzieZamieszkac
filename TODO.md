@@ -64,7 +64,7 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | P0-5 | Find a district: personas and sliders to `POST /recommend` | `Rysia` | Task F6 passes review | Done |
 | P0-6 | Compare two to four districts | `Rysia` | Task F7 passes review | Done |
 | P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `Rysia` | Task F8 passes review | Done |
-| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `Rysia`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow | In progress. Automated checks pass; the keyboard pass by hand, a screen reader and 200 and 400 percent zoom are not done (issue #70) |
+| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `Rysia`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow | Automated checks pass. The reviewer closed issues #70 and #72 on 4 October. No written record of a screen-reader or 400 percent zoom test, and the statement in the app is a draft |
 | P0-9 | Apply the data verification feedback: fix a value, or add a caveat, for each "Fix" | `Delta-43`, with `unicorn-alex` | `docs/data-review/` records every finding and what changed | Open |
 | P0-10 | Submission pack: project description, a PDF of at most 10 slides, the declaration of earlier work | `Delta-43` | Uploaded to the Challenge Rocket platform | Open |
 
@@ -73,11 +73,11 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | ID | Task | Owner | Notes | Status |
 |---|---|---|---|---|
 | P1-1 | Household profile, kept in the browser, mapped to weights | `Rysia` | `frontend/TODO.md` task F9. Needs couple and newly married presets (B3). | Open |
-| P1-2 | Commute from a work district | `Rysia` | Task F10. Show the API's caveat. Long trips run fast. | Open |
+| P1-2 | Commute from a work district | `Rysia` | Task F10. Show the API's caveat. Long trips run fast. | Done (#101) |
 | P1-3 | Outlook card: momentum, the city's historical range, the backtest. No forecast | `Rysia` | Task F11 | Open |
 | P1-4 | Rent versus buy and similar districts | `Rysia` | Task F12 | Open |
 | P1-5 | `*_display` strings for the numbers that lack one (contract B2) | `Delta-43` | Removes a temporary helper in the frontend | Open |
-| P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request, and the text written on 4 October (issues #82 and #83) | In progress |
+| P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request, and the text written on 4 October (issues #82 and #83, closed by the reviewer on 4 October) | Done for the text written so far |
 | P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change | Done |
 
 ## P2: concept only, for the pitch (and the city service, below)

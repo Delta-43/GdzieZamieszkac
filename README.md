@@ -99,10 +99,10 @@ State on 4 October 2026, at the end of HackYeah.
 | Data and database (`krakow` schema, 51 metrics, 22 migrations) | ✅ Built | 47 of 51 metrics have data for Kraków. The other four show their reason. |
 | Data API (16 operations) | ✅ Built | 161 offline tests, lint clean. |
 | City service (AI report, resident feedback) | ✅ Built | 31 offline tests. Needs an `OPENROUTER_LLM_KEY` for the AI report. |
-| Frontend, phase 1 | ✅ Built | Home, districts map, district, find, compare, feedback, sources, not found. 167 tests, lint, type check and build pass. |
-| Accessibility (WCAG 2.2 AA) | 🟡 Target | Automated checks pass on every page at two widths in both languages. A keyboard pass by hand, a screen reader and 200 and 400 percent zoom are **not done yet**. The statement in the app is marked as a draft. |
-| Polish text | 🟡 Review open | The wording the team's agents wrote on 4 October waits for a native reader (issue #83). |
-| Frontend, phase 2 (household profile, commute, outlook, rent versus buy) | ⬜ Not built | The API serves all of it. See `frontend/TODO.md` tasks F9 to F12. |
+| Frontend, phase 1 | ✅ Built | Home, districts map, district (with commute), find, compare, feedback, sources, not found. Tests, lint, type check and build pass. |
+| Accessibility (WCAG 2.2 AA) | 🟡 Target | Automated checks pass on every page at two widths in both languages. The reviewer closed the accessibility and map review issues (#70, #72) on 4 October, but the repository holds no written record of a screen-reader or 400 percent zoom test. The accessibility statement in the app is marked as a draft. |
+| Polish text | ✅ Reviewed | The native-speaking reviewer closed the Polish text review issues (#82, #83) on 4 October. The text of the API comes from the stored catalogue and is never translated in the browser. |
+| Frontend, phase 2 | 🟡 Partly | Commute times on the district page are built (task F10). The household profile, the outlook card, and rent versus buy with similar districts are not (tasks F9, F11, F12). The API serves all of them. |
 | Official notices, demand counts, identity checks for feedback | 💡 Concept | Shown only as a labelled concept. No endpoint and no data. |
 | Public deployment | ⬜ Not done | The demo runs on a team machine on a private network. See "Run it and check it". |
 
@@ -158,7 +158,7 @@ cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev
 cd ../city-service && ../backend/.venv/bin/pip install -r requirements-dev.txt
 ../backend/.venv/bin/ruff check . && ../backend/.venv/bin/python -m pytest -q
 
-# Frontend: contracts, lint, types, 167 tests, build
+# Frontend: contracts, lint, types, tests, build
 cd ../frontend && npm ci && npm run check
 ```
 

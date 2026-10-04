@@ -32,7 +32,7 @@ If this file and the contract disagree, the contract wins. Open a pull request t
 | `getMetricValues` | `GET /metrics/{key}/values` | One metric for all districts, with the numeric `value`. Use it for the map and for filters. |
 | `compareDistricts` | `GET /compare?codes=a,b,c` | Two to four districts side by side. |
 | `getCommute` | `GET /commute?from={code}` | Minutes by public transport from one district to the others. |
-| `listPersonas` | `GET /personas` | Weight presets: `student`, `family`, `remote_worker`, `senior`, `budget`. |
+| `listPersonas` | `GET /personas` | Nine weight presets: `student`, `family`, `remote_worker`, `senior`, `budget`, `city_life`, `quiet_green`, `couple`, `newly_married`. |
 | `recommend` | `POST /recommend` | Ranks the districts for the weights. Body: `{ "weights": {...}, "lang": "pl" }`. |
 
 ## Generate the types
@@ -42,19 +42,19 @@ That way the client cannot drift from the contract.
 
 ## Example responses
 
-These are real answers from the Warsaw deployment on 3 October 2026. Kraków answers have the same shape. Text is shortened.
+These are real answers from the Kraków deployment on 4 October 2026. Text and URLs are shortened.
 
 District list item (`GET /districts?lang=pl`):
 
 ```json
 {
-  "code": "bemowo",
-  "name": "Bemowo",
-  "area_km2": 24.933,
-  "livability_score": 51.4,
+  "code": "stare-miasto",
+  "name": "Stare Miasto",
+  "area_km2": 5.56,
+  "livability_score": 40.9,
   "highlights": [
-    { "key": "sale_price_median_m2", "display": "14 500 PLN/m²", "data_kind": "observed" },
-    { "key": "rent_price_median_m2", "display": "73,9 PLN/m²", "data_kind": "observed" }
+    { "key": "sale_price_median_m2", "display": "18 707 PLN/m²", "data_kind": "observed" },
+    { "key": "rent_price_median_m2", "display": "74,5 PLN/m²", "data_kind": "observed" }
   ]
 }
 ```
@@ -65,17 +65,17 @@ A metric with data (inside `categories[].metrics[]` of `GET /districts/{code}`):
 {
   "key": "transit_stops_total",
   "available": true,
-  "label": "Przystanki komunikacji miejskiej",
-  "display": "111",
-  "value": 111.0,
-  "unit": "stops",
+  "label": "Przystanki w dzielnicy",
+  "display": "28",
+  "value": 28.0,
+  "unit": "przystanki",
   "data_kind": "observed",
   "n_obs": null,
   "as_of": "2026-09-30",
-  "source": { "name": "Public transport GTFS feeds", "licence": "…", "attribution": "ZTM Warszawa (GTFS), mirror by mkuran.pl", "url": "…" },
+  "source": { "name": "Dane rozkładowe komunikacji miejskiej (GTFS)", "licence": "…", "attribution": "ZTP Kraków, MPK S.A. w Krakowie, R&G Plus (GTFS)", "url": "…" },
   "method": "Unikalne nazwy przystanków …",
   "caveat": null,
-  "rank": { "position": 1, "of": 18, "direction": "higher is better" }
+  "rank": { "position": 3, "of": 18, "direction": "higher is better" }
 }
 ```
 
@@ -83,20 +83,20 @@ A metric without data:
 
 ```json
 {
-  "key": "residents_registered",
+  "key": "transit_stops_rail_metro",
   "available": false,
-  "label": "Zameldowani na pobyt stały",
-  "reason": "Źródło dla Warszawy (Panorama dzielnic) nie zawiera liczby zameldowanych mieszkańców; …"
+  "label": "Stacje kolejowe i metra",
+  "reason": "Dane rozkładowe komunikacji miejskiej w Krakowie nie zawierają przystanków kolejowych ani metra."
 }
 ```
 
 A point of the price series (`GET /districts/{code}/series/sale_price_median_m2`):
 
 ```json
-{ "period_start": "2022-10-01", "period_end": "2022-12-31", "value": 16233.0, "display": "16 233 PLN/m²", "n_obs": 96, "low_confidence": false }
+{ "period_start": "2026-04-01", "period_end": "2026-06-30", "value": 18683.0, "display": "18 683 PLN/m²", "n_obs": 118, "low_confidence": false }
 ```
 
-A commute answer (`GET /commute?from=srodmiescie`): `{ "from": "srodmiescie", "destinations": [{ "code": "bemowo", "minutes": 32.2 }, …], "caveat": "…" }`.
+A commute answer (`GET /commute?from=stare-miasto`): `from`, `data_kind` (`estimated`), `method`, `destinations[]` with `code` and `minutes`, and a `caveat`.
 `minutes` is `null` when no connection was found.
 
 A recommend answer (`POST /recommend`): `ranking[]` with `rank`, `code`, `name`, `score` and `top_drivers[]` (`key`, `label`, `percentile`), plus `metrics_used`, `missing_metrics` and `note`.
@@ -128,14 +128,12 @@ These are known. Raise each one in a pull request that changes the contract. Unt
 | The default language is English | The portal default is Polish | Send `lang` on every request. |
 | `/recommend` takes weights only | No budget range, tenure or work place | Do the budget filter and the commute step in the browser. See phase 2 in `REQUIREMENTS.md`. |
 
-## Not in the contract
+## Not in the contract of the data API
 
-These features have no endpoint. Do not invent one in the client.
+These features have no endpoint in `../backend/openapi.yaml`. Do not invent one in the client.
 
-- The personalised AI report.
 - Official notices (shown as "to be implemented after city approval").
 - Aggregate demand counts.
+- Identity checks for feedback.
 
-The personalised AI report and resident feedback are moving to a separate city service with its own contract (`../city-service/openapi.yaml`, not written yet). Do not code against them before it exists.
-
-Each will need a contract change first, and some need a separate backend service. The backend today is read-only and has no internet access by design.
+The personalised AI report and resident feedback are **built** in a separate city service with its own contract, `../city-service/openapi.yaml` (port 8100 in development, types in `src/api/citySchema.d.ts`). The data API stays read-only and has no internet access by design. `README.md` ("Get an API") says how the dev server reaches both.
