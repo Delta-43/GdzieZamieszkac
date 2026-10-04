@@ -111,7 +111,7 @@ Copy `.env.example` to `.env.local` and put the API addresses there. Git ignores
 
 ```
 frontend/
-  public/            static files: favicon, and basemap/ (the OpenStreetMap context layer, not committed)
+  public/            static files: logo, favicons, and basemap/ (the OpenStreetMap context layer, not committed)
   scripts/           build_basemap.py, which builds that layer once
   src/
     api/             generated types for both contracts, two clients and one hook per endpoint
