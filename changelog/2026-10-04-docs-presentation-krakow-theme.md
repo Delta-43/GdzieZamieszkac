@@ -1,1 +1,0 @@
-- `presentation-comments.html`: colours and font follow the frontend theme (`frontend/src/theme/tokens.ts`: Kraków blue, ink, grey panels, Lato). `presentation.html` and other imported code are unchanged.

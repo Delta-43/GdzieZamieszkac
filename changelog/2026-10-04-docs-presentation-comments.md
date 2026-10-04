@@ -1,1 +1,0 @@
-- `presentation-comments.html`: new copy of `presentation.html` with a per-slide comment panel (key `C`, stored in the browser, JSON export and import) so the team can review the pitch. `presentation.html` and other imported code are unchanged.
