@@ -79,3 +79,15 @@ test('no colour is written outside the theme folder', () => {
   expect(Object.keys(sources).length).toBeGreaterThan(5)
   expect(offenders).toEqual([])
 })
+
+test('the favicon is drawn in the blues of the map, and the page links to it from the same server', async () => {
+  const { readFileSync } = await import('node:fs')
+  const icon = readFileSync('public/favicon.svg', 'utf8')
+  const fills = [...icon.matchAll(/fill="(#[0-9a-f]{6})"/g)].map((match) => match[1])
+  expect(fills).toEqual([colors.mapRamp2, colors.mapRamp4, colors.mapRamp3, colors.mapRamp5])
+  const page = readFileSync('index.html', 'utf8')
+  expect(page).toContain('<link rel="icon" href="/favicon.ico" sizes="32x32" />')
+  expect(page).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />')
+  // No icon from another host.
+  expect(page).not.toMatch(/rel="icon" href="https?:/)
+})

@@ -138,6 +138,24 @@ export function useDistrictSeries(code: string | undefined, key: string) {
   })
 }
 
+/**
+ * Estimated minutes by public transport from one district to every other one. A 501 answer means the feature is
+ * switched off: the caller hides the section.
+ */
+export function useCommute(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['commute', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/commute', { params: { query: { from: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
 /** The category names as the API sends them. They arrive only inside a district's detail, so the first district is read for them. */
 export function useCategoryLabels(): Map<string, string> {
   const districts = useDistricts()
