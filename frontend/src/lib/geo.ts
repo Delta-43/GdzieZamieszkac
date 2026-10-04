@@ -10,9 +10,36 @@ export type Shape = {
   path: string
   /** A point inside the largest ring, for the class number label. */
   label: { x: number; y: number }
+  /** The extent of the district in the drawing, to zoom to it. */
+  box: { x0: number; y0: number; x1: number; y1: number }
+  /** How far the district is from the middle of the map, 0 to 1: its place in the wave of colour when the measure changes. */
+  wave: number
 }
 
-export type MapGeometry = { width: number; height: number; shapes: Shape[] }
+/** The context layers of the map, as the app's own file gives them: lines and rings of [lon, lat]. */
+export type Basemap = {
+  roads: { class: string; line: Position[] }[]
+  rail: { line: Position[] }[]
+  rivers: { line: Position[] }[]
+  lakes: { ring: Position[] }[]
+  places: { name: string; lon: number; lat: number }[]
+  attribution: string
+}
+
+/** The context drawn in the same projection as the districts. Paths are SVG path data. */
+export type MapContext = {
+  /** Motorways and trunk roads, and the other main roads. */
+  roadsMajor: string
+  roadsMinor: string
+  rail: string
+  rivers: string
+  lakes: string
+  places: { name: string; x: number; y: number }[]
+  attribution: string
+}
+
+export type MapGeometry = { width: number; height: number; shapes: Shape[]; context: MapContext | null }
+
 
 const WIDTH = 1000
 
@@ -90,10 +117,10 @@ const round = (value: number) => Math.round(value * 10) / 10
  * Projects longitude and latitude onto a flat drawing. At the size of one city a simple projection is enough:
  * longitude is shrunk by the cosine of the city's latitude, so the shapes are not stretched sideways.
  */
-export function buildMap(features: { geometry: unknown; properties: { code: string; name: string } }[]): MapGeometry {
+export function buildMap(features: { geometry: unknown; properties: { code: string; name: string } }[], basemap: Basemap | null = null): MapGeometry {
   const districts = features.map((feature) => ({ ...feature.properties, rings: ringsOf(feature.geometry) })).filter((d) => d.rings.length > 0)
   const all = districts.flatMap((d) => d.rings.flat())
-  if (all.length === 0) return { width: WIDTH, height: WIDTH, shapes: [] }
+  if (all.length === 0) return { width: WIDTH, height: WIDTH, shapes: [], context: null }
 
   const lons = all.map(([lon]) => lon)
   const lats = all.map(([, lat]) => lat)
@@ -102,13 +129,55 @@ export function buildMap(features: { geometry: unknown; properties: { code: stri
   const scale = WIDTH / ((maxLon - minLon) * squeeze || 1)
   const project = ([lon, lat]: Position): Position => [(lon - minLon) * squeeze * scale, (maxLat - lat) * scale]
 
+  const height = Math.ceil((maxLat - minLat) * scale)
+  const [cx, cy] = [WIDTH / 2, height / 2]
+  const reach = Math.hypot(cx, cy) || 1
   const shapes = districts.map((district) => {
     const rings = district.rings.map((ring) => ring.map(project))
     const largest = rings.reduce((a, b) => (Math.abs(area(b)) > Math.abs(area(a)) ? b : a))
     const [x, y] = labelPoint(largest)
     const path = rings.map((ring) => `M${ring.map(([px, py]) => `${round(px)} ${round(py)}`).join('L')}Z`).join('')
-    return { code: district.code, name: district.name, path, label: { x: round(x), y: round(y) } }
+    const flat = rings.flat()
+    const xs = flat.map(([px]) => px)
+    const ys = flat.map(([, py]) => py)
+    const box = { x0: round(Math.min(...xs)), y0: round(Math.min(...ys)), x1: round(Math.max(...xs)), y1: round(Math.max(...ys)) }
+    const wave = Math.round(Math.min(1, Math.hypot(x - cx, y - cy) / reach) * 100) / 100
+    return { code: district.code, name: district.name, path, label: { x: round(x), y: round(y) }, box, wave }
   })
 
-  return { width: WIDTH, height: Math.ceil((maxLat - minLat) * scale), shapes }
+  const lines = (list: Position[][]) => list.map((line) => `M${line.map((point) => project(point)).map(([x, y]) => `${round(x)} ${round(y)}`).join('L')}`).join('')
+  const context: MapContext | null = basemap && {
+    roadsMajor: lines(basemap.roads.filter((road) => road.class === 'motorway' || road.class === 'trunk').map((road) => road.line)),
+    roadsMinor: lines(basemap.roads.filter((road) => road.class !== 'motorway' && road.class !== 'trunk').map((road) => road.line)),
+    rail: lines(basemap.rail.map((item) => item.line)),
+    rivers: lines(basemap.rivers.map((river) => river.line)),
+    lakes: basemap.lakes.map((lake) => `${lines([lake.ring])}Z`).join(''),
+    places: basemap.places.map((place) => {
+      const [x, y] = project([place.lon, place.lat])
+      return { name: place.name, x: round(x), y: round(y) }
+    }),
+    attribution: basemap.attribution,
+  }
+
+  return { width: WIDTH, height, shapes, context }
+}
+
+function isLine(value: unknown): value is Position[] {
+  return Array.isArray(value) && value.every(isPosition)
+}
+
+/** Checks the file of context layers, which comes from the app's own server but is still outside the code: a wrong file shows no context. */
+export function parseBasemap(value: unknown): Basemap | null {
+  if (typeof value !== 'object' || value === null) return null
+  const v = value as Record<string, unknown>
+  const list = (key: string): Record<string, unknown>[] => (Array.isArray(v[key]) ? (v[key] as unknown[]).filter((x): x is Record<string, unknown> => typeof x === 'object' && x !== null) : [])
+  if (typeof v.attribution !== 'string') return null
+  return {
+    attribution: v.attribution,
+    roads: list('roads').filter((r): r is { class: string; line: Position[] } => typeof r.class === 'string' && isLine(r.line)),
+    rail: list('rail').filter((r): r is { line: Position[] } => isLine(r.line)),
+    rivers: list('rivers').filter((r): r is { line: Position[] } => isLine(r.line)),
+    lakes: list('lakes').filter((r): r is { ring: Position[] } => isLine(r.ring)),
+    places: list('places').filter((r): r is { name: string; lon: number; lat: number } => typeof r.name === 'string' && typeof r.lon === 'number' && typeof r.lat === 'number'),
+  }
 }

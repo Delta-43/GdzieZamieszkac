@@ -21,6 +21,11 @@ HIGHLIGHT_KEYS = ("sale_price_median_m2", "rent_price_median_m2")
 TOP_DRIVERS = 3
 
 
+def shown(text: str, limit: int = 40) -> str:
+    """A client's text as it may appear in an error message: short, so a very long input is not echoed back in full."""
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
 class ProblemError(Exception):
     """An error the API reports as problem+json with this status."""
     def __init__(self, status: int, title: str, detail: str | None = None):
@@ -49,6 +54,11 @@ def note(d: Derived, text: str | None, lang: str) -> str | None:
     return d.snap.notes_pl.get(text, text) if lang == "pl" else text
 
 
+def local(d: Derived, text: str | None, lang: str) -> str:
+    """`note`, but an empty string instead of None, for text that is always shown (a source name, a licence, a unit)."""
+    return note(d, text, lang) or ""
+
+
 def pick(row_or_def: dict, field: str, lang: str) -> str:
     """The `<field>_<lang>` text of a catalogue or row dict, falling back to English."""
     return row_or_def.get(f"{field}_{lang}") or row_or_def.get(f"{field}_en") or ""
@@ -56,9 +66,10 @@ def pick(row_or_def: dict, field: str, lang: str) -> str:
 
 # ---------------------------------------------------------------- metric entries
 
-def source_of(row: dict) -> dict:
-    """The provenance block of a stored row."""
-    s = {"name": row["source"] or "", "licence": row["licence"] or "", "attribution": row["attribution"] or ""}
+def source_of(d: Derived, row: dict, lang: str) -> dict:
+    """The provenance block of a stored row. The source name, the licence text and the credit line have a stored Polish version where one
+    was written (the same lookup as the notes); the credit line of a source that is a proper name stays as the licence asks."""
+    s = {"name": local(d, row["source"], lang), "licence": local(d, row["licence"], lang), "attribution": local(d, row["attribution"], lang)}
     if row.get("source_url"):
         s["url"] = row["source_url"]
     return s
@@ -75,8 +86,8 @@ def metric_value(d: Derived, code: str, key: str, lang: str) -> dict:
     """One stored value in the contract's MetricValue shape, with provenance and rank."""
     row, definition = d.rows[(code, key)], d.defs[key]
     out = {"key": key, "available": True, "label": pick(definition, "label", lang), "display": (row[f"value_{lang}"] or row["value_en"] or ""),
-           "value": float(row["value_num"]), "unit": row["unit"] or definition["unit"], "data_kind": row["data_kind"], "n_obs": row["n_obs"],
-           "as_of": iso(row["as_of_date"]), "source": source_of(row), "method": note(d, row["method"], lang) or "",
+           "value": float(row["value_num"]), "unit": local(d, definition["unit"] or row["unit"], lang), "data_kind": row["data_kind"], "n_obs": row["n_obs"],
+           "as_of": iso(row["as_of_date"]), "source": source_of(d, row, lang), "method": local(d, row["method"], lang),
            "caveat": note(d, row["coverage_note"], lang)}
     if definition["refresh_cadence"] == "weekly":
         out["updated_at"] = iso(row["fetched_at"])
@@ -101,8 +112,9 @@ def derived_entry(d: Derived, code: str, lang: str, kind: str) -> dict | None:
             "value": float(value), "unit": unit, "data_kind": "estimated", "n_obs": min(x for x in (sale["n_obs"], rent["n_obs"]) if x is not None) if
             any(x["n_obs"] is not None for x in (sale, rent)) else None,
             "as_of": iso(min(sale["as_of_date"], rent["as_of_date"])),
-            "source": {"name": " and ".join(sorted(names)), "licence": " / ".join(sorted({s["licence"] for s in (sale, rent) if s["licence"]})),
-                       "attribution": "; ".join(sorted({s["attribution"] for s in (sale, rent) if s["attribution"]}))},
+            "source": {"name": f" {t('and', lang)} ".join(sorted(local(d, n, lang) for n in names)),
+                       "licence": " / ".join(sorted({local(d, s["licence"], lang) for s in (sale, rent) if s["licence"]})),
+                       "attribution": "; ".join(sorted({local(d, s["attribution"], lang) for s in (sale, rent) if s["attribution"]}))},
             "method": t("yield_method" if kind == "yield_gross" else "payback_method", lang), "caveat": t("yield_caveat", lang)}
 
 
@@ -171,7 +183,8 @@ def catalogue(d: Derived, settings: Settings, lang: str) -> list[dict]:
     out = []
     for k, df in d.defs.items():
         entry = {"key": k, "category": df["category"], "label": pick(df, "label", lang), "description": pick(df, "description", lang),
-                 "unit": df["unit"], "higher_is": df["higher_is"], "refresh_cadence": df["refresh_cadence"], "data_kind": df["default_data_kind"],
+                 "unit": local(d, df["unit"], lang), "higher_is": df["higher_is"], "refresh_cadence": df["refresh_cadence"],
+                 "data_kind": df["default_data_kind"],
                  "available": k in d.available, "has_series": k in d.series_keys}
         if k not in d.available:
             entry["reason"] = unavailable(d, settings, k, lang)["reason"]
@@ -182,7 +195,7 @@ def catalogue(d: Derived, settings: Settings, lang: str) -> list[dict]:
 def metric_values(d: Derived, settings: Settings, key: str, lang: str) -> dict:
     """One metric for every district, best first for directional metrics."""
     if key not in d.defs:
-        raise ProblemError(404, "Unknown metric", f"There is no metric '{key}' in the catalogue.")
+        raise ProblemError(404, "Unknown metric", f"There is no metric '{shown(key)}' in the catalogue.")
     df = d.defs[key]
     out = {"key": key, "label": pick(df, "label", lang), "lang": lang, "higher_is": df["higher_is"], "values": []}
     if key not in d.available:
@@ -305,7 +318,8 @@ def meta(d: Derived, settings: Settings, lang: str) -> dict:
         g["keys"].add(r["metric_key"])
     sources = []
     for (name, licence, attribution, url), g in sorted(groups.items(), key=lambda x: (x[0][0] or "", x[0][3] or "")):
-        s = {"name": name or "", "licence": licence or "", "attribution": attribution or "", "as_of": iso(g["as_of"]), "metric_keys": sorted(g["keys"])}
+        s = {"name": local(d, name, lang), "licence": local(d, licence, lang), "attribution": local(d, attribution, lang), "as_of": iso(g["as_of"]),
+             "metric_keys": sorted(g["keys"])}
         if url:
             s["url"] = url
         sources.append(s)
@@ -324,7 +338,7 @@ SERIES_MIN_OBS = 30  # quarters with fewer observations are low confidence (the 
 def series(d: Derived, code: str, key: str, lang: str) -> dict:
     """The stored history of a metric for a district, oldest first. 404 if the metric has no history."""
     if key not in d.defs:
-        raise ProblemError(404, "Unknown metric", f"There is no metric '{key}' in the catalogue.")
+        raise ProblemError(404, "Unknown metric", f"There is no metric '{shown(key)}' in the catalogue.")
     rows = d.series.get((code, key))
     if not rows:
         raise ProblemError(404, "No history", f"The metric '{key}' has no stored history for district '{code}'.")
@@ -333,9 +347,10 @@ def series(d: Derived, code: str, key: str, lang: str) -> dict:
     points = [{"period_start": iso(r["period_start"]), "period_end": iso(r["period_end"]), "value": float(r["value_num"]),
                "display": r[f"value_{lang}"] or r["value_en"] or "", "n_obs": r["n_obs"], "low_confidence": r["n_obs"] < SERIES_MIN_OBS} for r in rows]
     caveat = f"{t('series_newest_caveat', lang)} {t('series_thin_caveat', lang).format(n=SERIES_MIN_OBS)}"
-    return {"district": code, "key": key, "label": pick(df, "label", lang), "lang": lang, "unit": df["unit"], "data_kind": first["data_kind"],
-            "min_obs": SERIES_MIN_OBS, "source": source_of(first),
-            "method": note(d, first["method"], lang) or "", "caveat": caveat, "points": points}
+    return {"district": code, "key": key, "label": pick(df, "label", lang), "lang": lang, "unit": local(d, df["unit"], lang),
+            "data_kind": first["data_kind"],
+            "min_obs": SERIES_MIN_OBS, "source": source_of(d, first, lang),
+            "method": local(d, first["method"], lang), "caveat": caveat, "points": points}
 
 
 # ---------------------------------------------------------------- commute
@@ -359,7 +374,10 @@ OUTLOOK_BACKTEST = _load_json("outlook_backtest.json")
 OUTLOOK_METRIC = "sale_price_median_m2"
 OUTLOOK_WINDOWS = (4, 8)
 COMPLETE_SHARE = 0.5   # a quarter counts for momentum only with at least this share of the city's median quarterly deed count
-BACKTEST_METHODS = {"history_range": "History range", "damped_momentum": "Damped momentum"}
+BACKTEST_METHODS = {
+    "history_range": {"en": "History range", "pl": "Zakres historyczny"},
+    "damped_momentum": {"en": "Damped momentum", "pl": "Wygaszone tempo zmian"},
+}
 
 
 def pct(x: float, lang: str, signed: bool = True) -> str:
@@ -393,12 +411,16 @@ def city_history(d: Derived, lang: str) -> dict:
                         "median_display": pct(med, lang), "high_display": pct(hi, lang), "n_windows": int(len(g))})
     first = rows[0]
     return {"available": True, "period_start": iso(first["period_start"]), "period_end": iso(rows[-1]["period_end"]), "windows": windows,
-            "source": source_of(first), "method": note(d, first["method"], lang) or ""}
+            "source": source_of(d, first, lang), "method": local(d, first["method"], lang)}
 
 
-def backtest_summary() -> dict:
+def backtest_summary(lang: str = "en") -> dict:
     b = OUTLOOK_BACKTEST
-    results = [{"quarters": int(h), "method": BACKTEST_METHODS.get(m, m), "origins": v["origins"], "mae_method": v["mae_method"],
+    def method_name(m: str) -> str:
+        names = BACKTEST_METHODS.get(m, {})
+        return names.get(lang) or names.get("en") or m
+
+    results = [{"quarters": int(h), "method": method_name(m), "origins": v["origins"], "mae_method": v["mae_method"],
                 "mae_no_change": v["mae_no_change"], "mae_last_year_continues": v["mae_last_year_continues"], "coverage_80": v["coverage_80"],
                 "passes": v["passes"]} for h, e in b["horizons"].items() for m, v in e.items()]
     return {"period_start": b["period"][0], "period_end": b["period"][1], "cities": b["cities"], "results": results}
@@ -430,5 +452,5 @@ def outlook(d: Derived, code: str, lang: str) -> dict:
             "momentum": {"growth_12m": growth(year_ago, newest, lang, False) if year_ago else None,
                          "growth_since_start": growth(usable[0], newest, lang, True) if len(usable) >= 2 else None},
             "city_history": city_history(d, lang),
-            "scenario": {"published": False, "reason": t("outlook_reason", lang), "ranges": [], "backtest": backtest_summary()},
+            "scenario": {"published": False, "reason": t("outlook_reason", lang), "ranges": [], "backtest": backtest_summary(lang)},
             "method": t("outlook_method", lang), "caveat": t("outlook_caveat", lang)}

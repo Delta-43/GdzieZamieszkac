@@ -13,8 +13,11 @@ export function themeCss(): string {
   ]
   return [
     `:root { color-scheme: light; ${declarations.join(' ')} }`,
-    // The user asked for less motion: every transition becomes instant.
-    '@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 0ms; --duration-base: 0ms; } }',
+    // The user asked for less motion: every duration token becomes zero, so every transition is instant.
+    `@media (prefers-reduced-motion: reduce) { :root { ${Object.keys(scale)
+      .filter((name) => name.startsWith('duration-'))
+      .map((name) => `--${name}: 0ms;`)
+      .join(' ')} } }`,
   ].join('\n')
 }
 

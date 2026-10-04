@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { ApiError } from '../api/client'
 import { useAiReport } from '../api/useAiReport'
+import { dateInWords } from '../lib/dates'
 import type { CategoryWeights } from '../api/useDistrictsData'
 
 // The limits of `requirements` in the city service contract.
@@ -73,7 +74,8 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
           {t('aiReport.privacy')}
         </p>
         <p className="find-actions">
-          <button type="submit" className="button-primary">
+          {/* While a report is written the button is dimmed and does nothing. It stays focusable. */}
+          <button type="submit" className="button-primary" aria-disabled={report.isPending || undefined}>
             {t('aiReport.submit')}
           </button>
         </p>
@@ -99,7 +101,7 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
             <p key={index}>{paragraph}</p>
           ))}
           <p className="note" lang={i18n.language}>
-            {t('aiReport.generated', { model: report.data.model, date: report.data.generated_at.slice(0, 10) })}
+            {t('aiReport.generated', { model: report.data.model, date: dateInWords(report.data.generated_at, i18n.language) })}
           </p>
 
           <h3 lang={i18n.language}>{t('aiReport.districts')}</h3>

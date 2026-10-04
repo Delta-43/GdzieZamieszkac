@@ -18,3 +18,12 @@ test('no interface text is empty', () => {
     expect(text).not.toMatch(/:""/)
   }
 })
+
+test('no interface text says "percentile" or gives a map class by its number', () => {
+  // Issue #82: a resident reads a place (1 is the best) or the size of a value in words, never a percentile or "class 4 of 5".
+  for (const locale of [pl, en]) {
+    const text = JSON.stringify(locale)
+    expect(text).not.toMatch(/percentyl|percentile/i)
+    expect(text).not.toMatch(/\{\{(number|class)\}\}/)
+  }
+})

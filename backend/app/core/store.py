@@ -29,6 +29,9 @@ from .i18n import CATEGORIES
 STATEMENT_TIMEOUT_MS = 15_000
 SIMPLIFY_TOLERANCE = 0.0002  # degrees; about 20 m, plenty for a city map of 18 polygons
 WEEKLY_MAX_AGE = timedelta(days=14)
+# Metrics with Kraków data that are shown and ranked but not part of the score. Adding them to the score would move every stored score, every
+# ranking and the numbers in the stored reports. They join the score when the scores and the reports are recomputed together (the data pipeline).
+SHOWN_NOT_SCORED = frozenset({"amenity_open_sports_grounds", "amenity_aed_public"})
 
 
 class StoreUnavailable(RuntimeError):
@@ -152,7 +155,9 @@ class Derived:
         wide = pd.DataFrame({k: pd.Series({c: self.rows[(c, k)]["value_num"] for c in self.codes if (c, k) in self.rows}, dtype="float64")
                              for k in sorted(self.available)}).reindex(self.codes)
         self.wide = wide
-        self.scorable = wide.drop(columns=[c for c in ("livability_score_default",) if c in wide])
+        # Shown and ranked, but not scored: they keep their direction (so every metric's share of its category stays as the stored scores were made),
+        # and are only left out of the table the score is computed from. See SHOWN_NOT_SCORED.
+        self.scorable = wide.drop(columns=[c for c in ("livability_score_default", *SHOWN_NOT_SCORED) if c in wide])
         self.base_weights = scoring.category_weights(self.meta)
         self.default_score, self.default_table = scoring.weighted_score(self.scorable, self.area, self.meta)
         self.ranks = self._ranks()

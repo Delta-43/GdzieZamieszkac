@@ -16,7 +16,7 @@ This is not a listings site. It shows data about districts, not offers.
 ## Status
 
 **Tasks F1 to F6 are done.** The project builds, lints and tests, and the API types are generated from the contract.
-The shared parts exist: skip link, header with the city name from `/meta`, a menu that opens from the left under the header (the pages, then the districts),
+The shared parts exist: skip link, header with the city name from `/meta`, a header that stays at the top on a wide and tall screen, with shortcuts to the three steps of the main flow and a menu card that drops from the menu button (every page, then the districts; it opens on a press, and for a mouse on hover),
 language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages and the credit line of every source, linked to where the data comes from.
 The pages are home, districts (map and list), one district, find a district, and "page not found". The menu and the footer list only pages that exist (`src/lib/pages.ts`), so they grow with each task.
 The other screens are tasks F7 and F8 in `TODO.md`.
@@ -49,7 +49,29 @@ The design is accepted (4 October 2026): `../docs/DESIGN.md`. It follows the loo
 - **Font:** Lato, regular and bold, the typeface of that site. It is bundled from the `@fontsource/lato` package (SIL Open Font Licence 1.1) and served with the app, with the Latin Extended range for Polish. Nothing loads from a third party.
 - **Layout of the districts page:** a map with category buttons and a tabbed panel beside it. The header is a white bar over a blue navigation band, and section headings carry a short dark bar.
 
+**Shapes and sizes follow the Gov.pl design system** (the official guide "Przewodnik Gov UI", version 1.0 beta, read on 4 October 2026). The colours stay Kraków's (decision of the frontend developer).
+
+| From the Gov.pl design system | In the app |
+|---|---|
+| Sizes 12, 14, 16, 20, 24, 28, 32 and 40 pixels; headings at 1:1.25, running text at 1:1.5 | The `text-*` and `line-*` tokens. The page heading grows from 28 to 40 pixels with the screen. |
+| Button: 44 pixels high, 2 pixel border, 4 pixel corners, bold label in capitals at 16 pixels | `.button-primary`, `.button-secondary` and the retry button. The choices of a group (presets, categories, languages) keep their own case. |
+| Input, select, text area: 44 pixels high, 8 by 12 pixels of padding, 16 pixel text, 4 pixel corners | `.field` controls. |
+| Message: a 2 pixel frame in the colour of its kind, 4 pixel corners | `.notice`, `.error-message`, `.stale-notice`. |
+
+Where the guide and WCAG 2.2 AA disagree, WCAG wins: the border of a field is darker than the guide's light grey (3:1, criterion 1.4.11), and links stay underlined (1.4.1).
+
+Not taken from the guide, on purpose: the top bar "gov.pl, Serwis Rzeczypospolitej Polskiej", the eagle and the Gov.pl footer. They mark an official government site, and this app is not one. Not applied yet: the typeface (the guide uses Open Sans; the app uses Lato, the typeface of krakow.pl) and the spacing steps of 20, 28, 40, 56 and 72 pixels.
+
 Changing the look means changing the values in `tokens.ts`.
+
+## The map
+
+The map is the centre of the app. It is built from two layers, with no map library and no request to a map server:
+
+- **Districts** (`src/components/DistrictMap.tsx`): an SVG. Each district is a button with its value and class in its name, filled with its step of a colour ramp, with an exact outline, the hatch for "no data", and the focus ring. The ramp is five steps of one blue, for every measure: a darker step is a higher value, never a verdict (a red to green ramp for scores was tried and taken back on 4 October). No names are printed on the map: a card with the name, the value, the class and its range, and the two prices appears over the district under the pointer or the keyboard focus (Escape puts it away). When the measure changes, the new colours spread from the middle of the city to its edge in about half a second (a CSS transition with a delay per district). With reduced motion the colours change at once. An earlier version drew the colours as small squares on a canvas; it was removed on 4 October because it slowed the page down.
+- **Context**: rivers, lakes, main roads, railways and a few landmarks from OpenStreetMap, thin and see-through over the districts, with the credit under the map. The file is made once by `scripts/build_basemap.py` (see `public/basemap/README.md`) and is not committed, because it is under the ODbL. Without it the map shows the districts alone.
+
+The map has no buttons. The mouse wheel over the map zooms it at the pointer (turned "out" at the whole city it scrolls the page), a zoomed map can be dragged, and a double click zooms in. The keyboard does the same from a focused district: `+` and `−` zoom, the arrow keys move a zoomed map, `0` shows the whole city; a line under the map says so, and it is tied to the map for screen readers. A touch screen shows the whole city and has no zoom, so it needs no gesture. Reaching another part of the city never needs a drag: zoom out and zoom in at another place (WCAG 2.5.7). The card of a district appears only on the page Districts on the map (`card` prop), not on the home page. `?district=<code>` on the page Districts on the map selects a district and zooms to it. The home page has a search by district name that leads there.
 
 ## Commands
 

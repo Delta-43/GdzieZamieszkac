@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import { DataKindBadge } from './DataKindBadge'
+import { DateText } from './DateText'
 
 type MetricEntry = components['schemas']['MetricEntry']
 type MetricValue = components['schemas']['MetricValue']
@@ -10,11 +11,13 @@ function hasValue(metric: MetricEntry): metric is MetricValue {
 }
 
 /**
- * One metric of a district with everything a reader needs to judge it: the API's display string, the data kind,
- * the as-of date, the source, the rank, the sample size and the caveat. The method, the licence and the credit line
- * sit in a collapsible detail. A metric without data shows its reason, never a zero.
+ * One metric of a district: the API's display string, the place among the districts, the sample size and the caveat.
+ * A value that is an estimate or an indirect measure carries its mark beside the number. The rest of what a reader
+ * needs to judge it is one press away, under "What does this mean?": the measure's description from the catalogue,
+ * then the data kind with one sentence on it, the as-of date, the source, the method, the licence and the credit line.
+ * A metric without data shows its reason, never a zero.
  */
-export function MetricRow({ metric }: { metric: MetricEntry }) {
+export function MetricRow({ metric, description }: { metric: MetricEntry; description?: string }) {
   const { t } = useTranslation()
 
   if (!hasValue(metric)) {
@@ -33,19 +36,21 @@ export function MetricRow({ metric }: { metric: MetricEntry }) {
       <dt>{metric.label}</dt>
       <dd>
         <p className="metric__value">
-          <span>{metric.display}</span> <DataKindBadge kind={metric.data_kind} />
+          <span>{metric.display}</span>
+          {/* An estimate or an indirect measure says so beside the number. A measured value needs no mark: its kind is in the details below. */}
+          {metric.data_kind !== 'observed' && (
+            <>
+              {' '}
+              <DataKindBadge kind={metric.data_kind} />
+            </>
+          )}
         </p>
         <p className="metric__facts">
-          <span>
-            {t('provenance.asOf')}: {metric.as_of}
-          </span>
-          <span>
-            {t('provenance.source')}: {metric.source.name}
-          </span>
           {metric.rank && (
             <span>
-              {t('districts.rank', { position: metric.rank.position, of: metric.rank.of })} (
-              {t(metric.rank.direction === 'higher is better' ? 'districts.higherIsBetter' : 'districts.lowerIsBetter')})
+              {/* The place: 1 is always the best. Whether more or less of the measure is better is a sentence of its own. */}
+              {t('districts.rank', { position: metric.rank.position, of: metric.rank.of })}.{' '}
+              {t(metric.rank.direction === 'higher is better' ? 'districts.higherIsBetter' : 'districts.lowerIsBetter')}
             </span>
           )}
           {typeof metric.n_obs === 'number' && (
@@ -61,7 +66,25 @@ export function MetricRow({ metric }: { metric: MetricEntry }) {
         )}
         <details>
           <summary>{t('metric.more')}</summary>
+          {/* The measure in plain language, as the catalogue of the API describes it. */}
+          {description && <p className="metric__description">{description}</p>}
           <dl className="metric__more">
+            <div>
+              <dt>{t('provenance.dataKind')}</dt>
+              <dd>
+                <DataKindBadge kind={metric.data_kind} /> {t(`dataKindHelp.${metric.data_kind}`)}
+              </dd>
+            </div>
+            <div>
+              <dt>{t('provenance.asOf')}</dt>
+              <dd>
+                <DateText value={metric.as_of} />
+              </dd>
+            </div>
+            <div>
+              <dt>{t('provenance.source')}</dt>
+              <dd>{metric.source.name}</dd>
+            </div>
             {metric.method && (
               <div>
                 <dt>{t('metric.method')}</dt>

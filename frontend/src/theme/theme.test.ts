@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { contrastRatio } from './contrast'
 import { themeCss } from './index'
-import { colors, CONTRAST_PAIRS, MAP_RAMP, TEXT_MIN, UI_MIN } from './tokens'
+import { colors, CONTRAST_PAIRS, MAP_RAMP, scale, TEXT_MIN, UI_MIN } from './tokens'
 
 test('the contrast formula matches the known WCAG values', () => {
   expect(contrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 5)
@@ -18,8 +18,9 @@ test.each(CONTRAST_PAIRS)('$fg on $bg reaches $min:1 ($use)', ({ fg, bg, min }) 
 
 test('every colour that can sit on a background is covered by a contrast pair', () => {
   const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent', 'accentHover', ...MAP_RAMP])
-  // "border" is a decorative hairline and carries no meaning, so it is the one colour with no requirement.
-  const exempt = new Set<string>(['border', 'noDataStripe'])
+  // "border" is a decorative hairline and carries no meaning, so it has no requirement. The same goes for the context of the map
+  // (water, roads, railways): they only help to find one's way, nothing is read from them, and they are thin and see-through.
+  const exempt = new Set<string>(['border', 'noDataStripe', 'mapWater', 'mapRoad', 'mapRail'])
   const covered = new Set<string>(CONTRAST_PAIRS.map((pair) => pair.fg))
   const uncovered = Object.keys(colors).filter((name) => !backgrounds.has(name) && !exempt.has(name) && !covered.has(name))
   expect(uncovered).toEqual([])
@@ -47,6 +48,20 @@ test('the theme stylesheet defines a custom property for every colour', () => {
   expect(css).toContain('--font-body:')
   expect(css).toContain('--font-ui:')
   expect(css).toContain('prefers-reduced-motion')
+})
+
+test('with reduced motion every duration token is zero, and the stylesheet writes no duration of its own', () => {
+  const reduced = themeCss().split('prefers-reduced-motion')[1] ?? ''
+  const durations = Object.keys(scale).filter((name) => name.startsWith('duration-'))
+  expect(durations.length).toBeGreaterThan(0)
+  for (const name of durations) expect(reduced).toContain(`--${name}: 0ms;`)
+  // A duration typed into the stylesheet would keep moving for a person who asked for less motion.
+  const styles = import.meta.glob('/src/styles.css', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+  const typed = Object.values(styles)
+    .join('\n')
+    .split('\n')
+    .filter((line) => /transition|animation/.test(line) && /\b\d+m?s\b/.test(line) && !/\b0s\b/.test(line.replace(/var\([^)]*\)/g, '')))
+  expect(typed).toEqual([])
 })
 
 test('no colour is written outside the theme folder', () => {

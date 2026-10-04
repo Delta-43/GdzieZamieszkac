@@ -46,7 +46,9 @@ def make_snapshot(version="v1", now=NOW) -> Snapshot:
             rows.append(_row(code, key, v, kinds[key], n, note))
     districts = [{"code": c, "name": c.capitalize(), "area_km2": AREA[c],
                   "geometry": {"type": "MultiPolygon", "coordinates": [[[[i, 0], [i + 1, 0], [i + 1, 1], [i, 1], [i, 0]]]]}} for i, c in enumerate(CODES)]
-    snap = Snapshot(districts=districts, metric_defs=DEFS, rows=rows, reports={}, notes_pl={"Test method.": "Metoda testowa.", "Low confidence: fewer than 20 transactions.": "Niska pewność: mniej niż 20 transakcji."},
+    snap = Snapshot(districts=districts, metric_defs=DEFS, rows=rows, reports={}, notes_pl={"Test method.": "Metoda testowa.", "Low confidence: fewer than 20 transactions.": "Niska pewność: mniej niż 20 transakcji.",
+                              # Stored Polish versions of the provenance and unit texts, as in the translation cache of the real database.
+                              "Test source": "Źródło testowe", "Test licence": "Licencja testowa", "Test attribution": "Podpis testowy", "stops": "przystanki"},
                     runs=[{"source": "rcn", "status": "ok", "finished_at": now, "started_at": now}], version=version, loaded_at=now)
     score = Derived(snap, now).default_score  # the stored default score is what the engine computes
     for c in CODES:

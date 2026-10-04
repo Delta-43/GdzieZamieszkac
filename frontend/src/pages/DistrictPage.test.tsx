@@ -10,7 +10,7 @@ function rowOf(label: string): HTMLElement {
   return screen.getByText(label, { selector: 'dt' }).closest('.metric') as HTMLElement
 }
 
-test('every metric shows its value as given, with data kind, date, source, rank, sample size and caveat', async () => {
+test('every metric shows its value as given, with rank, sample size and caveat; its data kind, date and source are one press away', async () => {
   mockFetch(districtsApi)
   renderApp(PAGE)
 
@@ -18,17 +18,37 @@ test('every metric shows its value as given, with data kind, date, source, rank,
   expect(document.title).toBe('Alpha – GdzieZamieszkać')
   const sale = rowOf('Test sale label')
   expect(sale).toHaveTextContent('100 test')
-  expect(sale).toHaveTextContent('obserwowane')
-  expect(sale).toHaveTextContent('Stan na: 2026-09-30')
-  expect(sale).toHaveTextContent('Źródło: Test source A')
-  expect(sale).toHaveTextContent('Pozycja 2 z 4 (niższa wartość to lepsza pozycja)')
+  expect(sale).toHaveTextContent('Miejsce 2 z 4 (1 = najlepsze). Im mniej, tym lepiej.')
   expect(sale).toHaveTextContent('Liczba obserwacji: 42')
   expect(sale).toHaveTextContent('Zastrzeżenie: Test caveat from the API.')
-  // The method, the licence and the credit line sit in a collapsible detail.
-  const more = within(sale).getByText('Metoda, licencja i oznaczenie źródła').closest('details') as HTMLElement
+  // One collapsible detail, "What does this mean?": the description from the catalogue first, then the data kind with
+  // one sentence on it, the date in words, the source, the method, the licence and the credit line.
+  const more = within(sale).getByText('Co to znaczy?').closest('details') as HTMLElement
+  expect(within(sale).getAllByText('Co to znaczy?')).toHaveLength(1)
+  expect(more).toHaveTextContent('Test sale label description from the API.')
+  expect(more).toHaveTextContent('Zmierzone albo podane w oficjalnych danych.')
+  expect(more).toHaveTextContent('Rodzaj danych')
+  expect(more).toHaveTextContent('zmierzone')
+  expect(within(more).getByText('30 września 2026')).toHaveAttribute('datetime', '2026-09-30')
+  expect(more).toHaveTextContent('Test source A')
   expect(more).toHaveTextContent('Test method text.')
   expect(more).toHaveTextContent('Test licence text')
   expect(more).toHaveTextContent('Test credit line A')
+  // A measured value carries no mark beside the number: the only badge of this row is the one in the detail.
+  expect(sale.querySelectorAll('.data-kind')).toHaveLength(1)
+  expect(more.querySelectorAll('.data-kind')).toHaveLength(1)
+})
+
+test('a value that is an estimate keeps its mark beside the number', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  await screen.findByRole('heading', { level: 1, name: 'Alpha' })
+  // The yield is estimated: the reader sees that without opening anything.
+  const row = rowOf('Test yield label')
+  const value = row.querySelector('.metric__value') as HTMLElement
+  expect(value).toHaveTextContent('5 test percent')
+  expect(value).toHaveTextContent('oszacowane')
 })
 
 test('a metric without data shows its reason and no value', async () => {
@@ -51,7 +71,7 @@ test('the page opens with the area, the score with its provenance and the API sc
   expect(rowOf('Powierzchnia')).toHaveTextContent('10,5 km²')
   const score = rowOf('Test score label')
   expect(score).toHaveTextContent('61,5 test points')
-  expect(score).toHaveTextContent('szacowane')
+  expect(score).toHaveTextContent('oszacowane')
   expect(screen.getByText('Test score note from the API.')).toBeInTheDocument()
   // The score is shown once, at the top, and not again inside its category.
   expect(screen.getAllByText('Test score label', { selector: 'dt' })).toHaveLength(1)
@@ -81,14 +101,14 @@ test('the price history has a summary in words, a table with every value and a m
   const { container } = renderApp(PAGE)
 
   expect(await screen.findByRole('heading', { level: 2, name: 'Historia: Test series label' })).toBeInTheDocument()
-  expect(screen.getByText(/Pierwszy kwartał \(2025-01-01\): 100 test\. Ostatni kwartał \(do 2025-09-30\): 120 test\. Liczba kwartałów: 3\./)).toBeInTheDocument()
+  expect(screen.getByText(/Pierwszy kwartał \(1 stycznia 2025\): 100 test\. Ostatni kwartał \(do 30 września 2025\): 120 test\. Liczba kwartałów: 3\./)).toBeInTheDocument()
   expect(screen.getByText(/Puste, większe kółko oznacza kwartał o niskiej wiarygodności\./)).toBeInTheDocument()
   expect(screen.getByText(/Test series caveat from the API\./)).toBeInTheDocument()
 
   const table = screen.getByRole('table', { name: 'Wartości z wykresu, kwartał po kwartale' })
   const rows = within(table).getAllByRole('row')
   expect(rows).toHaveLength(4)
-  expect(rows[2]).toHaveTextContent('2025-04-01 – 2025-06-30')
+  expect(rows[2]).toHaveTextContent('1 kwietnia 2025 – 30 czerwca 2025')
   expect(rows[2]).toHaveTextContent('80 test')
   expect(rows[2]).toHaveTextContent('7')
   expect(rows[2]).toHaveTextContent('niska')

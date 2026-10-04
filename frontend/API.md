@@ -121,12 +121,12 @@ These are known. Raise each one in a pull request that changes the contract. Unt
 
 | Gap | Effect | Work-around |
 |---|---|---|
-| No `display` string for `livability_score`, `area_km2`, commute `minutes`, recommend `score` and `percentile`, and similar `similarity` | You cannot show these in the language's number format | Show the number as the API sends it. In Polish, replace the decimal point with a comma, and do no rounding. Keep this in one small helper that you delete later. |
+| No `display` string for `area_km2`, commute `minutes` and similar `similarity` | You cannot show these in the language's number format | Show the number as the API sends it. In Polish, replace the decimal point with a comma, and do no rounding. Keep this in one small helper that you delete later (`src/lib/plainNumber.ts`). |
+| No `display` string for `livability_score` and recommend `score`, and no "better than k districts" count for a driver's `percentile` | A list of scores with decimals, and a percentile, say nothing to a resident (issue #82, the coordinator's decision) | Lists show the score as a whole number with "pkt", and a driver as "better than k of the other n − 1 districts", k = round(percentile / 100 × (n − 1)). Both are computed in one place, `src/lib/score.ts`. Delete it when the API sends them. |
 | `highlights` in `/districts` carry the key and the display string only | No label and no numeric value | Get the label from `/metrics`. Get the numeric value from `/metrics/{key}/values`. |
-| Dates such as `as_of` are ISO strings with no display form | The date format is not localised | Show the ISO date for now. |
+| Dates such as `as_of` are ISO strings with no display form | The date format is not localised | Show the date in words in the page language, inside `<time dateTime="…">` (`src/lib/dates.ts`, issue #82). This is formatting, not translation. |
 | The default language is English | The portal default is Polish | Send `lang` on every request. |
 | `/recommend` takes weights only | No budget range, tenure or work place | Do the budget filter and the commute step in the browser. See phase 2 in `REQUIREMENTS.md`. |
-| `/personas` has no couple or newly married preset | Phase 2 needs them | Ask the coordinator to add them to the backend data file. |
 
 ## Not in the contract
 

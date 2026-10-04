@@ -44,16 +44,19 @@ test('the button sends the text to the city service with the language and no wei
   write('  TEST quiet and green  ')
 
   expect(section.getByText('Piszemy podsumowanie. To trwa kilka sekund…')).toHaveAttribute('role', 'status')
+  // While the report is written the button is marked as not available, and it keeps the focus.
+  expect(screen.getByRole('button', { name: 'Napisz podsumowanie' })).toHaveAttribute('aria-disabled', 'true')
   // The AI label is the API's text.
   expect(await section.findByText('Test AI label from the API.')).toBeInTheDocument()
   expect(section.getByText('Podsumowanie jest gotowe.')).toHaveAttribute('role', 'status')
+  expect(screen.getByRole('button', { name: 'Napisz podsumowanie' })).not.toHaveAttribute('aria-disabled')
   const requests = reportRequests(fetchMock)
   expect(requests.map((request) => request.url)).toEqual(['http://city.test/v1/ai-report'])
   expect(await requests[0]?.clone().json()).toEqual({ requirements: 'TEST quiet and green', lang: 'pl' })
   // Plain text in paragraphs: markup in the text is shown as characters, never as HTML.
   expect(section.getByText('Test AI report first paragraph.')).toBeInTheDocument()
   expect(section.getByText('Test AI report <b>second</b> paragraph.')).toBeInTheDocument()
-  expect(section.getByText('Model: test-model. Wygenerowano: 2026-10-01.')).toBeInTheDocument()
+  expect(section.getByText('Model: test-model. Wygenerowano: 1 października 2026.')).toBeInTheDocument()
   // The three districts and their order are the API's.
   const items = section.getAllByRole('listitem')
   // The scores are the API's display strings, as given.
@@ -125,7 +128,7 @@ test.each([
   await waitFor(() => expect(section.getByRole('alert')).toHaveTextContent(message))
   // One request, never retried: each report costs model budget.
   expect(reportRequests(fetchMock)).toHaveLength(1)
-  expect(screen.getByRole('table', { name: 'Ranking domyślny: wskaźnik jakości życia' })).toBeInTheDocument()
+  expect(screen.getByRole('table', { name: 'Ranking domyślny: wynik ogólny' })).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Pokaż ranking' }))
   expect(await screen.findByRole('table', { name: 'Ranking dla Twoich priorytetów' })).toBeInTheDocument()
 })

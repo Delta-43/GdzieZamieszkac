@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from ..core import present
 from ..core.config import Settings
 from ..core.i18n import CATEGORIES, LANGS, resolve_lang, t
-from ..core.present import ProblemError
+from ..core.present import ProblemError, shown
 from ..core.store import DataStore, Derived, StoreUnavailable
 
 router = APIRouter()
@@ -36,7 +36,7 @@ def lang_dep(request: Request, lang: str | None = Query(None, description="en or
 
 def known_district(d: Derived, code: str) -> str:
     if code not in d.districts:
-        raise ProblemError(404, "Unknown district", f"There is no district '{code}'.")
+        raise ProblemError(404, "Unknown district", f"There is no district '{shown(code)}'.")
     return code
 
 

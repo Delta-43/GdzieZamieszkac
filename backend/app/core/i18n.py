@@ -61,6 +61,7 @@ TEXT = {
     "window_8": {"en": "Two years", "pl": "Dwa lata"},
     "per_month": {"en": "per month", "pl": "miesięcznie"},
     "years": {"en": "years", "pl": "lat"},
+    "and": {"en": "and", "pl": "i"},
 }
 
 

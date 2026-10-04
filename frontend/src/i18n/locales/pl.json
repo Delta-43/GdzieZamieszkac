@@ -12,7 +12,9 @@
     "close": "Zamknij menu",
     "groupDistricts": "Dzielnice",
     "findDistrict": "Znajdź dzielnicę",
-    "compare": "Porównaj dzielnice"
+    "compare": "Porównaj dzielnice",
+    "feedback": "Zgłoszenia",
+    "sources": "Źródła i jak to działa"
   },
   "language": {
     "label": "Język"
@@ -31,17 +33,23 @@
   },
   "footer": {
     "sources": "Źródła danych",
-    "nav": "Nawigacja w stopce",
-    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania.",
-    "newTab": "(otwiera się w nowej karcie)",
-    "moreLink": "{{credit}}: adres {{number}} (otwiera się w nowej karcie)"
+    "newTab": "(otwiera się w nowej karcie)"
   },
   "home": {
     "title": "Strona główna",
     "heading": "Porównaj dzielnice, zanim zaczniesz szukać mieszkania",
     "what": "Portal pokazuje dane publiczne o dzielnicach: transport, usługi, środowisko, ceny i czynsze. Przy każdej liczbie podajemy źródło i datę.",
     "notListings": "To nie jest serwis z ogłoszeniami. Nie pokazujemy ofert mieszkań ani pośredników.",
-    "cta": "Zobacz dzielnice"
+    "cta": "Zobacz dzielnice",
+    "notices": {
+      "heading": "Oficjalne komunikaty miasta",
+      "badge": "Koncepcja",
+      "text": "Komunikaty o planowanych inwestycjach i infrastrukturze, publikowane przez miasto, zostaną wdrożone po zatwierdzeniu przez miasto. Jeszcze ich nie ma: ta sekcja nie pokazuje żadnych komunikatów ani danych."
+    },
+    "map": {
+      "heading": "Mapa dzielnic: {{metric}}",
+      "hint": "Najedź na dzielnicę, aby zobaczyć jej wynik. Wybierz ją, aby zobaczyć szczegóły. Każda dzielnica jest też na liście na stronie Dzielnice na mapie."
+    }
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -49,9 +57,22 @@
     "back": "Wróć na stronę główną"
   },
   "dataKind": {
-    "observed": "obserwowane",
-    "estimated": "szacowane",
-    "proxy": "pośrednie"
+    "observed": "zmierzone",
+    "estimated": "oszacowane",
+    "proxy": "przybliżone"
+  },
+  "dataKindHelp": {
+    "observed": "Zmierzone albo podane w oficjalnych danych.",
+    "estimated": "Obliczone z innych danych, a nie zmierzone wprost.",
+    "proxy": "Przybliżone na podstawie innej, podobnej miary."
+  },
+  "score": {
+    "place": "Miejsce {{position}} z {{of}}",
+    "placeHeader": "Miejsce (1 = najlepsze)",
+    "points": "{{value}} pkt",
+    "explain": "Wynik porównuje ze sobą dzielnice miasta {{city}}. Nie ocenia, jak się tam żyje. Wysokie ceny mieszkań go obniżają.",
+    "how": "Jak to liczymy?",
+    "howText": "Dla każdej miary sprawdzamy, jak dzielnica wypada na tle pozostałych dzielnic miasta. Wynik to średnia z tych porównań, w skali od 0 do 100. Kategorie, które są dla Ciebie ważniejsze, liczą się mocniej. Pełny opis metody jest na stronie Źródła i jak to działa."
   },
   "provenance": {
     "dataKind": "Rodzaj danych",
@@ -62,34 +83,52 @@
   "districts": {
     "title": "Dzielnice",
     "heading": "Dzielnice na mapie i na liście",
-    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Te same wartości są na liście obok mapy.",
+    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Najedź na dzielnicę, aby zobaczyć jej wartość, i wybierz ją, aby zobaczyć szczegóły. Te same wartości są na liście pod mapą.",
     "optionNoData": "{{label}} (brak danych)",
     "unavailable": "Brak danych dla tej miary.",
     "noData": "brak danych",
-    "rank": "Pozycja {{position}} z {{of}}",
-    "higherIsBetter": "wyższa wartość to lepsza pozycja",
-    "lowerIsBetter": "niższa wartość to lepsza pozycja",
-    "classOf": "Przedział {{number}} z {{count}} na mapie",
+    "rank": "Miejsce {{position}} z {{of}} (1 = najlepsze)",
+    "higherIsBetter": "Im więcej, tym lepiej.",
+    "lowerIsBetter": "Im mniej, tym lepiej.",
+    "step": {
+      "1": "bardzo niska",
+      "2": "niska",
+      "3": "średnia",
+      "4": "wysoka",
+      "5": "bardzo wysoka"
+    },
+    "stepOf": "wartość {{step}}",
+    "compared": "Na tle innych dzielnic",
     "map": {
       "label": "Mapa dzielnic. Miara: {{metric}}",
-      "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
+      "district": "{{name}}: {{value}}, miejsce {{position}} z {{of}}",
+      "districtStep": "{{name}}: {{value}}, wartość {{step}}",
       "districtNoData": "{{name}}: brak danych",
-      "districtLoading": "{{name}}: wczytywanie danych"
+      "districtLoading": "{{name}}: wczytywanie danych",
+      "wholeCity": "Widać całe miasto.",
+      "zoomLevel": "Powiększenie {{zoom}} razy.",
+      "zoomedTo": "Przybliżono do dzielnicy: {{name}}.",
+      "hint": "Mapę przybliża i oddala kółko myszy; przybliżoną można przeciągać. Z klawiatury: klawisze + i − przybliżają i oddalają, strzałki przesuwają, a 0 pokazuje całe miasto."
     },
     "legend": {
-      "title": "Legenda",
-      "direction": "Ciemniejszy kolor oznacza wyższą wartość.",
-      "range": "Przedział {{number}}: od {{min}} do {{max}}",
-      "single": "Przedział {{number}}: {{value}}",
-      "noData": "Pole kreskowane: brak danych"
+      "range": "Wartość {{step}}: od {{min}} do {{max}}",
+      "single": "Wartość {{step}}: {{value}}",
+      "noData": "Pole kreskowane: brak danych",
+      "lower": "niższa wartość",
+      "higher": "wyższa wartość",
+      "darker": "Ciemniejszy kolor oznacza wyższą wartość: {{label}}.",
+      "better": "Dla tej miary wyższa wartość jest lepsza.",
+      "worse": "Dla tej miary wyższa wartość jest gorsza.",
+      "neutral": "Dla tej miary wyższa wartość nie jest ani lepsza, ani gorsza."
     },
     "table": {
       "region": "Lista dzielnic. Można ją przewijać.",
       "caption": "Dzielnice: wynik ogólny i {{metric}}",
       "district": "Dzielnica",
-      "score": "Wynik ogólny (0–100)",
+      "score": "Wynik ogólny (miejsce 1 = najlepsze)",
       "selected": "wybrana",
-      "captionScore": "Dzielnice: wynik ogólny"
+      "captionScore": "Dzielnice: wynik ogólny",
+      "rank": "Ranking"
     },
     "colourBy": "Koloruj mapę według",
     "overall": "Wynik ogólny",
@@ -97,19 +136,19 @@
     "chooseMeasure": "— wybierz miarę —",
     "categoryScore": "Wynik kategorii: {{category}} (0–100)",
     "categoryMethod": "Wynik od 0 do 100 obliczony przez API tylko z miar tej kategorii. Porównuje dzielnice jednego miasta.",
-    "tabs": {
-      "label": "Dane dzielnic",
-      "list": "Lista",
-      "details": "Szczegóły"
-    },
     "details": {
-      "none": "Wybierz dzielnicę na mapie albo na liście, aby zobaczyć jej szczegóły.",
       "profile": "Profil dzielnicy: wyniki kategorii",
       "category": "Kategoria",
-      "score": "Wynik (0–100)",
-      "classShort": "{{number}} z {{count}}",
-      "backToList": "Wróć do listy"
-    }
+      "score": "Wynik",
+      "close": "Zamknij szczegóły"
+    },
+    "pickerLabel": "Co koloruje mapę",
+    "listHeading": "Lista dzielnic",
+    "detailsLabel": "Szczegóły wybranej dzielnicy",
+    "measureSearch": "Szukaj miary",
+    "measureSearchHint": "Wpisz część nazwy, na przykład „hałas”. Lista poniżej pokaże tylko pasujące miary.",
+    "measureCount": "Pasujące miary: {{count}}.",
+    "measureNone": "Żadna miara nie pasuje. Zmień wpisany tekst."
   },
   "report": {
     "heading": "Opis dzielnicy",
@@ -130,7 +169,7 @@
     "noData": "Brak danych.",
     "sample": "Liczba obserwacji",
     "caveat": "Zastrzeżenie",
-    "more": "Metoda, licencja i oznaczenie źródła",
+    "more": "Co to znaczy?",
     "method": "Metoda",
     "licence": "Licencja",
     "attribution": "Oznaczenie źródła"
@@ -160,24 +199,36 @@
     "intro": "Wybierz gotowy profil albo ustaw, jak ważna jest dla Ciebie każda kategoria. Ranking oblicza API na podstawie danych publicznych.",
     "priorities": "Twoje priorytety",
     "presets": "Gotowe profile",
+    "importance": {
+      "0": "Nieważne",
+      "3": "Ważne",
+      "5": "Bardzo ważne"
+    },
+    "question": {
+      "cost": "Ile to kosztuje?",
+      "transport": "Jak dojadę?",
+      "amenities": "Co mam w pobliżu?",
+      "environment": "Jaki jest hałas i powietrze?"
+    },
+    "otherWeight": "Waga {{value}} z {{max}}. Dokładną wartość zmienisz w części Zaawansowane.",
+    "advanced": "Zaawansowane",
     "hint": "Skala od 0 do 5. Wartość 0 pomija kategorię. Wartość 5 liczy się pięć razy mocniej niż 1.",
     "weight": "{{value}} z {{max}}",
     "left_out": "0 – kategoria pominięta",
-    "allZero": "Wszystkie kategorie mają wartość 0. Ustaw co najmniej jedną kategorię powyżej zera.",
+    "allZero": "Wszystkie kategorie są nieważne. Wybierz co najmniej jedną jako ważną.",
     "submit": "Pokaż ranking",
     "reset": "Przywróć domyślne",
     "ranking": "Ranking dzielnic",
     "ready": "Ranking gotowy. Pierwsze miejsce: {{name}}.",
     "readyDefault": "Ranking domyślny, bez wag. Pierwsze miejsce: {{name}}.",
-    "percentile": "percentyl {{value}}",
+    "better": "lepszy niż w {{count}} z {{of}} pozostałych dzielnic",
     "used": "Liczba miar w wyniku: {{count}}.",
     "missing": "Miary bez danych w tym mieście są pominięte w wyniku:",
     "table": {
       "region": "Tabela z rankingiem dzielnic. Można ją przewijać.",
       "caption": "Ranking dla Twoich priorytetów",
-      "captionDefault": "Ranking domyślny: wskaźnik jakości życia",
-      "rank": "Miejsce",
-      "score": "Wynik (0–100)",
+      "captionDefault": "Ranking domyślny: wynik ogólny",
+      "score": "Wynik",
       "drivers": "Co najbardziej wpływa na wynik"
     }
   },
@@ -219,5 +270,130 @@
     "metric": "Miara",
     "more": "Metodę, zastrzeżenia, licencję i oznaczenie źródła każdej miary znajdziesz na stronie dzielnicy.",
     "region": "Tabela: {{label}}. Można ją przewijać."
+  },
+  "feedback": {
+    "title": "Zgłoszenia",
+    "heading": "Zgłoszenia od mieszkańców",
+    "intro": "Napisz, ile faktycznie płacisz za wynajem, albo zgłoś problem, który znalazłeś w danych. Zgłoszenie pomaga nam sprawdzać liczby. To nie jest oferta, ogłoszenie ani skarga do miasta.",
+    "noIdentity": "Dziś nie pytamy o tożsamość. Zgłoszenia nie da się jeszcze sprawdzić, więc nie jest używane.",
+    "privacy": "Nie wpisuj imienia, adresu, numeru telefonu ani niczego, co wskazuje osobę lub właściciela mieszkania. Zgłoszeń o przestępstwach tu nie zbieramy.",
+    "choose": "Wybierz…",
+    "required": "Wszystkie pola są wymagane.",
+    "sending": "Wysyłanie…",
+    "submit": "Wyślij zgłoszenie",
+    "sent": "Zgłoszenie zostało wysłane.",
+    "rent": {
+      "heading": "Czynsz, który płacisz",
+      "intro": "Jedna liczba dla jednego mieszkania: dzielnica, miesięczny czynsz, wielkość i miesiąc."
+    },
+    "problem": {
+      "heading": "Problem w danych",
+      "intro": "Napisz, która liczba wygląda źle i dlaczego. Opisz liczbę, nie osobę."
+    },
+    "fields": {
+      "district": "Dzielnica",
+      "rent": "Miesięczny czynsz (zł)",
+      "size": "Wielkość mieszkania",
+      "month": "Miesiąc, za który zapłacono",
+      "metric": "Liczba",
+      "message": "Co jest nie tak?"
+    },
+    "hints": {
+      "rent": "Liczba całkowita od {{min}} do {{max}}.",
+      "month": "Rok i miesiąc, na przykład 2026-09.",
+      "message": "Od {{min}} do {{max}} znaków."
+    },
+    "sizes": {
+      "up_to_30": "Do 30 m²",
+      "31_50": "Od 31 do 50 m²",
+      "51_70": "Od 51 do 70 m²",
+      "over_70": "Powyżej 70 m²"
+    },
+    "errors": {
+      "district": "Wybierz dzielnicę.",
+      "rent": "Wpisz liczbę całkowitą od {{min}} do {{max}}.",
+      "size": "Wybierz wielkość mieszkania.",
+      "month": "Wpisz rok i miesiąc, na przykład 2026-09.",
+      "metric": "Wybierz liczbę.",
+      "message": "Napisz od {{min}} do {{max}} znaków."
+    },
+    "error": {
+      "tooLarge": "Zgłoszenie jest za duże. Skróć je i spróbuj ponownie.",
+      "invalid": "Zgłoszenie nie zostało przyjęte. Sprawdź pola i spróbuj ponownie.",
+      "tooMany": "Za dużo zgłoszeń w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
+      "tooManySeconds": "Za dużo zgłoszeń w krótkim czasie. Spróbuj za {{seconds}} s.",
+      "unavailable": "Zgłoszenia nie mogą teraz być przyjęte. Spróbuj później.",
+      "generic": "Zgłoszenie nie zostało wysłane. Sprawdź połączenie z internetem i spróbuj ponownie."
+    }
+  },
+  "about": {
+    "title": "Źródła i jak to działa",
+    "heading": "Źródła i jak to działa",
+    "intro": "Skąd pochodzą liczby, jak powstaje wynik, gdzie używamy sztucznej inteligencji, a gdzie nie, i czego ten portal nie robi.",
+    "score": {
+      "heading": "Jak powstaje wynik",
+      "text": "Wynik liczy kod programu na podstawie danych publicznych, a kod jest testowany. Dla każdej miary dzielnica dostaje od 0 do 100 punktów za to, jak wypada na tle pozostałych dzielnic miasta (100 to najlepiej). Wynik to średnia ważona tych punktów. Wagi ustalasz Ty: na stronie Znajdź dzielnicę albo gotowym profilem.",
+      "limit": "Wynik pokazuje, jak dzielnica wypada na tle pozostałych dzielnic tego samego miasta. Nie porównuje miast i nie jest oceną tego, jak dobrze się tam mieszka."
+    },
+    "kinds": {
+      "heading": "Rodzaje danych"
+    },
+    "ai": {
+      "heading": "Gdzie używamy sztucznej inteligencji",
+      "used": "Gdzie jest używana",
+      "notUsed": "Gdzie nie jest używana",
+      "reports": "Opis każdej dzielnicy pisze model językowy z ustalonej listy faktów, z wyprzedzeniem. Każdy opis ma etykietę, która o tym mówi.",
+      "summary": "Podsumowanie na stronie Znajdź dzielnicę pisze model językowy, gdy o nie poprosisz, na podstawie rankingu na ekranie i Twojego tekstu. Twój tekst jest wysyłany do zewnętrznego dostawcy modelu i nie jest przez nas zapisywany.",
+      "translation": "Zapisany tekst jest tłumaczony między polskim a angielskim przez model językowy przed publikacją. Podczas korzystania z portalu nic nie jest tłumaczone.",
+      "noScore": "Wyniku i rankingu nigdy nie liczy model.",
+      "noNumbers": "Model nigdy nie dodaje, nie zmienia ani nie wymyśla liczb. Tekst z liczbą, której nie ma w faktach, jest odrzucany.",
+      "noVerdict": "Model nigdy nie pisze, że dzielnica jest bezpieczna lub niebezpieczna.",
+      "guard": "Jeśli tekstu nie da się napisać, portal mówi o tym, a reszta nadal działa."
+    },
+    "not": {
+      "heading": "Czego ten portal nie robi",
+      "listings": "To nie jest serwis z ogłoszeniami. Nie pokazuje mieszkań na sprzedaż ani do wynajęcia, pośredników ani odnośników do ofert. Czynsze to mediany dla dzielnic.",
+      "safety": "Nie ocenia bezpieczeństwa. Przestępczość byłaby pokazana jako liczba zarejestrowanych przestępstw na 10 000 mieszkańców, a dla Krakowa nie ma dziś w portalu takich danych.",
+      "forecast": "Nie prognozuje cen. Pokazuje historię i przedział, który wystąpił w przeszłości.",
+      "advice": "Nie daje porad finansowych ani prawnych i nie pyta, kto mieszka w dzielnicy."
+    },
+    "sources": {
+      "heading": "Źródła",
+      "intro": "Każde używane źródło, z podpisem wymaganym przez licencję, tak jak podaje go serwis z danymi.",
+      "credit": "Podpis",
+      "licence": "Licencja",
+      "asOf": "Stan danych na",
+      "metrics": "Liczby z tego źródła"
+    },
+    "gaps": {
+      "heading": "Luki w danych",
+      "intro": "Dla tego miasta nie ma danych dla tych liczb. Nie wchodzą do wyniku. Powód to tekst serwisu z danymi.",
+      "none": "Dla wszystkich liczb są dane dla tego miasta."
+    },
+    "a11y": {
+      "heading": "Deklaracja dostępności (projekt)",
+      "draft": "To projekt napisany podczas wydarzenia HackYeah. Miasto, które będzie prowadzić usługę, musi go uzupełnić i co roku sprawdzać.",
+      "target": "Celem są wytyczne dostępności treści internetowych WCAG 2.2, poziom AA. Portal nie został jeszcze w pełni sprawdzony pod tym kątem.",
+      "done": "Co zostało zrobione",
+      "doneAuto": "Każda strona jest sprawdzana automatycznym testem dostępności w obu językach.",
+      "doneContrast": "Każda para kolorów jest testowana pod kątem kontrastu: 4,5 do 1 dla tekstu i 3 do 1 dla elementów formularzy i przycisków.",
+      "doneKeyboard": "Strony mają odnośnik pomijający nawigację i widoczny fokus, a także mieszczą się na ekranie o szerokości 320 pikseli bez przewijania na boki.",
+      "todo": "Czego jeszcze nie sprawdzono",
+      "todoScreenReader": "Pełnego sprawdzenia czytnikiem ekranu na każdej stronie.",
+      "todoZoom": "Pełnego sprawdzenia przy powiększeniu 400 procent na każdej stronie.",
+      "todoMap": "Na dwóch najciemniejszych klasach mapy cienki obrys dzielnicy nie osiąga kontrastu 3 do 1 względem wypełnienia. Każda dzielnica jest też w tabeli obok mapy.",
+      "report": "Jak zgłosić problem",
+      "reportText": "Miasto, które będzie prowadzić usługę, poda kontakt w sprawie problemów z dostępnością. W czasie wydarzenia zgłoś problem zespołowi projektu albo jako zgłoszenie w repozytorium projektu na GitHubie.",
+      "todoKeyboard": "Pełnego sprawdzenia samą klawiaturą na każdej stronie."
+    }
+  },
+  "search": {
+    "region": "Wyszukiwanie dzielnicy",
+    "label": "Wpisz nazwę dzielnicy",
+    "hint": "Na przykład: {{example}}. Dzielnica zostanie pokazana na mapie.",
+    "submit": "Pokaż na mapie",
+    "list": "Dzielnice pasujące do wpisanego tekstu",
+    "count": "Podpowiedzi: {{count}}.",
+    "missed": "Nie ma dzielnicy o takiej nazwie. Sprawdź pisownię albo wybierz dzielnicę na mapie."
   }
 }

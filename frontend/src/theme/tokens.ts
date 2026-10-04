@@ -45,6 +45,14 @@ export const colors = {
   mapRamp5: '#0a3a66',
   /** "No data" is hatching, never a fill that looks like a low value. */
   noDataStripe: '#bfbfbf',
+  /**
+   * The context of the map (rivers, lakes, main roads, railways). They only help a reader find their way: nothing is read from
+   * them, so they have no contrast requirement, and they are drawn thin and see-through over the districts. Water is white, as a
+   * gap in the colours, so it is never mistaken for a step of the blue ramp.
+   */
+  mapWater: '#ffffff',
+  mapRoad: '#2b2b2b',
+  mapRail: '#2b2b2b',
 } as const
 
 export type ColorToken = keyof typeof colors
@@ -84,6 +92,9 @@ export const CONTRAST_PAIRS: ContrastPair[] = [
   pair('danger', 'surface', UI_MIN, 'status rule on a panel'),
   pair('info', 'bg', UI_MIN, 'status rule on the page'),
   pair('info', 'surface', UI_MIN, 'status rule on a panel'),
+  pair('warning', 'surfaceRaised', UI_MIN, 'frame of a warning message'),
+  pair('danger', 'surfaceRaised', UI_MIN, 'frame of an error message'),
+  pair('info', 'surfaceRaised', UI_MIN, 'frame of an information message'),
   // The class number printed on each district of the map: dark on the pale steps, light on the deep ones.
   pair('text', 'mapRamp1', TEXT_MIN, 'class number on map step 1'),
   pair('text', 'mapRamp2', TEXT_MIN, 'class number on map step 2'),
@@ -112,8 +123,12 @@ export const scale = {
   'text-base': '1rem',
   'text-lg': '1.25rem',
   'text-xl': '1.5rem',
-  'text-2xl': '1.875rem',
-  'line-tight': '1.2',
+  /** 28, 32 and 40 pixels: the heading sizes of the Gov.pl design system. */
+  'text-2xl': '1.75rem',
+  'text-3xl': '2rem',
+  'text-4xl': '2.5rem',
+  /** Headings 1:1.25 and running text 1:1.5, as the Gov.pl design system sets them. */
+  'line-tight': '1.25',
   'line-base': '1.5',
   'space-1': '0.25rem',
   'space-2': '0.5rem',
@@ -122,8 +137,9 @@ export const scale = {
   'space-5': '1.5rem',
   'space-6': '2rem',
   'space-7': '3rem',
+  /** 4 pixels on every control, message and frame, as in the Gov.pl design system. Both names stay, so the styles need no change. */
   'radius-sm': '0.25rem',
-  'radius-md': '0.375rem',
+  'radius-md': '0.25rem',
   'radius-pill': '999px',
   container: '75rem',
   measure: '68ch',
@@ -133,6 +149,13 @@ export const scale = {
   'shadow-menu': '1px 2px 5px 0 rgb(0 0 0 / 0.25)',
   /** The height of the header. The menu opens right under it. */
   'header-height': '4rem',
+  /** Hover and colour changes. */
   'duration-fast': '120ms',
   'duration-base': '200ms',
+  /** The wave of colour on the map: the time between the middle of the city and its edge when the measure changes. */
+  'duration-wave': '250ms',
+  /** The menu card appearing under its button. */
+  'duration-menu': '160ms',
+  /** Things that enter or leave start fast and settle: the reader sees the answer to their action at once. */
+  'ease-out': 'cubic-bezier(0.23, 1, 0.32, 1)',
 } as const
