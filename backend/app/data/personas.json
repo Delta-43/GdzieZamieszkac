@@ -105,6 +105,90 @@
           "environment": 1
         }
       }
+    },
+    {
+      "key": "city_life",
+      "label": {
+        "en": "City life",
+        "pl": "Życie w centrum"
+      },
+      "description": {
+        "en": "Getting around, shops and services close by. Cost is left out of the ranking.",
+        "pl": "Liczy się dojazd oraz sklepy i usługi w pobliżu. Koszty nie wchodzą do rankingu."
+      },
+      "weights": {
+        "category": {
+          "amenities": 5,
+          "transport": 5,
+          "livability": 4,
+          "safety": 2,
+          "environment": 1,
+          "cost": 0
+        }
+      }
+    },
+    {
+      "key": "quiet_green",
+      "label": {
+        "en": "Quiet and green",
+        "pl": "Cisza i zieleń"
+      },
+      "description": {
+        "en": "Quiet, clean air and green space. Transport and services matter less.",
+        "pl": "Cisza, czyste powietrze i zieleń. Dojazd i usługi są mniej ważne."
+      },
+      "weights": {
+        "category": {
+          "environment": 5,
+          "safety": 4,
+          "livability": 3,
+          "cost": 2,
+          "amenities": 1,
+          "transport": 1
+        }
+      }
+    },
+    {
+      "key": "couple",
+      "label": {
+        "en": "Couple",
+        "pl": "Para"
+      },
+      "description": {
+        "en": "Good connections and things to do nearby. Cost matters, but less than the rest.",
+        "pl": "Dobry dojazd i miejsca na wyjście w pobliżu. Koszty mają znaczenie, ale mniejsze niż reszta."
+      },
+      "weights": {
+        "category": {
+          "amenities": 5,
+          "transport": 4,
+          "livability": 4,
+          "cost": 3,
+          "environment": 2,
+          "safety": 2
+        }
+      }
+    },
+    {
+      "key": "newly_married",
+      "label": {
+        "en": "Newly married",
+        "pl": "Nowożeńcy"
+      },
+      "description": {
+        "en": "A first home together: a reasonable price, a calm area and good connections.",
+        "pl": "Pierwsze wspólne mieszkanie: rozsądna cena, spokojna okolica i dobry dojazd."
+      },
+      "weights": {
+        "category": {
+          "cost": 4,
+          "safety": 4,
+          "transport": 4,
+          "environment": 3,
+          "livability": 3,
+          "amenities": 2
+        }
+      }
     }
   ]
 }

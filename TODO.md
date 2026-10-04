@@ -78,7 +78,7 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | P1-4 | Rent versus buy and similar districts | `unicorn-alex` | Task F12 | Open |
 | P1-5 | `*_display` strings for the numbers that lack one (contract B2) | `Delta-43` | Removes a temporary helper in the frontend | Open |
 | P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request | Open |
-| P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change | Open |
+| P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change | Done |
 
 ## P2: concept only, for the pitch (and the city service, below)
 
@@ -115,7 +115,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 |---|---|---|
 | B1 | Kraków runs behind Tailscale serve, which is tailnet only, with `TRUSTED_PROXY_HOPS=0`. All clients share one rate-limit bucket (about 600 requests a minute, and 60 for `POST /recommend`). Check whether the proxy sets `X-Forwarded-For`. If it does, set `TRUSTED_PROXY_HOPS=1` so limits count real clients. If not, keep `0`. | P0, open |
 | B2 | Add `*_display` fields for district score, area, commute minutes, recommend score and percentile, similarity. Contract first | P1 |
-| B3 | Add couple and newly married presets to `backend/app/data/personas.json`, with Polish text reviewed by `unicorn-alex` | P1 |
+| B3 | Add couple and newly married presets to `backend/app/data/personas.json`, with Polish text reviewed by `unicorn-alex` | P1, done |
 | B4 | Keep the offline tests green. Record any change to imported code in `ON_SITE_CHANGELOG.md` | Always |
 | B5 | Services for the P2 features. Notices and demand counts stay concepts. The AI report and feedback are tasks C1 to C3 | P3 |
 

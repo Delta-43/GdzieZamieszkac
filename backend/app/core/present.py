@@ -21,6 +21,11 @@ HIGHLIGHT_KEYS = ("sale_price_median_m2", "rent_price_median_m2")
 TOP_DRIVERS = 3
 
 
+def shown(text: str, limit: int = 40) -> str:
+    """A client's text as it may appear in an error message: short, so a very long input is not echoed back in full."""
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
 class ProblemError(Exception):
     """An error the API reports as problem+json with this status."""
     def __init__(self, status: int, title: str, detail: str | None = None):
@@ -182,7 +187,7 @@ def catalogue(d: Derived, settings: Settings, lang: str) -> list[dict]:
 def metric_values(d: Derived, settings: Settings, key: str, lang: str) -> dict:
     """One metric for every district, best first for directional metrics."""
     if key not in d.defs:
-        raise ProblemError(404, "Unknown metric", f"There is no metric '{key}' in the catalogue.")
+        raise ProblemError(404, "Unknown metric", f"There is no metric '{shown(key)}' in the catalogue.")
     df = d.defs[key]
     out = {"key": key, "label": pick(df, "label", lang), "lang": lang, "higher_is": df["higher_is"], "values": []}
     if key not in d.available:
@@ -324,7 +329,7 @@ SERIES_MIN_OBS = 30  # quarters with fewer observations are low confidence (the 
 def series(d: Derived, code: str, key: str, lang: str) -> dict:
     """The stored history of a metric for a district, oldest first. 404 if the metric has no history."""
     if key not in d.defs:
-        raise ProblemError(404, "Unknown metric", f"There is no metric '{key}' in the catalogue.")
+        raise ProblemError(404, "Unknown metric", f"There is no metric '{shown(key)}' in the catalogue.")
     rows = d.series.get((code, key))
     if not rows:
         raise ProblemError(404, "No history", f"The metric '{key}' has no stored history for district '{code}'.")
