@@ -223,10 +223,10 @@ Constraints: `PRIMARY KEY (cache_key)`
 
 | Key | Category | English label | Polish label | Unit | Higher | Kind | Refresh | Kraków | Warsaw |
 |---|---|---|---|---|---|---|---|---|---|
-| `transit_stops_total` | transport | Public transport stops | Przystanki komunikacji miejskiej | stops | better | observed | static | 18 | 18 |
-| `transit_stops_bus` | transport | Bus stops | Przystanki autobusowe | stops | better | observed | static | 18 | 18 |
-| `transit_stops_tram` | transport | Tram stops | Przystanki tramwajowe | stops | better | observed | static | 18 | 18 |
-| `transit_stops_rail_metro` | transport | Rail and metro stations | Stacje kolejowe i metra | stations | better | observed | static | 0 | 18 |
+| `transit_stops_total` | transport | Stops in the district | Liczba przystanków w dzielnicy | stops | better | observed | static | 18 | 18 |
+| `transit_stops_bus` | transport | Bus stops | Liczba przystanków autobusowych | stops | better | observed | static | 18 | 18 |
+| `transit_stops_tram` | transport | Tram stops | Liczba przystanków tramwajowych | stops | better | observed | static | 18 | 18 |
+| `transit_stops_rail_metro` | transport | Train stations | Liczba stacji kolejowych | stations | better | observed | static | 0 | 18 |
 | `transit_routes_count` | transport | Routes serving the district | Linie obsługujące dzielnicę | routes | better | observed | static | 18 | 18 |
 | `transit_departures_weekday` | transport | Weekday departures | Odjazdy w dzień roboczy | departures/day | better | observed | static | 18 | 18 |
 | `transit_night_departures` | transport | Night departures | Odjazdy w nocy | departures/night | better | observed | static | 18 | 18 |
@@ -235,7 +235,7 @@ Constraints: `PRIMARY KEY (cache_key)`
 | `residents_registered` | demographics | Registered permanent residents | Zameldowani na pobyt stały | people | neutral | observed | static | 18 | 0 |
 | `population_density` | demographics | Population density | Gęstość zaludnienia | people/km² | neutral | observed | static | 18 | 18 |
 | `age_mean` | demographics | Average age | Średni wiek | years | neutral | observed | static | 18 | 18 |
-| `share_age_65_plus` | demographics | Residents aged 65 or older | Mieszkańcy w wieku 65+ | % | neutral | observed | static | 18 | 18 |
+| `share_age_65_plus` | demographics | Residents aged 65 or older | Mieszkańcy powyżej 65 lat | % | neutral | observed | static | 18 | 18 |
 | `share_female` | demographics | Share of women | Udział kobiet | % | neutral | observed | static | 18 | 18 |
 | `amenity_schools` | amenities | Schools | Szkoły | count | better | observed | static | 18 | 18 |
 | `amenity_hospitals_clinics` | amenities | Hospitals and clinics | Szpitale i przychodnie | count | better | observed | static | 18 | 18 |
@@ -257,7 +257,7 @@ Constraints: `PRIMARY KEY (cache_key)`
 | `noise_share_above_55db` | livability | Area above 55 dB | Tereny o natężeniu dźwięku powyżej 55 dB | % of district | worse | observed | static | 18 | 18 |
 | `night_noise_estimate` | livability | Night noise (estimate) | Poziom hałasu w nocy (szacunek) | index | worse | proxy | static | 18 | 18 |
 | `nightlife_density` | livability | Bars and clubs | Bary i kluby | per km² | neutral | observed | static | 18 | 18 |
-| `busyness_index` | livability | Busyness | Natężenie ruchu | index | neutral | proxy | static | 18 | 18 |
+| `busyness_index` | livability | Busyness | Natężenie ruchu (szacunek) | index | neutral | proxy | static | 18 | 18 |
 | `walkability_index` | livability | Walkability | Dostępność usług dla pieszych | index | better | proxy | static | 18 | 18 |
 | `family_friendliness_index` | livability | Family friendliness | Przyjazność rodzinom z dziećmi | index | better | proxy | static | 18 | 18 |
 | `sale_price_median_m2` | cost | Median sale price per m² | Mediana ceny sprzedaży za m² | PLN/m² | worse | observed | static | 18 | 18 |
@@ -266,7 +266,7 @@ Constraints: `PRIMARY KEY (cache_key)`
 | `rent_listings_count` | cost | Rent listings counted | Liczba ofert najmu | count | neutral | observed | static | 18 | 18 |
 | `nursery_fee_median` | cost | Median monthly nursery fee | Mediana miesięcznej opłaty za żłobek | PLN/month | neutral | observed | static | 18 | 18 |
 | `crimes_per_10k` | safety | Recorded crimes per 10,000 residents | Przestępstwa stwierdzone na 10 000 mieszkańców | per 10,000 | worse | observed | static | 0 | 18 |
-| `crime_detection_rate` | safety | Offender detection rate | Wskaźnik wykrywalności sprawców | % | better | observed | static | 0 | 18 |
+| `crime_detection_rate` | safety | Criminal offender detection rate | Wskaźnik wykrywalności sprawców przestępstw | % | better | observed | static | 0 | 18 |
 | `road_accidents_per_km` | safety | Road accidents per km of road | Wypadki drogowe na km dróg | per km per year | worse | observed | static | 18 | 18 |
 | `road_ped_cyc_casualties_per_km` | safety | Pedestrian and cyclist casualties per km | Poszkodowani piesi i rowerzyści na km | per km per year | worse | observed | static | 18 | 18 |
 | `lit_street_share` | safety | Streets tagged as lit | Ulice oznaczone jako oświetlone | % | better | proxy | static | 18 | 18 |
@@ -277,13 +277,13 @@ Constraints: `PRIMARY KEY (cache_key)`
 
 ### Descriptions and sources per metric
 
-- **`transit_stops_total`** (Public transport stops): Distinct public transport stops (bus, tram, rail, metro) inside the district, from the timetable feeds; platforms of one stop count once.  
+- **`transit_stops_total`** (Stops in the district): Distinct public transport stops (bus, tram, rail, metro) inside the district, from the timetable feeds; platforms of one stop count once.  
   Sources: Kraków: Public transport GTFS feeds (as of 2026-09-30); Warsaw: Public transport GTFS feeds (as of 2026-09-30).
 - **`transit_stops_bus`** (Bus stops): Distinct stops served by bus routes.  
   Sources: Kraków: Public transport GTFS feeds (as of 2026-09-30); Warsaw: Public transport GTFS feeds (as of 2026-09-30).
 - **`transit_stops_tram`** (Tram stops): Distinct stops served by tram routes.  
   Sources: Kraków: Public transport GTFS feeds (as of 2026-09-30); Warsaw: Public transport GTFS feeds (as of 2026-09-30).
-- **`transit_stops_rail_metro`** (Rail and metro stations): Rail and metro stations in the timetable feed (Warsaw: metro, SKM, rail, WKD). Not available for Kraków, whose feeds contain no rail.  
+- **`transit_stops_rail_metro`** (Train stations): Rail and metro stations in the timetable feed (Warsaw: metro, SKM, rail, WKD). Not available for Kraków, whose feeds contain no rail.  
   Sources: Kraków: none (as of -); Warsaw: Public transport GTFS feeds (as of 2026-09-30).
 - **`transit_routes_count`** (Routes serving the district): Distinct route numbers with at least one stop in the district.  
   Sources: Kraków: Public transport GTFS feeds (as of 2026-09-30); Warsaw: Public transport GTFS feeds (as of 2026-09-30).
@@ -363,7 +363,7 @@ Constraints: `PRIMARY KEY (cache_key)`
   Sources: Kraków: National register of nurseries and children's clubs (as of 2026-09-30); Warsaw: National register of nurseries and children's clubs (as of 2026-09-30).
 - **`crimes_per_10k`** (Recorded crimes per 10,000 residents): Crimes recorded by the police per 10,000 residents in 2024 (Warsaw only). Higher in districts with many visitors and commuters; not a measure of risk.  
   Sources: Kraków: none (as of -); Warsaw: Panorama dzielnic Warszawy w 2024 r. (as of 2024-12-31).
-- **`crime_detection_rate`** (Offender detection rate): Share of recorded crimes in 2024 with a detected offender (Warsaw only).  
+- **`crime_detection_rate`** (Criminal offender detection rate): Share of recorded crimes in 2024 with a detected offender (Warsaw only).  
   Sources: Kraków: none (as of -); Warsaw: Panorama dzielnic Warszawy w 2024 r. (as of 2024-12-31).
 - **`road_accidents_per_km`** (Road accidents per km of road): Road accidents with injury or death per km of road per year, mean of 2022-2024 (police SEWiK data).  
   Sources: Kraków: SEWiK police accident register (sewik.pl dump) (as of 2024-12-31); Warsaw: SEWiK police accident register (sewik.pl dump) (as of 2024-12-31).
