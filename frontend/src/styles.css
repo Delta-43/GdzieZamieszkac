@@ -123,7 +123,9 @@ main,
 
 .site-name {
   display: flex;
-  flex: 1 1 auto;
+  /* The name may give up room, so the city wraps under it before the header needs a second row. */
+  flex: 1 1 9.75rem;
+  min-inline-size: 0;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 var(--space-4);
@@ -316,18 +318,37 @@ button.reserve-bold {
   gap: var(--space-2);
 }
 
-/* On a narrow screen the two language buttons would push the header wider than the screen (issue #45): they move to a row of their own. */
+/*
+  On a phone the header stays one row for as long as it fits: the gaps and the language buttons tighten, and the city
+  sits under the site name. Only when even that is too wide (below about 384 pixels) do the language buttons take a row
+  of their own, at the right edge, so the header never pushes the page wider than the screen (issue #45).
+*/
 @media (max-width: 26rem) {
   .site-header {
     flex-wrap: wrap;
+    gap: 0 var(--space-2);
+    padding-inline-end: var(--space-2);
+  }
+
+  /* The name and the city under it fit the height of the menu button: the link keeps a 40 pixel target. */
+  .site-name {
+    align-content: center;
+    line-height: var(--line-tight);
+  }
+
+  .site-name a {
+    min-block-size: 2.5rem;
   }
 
   .language-toggle {
-    flex: 1 0 100%;
-    justify-content: flex-end;
+    flex: none;
+    gap: var(--space-1);
+    margin-inline-start: auto;
     padding-block: var(--space-2);
-    padding-inline: var(--space-4);
-    box-sizing: border-box;
+  }
+
+  .language-toggle button {
+    padding-inline: var(--space-3);
   }
 }
 
@@ -430,6 +451,7 @@ main:focus {
   The districts page: one column in the middle of the page. The map first; when a district is chosen, its details
   open right under the map; then what colours the map, and the list.
 */
+.districts-head,
 .districts-layout {
   display: grid;
   gap: var(--space-5);
@@ -467,6 +489,7 @@ main:focus {
 }
 
 @media (max-width: 60rem) {
+  .districts-head,
   .districts-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -489,16 +512,40 @@ main:focus {
   gap: var(--space-2);
 }
 
-/* The choices of a group sit on a grid of equal columns, so every button has the same width and the rows line up. */
+/*
+  A group of choice buttons. Every row is filled from edge to edge at every width: the buttons of a row share its width
+  equally, so no row ends in an empty track. The number of buttons in a row follows the number in the group, so the
+  rows come out even where they can: nine as three rows of three, seven as four and three.
+*/
 .map-picker__pills {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 
 .map-picker__pills .pill {
+  flex: 1 1 8.5rem;
   padding: var(--space-2) var(--space-3);
   text-align: center;
+}
+
+.map-picker__pills:has(> :nth-child(3n):last-child) .pill {
+  flex-basis: max(8.5rem, 30%);
+}
+
+.map-picker__pills:has(> :is(:nth-child(7), :nth-child(8)):last-child) .pill {
+  flex-basis: max(8.5rem, 23%);
+}
+
+/* Seven or eight in rows of three would leave one alone: where four do not fit, they go two by two. */
+.map-picker__group {
+  container-type: inline-size;
+}
+
+@container (max-width: 36rem) {
+  .map-picker__pills:has(> :is(:nth-child(7), :nth-child(8)):last-child) .pill {
+    flex-basis: max(8.5rem, 34%);
+  }
 }
 
 .field {
@@ -800,14 +847,17 @@ main:focus {
   color: var(--color-text-muted);
 }
 
+/* The scale gives up width on a narrow screen, so the two words stay at its ends on one line. */
 .map-legend__scale {
   display: inline-flex;
+  flex: 1 1 2.5rem;
+  min-inline-size: 2.5rem;
+  max-inline-size: 8.75rem;
 }
 
 .map-legend__swatch {
-  flex: none;
+  flex: 1 1 0;
   display: inline-block;
-  inline-size: 1.75rem;
   block-size: 0.875rem;
   border: 1px solid var(--color-text);
 }
@@ -916,8 +966,9 @@ main:focus {
   border: 1px solid var(--color-accent);
 }
 
+/* The report fills a narrow panel and stops at the reading measure in a wide one. */
 .report p {
-  max-inline-size: none;
+  max-inline-size: var(--measure);
 }
 
 /* A wide table scrolls inside its own region, so the page never scrolls sideways. */
@@ -1017,9 +1068,11 @@ main > .card {
   margin: 0;
 }
 
-.metric p {
+.metric p,
+.metric--missing dd,
+.metric__more dd {
   margin-block-end: var(--space-1);
-  max-inline-size: none;
+  max-inline-size: var(--measure);
 }
 
 .metric__value {
@@ -1540,7 +1593,7 @@ main > .ai-report-card {
 }
 
 .source-list p {
-  max-inline-size: none;
+  max-inline-size: var(--measure);
   margin-block: var(--space-1);
 }
 
@@ -1633,15 +1686,34 @@ main > .ai-report-card {
   align-items: start;
 }
 
-/* In that column the field and every button are stacked and share its width: one edge on each side. */
-.home-hero .search__row,
-.home-hero .find-actions {
-  flex-direction: column;
-  align-items: stretch;
+/* Beside the map, the field and every button are stacked and share the column's width: one edge on each side. */
+/* On a phone too: full-width buttons, one under the other. Between the two, on a tablet, they sit in a row. */
+@media (min-width: 60.0625rem), (max-width: 40rem) {
+  .home-hero .search__row,
+  .home-hero .find-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-hero .search__field {
+    flex: none;
+  }
 }
 
-.home-hero .search__field {
-  flex: none;
+/* On a tablet the two links share the width of the search row above them, so the block has one right edge. */
+@media (min-width: 40.0625rem) and (max-width: 60rem) {
+  .home-hero .find-actions {
+    max-inline-size: 44rem;
+  }
+
+  .home-hero .find-actions > * {
+    flex: 1 1 0;
+  }
+}
+
+/* The sentence under the hero keeps its distance from the map card. */
+.home-hero + p {
+  margin-block-start: var(--space-5);
 }
 
 .home-hero__intro > :first-child {
@@ -1758,11 +1830,26 @@ main > .ai-report-card {
   margin-block: 0;
 }
 
+/*
+  The three choices sit on one row. Where the form is too narrow for the three labels in either language (a phone),
+  they go one under the other, so the row never breaks into two and one.
+*/
 .importance__choices {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
   gap: 0 var(--space-5);
   clear: both;
+}
+
+.find-layout > form {
+  container-type: inline-size;
+}
+
+@container (max-width: 23rem) {
+  .importance__choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .importance__choices label {
@@ -1775,6 +1862,7 @@ main > .ai-report-card {
 }
 
 .importance__choices input {
+  flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
   margin: 0;
@@ -1785,4 +1873,25 @@ main > .ai-report-card {
 .find-advanced {
   margin-block: var(--space-2) var(--space-4);
   border-block-start: 1px solid var(--color-border);
+}
+
+/* Running text in a list stops at the reading measure, as paragraphs do. */
+main :is(ul, ol):not([class]) > li {
+  max-inline-size: var(--measure);
+}
+
+/*
+  On a phone the map is what the page is for, so its panel runs to the edges of the card and the drawing gets the
+  width that two paddings and two borders took. The words under the map keep the card's inset.
+*/
+@media (max-width: 40rem) {
+  .map-stage {
+    margin-inline: calc(-1 * var(--space-4));
+    padding-inline: 0;
+    border-inline: 0;
+  }
+
+  .district-map-frame > .note {
+    padding-inline: var(--space-4);
+  }
 }
