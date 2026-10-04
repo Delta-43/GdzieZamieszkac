@@ -26,3 +26,4 @@ city-service/data/
 /playwright/.auth/
 frontend/public/basemap/*.json
 server/cache/
+server/run/
