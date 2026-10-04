@@ -84,17 +84,10 @@
       "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
       "districtNoData": "{{name}}: no data",
       "districtLoading": "{{name}}: loading the data",
-      "controls": "Zoom and move the map",
-      "zoomIn": "Zoom in",
-      "zoomOut": "Zoom out",
-      "panLeft": "Move the map left",
-      "panRight": "Move the map right",
-      "panUp": "Move the map up",
-      "panDown": "Move the map down",
-      "reset": "Whole city",
       "wholeCity": "The whole city is shown.",
       "zoomLevel": "Zoom {{zoom}} times.",
-      "zoomedTo": "Zoomed to {{name}}."
+      "zoomedTo": "Zoomed to {{name}}.",
+      "hint": "The mouse wheel zooms the map in and out; a zoomed map can be dragged. With the keyboard: + and − zoom, the arrow keys move the map, and 0 shows the whole city."
     },
     "legend": {
       "range": "Class {{number}}: from {{min}} to {{max}}",

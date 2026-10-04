@@ -92,6 +92,17 @@ test('choosing a suggestion with the mouse opens the map on that district', asyn
   expect(await screen.findByText('Przybliżono do dzielnicy: Gamma.')).toBeInTheDocument()
 })
 
+test('on the home page a district under the pointer shows no card: the map there only leads to the map page', async () => {
+  await search()
+  const map = await screen.findByRole('group', { name: /Mapa dzielnic/ })
+  const delta = await within(map).findByRole('button', { name: /^Delta/ })
+
+  fireEvent.pointerEnter(delta, { pointerType: 'mouse' })
+  fireEvent.focus(delta)
+
+  expect(document.querySelector('.map-tip')).toBeNull()
+})
+
 test('a district on the home map opens the map page on that district', async () => {
   await search()
   const map = await screen.findByRole('group', { name: /Mapa dzielnic/ })

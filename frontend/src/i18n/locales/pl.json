@@ -84,17 +84,10 @@
       "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
       "districtNoData": "{{name}}: brak danych",
       "districtLoading": "{{name}}: wczytywanie danych",
-      "controls": "Przybliżanie i przesuwanie mapy",
-      "zoomIn": "Przybliż",
-      "zoomOut": "Oddal",
-      "panLeft": "Przesuń mapę w lewo",
-      "panRight": "Przesuń mapę w prawo",
-      "panUp": "Przesuń mapę w górę",
-      "panDown": "Przesuń mapę w dół",
-      "reset": "Całe miasto",
       "wholeCity": "Widać całe miasto.",
       "zoomLevel": "Powiększenie {{zoom}} razy.",
-      "zoomedTo": "Przybliżono do dzielnicy: {{name}}."
+      "zoomedTo": "Przybliżono do dzielnicy: {{name}}.",
+      "hint": "Mapę przybliża i oddala kółko myszy; przybliżoną można przeciągać. Z klawiatury: klawisze + i − przybliżają i oddalają, strzałki przesuwają, a 0 pokazuje całe miasto."
     },
     "legend": {
       "range": "Przedział {{number}}: od {{min}} do {{max}}",
