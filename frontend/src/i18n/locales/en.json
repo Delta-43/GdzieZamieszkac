@@ -33,8 +33,7 @@
   },
   "footer": {
     "sources": "Data sources",
-    "newTab": "(opens in a new tab)",
-    "moreLink": "{{credit}}: address {{number}} (opens in a new tab)"
+    "newTab": "(opens in a new tab)"
   },
   "home": {
     "title": "Home",

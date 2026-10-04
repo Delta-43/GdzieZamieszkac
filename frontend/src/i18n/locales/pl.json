@@ -33,8 +33,7 @@
   },
   "footer": {
     "sources": "Źródła danych",
-    "newTab": "(otwiera się w nowej karcie)",
-    "moreLink": "{{credit}}: adres {{number}} (otwiera się w nowej karcie)"
+    "newTab": "(otwiera się w nowej karcie)"
   },
   "home": {
     "title": "Strona główna",

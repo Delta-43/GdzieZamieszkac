@@ -1329,14 +1329,6 @@ summary:hover {
   list-style: none;
 }
 
-.site-footer a {
-  transition: color var(--duration-fast) ease-out;
-}
-
-.site-footer a:hover {
-  color: var(--color-accent-hover);
-}
-
 /* The column label: uppercase, wide tracking, in the accent colour. It is not a section heading of the page, so no bar. */
 .site-footer h2 {
   margin-block: 0 var(--space-2);
@@ -1349,7 +1341,7 @@ summary:hover {
   border-inline-start: 0;
 }
 
-/* The credit lines are small print: three columns of the smallest text, each line still 24 pixels apart for the pointer (WCAG 2.5.8). */
+/* The credit lines are small print: three columns of the smallest text. */
 .site-footer__sources {
   columns: 3 16rem;
   column-gap: var(--space-5);
@@ -1361,24 +1353,6 @@ summary:hover {
   padding-block: var(--space-1);
   line-height: var(--line-base);
   color: var(--color-text-muted);
-}
-
-/* Each credit link is a block of its own height, at least 24 pixels, so small print is still easy to hit (WCAG 2.5.8). */
-.site-footer__sources li > a:first-child {
-  display: inline-block;
-  min-block-size: 1.5rem;
-  padding-block: 0.1875rem;
-  box-sizing: border-box;
-}
-
-.site-footer__more {
-  /* A short link like "[2]" still gets a 24 by 24 pixel target (WCAG 2.5.8). */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-inline-size: 1.5rem;
-  min-block-size: 1.5rem;
-  margin-inline-start: var(--space-2);
 }
 
 /* Find a district: the form card and the ranking card side by side on a wide screen. */
