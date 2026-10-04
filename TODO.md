@@ -1,6 +1,6 @@
 # TODO and MVP priorities
 
-Last updated 3 October 2026, the first evening of HackYeah. This is the one list for the team. Module files link here.
+Last updated 4 October 2026, the last day of HackYeah (statuses checked against `develop`, `main` and the open issues). This is the one list for the team. Module files link here.
 
 ## How we work
 
@@ -19,7 +19,7 @@ The organisers' times are not in this file yet. The coordinator fills them in.
 | Submission deadline (project description, slides, declaration of earlier work) | To be set by `Delta-43` |
 | Freeze: only fixes after this time | To be set by `Delta-43` |
 
-Owners use GitHub handles. `Delta-43` is the coordinator. `unicorn-alex` builds the frontend from 3 October (evening), owns the Polish text and verifies the data. `Rysia` is on break; the handle stays trusted and can return to the frontend.
+Owners use GitHub handles. `Delta-43` is the coordinator (backend, data, city service, docs). `Rysia` builds the frontend. `unicorn-alex` reviews the frontend and the data, owns the Polish text, and works on the pitch deck.
 
 ## The idea
 
@@ -58,13 +58,13 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 | ID | Task | Owner | Done when | Status |
 |---|---|---|---|---|
 | P0-1 | A live Kraków API the frontend can reach: the coordinator runs the backend and shares it over the team Tailscale network | `Delta-43` | The frontend developer's agent gets `{"status":"ok","database":"reachable"}` from `/v1/health` and `"city": "krakow"` from `/v1/meta`, from the frontend machine. All 16 contract operations answer, and the city service (port 8100) runs next to it. Checked from the frontend machine in the test runs of 3 and 4 October 2026. See `frontend/README.md`. | Done. Live while the coordinator's machine is awake |
-| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `unicorn-alex` | `frontend/TODO.md` tasks F1 to F3 pass review | Done |
-| P0-3 | Districts screen: accessible table and SVG map | `unicorn-alex` | Task F4 passes review | Done |
-| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `unicorn-alex` | Task F5 passes review | Done |
-| P0-5 | Find a district: personas and sliders to `POST /recommend` | `unicorn-alex` | Task F6 passes review | Done |
-| P0-6 | Compare two to four districts | `unicorn-alex` | Task F7 passes review | Done |
-| P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `unicorn-alex` | Task F8 passes review | Open |
-| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `unicorn-alex`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow | Open |
+| P0-2 | Create the frontend project, generate the API types, and build the shared parts: layout, provenance badge, metric row, states, language toggle, theme tokens | `Rysia` | `frontend/TODO.md` tasks F1 to F3 pass review | Done |
+| P0-3 | Districts screen: accessible table and SVG map | `Rysia` | Task F4 passes review | Done |
+| P0-4 | District detail: every number with provenance, the AI-labelled report, the price history with its table | `Rysia` | Task F5 passes review | Done |
+| P0-5 | Find a district: personas and sliders to `POST /recommend` | `Rysia` | Task F6 passes review | Done |
+| P0-6 | Compare two to four districts | `Rysia` | Task F7 passes review | Done |
+| P0-7 | Sources and "how it works" page: where AI is used and where it is not, limits, credit lines | `Rysia` | Task F8 passes review | Done |
+| P0-8 | Accessibility baseline: keyboard, contrast test, automated checks, 320 pixel reflow | `Rysia`, spot-checked by `Delta-43` | `frontend/REVIEW_CHECKLIST.md` passes for the main flow | Automated checks pass. The reviewer closed issues #70 and #72 on 4 October. No written record of a screen-reader or 400 percent zoom test, and the statement in the app is a draft |
 | P0-9 | Apply the data verification feedback: fix a value, or add a caveat, for each "Fix" | `Delta-43`, with `unicorn-alex` | `docs/data-review/` records every finding and what changed | Open |
 | P0-10 | Submission pack: project description, a PDF of at most 10 slides, the declaration of earlier work | `Delta-43` | Uploaded to the Challenge Rocket platform | Open |
 
@@ -72,12 +72,12 @@ A few finished screens beat many half-working ones. Hide any feature whose endpo
 
 | ID | Task | Owner | Notes | Status |
 |---|---|---|---|---|
-| P1-1 | Household profile, kept in the browser, mapped to weights | `unicorn-alex` | `frontend/TODO.md` task F9. Needs couple and newly married presets (B3). | Open |
-| P1-2 | Commute from a work district | `unicorn-alex` | Task F10. Show the API's caveat. Long trips run fast. | Open |
-| P1-3 | Outlook card: momentum, the city's historical range, the backtest. No forecast | `unicorn-alex` | Task F11 | Open |
-| P1-4 | Rent versus buy and similar districts | `unicorn-alex` | Task F12 | Open |
+| P1-1 | Household profile, kept in the browser, mapped to weights | `Rysia` | `frontend/TODO.md` task F9. Needs couple and newly married presets (B3). | Open |
+| P1-2 | Commute from a work district | `Rysia` | Task F10. Show the API's caveat. Long trips run fast. | Done (#101) |
+| P1-3 | Outlook card: momentum, the city's historical range, the backtest. No forecast | `Rysia` | Task F11 | Open |
+| P1-4 | Rent versus buy and similar districts | `Rysia` | Task F12 | Open |
 | P1-5 | `*_display` strings for the numbers that lack one (contract B2) | `Delta-43` | Removes a temporary helper in the frontend | Open |
-| P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request | Open |
+| P1-6 | Polish text review of the interface strings | `unicorn-alex` | Review `pl.json` in each frontend pull request, and the text written on 4 October (issues #82 and #83, closed by the reviewer on 4 October) | Done for the text written so far |
 | P1-7 | Personas for couple and newly married (B3) | `Delta-43`, text by `unicorn-alex` | A data file change | Done |
 
 ## P2: concept only, for the pitch (and the city service, below)
@@ -98,7 +98,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 | C1 | `city-service/openapi.yaml` and the service skeleton: config, health, rate limit, tests, `Dockerfile` | `Delta-43` | Done |
 | C2 | Personalised AI report (OpenRouter, `z-ai/glm-5.3-flash`). Numbers come from code; AI label on every answer | `Delta-43` | Done |
 | C3 | Resident feedback in local SQLite, stored `unverified`, never published | `Delta-43` | Done |
-| C4 | Frontend screens for C2 and C3, and the "after city approval" label for notices | `unicorn-alex` | Open, after C1 |
+| C4 | Frontend screens for C2 and C3, and the "after city approval" label for notices | `Rysia` (with `unicorn-alex` as reviewer) | Done (#47, #67, #68) |
 
 ## P3: after the event
 

@@ -6,36 +6,39 @@ This is not a listings site. It shows data about districts, not offers.
 ## Start here
 
 1. Read `AGENTS.md`. It is short.
-2. Open `TODO.md`. It lists the tasks in order, with sizes and the condition for done.
-3. Write a short plan and share it with the coordinator.
+2. Read `HANDOFF.md`: what is built, what is decided, what comes next.
+3. Open `TODO.md` for the task list, with sizes and the condition for done.
 4. Get an API. See "Get an API" below.
-5. Do task F1. Then work down the list, one small pull request at a time.
+5. Run `npm ci` and `npm run check` before you change anything.
 
 `unicorn-alex` reviews each pull request with `REVIEW_CHECKLIST.md`. Run that list yourself first.
 
 ## Status
 
-**Tasks F1 to F6 are done.** The project builds, lints and tests, and the API types are generated from the contract.
-The shared parts exist: skip link, header with the city name from `/meta`, a header that stays at the top on a wide and tall screen, with shortcuts to the three steps of the main flow and a menu card that drops from the menu button (every page, then the districts; it opens on a press, and for a mouse on hover),
-language toggle (Polish default), stale-data notice, loading and error states, and a footer with the pages and the credit line of every source, linked to where the data comes from.
-The pages are home, districts (map and list), one district, find a district, and "page not found". The menu and the footer list only pages that exist (`src/lib/pages.ts`), so they grow with each task.
-The other screens are tasks F7 and F8 in `TODO.md`.
+State on 4 October 2026. **Phase 1 is built**, and so is the commute step of phase 2 (task F10). `npm run check` passes: both contracts, lint, type check, tests and build. CI runs the same on every pull request.
 
-On the districts page the user chooses what colours the map: the overall score, the score of one category, or one single measure.
-The map is an SVG drawn from `/districts.geojson`, with no map tiles. It splits the districts into at most five classes of equal count,
-from the lowest values (class 1) to the highest (class 5). Each district is a keyboard-reachable button named with its value and prints its name, with one even outline around it. A panel beside the map has two tabs: "Lista" is a short table (the overall score, and the value on the map), and "Szczegóły" shows the chosen district:
-its value, its category profile and its area report with the AI label. A measure or a district without data is hatched and shows the API's reason.
+| Page | Route | What it does |
+|---|---|---|
+| Home | `/` | What the app is and is not, a search by district name, and the map |
+| Districts | `/districts` | The map first, a picker for the measure (overall score, one category, or one measure), a list under the map, a card over the district under the pointer, and the details of the chosen district. `?district=<code>` selects one. |
+| District | `/districts/<code>` | The area report with its AI label, the price history with a table and low-confidence marks, every measure by category, and commute times |
+| Find a district | `/find` | Nine presets and six category weights (0 to 5) to `POST /recommend`, the ranking where place 1 is best, and the AI report card from the city service |
+| Compare | `/compare?codes=a,b` | Two to four districts side by side, with real table headers |
+| Feedback | `/feedback` | Two forms to the city service: rent paid and a data problem. The page says first that a report is unverified and not published. |
+| Sources | `/sources` | Every source with credit line, licence and date, the three data kinds, where AI is used, and the draft accessibility statement |
+| Not found | `*` | A clear message and a way back |
 
-The page of one district (`/districts/<code>`) shows the area, the livability score, the area report with its AI label, the price history, and every metric by category.
-Each metric shows the API's display string, the data kind, the as-of date, the source, the rank, the sample size and the caveat; the method, the licence and the credit line open in a detail.
-A metric without data shows its reason in a dashed frame. The price history is a line chart with a sentence that sums it up and a table with every value; a quarter with low confidence has a hollow marker and the word "low" in the table.
-The chart formats no number: its two gridlines are labelled with the API's display strings of the lowest and the highest value.
+Shared parts: skip link, a header with the city name from `/meta`, a menu card, the language toggle (Polish default), a stale-data notice, loading and error states, and a footer with the credit line of every source as plain text.
+The menu and the footer list only pages that exist (`src/lib/pages.ts`).
 
-On the find page (`/find`) the user picks a preset from `/personas` or sets a weight from 0 to 5 for each of the six scored categories, and presses a button.
-The ranking, the score and the top drivers come from `POST /recommend`. With no weights the page sends none, so the first ranking equals the default livability score.
-The page shows the API's note and names the measures that are left out because the city has no data for them. A new ranking is announced to screen readers.
+How the app shows data, in short:
 
-A category score is asked from `POST /recommend` with that one category switched on and the others off. The answers are cached for five minutes, because that endpoint is rate limited.
+- **Provenance.** A measure shows the API's display string. The data kind, date and source of an `observed` value open in its detail; an estimate or an indirect measure keeps its badge beside the number. The method, licence and credit line open in the same detail. A measure without data shows its reason in a dashed frame.
+- **The score.** A place first ("Miejsce 3 z 18, 1 = najlepsze"), then a whole number with "pkt" and a bar. One sentence under every ranking says the score compares the districts of one city only. A driver reads "better than k of the other n − 1 districts"; the browser computes the whole number and the count (`src/lib/score.ts`) until the contract adds fields for them (`API.md`, "Contract gaps").
+- **Dates** are shown in words in the page language ("30 września 2026"), inside `<time dateTime="…">` (`src/lib/dates.ts`). That is formatting, not translation.
+- **Plain language.** Each measure has a "Co to znaczy?" disclosure with the catalogue's description. The data kinds read *zmierzone*, *oszacowane* and *przybliżone*.
+- **The price history** is a line chart with a sentence that sums it up and a table with every value. A quarter with low confidence has a hollow marker and the word "low" in the table. The chart formats no number.
+- **A category score** is asked from `POST /recommend` with that one category switched on. The answers are cached for five minutes, because that endpoint is rate limited.
 
 ## Theme
 
@@ -47,7 +50,7 @@ The design is accepted (4 October 2026): `../docs/DESIGN.md`. It follows the loo
 
 - **Colours:** a white page, grey panels, one blue and dark navy text, taken from that site's stylesheet (blue `#0063af`, ink `#071f32`, grey `#f5f5f5`). Colours only: no logo, crest or photo of the city is used.
 - **Font:** Lato, regular and bold, the typeface of that site. It is bundled from the `@fontsource/lato` package (SIL Open Font Licence 1.1) and served with the app, with the Latin Extended range for Polish. Nothing loads from a third party.
-- **Layout of the districts page:** a map with category buttons and a tabbed panel beside it. The header is a white bar over a blue navigation band, and section headings carry a short dark bar.
+- **Layout of the districts page:** the map first, the picker and the list under it, and the details of the chosen district under the map. The header is a white bar with a menu button, and section headings carry a short dark bar.
 
 **Shapes and sizes follow the Gov.pl design system** (the official guide "Przewodnik Gov UI", version 1.0 beta, read on 4 October 2026). The colours stay Kraków's (decision of the frontend developer).
 
@@ -68,18 +71,18 @@ Changing the look means changing the values in `tokens.ts`.
 
 The map is the centre of the app. It is built from two layers, with no map library and no request to a map server:
 
-- **Districts** (`src/components/DistrictMap.tsx`): an SVG. Each district is a button with its value and class in its name, filled with its step of a colour ramp, with an exact outline, the hatch for "no data", and the focus ring. The ramp is five steps of one blue, for every measure: a darker step is a higher value, never a verdict (a red to green ramp for scores was tried and taken back on 4 October). No names are printed on the map: a card with the name, the value, the class and its range, and the two prices appears over the district under the pointer or the keyboard focus (Escape puts it away). When the measure changes, the new colours spread from the middle of the city to its edge in about half a second (a CSS transition with a delay per district). With reduced motion the colours change at once. An earlier version drew the colours as small squares on a canvas; it was removed on 4 October because it slowed the page down.
+- **Districts** (`src/components/DistrictMap.tsx`): an SVG. Each district is a button, filled with its step of a colour ramp, with an exact outline, the hatch for "no data", and the focus ring. Its accessible name is "{name}: {value}, miejsce {rank} of {of}" where the API sends a rank, and "{name}: {value}, {step in words} value" where it does not. The five steps are named in words (very low to very high); class numbers are never shown. The ramp is five steps of one blue, for every measure: a darker step is a higher value, never a verdict, and the one-line legend says in words what darker means and whether more is better for that measure (a red to green ramp for scores was tried and taken back on 4 October). No names are printed on the map: a card with the name, the value and its position, and the two prices appears over the district under the pointer or the keyboard focus (Escape puts it away). When the measure changes, the new colours spread from the middle of the city to its edge in about half a second (a CSS transition with a delay per district). With reduced motion the colours change at once. An earlier version drew the colours as small squares on a canvas; it was removed on 4 October because it slowed the page down.
 - **Context**: rivers, lakes, main roads, railways and a few landmarks from OpenStreetMap, thin and see-through over the districts, with the credit under the map. The file is made once by `scripts/build_basemap.py` (see `public/basemap/README.md`) and is not committed, because it is under the ODbL. Without it the map shows the districts alone.
 
 The map has no buttons. The mouse wheel over the map zooms it at the pointer (turned "out" at the whole city it scrolls the page), a zoomed map can be dragged, and a double click zooms in. The keyboard does the same from a focused district: `+` and `−` zoom, the arrow keys move a zoomed map, `0` shows the whole city; a line under the map says so, and it is tied to the map for screen readers. A touch screen shows the whole city and has no zoom, so it needs no gesture. Reaching another part of the city never needs a drag: zoom out and zoom in at another place (WCAG 2.5.7). The card of a district appears only on the page Districts on the map (`card` prop), not on the home page. `?district=<code>` on the page Districts on the map selects a district and zooms to it. The home page has a search by district name that leads there.
 
 ## Commands
 
-Run them from this folder. Tested with Node 26 and npm 11.
+Run them from this folder. Tested with Node 26 and npm 11. CI uses Node 26.
 
 | Command | What it does |
 |---|---|
-| `npm install` | Installs the packages. |
+| `npm ci` | Installs the packages from the lock file. |
 | `npm run dev` | Starts the dev server on port 5173, on the network. It forwards `/v1` to `VITE_DEV_API`. |
 | `npm run build` | Checks the types and builds the app into `dist/`. |
 | `npm run lint` | Runs ESLint with the accessibility rules. A warning fails it. |
@@ -89,39 +92,40 @@ Run them from this folder. Tested with Node 26 and npm 11.
 | `npm run api:check` | Fails when the committed types differ from a fresh run. |
 | `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
 
-Copy `.env.example` to `.env.local` and put the API address there. Git ignores `.env.local`, so the address stays private.
+Copy `.env.example` to `.env.local` and put the API addresses there. Git ignores `.env.local`, so the address stays private.
 
 | File | What it covers |
 |---|---|
 | `AGENTS.md` | The hard rules. Read it first. |
 | `TODO.md` | The tasks in order, with sizes and the condition for done. |
 | `REVIEW_CHECKLIST.md` | What a reviewer checks. Run it yourself before you ask for a review. |
-| `HANDOFF.md` | State of the work, the design session, what is undecided, and next steps. Read it after `AGENTS.md`. |
-| `design/` | A clickable mock-up of the Districts screen and the proposed Kraków blue tokens. Mock-up values are samples. |
+| `HANDOFF.md` | State of the work, what is decided and undecided, and next steps. Read it after `AGENTS.md`. |
+| `PLAN.md` | The stack and the order of the first tasks (built). |
+| `GUIDELINES.md` | How `Rysia` works with Claude Code, and the history of what was decided and when. Add to it, never rewrite it. |
+| `BACKEND_CONTRACT.md` | The servers, CORS, limits and the Kraków data gaps. |
 | `REQUIREMENTS.md` | Screens, elements, states, phases and the definition of done. |
 | `API.md` | How to use the contract, with real example responses and the known gaps. |
 | `ACCESSIBILITY.md` | What WCAG 2.2 level AA means for this app, and how to test it. |
 
 ## Folder layout
 
-The empty folders mark where things go. Keep this layout, or change it in a pull request that explains why.
-
 ```
 frontend/
-  public/            static files that need no processing
+  public/            static files: favicon, and basemap/ (the OpenStreetMap context layer, not committed)
+  scripts/           build_basemap.py, which builds that layer once
   src/
-    api/             generated types, the API client and one hook per endpoint
-    components/      shared pieces: provenance badge, metric row, layout, states
+    api/             generated types for both contracts, two clients and one hook per endpoint
+    components/      shared pieces: provenance badge, metric row, map, legend, layout, states
     pages/           one file per screen
-    i18n/locales/    pl.json and en.json (static interface text only)
-    lib/             small helpers, none of which format API numbers
-    theme/           the Kraków colours and favicon as tokens
+    i18n/locales/    pl.json and en.json (static interface text only; the same keys, a test checks)
+    lib/             small helpers: dates, score, map view, classes. None formats an API text.
+    theme/           the colours, fonts, sizes and durations as tokens, and the contrast test
     test/            test helpers and fixtures
 ```
 
-## Suggested stack
+## Stack
 
-You can choose another stack. Pick it in your first pull request and say why.
+The stack in use. `PLAN.md` has the reasons. Change it in a pull request that says why.
 
 | Need | Suggestion | Why |
 |---|---|---|
@@ -130,7 +134,7 @@ You can choose another stack. Pick it in your first pull request and say why.
 | Server state | TanStack Query | Caching, retries and loading states. |
 | Routing | React Router | Plain and well known. |
 | Interface text | `i18next` and `react-i18next` | Hand-written `pl.json` and `en.json`. |
-| Map | SVG drawn from `/districts.geojson` | No map tiles, so no third-party requests. The SVG can be keyboard accessible. |
+| Map | SVG drawn from `/districts.geojson`, plus an OpenStreetMap context layer | No map tiles, so no third-party requests. Each district is a keyboard-reachable button. |
 | Tests | Vitest, Testing Library and `vitest-axe` | Component tests with accessibility checks. |
 | Lint | ESLint with `eslint-plugin-jsx-a11y` | Catches many accessibility mistakes while you type. |
 
@@ -157,7 +161,7 @@ The host name is private, because this repository is public. Never write it in a
 1. Join the team Tailscale network and keep it connected.
 2. Ask the coordinator for the API host name.
 3. Put it in a local file that git ignores, such as `.env.local`, as `VITE_DEV_API=http://<host>:8000`. Do not add `/v1`. The client adds it.
-4. Let the dev server forward `/v1` to that address. Your browser then makes same-origin requests, and you need no CORS setup.
+4. Let the dev server forward `/v1` to that address (and `/v1/ai-report` and `/v1/feedback` to the city service, `VITE_DEV_CITY`). Your browser then makes same-origin requests, and you need no CORS setup.
 5. Check it: open `/v1/health` (it answers `{"status":"ok","database":"reachable"}`) and `/v1/meta` (it shows `"city": "krakow"` and `"district_count": 18`).
 
 Use the host name. The bare Tailscale IP answers `404`, because the proxy routes by name.
@@ -179,10 +183,8 @@ Every `VITE_` variable is public. Never put a secret in one.
 
 ## Run in Docker
 
-The image contract for every module is fixed. Build it from this folder with `VITE_API_URL` as a build argument.
-Serve the built files from a small static server on port 8080 as an unprivileged user. Read nothing at run time. Bake in no secret.
-Add a health check. The reverse proxy handles TLS.
+There is no frontend `Dockerfile` yet, and nothing is deployed. The image contract for every module is fixed: build from this folder with `VITE_API_URL` and `VITE_CITY_API_URL` as build arguments, serve the built files from a small static server on port 8080 as an unprivileged user, read nothing at run time, bake in no secret, add a health check, and leave TLS to the reverse proxy.
 
 ## Review and merge
 
-`unicorn-alex` reviews frontend pull requests. The coordinator or Claude merges. See `AGENTS.md`.
+`unicorn-alex` reviews frontend pull requests. They target `develop`. A trusted owner of `frontend/` merges them when the conditions in `../REVIEW.md` section 7 hold, and only the coordinator merges `develop` into `main`. See `AGENTS.md`.

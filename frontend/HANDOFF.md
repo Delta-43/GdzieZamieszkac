@@ -7,8 +7,8 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 ## Where things stand
 
 - **Phase 1 is built.** Pages: home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
-- **`develop` holds everything up to pull request #90.** The last piece, the pull request for issue #91, is open on the branch `frontend/responsive-scaling`. It contains this file.
-- `npm run check` passes on it: both contracts, lint, type check, 167 tests, build. CI runs the same on every pull request, with the backend and city service tests.
+- **`develop` and `main` hold everything up to pull request #101** (checked by the coordinator on 4 October, evening): #92 (sizes and alignment, issue #91), #99 (favicon) and #101 (commute times on the district page, task F10) are merged. The three round-two issues and the plain-language issue are closed.
+- `npm run check` passes on it: both contracts, lint, type check, 170 tests, build. CI runs the same on every pull request, with the backend and city service tests.
 - The app was run against the real servers on 4 October: every page and main flow, 14 kinds of API call, all answered 200, no console error.
 
 ## What changed on 4 October (in order)
@@ -23,18 +23,18 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **Merge the pull request for issue #91** (branch `frontend/responsive-scaling`): sizes and alignment at every width. #89 and #90 are merged. An agent's session cannot merge (see "Things that cost time").
+1. ~~Merge the pull request for issue #91.~~ Done (#92).
 2. **Issue #82 is built, with three differences decided by Aryna** and written in a comment on the issue: the legend stays one line and gains a sentence on what darker means (the step list does not come back); one "Co to znaczy?" disclosure per measure, not two; a preset sends its exact weights, and a weight that is not 0, 3 or 5 is said in words. Two boxes of the issue stay open: the check with five people (Aryna), and the Polish text (`unicorn-alex`).
 3. **Decisions waiting for `Delta-43`**, each flagged in a pull request:
    - Observed values no longer show data kind, date and source beside the number (one press away). `REVIEW.md` and `AGENTS.md` rule 4 say "beside it" (#89).
    - The map has no buttons: WCAG 2.5.7 rests on zooming out and in elsewhere, and a touch screen cannot zoom (#89). If that is not enough, the buttons come back.
    - `../docs/DESIGN.md` describes neither the gov.pl shapes (#75) nor the removed pixel canvas. It is the coordinator's file.
-   - #87: the API lists a Warsaw-only metric for Kraków. The frontend shows what the API gives.
+   - ~~#87: the API lists a Warsaw-only metric for Kraków.~~ Closed on 4 October: pull request #81 replaced it with Kraków data.
    - #82: the whole-number score and "better than k of n − 1 districts" are computed in the browser (`src/lib/score.ts`). A `display` string and a count in `/recommend` would remove both (`API.md`, "Contract gaps").
-4. **Polish text for `unicorn-alex`:** every string the agent wrote is listed in the pull requests #73, #75, #77, #85, #89 and the one for #82, plus `districts.map.hint` (not listed in #89). Issue #83 is the coordinator's own list. Do not guess wording: apply what the reviewer writes. Open from #82: the questions under the categories *livability* and *safety* on Find a district (none is shown until she writes them), and the five step names, written in the feminine to agree with "wartość".
-5. **Manual accessibility checks, never done:** a screen reader (NVDA or VoiceOver), 200 and 400 percent zoom, a keyboard-only pass by hand. Then update the draft statement (`about.a11y`).
+4. **Polish text for `unicorn-alex`:** every string the agent wrote is listed in the pull requests #73, #75, #77, #85, #89 and the one for #82, plus `districts.map.hint` (not listed in #89). Issue #83 is the coordinator's own list. `unicorn-alex` closed #82 and #83 on 4 October, with no comment: check with the reviewer whether the two category questions (*livability*, *safety*) and the step names were written. Do not guess wording: apply what the reviewer writes. Open from #82: the questions under the categories *livability* and *safety* on Find a district (none is shown until she writes them), and the five step names, written in the feminine to agree with "wartość".
+5. **Manual accessibility checks, no written record** (`unicorn-alex` closed the review issues #70 and #72 on 4 October; write the result here when it is known): a screen reader (NVDA or VoiceOver), 200 and 400 percent zoom, a keyboard-only pass by hand. Then update the draft statement (`about.a11y`).
 6. **Open choices of Aryna's:** the typeface (the Gov.pl guide uses Open Sans, the app uses Lato); the dark bar beside section headings (a krakow.pl motif); whether the compare table, the list and the map card should hide the "observed" badge as the district page does.
-7. **Small fixes** in `TODO.md` (favicon, `plainNumber.ts` after backend task B2), then **phase 2** (F9 to F12).
+7. **Small fixes** in `TODO.md` (`plainNumber.ts` after backend task B2; the favicon is done, #99), then the rest of **phase 2**: F9, F11 and F12 (F10 is done, #101).
 
 ## How Aryna works (decided in this session)
 
@@ -64,7 +64,7 @@ Playwright is installed at the repository root by Aryna (not committed). The age
 - **The dev server loses its settings when a branch without `frontend/vite.config.ts` is checked out.** Restart it after such a switch.
 - **View tests.** `tests/responsive.spec.ts` at the repository root (Aryna's local Playwright setup, not committed) checks every page at eleven widths in Chromium, Firefox and WebKit: no sideways scroll, target sizes, line length, shared edges, and evenly filled rows of buttons. Run `npx playwright test tests/responsive.spec.ts` from the root with the dev server up, before a pull request that changes layout.
 - **The project has no code formatter.** Never run `prettier --write`: with no configuration it restyles every file. Match the style by hand; `npm run lint` is the check.
-- **Closing issues.** `Closes #n` does not close an issue when the pull request merges into `develop`, only when it reaches `main`. #72, #74, #76, #84 and #88 are still open for that reason.
+- **Closing issues.** `Closes #n` does not close an issue when the pull request merges into `develop`, only when it reaches `main`. #72, #74, #76, #84 and #88 stayed open for that reason until the release merge into `main` on 4 October closed them.
 - **The AI report costs model budget** (10 a minute for the whole team). Send only on the button, use fixtures in tests, and put TEST in anything sent by hand. Feedback reports are stored.
 
 ## Rules that are easy to break
