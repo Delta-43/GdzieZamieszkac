@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Four steps of the map's blue: the app is a map of districts coloured by a measure. Not a logo or a crest of the city. -->
+  <rect x="1" y="1" width="14" height="14" fill="#b5d3ee" />
+  <rect x="17" y="1" width="14" height="14" fill="#0063af" />
+  <rect x="1" y="17" width="14" height="14" fill="#7fb0dc" />
+  <rect x="17" y="17" width="14" height="14" fill="#0a3a66" />
+</svg>

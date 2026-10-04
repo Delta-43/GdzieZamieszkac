@@ -43,7 +43,6 @@ The city service (`../city-service/`, contract `../city-service/openapi.yaml`) w
 
 ## Small fixes waiting
 
-- Add a favicon: the browser logs a 404 for `/favicon.ico`.
 - Manual checks that were never done on any page: a keyboard pass, 320 pixels, 200 and 400 percent zoom, a screen reader. `REVIEW_CHECKLIST.md` section 5.
 - Delete `src/lib/plainNumber.ts` when the contract adds the `*_display` fields (backend task B2).
 
