@@ -199,3 +199,39 @@ test('the travel times are hidden when the API answers 501, and the rest of the 
   expect(screen.queryByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })).not.toBeInTheDocument()
   expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 })
+
+test('the outlook is history: the change in the district, the city in the past, the reason for no forecast, and no future price', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Jak zmieniały się ceny' })).closest('section') as HTMLElement
+  // The API's caveat opens the section: this is the past, not a forecast.
+  expect(within(section).getByText('Test outlook caveat: a record of the past, not a forecast.')).toBeInTheDocument()
+  // The change as the API words it, with the two prices and dates it compares, the sample sizes and the low-confidence mark.
+  const last = within(section).getByText('Ostatnie 12 miesięcy').closest('.metric') as HTMLElement
+  expect(last).toHaveTextContent('+10 test% (niska wiarygodność)')
+  expect(last).toHaveTextContent('od 1 kwietnia 2025 (100 test) do 1 kwietnia 2026 (110 test)')
+  expect(last).toHaveTextContent('Liczba transakcji: 78 i 12')
+  // A change without data says so in words, never a zero.
+  expect(within(section).getByText('Od początku danych').closest('.metric')).toHaveTextContent('Za mało danych, aby pokazać zmianę.')
+  // The city in the past, as the API words each figure.
+  const city = within(section).getByRole('table', { name: 'Zmiana cen w mieście w przeszłych okresach tej długości' })
+  expect(within(city).getAllByRole('row')[1]).toHaveTextContent('Test year+3 test%-5 test%+15 test%')
+  expect(section).toHaveTextContent('Test city source')
+  // No forecast: the API's reason, and the test behind it with its figures as sent.
+  expect(within(section).getByRole('heading', { level: 3, name: 'Dlaczego nie ma prognozy' })).toBeInTheDocument()
+  expect(section).toHaveTextContent('Test reason for no forecast.')
+  const test = within(section).getByText('Jak sprawdzono metody prognozy').closest('details') as HTMLElement
+  expect(test).toHaveTextContent('Test method name40,06190,07120,04150,686niezaliczony')
+})
+
+test('the outlook is hidden when the API answers 501', async () => {
+  mockFetch((request) =>
+    new URL(request.url).pathname.endsWith('/outlook') ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  expect(await screen.findByRole('heading', { level: 1 })).toBeInTheDocument()
+  await screen.findByText('Test sale label', { selector: 'dt' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Jak zmieniały się ceny' })).not.toBeInTheDocument()
+})

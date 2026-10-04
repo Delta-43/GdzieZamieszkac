@@ -7,6 +7,7 @@ import { CommuteTable } from '../components/CommuteTable'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { MetricRow } from '../components/MetricRow'
+import { OutlookCard } from '../components/OutlookCard'
 import { PriceHistory } from '../components/PriceHistory'
 import { plainNumber } from '../lib/plainNumber'
 import { usePageTitle } from '../lib/usePageTitle'
@@ -68,6 +69,8 @@ export function DistrictPage() {
       </div>
 
       <PriceHistory code={district.code} />
+
+      <OutlookCard code={district.code} />
 
       {derived.length > 0 && (
         <section aria-labelledby="rental-heading">

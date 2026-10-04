@@ -1923,3 +1923,8 @@ main :is(ul, ol):not([class]) > li {
     padding-inline: var(--space-4);
   }
 }
+
+/* Why no forecast is published: a card of its own under the two cards of the past. */
+.outlook-scenario {
+  margin-block-start: var(--space-5);
+}

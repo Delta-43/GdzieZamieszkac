@@ -175,6 +175,50 @@ export const reportFixture: Schemas['Report'] = {
   generated_at: '2026-09-30T12:00:00+00:00',
 }
 
+/** The outlook of Alpha: one change with data, one without, the city's past, and no published forecast. */
+export const outlookFixture: Schemas['Outlook'] = {
+  district: 'alpha',
+  lang: 'pl',
+  data_kind: 'observed',
+  momentum: {
+    growth_12m: {
+      value: 0.1,
+      display: '+10 test%',
+      annualised: null,
+      annualised_display: null,
+      from: '2025-04-01',
+      to: '2026-04-01',
+      from_display: '100 test',
+      to_display: '110 test',
+      n_obs_from: 78,
+      n_obs_to: 12,
+      low_confidence: true,
+    },
+    growth_since_start: null,
+  },
+  city_history: {
+    available: true,
+    period_start: '2006-06-01',
+    period_end: '2026-05-31',
+    windows: [{ quarters: 4, label: 'Test year', low: -0.05, median: 0.03, high: 0.15, low_display: '-5 test%', median_display: '+3 test%', high_display: '+15 test%', n_windows: 76 }],
+    source: { name: 'Test city source', licence: 'Test city licence', attribution: 'Test city credit' },
+    method: 'Test city method.',
+  },
+  scenario: {
+    published: false,
+    reason: 'Test reason for no forecast.',
+    ranges: [],
+    backtest: {
+      period_start: '2006-08-31',
+      period_end: '2026-05-31',
+      cities: 17,
+      results: [{ quarters: 4, method: 'Test method name', origins: 816, mae_method: 0.0619, mae_no_change: 0.0712, mae_last_year_continues: 0.0415, coverage_80: 0.686, passes: false }],
+    },
+  },
+  method: 'Test outlook method.',
+  caveat: 'Test outlook caveat: a record of the past, not a forecast.',
+}
+
 /** Travel times from Alpha, as /commute answers them: out of order, with Alpha itself, and one district without a connection. */
 export const commuteFixture: Schemas['Commute'] = {
   from: 'alpha',
@@ -247,6 +291,9 @@ export function districtsApi(request: Request): Response {
       })),
     })
   }
+  if (pathname === '/v1/districts/alpha/outlook') return jsonResponse(outlookFixture)
+  // The other districts answer as an API with the feature switched off: the section must hide.
+  if (pathname.endsWith('/outlook')) return jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501)
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
   if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)
