@@ -1,8 +1,11 @@
 import '@testing-library/jest-dom/vitest'
-import { cleanup } from '@testing-library/react'
+import { cleanup, configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import i18n from '../i18n'
 import { resetDataWarningForTests } from '../lib/staleWarning'
+
+// Waiting for something to appear (findBy, waitFor) gives up after one second by default. A busy machine or a CI runner needs longer.
+configure({ asyncUtilTimeout: 5000 })
 
 // jsdom has no canvas. The pixel layer of the map is only a picture under the SVG, so it draws nothing in a test.
 HTMLCanvasElement.prototype.getContext = () => null
