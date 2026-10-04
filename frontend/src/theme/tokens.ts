@@ -144,6 +144,8 @@ export const scale = {
   /** Hover and colour changes. */
   'duration-fast': '120ms',
   'duration-base': '200ms',
+  /** The wave of colour on the map: the time between the middle of the city and its edge when the measure changes. */
+  'duration-wave': '250ms',
   /** The menu panel sliding in and out. */
   'duration-menu': '250ms',
   /** Things that enter or leave start fast and settle: the reader sees the answer to their action at once. */

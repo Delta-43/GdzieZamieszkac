@@ -493,7 +493,11 @@ main:focus {
   stroke-width: 1px;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  transition: fill var(--duration-base) ease-out;
+  /*
+    When the measure changes, the new colours spread from the middle of the city to its edge: each district waits
+    for its share of the wave (--wave, 0 to 1, set per district). Under reduced motion both durations are zero.
+  */
+  transition: fill var(--duration-base) ease-out calc(var(--wave, 0) * var(--duration-wave));
 }
 
 /* The zoom buttons sit in a row above the map, never over it, so they cannot cover a focused district (WCAG 2.4.11). */
@@ -628,9 +632,29 @@ main:focus {
   }
 }
 
+/* The colour of a district: its step of the ramp. While the values load, and before the first answer, a plain light surface. */
 .map-district path {
-  /* Transparent, not none: the district still takes the click and the touch. The colour is in the pixels below. */
-  fill: transparent;
+  fill: var(--color-surface-raised);
+}
+
+.map-district--c1 path {
+  fill: var(--color-map-ramp1);
+}
+
+.map-district--c2 path {
+  fill: var(--color-map-ramp2);
+}
+
+.map-district--c3 path {
+  fill: var(--color-map-ramp3);
+}
+
+.map-district--c4 path {
+  fill: var(--color-map-ramp4);
+}
+
+.map-district--c5 path {
+  fill: var(--color-map-ramp5);
 }
 
 .map-district--none path {
@@ -1618,18 +1642,11 @@ main > .ai-report-card {
   margin-block: 0;
 }
 
-/* The map is a canvas of pixels under an SVG. The canvas only colours; the SVG above it carries the districts, their outlines and the clicks. */
+/* The frame of the map drawing. */
 .district-map-stack {
   position: relative;
 }
 
-.map-pixels-canvas {
-  position: absolute;
-  inset: 0;
-  inline-size: 100%;
-  block-size: 100%;
-  pointer-events: none;
-}
 
 .district-map {
   position: relative;

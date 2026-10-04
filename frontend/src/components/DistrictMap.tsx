@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import { buildMap, type Basemap } from '../lib/geo'
-import { PixelLayer } from './PixelLayer'
 
 type Boundaries = components['schemas']['BoundaryCollection']
 
@@ -16,8 +15,6 @@ const PLACE_SIZE = 13
 const MAX_ZOOM = 6
 // From this zoom on, the landmarks are named.
 const LABEL_ZOOM = 2
-// How long the wave of colour takes to cross the map when the measure changes, in milliseconds.
-const WAVE = 250
 
 const reducedMotion = () => typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
 
@@ -127,17 +124,6 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
     }
   }
 
-  // The colours of the districts as small squares, one kind per square. The canvas under the map draws them and glides them to new colours.
-  const pixelKinds = useMemo(
-    () =>
-      map.pixels.cells.map((cell) => {
-        const value = values.get(cell.code)
-        return value ? `c${value.classNumber}` : loading ? 'loading' : 'none'
-      }),
-    [map, values, loading],
-  )
-  const cityPath = useMemo(() => map.shapes.map((shape) => shape.path).join(''), [map])
-
   // Draw the selected district last, so its thick outline is not covered by its neighbours.
   const shapes = [...map.shapes].sort((a, b) => Number(a.code === selected) - Number(b.code === selected))
 
@@ -174,7 +160,6 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
         {note}
       </p>
       <div className="district-map-stack">
-        <PixelLayer size={map.pixels.size} cells={map.pixels.cells} kinds={pixelKinds} view={current} cityPath={cityPath} wave={WAVE} />
         <svg
           className={`district-map${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}`}
           viewBox={`${current.x} ${current.y} ${current.w} ${current.h}`}
@@ -203,6 +188,8 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
                 aria-label={name}
                 aria-pressed={shape.code === selected}
                 className={`map-district map-district--${value ? `c${value.classNumber}` : loading ? 'loading' : 'none'}`}
+                // The district's place in the wave: when the measure changes, the colour reaches the middle of the map first.
+                style={{ '--wave': shape.wave } as CSSProperties}
                 onClick={() => onSelect(shape.code)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
