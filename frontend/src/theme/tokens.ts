@@ -141,6 +141,11 @@ export const scale = {
   'shadow-menu': '1px 2px 5px 0 rgb(0 0 0 / 0.25)',
   /** The height of the header. The menu opens right under it. */
   'header-height': '4rem',
+  /** Hover and colour changes. */
   'duration-fast': '120ms',
   'duration-base': '200ms',
+  /** The menu panel sliding in and out. */
+  'duration-menu': '250ms',
+  /** Things that enter or leave start fast and settle: the reader sees the answer to their action at once. */
+  'ease-out': 'cubic-bezier(0.23, 1, 0.32, 1)',
 } as const

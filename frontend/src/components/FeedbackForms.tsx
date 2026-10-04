@@ -164,7 +164,7 @@ export function RentPaidForm({ ready }: { ready: boolean }) {
           )}
         </Field>
         <p className="find-actions">
-          <button type="submit" className="button-primary" disabled={!ready}>
+          <button type="submit" className="button-primary" disabled={!ready} aria-disabled={send.isPending || undefined}>
             {t('feedback.submit')}
           </button>
         </p>
@@ -225,7 +225,7 @@ export function DataProblemForm({ ready }: { ready: boolean }) {
           )}
         </Field>
         <p className="find-actions">
-          <button type="submit" className="button-primary" disabled={!ready}>
+          <button type="submit" className="button-primary" disabled={!ready} aria-disabled={send.isPending || undefined}>
             {t('feedback.submit')}
           </button>
         </p>

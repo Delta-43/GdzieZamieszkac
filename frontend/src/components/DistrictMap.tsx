@@ -141,31 +141,34 @@ export function DistrictMap({ boundaries, values, classCount, metricLabel, loadi
   // Draw the selected district last, so its thick outline is not covered by its neighbours.
   const shapes = [...map.shapes].sort((a, b) => Number(a.code === selected) - Number(b.code === selected))
 
+  const atFull = !view
+  const controls: { text: string; label: string; off: boolean; run: () => void; className?: string }[] = [
+    { text: '+', label: t('districts.map.zoomIn'), off: full.w / asked.w >= MAX_ZOOM - 0.01, run: () => zoomBy(1.6) },
+    { text: '−', label: t('districts.map.zoomOut'), off: atFull, run: () => zoomBy(1 / 1.6) },
+    { text: '←', label: t('districts.map.panLeft'), off: atFull, run: () => pan(-0.3, 0) },
+    { text: '→', label: t('districts.map.panRight'), off: atFull, run: () => pan(0.3, 0) },
+    { text: '↑', label: t('districts.map.panUp'), off: atFull, run: () => pan(0, -0.3) },
+    { text: '↓', label: t('districts.map.panDown'), off: atFull, run: () => pan(0, 0.3) },
+    { text: t('districts.map.reset'), label: t('districts.map.reset'), off: atFull, run: () => show(null, t('districts.map.wholeCity')), className: 'map-controls__reset' },
+  ]
+
   return (
     <div className="district-map-frame">
       {/* Zoom and pan are buttons, so nothing needs a drag or a pinch (WCAG 2.5.7). They come first in the tab order. */}
       <div className="map-controls" role="group" aria-label={t('districts.map.controls')}>
-        <button type="button" onClick={() => zoomBy(1.6)} disabled={full.w / asked.w >= MAX_ZOOM - 0.01} aria-label={t('districts.map.zoomIn')}>
-          +
-        </button>
-        <button type="button" onClick={() => zoomBy(1 / 1.6)} disabled={!view} aria-label={t('districts.map.zoomOut')}>
-          −
-        </button>
-        <button type="button" onClick={() => pan(-0.3, 0)} disabled={!view} aria-label={t('districts.map.panLeft')}>
-          ←
-        </button>
-        <button type="button" onClick={() => pan(0.3, 0)} disabled={!view} aria-label={t('districts.map.panRight')}>
-          →
-        </button>
-        <button type="button" onClick={() => pan(0, -0.3)} disabled={!view} aria-label={t('districts.map.panUp')}>
-          ↑
-        </button>
-        <button type="button" onClick={() => pan(0, 0.3)} disabled={!view} aria-label={t('districts.map.panDown')}>
-          ↓
-        </button>
-        <button type="button" className="map-controls__reset" onClick={() => show(null, t('districts.map.wholeCity'))} disabled={!view}>
-          {t('districts.map.reset')}
-        </button>
+        {controls.map((control) => (
+          // At a limit the button is aria-disabled, not disabled: a disabled button would drop the keyboard focus.
+          <button
+            key={control.label}
+            type="button"
+            className={control.className}
+            aria-label={control.text === control.label ? undefined : control.label}
+            aria-disabled={control.off || undefined}
+            onClick={control.off ? undefined : control.run}
+          >
+            {control.text}
+          </button>
+        ))}
       </div>
       <p className="visually-hidden" role="status">
         {note}

@@ -73,7 +73,8 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
           {t('aiReport.privacy')}
         </p>
         <p className="find-actions">
-          <button type="submit" className="button-primary">
+          {/* While a report is written the button is dimmed and does nothing. It stays focusable. */}
+          <button type="submit" className="button-primary" aria-disabled={report.isPending || undefined}>
             {t('aiReport.submit')}
           </button>
         </p>

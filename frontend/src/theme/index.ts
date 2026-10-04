@@ -14,7 +14,7 @@ export function themeCss(): string {
   return [
     `:root { color-scheme: light; ${declarations.join(' ')} }`,
     // The user asked for less motion: every transition becomes instant.
-    '@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 0ms; --duration-base: 0ms; } }',
+    '@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 0ms; --duration-base: 0ms; --duration-menu: 0ms; } }',
   ].join('\n')
 }
 

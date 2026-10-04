@@ -168,7 +168,7 @@ main,
   inline-size: 2.25rem;
   block-size: 2.25rem;
   border-radius: 50%;
-  transition: background-color 200ms ease-out;
+  transition: background-color var(--duration-base) ease-out;
 }
 
 .menu-opener:hover .menu-opener__icons,
@@ -231,7 +231,7 @@ main,
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition-property: background-color, color, border-color;
-  transition-duration: 150ms;
+  transition-duration: var(--duration-fast);
   transition-timing-function: ease-out;
 }
 
@@ -493,7 +493,7 @@ main:focus {
   stroke-width: 1px;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  transition: fill var(--duration-base);
+  transition: fill var(--duration-base) ease-out;
 }
 
 /* The zoom buttons sit in a row above the map, never over it, so they cannot cover a focused district (WCAG 2.4.11). */
@@ -519,13 +519,17 @@ main:focus {
   cursor: pointer;
 }
 
-.map-controls button:hover:not(:disabled) {
+.map-controls button:hover:not([aria-disabled='true']) {
   color: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
 }
 
-/* A disabled control is dimmed, and it is exempt from the contrast rules (WCAG 1.4.3). It says why by being at the limit. */
-.map-controls button:disabled {
+/*
+  A control at its limit is dimmed and does nothing. It is marked with aria-disabled and stays focusable, so the
+  keyboard focus does not fall back to the top of the page when a button reaches its limit under the finger.
+  It is exempt from the contrast rules (WCAG 1.4.3).
+*/
+.map-controls button[aria-disabled='true'] {
   color: var(--color-text-muted);
   border-color: var(--color-border-strong);
   cursor: default;
@@ -1120,7 +1124,7 @@ summary:hover {
   visibility: hidden;
   font-family: var(--font-ui);
   font-size: var(--text-base);
-  transition: visibility 0s linear 300ms;
+  transition: visibility 0s linear var(--duration-menu);
 }
 
 .site-menu.is-open {
@@ -1145,7 +1149,7 @@ summary:hover {
   background: var(--color-surface);
   box-shadow: var(--shadow-menu);
   translate: -105% 0;
-  transition: translate 300ms ease;
+  transition: translate var(--duration-menu) var(--ease-out);
 }
 
 .site-menu.is-open .site-menu__panel {
@@ -1184,7 +1188,7 @@ summary:hover {
   padding-inline: var(--space-5);
   text-decoration: none;
   color: var(--color-text);
-  transition: color 150ms ease-out;
+  transition: color var(--duration-fast) ease-out;
 }
 
 .site-menu__section a:hover {
@@ -1261,7 +1265,7 @@ summary:hover {
 }
 
 .site-footer a {
-  transition: color 150ms ease-out;
+  transition: color var(--duration-fast) ease-out;
 }
 
 .site-footer a:hover {
@@ -1318,6 +1322,12 @@ summary:hover {
 }
 
 .site-footer__more {
+  /* A short link like "[2]" still gets a 24 by 24 pixel target (WCAG 2.5.8). */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.5rem;
+  min-block-size: 1.5rem;
   margin-inline-start: var(--space-2);
 }
 
@@ -1628,4 +1638,13 @@ main > .ai-report-card {
 .map-attribution {
   margin-block: var(--space-1) 0;
   text-align: end;
+}
+
+/* A send button while its request is on the way: dimmed, still focusable, and it does nothing until the answer arrives. */
+.button-primary[aria-disabled='true'],
+.button-primary[aria-disabled='true']:hover {
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+  cursor: default;
 }
