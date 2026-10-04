@@ -14,11 +14,11 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## What `frontend/map-home` holds
 
-One branch with all the frontend work that was open on 4 October, cut from `develop` at `8ad6d60` and merging cleanly with it. It contains, in this order: C4-3 (notices label, #64), C4-2 (feedback page, #65), F8 (sources page, #66), and the map work (#70). The pull requests #67, #68 and #69 hold the first three alone; they are redundant once this branch is merged and can then be closed.
+One branch with all the frontend work that was open on 4 October, cut from `develop` at `8ad6d60` and merging cleanly with it. It contains, in this order: C4-3 (notices label, #64), C4-2 (feedback page, #65), F8 (sources page, #66), and the map work (#70). The pull requests #67 and #68 were merged into `develop` separately, while this branch was being finished. #69 (F8) holds the third alone: it is redundant once this branch is merged and can then be closed.
 
 ## Next steps, in order
 
-1. **Merge `frontend/map-home`** (pull request into `develop`), then close #67 to #69 if GitHub has not.
+1. **Merge `frontend/map-home`** (pull request #71 into `develop`), then close #69 if GitHub has not.
 2. **The government look.** Read the official Polish government design system documentation (gov.pl). Write down what applies (type, colour, components, header and footer, form patterns) in `../docs/DESIGN.md`, then change `tokens.ts` and the styles. Keep the contrast pairs in `theme.test.ts` honest. Polish text goes to `unicorn-alex`.
 3. **Manual accessibility checks** that were never done: keyboard only, a screen reader (NVDA), 200 and 400 percent zoom, on every page. Update the draft statement in `src/pages/SourcesPage.tsx` and `en.json`/`pl.json` (`about.a11y`) when they are done.
 4. **Small fixes** at the end of `TODO.md` (favicon, long district names on the map, `plainNumber.ts` after backend task B2).
