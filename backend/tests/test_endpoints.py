@@ -233,3 +233,8 @@ def test_cors_allows_the_city_frontend_only(client):
 def test_unknown_path_is_problem_json(client):
     r = client.get("/v1/nothing")
     assert r.status_code == 404 and r.headers["content-type"].startswith("application/problem+json")
+
+
+def test_a_shown_but_not_scored_metric_cannot_be_given_a_weight(client):
+    r = client.post("/v1/recommend", json={"weights": {"metric": {"amenity_aed_public": 3}}})
+    assert r.status_code == 422
