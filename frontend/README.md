@@ -5,11 +5,11 @@ This is not a listings site. It shows data about districts, not offers.
 
 ## Start here
 
-1. Read `AGENTS.md`. It is short.
-2. Read `HANDOFF.md`: what is built, what is decided, what comes next.
-3. Open `TODO.md` for the task list, with sizes and the condition for done.
-4. Get an API. See "Get an API" below.
-5. Run `npm ci` and `npm run check` before you change anything.
+1. Read `REQUIREMENTS.md`: the screens, their states and the definition of done.
+2. Get an API. See "Get an API" below.
+3. Run `npm ci` and `npm run check` before you change anything.
+
+The rules, the hand-off and the task list for people and agents working on this module are on the `develop` branch.
 
 `unicorn-alex` reviews each pull request with `REVIEW_CHECKLIST.md`. Run that list yourself first.
 
@@ -96,12 +96,7 @@ Copy `.env.example` to `.env.local` and put the API addresses there. Git ignores
 
 | File | What it covers |
 |---|---|
-| `AGENTS.md` | The hard rules. Read it first. |
-| `TODO.md` | The tasks in order, with sizes and the condition for done. |
 | `REVIEW_CHECKLIST.md` | What a reviewer checks. Run it yourself before you ask for a review. |
-| `HANDOFF.md` | State of the work, what is decided and undecided, and next steps. Read it after `AGENTS.md`. |
-| `PLAN.md` | The stack and the order of the first tasks (built). |
-| `GUIDELINES.md` | How `Rysia` works with Claude Code, and the history of what was decided and when. Add to it, never rewrite it. |
 | `BACKEND_CONTRACT.md` | The servers, CORS, limits and the Kraków data gaps. |
 | `REQUIREMENTS.md` | Screens, elements, states, phases and the definition of done. |
 | `API.md` | How to use the contract, with real example responses and the known gaps. |
@@ -125,7 +120,7 @@ frontend/
 
 ## Stack
 
-The stack in use. `PLAN.md` has the reasons. Change it in a pull request that says why.
+The stack in use. Change it in a pull request that says why.
 
 | Need | Suggestion | Why |
 |---|---|---|
@@ -187,4 +182,4 @@ There is no frontend `Dockerfile` yet, and nothing is deployed. The image contra
 
 ## Review and merge
 
-`unicorn-alex` reviews frontend pull requests. They target `develop`. A trusted owner of `frontend/` merges them when the conditions in `../REVIEW.md` section 7 hold, and only the coordinator merges `develop` into `main`. See `AGENTS.md`.
+`unicorn-alex` reviews frontend pull requests. They target `develop`. A trusted owner of `frontend/` merges them under the review rules on the `develop` branch, and only the coordinator merges `develop` into `main`.

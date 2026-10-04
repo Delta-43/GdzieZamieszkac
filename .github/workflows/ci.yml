@@ -1,4 +1,4 @@
-# Checks on every pull request and on every push to develop and main. They are the same commands the AGENTS.md files ask for.
+# Checks on every pull request and on every push to develop and main. They are the same commands the module READMEs give.
 name: CI
 
 on:

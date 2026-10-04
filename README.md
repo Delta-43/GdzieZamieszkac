@@ -122,8 +122,8 @@ The first commit of this repository is the import of the earlier work. Every lat
 | Data collection and the Supabase database (`krakow` schema, migrations 0001 to 0017) | Before the event, 29 September to 2 October 2026, for research | First commit. The data pipeline and the data stay private. |
 | Backend API (16 operations), its contract, its tests, `data/sources/derived/scoring.py`, and the backend and data documents | Before the event, same dates | First commit. Every change made on site to this code is listed in `ON_SITE_CHANGELOG.md`. |
 | City service (AI report and resident feedback) | On site, 3 October 2026 | `docs/CITY_SERVICE_PLAN.md`, `city-service/` |
-| Frontend, all of it | On site, 3 and 4 October 2026 | `frontend/HANDOFF.md`, `ON_SITE_CHANGELOG.md` |
-| Plain-language catalogue, units and Polish texts, school sports grounds and defibrillators, label wording (migrations 0018 to 0022) | On site, 4 October 2026 | `backend/HANDOFF.md`, `ON_SITE_CHANGELOG.md` |
+| Frontend, all of it | On site, 3 and 4 October 2026 | `frontend/README.md`, `ON_SITE_CHANGELOG.md` |
+| Plain-language catalogue, units and Polish texts, school sports grounds and defibrillators, label wording (migrations 0018 to 0022) | On site, 4 October 2026 | `ON_SITE_CHANGELOG.md` |
 | Rules, review process, CI, issue templates, README, sources document, pitch deck | On site, 3 and 4 October 2026 | `ON_SITE_CHANGELOG.md` |
 
 The earlier work lived in a private repository. It was copied here with personal data removed and no change to the code logic.
@@ -137,7 +137,7 @@ We disclose all significant use, as the event rules require.
 - **District reports.** A language model (`z-ai/glm-5.3-flash`, through OpenRouter) writes each report from a structured list of facts. A guard rejects any text that contains a number that is not in the facts. Reports are generated ahead of time and stored. The app labels every report as written by artificial intelligence.
 - **Personalised AI report** (`city-service/`, new on site). The same model narrates the top three districts for a person's priorities, at request time. The ranking is computed in code and the model only writes text from a fixed fact list. The same number guard applies. Every answer carries an AI label. The typed text goes to OpenRouter and is neither stored nor logged by us.
 - **Translation.** A language model (`deepseek/deepseek-v4.1-flash`, through OpenRouter) translates stored text between English and Polish. A glossary and a number check come first. Nothing is translated at request time.
-- **Development.** We used Claude Code (Anthropic) to help write and review code, tests and documents, in both the earlier work and the work on site. People review it, and we can explain all of it. Agents follow the rules in `AGENTS.md` and `REVIEW.md`.
+- **Development.** We used Claude Code (Anthropic) to help write and review code, tests and documents, in both the earlier work and the work on site. People review it, and we can explain all of it. The written rules the agents followed are on the `develop` branch (see "Documentation").
 
 ## 🗃️ Data and licences
 
@@ -206,7 +206,6 @@ changelog/                One file per pull request, built into ON_SITE_CHANGELO
 scripts/                  build_changelog.py
 .github/                  CI, issue templates, pull request template
 pitch/                    The final pitch decks for the Smart City and Artificial Intelligence tracks (HTML and PDF), and the cover images
-presentation.html         The first draft of the pitch deck
 ```
 
 ## 📚 Documentation
@@ -218,14 +217,13 @@ presentation.html         The first draft of the pitch deck
 | `docs/DATA_DICTIONARY.md` | Tables, columns and the metric catalogue |
 | `backend/openapi.yaml`, `city-service/openapi.yaml` | The two API contracts. Change the contract first, then the code. |
 | `backend/README.md`, `city-service/README.md`, `frontend/README.md` | How each module works, its settings and how to run it |
-| `backend/HANDOFF.md`, `frontend/HANDOFF.md` | State of each module and how to restart or continue it |
 | `docs/DESIGN.md` | The look and the components that carry the data rules |
 | `docs/CITY_SERVICE_PLAN.md` | What the city service does and what it never does |
 | `docs/BACKEND_PLAN.md`, `docs/API_CONTRACT_DRAFT.md` | The reasoning behind the API, the price history and the backtest |
 | `frontend/ACCESSIBILITY.md`, `frontend/REVIEW_CHECKLIST.md` | The WCAG 2.2 AA rules and the checklist for every change |
-| `AGENTS.md`, `REVIEW.md` | The rules for people and agents, and the review process |
-| `TODO.md` | Priorities, owners and open decisions |
 | `ON_SITE_CHANGELOG.md` | Every change made during the event, with date and reason |
+
+`main` holds the released project. The working files for the team and its agents (the rules in `AGENTS.md`, the review process in `REVIEW.md`, the module hand-offs, the task lists and the first deck drafts) stay on the [`develop`](https://github.com/Delta-43/GdzieZamieszkac/tree/develop) branch, with their full history. Older documents that name them refer to that branch.
 
 ## 👥 Team
 

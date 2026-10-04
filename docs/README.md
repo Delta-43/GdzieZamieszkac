@@ -11,4 +11,4 @@
 | `DESIGN.md` | The accepted design: the look of krakow.pl, the rules our project forces, and the components for our data. The tokens are in `frontend/src/theme/tokens.ts`. |
 | `data-review/` | How data verification works, and the template for recording findings |
 
-Priorities and tasks for the whole project are in `../TODO.md`. The frontend guide files are in `../frontend/`.
+The frontend guide files are in `../frontend/`. The task lists and the rules for the team are on the `develop` branch.
