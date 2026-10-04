@@ -214,28 +214,20 @@ test('the menu lists every district, and choosing one opens its page and closes 
   expect(screen.getByRole('main')).toHaveFocus()
 })
 
-test('the footer is small print: every credit line, each linked to where its data comes from, and no list of pages', async () => {
+test('the footer is small print: every credit line once, as plain text, with no links and no list of pages', async () => {
   mockFetch(districtsApi)
   renderApp()
 
   const footer = await screen.findByRole('contentinfo')
-  // The pages are in the menu: the footer has no navigation, no list of pages and no list of districts. Only the sources.
-  expect(within(footer).queryByRole('navigation')).not.toBeInTheDocument()
-  expect(within(footer).queryByRole('link', { name: 'Znajdź dzielnicę' })).not.toBeInTheDocument()
-  expect(within(footer).queryByRole('link', { name: 'Gamma' })).not.toBeInTheDocument()
   expect(within(footer).getByRole('heading', { name: 'Źródła danych' })).toBeInTheDocument()
-
-  const first = await within(footer).findByRole('link', { name: /^Test credit line A\s*\(otwiera się w nowej karcie\)$/ })
-  expect(first).toHaveAttribute('href', 'https://example.org/source-a')
-  expect(first).toHaveAttribute('target', '_blank')
-  expect(first).toHaveAttribute('rel', 'noopener noreferrer')
-  // A second address of the same source follows as a numbered link.
-  expect(within(footer).getByRole('link', { name: 'Test credit line A: adres 2 (otwiera się w nowej karcie)' })).toHaveAttribute('href', 'https://example.org/source-a2')
-  // A source without an address, and a listings site, are named but not linked.
+  // Each credit line of /meta appears once, as the API gives it.
+  expect(await within(footer).findByText('Test credit line A')).toBeInTheDocument()
   expect(within(footer).getByText('Test credit line B')).toBeInTheDocument()
-  expect(within(footer).queryByRole('link', { name: /Test credit line B/ })).not.toBeInTheDocument()
   expect(within(footer).getByText('Test listings credit')).toBeInTheDocument()
-  expect(within(footer).queryByRole('link', { name: /Test listings credit/ })).not.toBeInTheDocument()
+  expect(within(footer).getAllByRole('listitem')).toHaveLength(3)
+  // The pages are in the menu, and the links to the sources are on the sources page: the footer has no link at all.
+  expect(within(footer).queryByRole('navigation')).not.toBeInTheDocument()
+  expect(within(footer).queryByRole('link')).not.toBeInTheDocument()
 })
 
 test.each(['pl', 'en'] as const)('the home page marks official notices as a concept and calls no endpoint for them in %s', async (language) => {

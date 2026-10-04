@@ -125,9 +125,6 @@ export function DistrictsPage() {
     setParams(next.kind === 'category' ? { category: next.category } : next.kind === 'metric' ? { metric: next.key } : {}, { replace: true })
   }
 
-  // The overall score and the category scores are scores, where higher is better: red to green. A single measure
-  // (a price, a count) is only more or less of something: steps of one blue.
-  const palette = choice.kind === 'metric' && metric?.key !== SCORE_KEY ? 'measure' : 'score'
   // The two values every district carries (the prices), for its card on the map.
   const extras = new Map(
     districts.data.districts.map((district) => [
@@ -142,7 +139,7 @@ export function DistrictsPage() {
       <h1>{t('districts.heading')}</h1>
       <p>{t('districts.intro')}</p>
 
-      <div className={`districts-layout${chosen ? ' districts-layout--details' : ''}`}>
+      <div className="districts-layout">
         {/* The map comes first and alone: it is what people come for. */}
         <section className="card map-card" aria-labelledby="map-heading">
           <h2 id="map-heading">{view.label}</h2>
@@ -165,12 +162,12 @@ export function DistrictsPage() {
               onSelect={setSelected}
               basemap={basemap}
               focusCode={districtParam}
-              palette={palette}
               classes={classes}
               extras={extras}
+              card
             />
           </div>
-          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} palette={palette} />}
+          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} />}
         </section>
 
         {/* The details of the chosen district: on the page only after a district is chosen, and announced politely when it changes. */}

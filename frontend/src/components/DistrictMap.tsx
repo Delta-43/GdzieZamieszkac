@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import type { ClassInfo } from '../lib/classes'
@@ -69,22 +69,20 @@ type Props = {
   basemap?: Basemap | null
   /** A district to zoom to, for example the one a search found. */
   focusCode?: string | null
-  /**
-   * What the colours stand for. `measure`: more or less of something, in steps of one blue. `score`: a score where a
-   * higher value is the better one, from red through yellow to green.
-   */
-  palette?: 'measure' | 'score'
   /** The classes of the map with their ranges, for the card of a district. */
   classes?: ClassInfo[]
   /** A few more values per district for its card, for example the two prices. Label and the API's display string. */
   extras?: Map<string, { label: string; display: string }[]>
+  /** Whether a district under the pointer or the focus shows its card. Off on the home page, where the map only leads on. */
+  card?: boolean
 }
 
 /**
  * The choropleth map: district shapes drawn as SVG, filled by class, with one even outline. Each district is a button
  * whose accessible name includes its name, value and class, so nothing depends on colour or on hover. A small card
- * with the same facts appears over a district under the pointer or the keyboard focus. The view moves with the
- * buttons above the map and, for a mouse, by dragging, by a double click and by the wheel with Ctrl or ⌘ held.
+ * with the same facts can appear over a district under the pointer or the keyboard focus. The view moves with the
+ * mouse (the wheel, a drag, a double click) and with the keyboard (+, −, the arrow keys, 0). A touch screen shows
+ * the whole city: it has no zoom, so it needs no gesture.
  */
 export function DistrictMap({
   boundaries,
@@ -96,10 +94,11 @@ export function DistrictMap({
   onSelect,
   basemap = null,
   focusCode = null,
-  palette = 'measure',
   classes = [],
   extras,
+  card = false,
 }: Props) {
+  const hintId = useId()
   const { t } = useTranslation()
   const map = useMemo(() => buildMap(boundaries.features, basemap), [boundaries, basemap])
   const full: View = { x: -6, y: -6, w: map.width + 12, h: map.height + 12 }
@@ -149,12 +148,13 @@ export function DistrictMap({
     return { fx: (clientX - box.left) / box.width, fy: (clientY - box.top) / box.height, width: box.width, height: box.height }
   }
 
-  // The wheel zooms only with Ctrl or ⌘ held (a pinch on a trackpad arrives the same way), so a plain scroll of the
-  // page is never caught by the map. React's wheel listener cannot stop the page from zooming, so this one is set by hand.
+  // The wheel over the map zooms it, at the place of the pointer. One case is left to the page: the wheel turned
+  // "out" while the whole city is already shown, so the page can still be scrolled down past the map.
+  // React's wheel listener cannot stop the page from scrolling, so this one is set by hand.
   const wheel = useRef<(event: WheelEvent) => void>(() => {})
   useEffect(() => {
     wheel.current = (event: WheelEvent) => {
-      if (!event.ctrlKey && !event.metaKey) return
+      if (!view && event.deltaY > 0) return
       event.preventDefault()
       const { fx, fy } = shareOf(event.clientX, event.clientY)
       zoomBy(Math.exp(-event.deltaY * 0.01), fx, fy, true)
@@ -222,7 +222,7 @@ export function DistrictMap({
   const shapes = [...map.shapes].sort((a, b) => Number(a.code === selected) - Number(b.code === selected))
 
   // The card of the district under the pointer or the focus: where it goes, and what it says.
-  const hoverShape = hover ? map.shapes.find((shape) => shape.code === hover) : undefined
+  const hoverShape = card && hover ? map.shapes.find((shape) => shape.code === hover) : undefined
   const tip = hoverShape && (() => {
     const value = values.get(hoverShape.code)
     const info = value && classes.find((item) => item.number === value.classNumber)
@@ -243,55 +243,47 @@ export function DistrictMap({
     }
   })()
 
-  const atFull = !view
-  const controls: { text: string; label: string; off: boolean; run: () => void; className?: string }[] = [
-    { text: '+', label: t('districts.map.zoomIn'), off: full.w / asked.w >= MAX_ZOOM - 0.01, run: () => zoomBy(1.6) },
-    { text: '−', label: t('districts.map.zoomOut'), off: atFull, run: () => zoomBy(1 / 1.6) },
-    { text: '←', label: t('districts.map.panLeft'), off: atFull, run: () => pan(-0.3, 0) },
-    { text: '→', label: t('districts.map.panRight'), off: atFull, run: () => pan(0.3, 0) },
-    { text: '↑', label: t('districts.map.panUp'), off: atFull, run: () => pan(0, -0.3) },
-    { text: '↓', label: t('districts.map.panDown'), off: atFull, run: () => pan(0, 0.3) },
-    {
-      text: t('districts.map.reset'),
-      label: t('districts.map.reset'),
-      off: atFull,
-      run: () => {
+  // The keyboard moves the map as the mouse does: + and − zoom, the arrow keys move a zoomed map, and 0 shows the
+  // whole city again. The keys work while a district of the map has the focus, and the hint under the map names them.
+  function onMapKey(event: ReactKeyboardEvent<SVGSVGElement>) {
+    if (event.altKey || event.ctrlKey || event.metaKey) return
+    const step = 0.3
+    const moves: Record<string, () => void> = {
+      '+': () => zoomBy(1.6),
+      '=': () => zoomBy(1.6),
+      '-': () => zoomBy(1 / 1.6),
+      '0': () => {
         setByHand(false)
         show(null, t('districts.map.wholeCity'))
       },
-      className: 'map-controls__reset',
-    },
-  ]
+      ArrowLeft: () => pan(-step, 0),
+      ArrowRight: () => pan(step, 0),
+      ArrowUp: () => pan(0, -step),
+      ArrowDown: () => pan(0, step),
+    }
+    const move = moves[event.key]
+    // At the whole city there is nothing to move to: the arrow keys are left to the page.
+    if (!move || (event.key.startsWith('Arrow') && !view)) return
+    event.preventDefault()
+    setHover(null)
+    move()
+  }
 
   return (
     <div className="district-map-frame">
-      {/* Zoom and pan are buttons, so nothing needs a drag or a pinch (WCAG 2.5.7). They come first in the tab order. */}
-      <div className="map-controls" role="group" aria-label={t('districts.map.controls')}>
-        {controls.map((control) => (
-          // At a limit the button is aria-disabled, not disabled: a disabled button would drop the keyboard focus.
-          <button
-            key={control.label}
-            type="button"
-            className={control.className}
-            aria-label={control.text === control.label ? undefined : control.label}
-            aria-disabled={control.off || undefined}
-            onClick={control.off ? undefined : control.run}
-          >
-            {control.text}
-          </button>
-        ))}
-      </div>
       <p className="visually-hidden" role="status">
         {note}
       </p>
       <div className="district-map-stack">
         <svg
           ref={svgRef}
-          className={`district-map district-map--${palette}${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}${view ? ' district-map--movable' : ''}`}
+          className={`district-map${zoom >= LABEL_ZOOM ? ' district-map--zoomed' : ''}${view ? ' district-map--movable' : ''}`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}
           onPointerCancel={onPointerEnd}
+          onKeyDown={onMapKey}
+          aria-describedby={hintId}
           onDoubleClick={(event) => {
             const { fx, fy } = shareOf(event.clientX, event.clientY)
             zoomBy(1.6, fx, fy)
@@ -382,7 +374,7 @@ export function DistrictMap({
             {tip.value ? (
               <>
                 <p className="map-tip__value">
-                  <span className={`map-tip__swatch map-legend__swatch--${palette} map-legend__swatch--c${tip.value.classNumber}`} />
+                  <span className={`map-tip__swatch map-legend__swatch--c${tip.value.classNumber}`} />
                   {tip.value.display}
                 </p>
                 <p className="map-tip__line">{metricLabel}</p>
@@ -406,6 +398,10 @@ export function DistrictMap({
       </div>
       {/* The credit the licence of the context layers asks for. It is the text of the file itself. */}
       {map.context && <p className="note map-attribution">{map.context.attribution}</p>}
+      {/* The map has no buttons: this line says how it moves, for the mouse and for the keyboard. */}
+      <p className="note map-hint" id={hintId}>
+        {t('districts.map.hint')}
+      </p>
     </div>
   )
 }

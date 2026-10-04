@@ -10,9 +10,10 @@ function hasValue(metric: MetricEntry): metric is MetricValue {
 }
 
 /**
- * One metric of a district with everything a reader needs to judge it: the API's display string, the data kind,
- * the as-of date, the source, the rank, the sample size and the caveat. The method, the licence and the credit line
- * sit in a collapsible detail. A metric without data shows its reason, never a zero.
+ * One metric of a district: the API's display string, the rank, the sample size and the caveat. A value that is an
+ * estimate or an indirect measure carries its mark beside the number. The rest of what a reader needs to judge it
+ * (the data kind in words, the as-of date, the source, the method, the licence and the credit line) is one press
+ * away, in a collapsible detail. A metric without data shows its reason, never a zero.
  */
 export function MetricRow({ metric }: { metric: MetricEntry }) {
   const { t } = useTranslation()
@@ -33,15 +34,16 @@ export function MetricRow({ metric }: { metric: MetricEntry }) {
       <dt>{metric.label}</dt>
       <dd>
         <p className="metric__value">
-          <span>{metric.display}</span> <DataKindBadge kind={metric.data_kind} />
+          <span>{metric.display}</span>
+          {/* An estimate or an indirect measure says so beside the number. A measured value needs no mark: its kind is in the details below. */}
+          {metric.data_kind !== 'observed' && (
+            <>
+              {' '}
+              <DataKindBadge kind={metric.data_kind} />
+            </>
+          )}
         </p>
         <p className="metric__facts">
-          <span>
-            {t('provenance.asOf')}: {metric.as_of}
-          </span>
-          <span>
-            {t('provenance.source')}: {metric.source.name}
-          </span>
           {metric.rank && (
             <span>
               {t('districts.rank', { position: metric.rank.position, of: metric.rank.of })} (
@@ -62,6 +64,20 @@ export function MetricRow({ metric }: { metric: MetricEntry }) {
         <details>
           <summary>{t('metric.more')}</summary>
           <dl className="metric__more">
+            <div>
+              <dt>{t('provenance.dataKind')}</dt>
+              <dd>
+                <DataKindBadge kind={metric.data_kind} />
+              </dd>
+            </div>
+            <div>
+              <dt>{t('provenance.asOf')}</dt>
+              <dd>{metric.as_of}</dd>
+            </div>
+            <div>
+              <dt>{t('provenance.source')}</dt>
+              <dd>{metric.source.name}</dd>
+            </div>
             {metric.method && (
               <div>
                 <dt>{t('metric.method')}</dt>

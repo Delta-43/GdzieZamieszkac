@@ -33,8 +33,7 @@
   },
   "footer": {
     "sources": "Źródła danych",
-    "newTab": "(otwiera się w nowej karcie)",
-    "moreLink": "{{credit}}: adres {{number}} (otwiera się w nowej karcie)"
+    "newTab": "(otwiera się w nowej karcie)"
   },
   "home": {
     "title": "Strona główna",
@@ -84,26 +83,17 @@
       "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
       "districtNoData": "{{name}}: brak danych",
       "districtLoading": "{{name}}: wczytywanie danych",
-      "controls": "Przybliżanie i przesuwanie mapy",
-      "zoomIn": "Przybliż",
-      "zoomOut": "Oddal",
-      "panLeft": "Przesuń mapę w lewo",
-      "panRight": "Przesuń mapę w prawo",
-      "panUp": "Przesuń mapę w górę",
-      "panDown": "Przesuń mapę w dół",
-      "reset": "Całe miasto",
       "wholeCity": "Widać całe miasto.",
       "zoomLevel": "Powiększenie {{zoom}} razy.",
-      "zoomedTo": "Przybliżono do dzielnicy: {{name}}."
+      "zoomedTo": "Przybliżono do dzielnicy: {{name}}.",
+      "hint": "Mapę przybliża i oddala kółko myszy; przybliżoną można przeciągać. Z klawiatury: klawisze + i − przybliżają i oddalają, strzałki przesuwają, a 0 pokazuje całe miasto."
     },
     "legend": {
       "range": "Przedział {{number}}: od {{min}} do {{max}}",
       "single": "Przedział {{number}}: {{value}}",
       "noData": "Pole kreskowane: brak danych",
       "lower": "niższa wartość",
-      "higher": "wyższa wartość",
-      "lowerScore": "niższy wynik",
-      "higherScore": "wyższy wynik"
+      "higher": "wyższa wartość"
     },
     "table": {
       "region": "Lista dzielnic. Można ją przewijać.",
@@ -130,7 +120,11 @@
     },
     "pickerLabel": "Co koloruje mapę",
     "listHeading": "Lista dzielnic",
-    "detailsLabel": "Szczegóły wybranej dzielnicy"
+    "detailsLabel": "Szczegóły wybranej dzielnicy",
+    "measureSearch": "Szukaj miary",
+    "measureSearchHint": "Wpisz część nazwy, na przykład „hałas”. Lista poniżej pokaże tylko pasujące miary.",
+    "measureCount": "Pasujące miary: {{count}}.",
+    "measureNone": "Żadna miara nie pasuje. Zmień wpisany tekst."
   },
   "report": {
     "heading": "Opis dzielnicy",
@@ -151,7 +145,7 @@
     "noData": "Brak danych.",
     "sample": "Liczba obserwacji",
     "caveat": "Zastrzeżenie",
-    "more": "Metoda, licencja i oznaczenie źródła",
+    "more": "Rodzaj danych, data, źródło, metoda i licencja",
     "method": "Metoda",
     "licence": "Licencja",
     "attribution": "Oznaczenie źródła"

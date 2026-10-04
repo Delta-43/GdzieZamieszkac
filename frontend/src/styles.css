@@ -427,8 +427,8 @@ main:focus {
 }
 
 /*
-  The districts page. The map is alone in the middle of the page. When a district is chosen, its details open beside
-  the map (under it on a narrow screen). What colours the map, and the list, are under the map.
+  The districts page: one column in the middle of the page. The map first; when a district is chosen, its details
+  open right under the map; then what colours the map, and the list.
 */
 .districts-layout {
   display: grid;
@@ -436,10 +436,6 @@ main:focus {
   grid-template-columns: minmax(0, 56rem);
   justify-content: center;
   align-items: start;
-}
-
-.districts-layout--details {
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
 }
 
 .districts-below {
@@ -568,50 +564,6 @@ main:focus {
   transition: fill var(--duration-base) ease-out calc(var(--wave, 0) * var(--duration-wave));
 }
 
-/* The zoom buttons sit in a row above the map, never over it, so they cannot cover a focused district (WCAG 2.4.11). */
-.map-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  margin-block-end: var(--space-2);
-}
-
-.map-controls button {
-  min-inline-size: var(--target);
-  min-block-size: var(--target);
-  padding-inline: var(--space-2);
-  font-family: var(--font-ui);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--color-accent);
-  background: var(--color-surface-raised);
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.map-controls button:hover:not([aria-disabled='true']) {
-  color: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
-}
-
-/*
-  A control at its limit is dimmed and does nothing. It is marked with aria-disabled and stays focusable, so the
-  keyboard focus does not fall back to the top of the page when a button reaches its limit under the finger.
-  It is exempt from the contrast rules (WCAG 1.4.3).
-*/
-.map-controls button[aria-disabled='true'] {
-  color: var(--color-text-muted);
-  border-color: var(--color-border-strong);
-  cursor: default;
-  opacity: 0.6;
-}
-
-.map-controls .map-controls__reset {
-  font-size: var(--text-sm);
-}
-
 /* The context of the map: thin and see-through over the districts, so it helps to find one's way without hiding the colours. */
 .map-context {
   pointer-events: none;
@@ -724,27 +676,6 @@ main:focus {
 */
 .map-district[aria-pressed='true'] path {
   stroke-width: 2.5px;
-}
-
-/* The score palette: red through yellow to green, for the scores where higher is better. */
-.district-map--score .map-district--c1 path {
-  fill: var(--color-map-score1);
-}
-
-.district-map--score .map-district--c2 path {
-  fill: var(--color-map-score2);
-}
-
-.district-map--score .map-district--c3 path {
-  fill: var(--color-map-score3);
-}
-
-.district-map--score .map-district--c4 path {
-  fill: var(--color-map-score4);
-}
-
-.district-map--score .map-district--c5 path {
-  fill: var(--color-map-score5);
 }
 
 /* A zoomed map can be dragged with a mouse. */
@@ -910,26 +841,6 @@ main:focus {
 
 .map-legend__swatch--c5 {
   background: var(--color-map-ramp5);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c1 {
-  background: var(--color-map-score1);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c2 {
-  background: var(--color-map-score2);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c3 {
-  background: var(--color-map-score3);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c4 {
-  background: var(--color-map-score4);
-}
-
-.map-legend__swatch--score.map-legend__swatch--c5 {
-  background: var(--color-map-score5);
 }
 
 .map-legend__swatch--none {
@@ -1418,14 +1329,6 @@ summary:hover {
   list-style: none;
 }
 
-.site-footer a {
-  transition: color var(--duration-fast) ease-out;
-}
-
-.site-footer a:hover {
-  color: var(--color-accent-hover);
-}
-
 /* The column label: uppercase, wide tracking, in the accent colour. It is not a section heading of the page, so no bar. */
 .site-footer h2 {
   margin-block: 0 var(--space-2);
@@ -1438,7 +1341,7 @@ summary:hover {
   border-inline-start: 0;
 }
 
-/* The credit lines are small print: three columns of the smallest text, each line still 24 pixels apart for the pointer (WCAG 2.5.8). */
+/* The credit lines are small print: three columns of the smallest text. */
 .site-footer__sources {
   columns: 3 16rem;
   column-gap: var(--space-5);
@@ -1447,18 +1350,9 @@ summary:hover {
 
 .site-footer__sources li {
   break-inside: avoid;
-  line-height: 2;
+  padding-block: var(--space-1);
+  line-height: var(--line-base);
   color: var(--color-text-muted);
-}
-
-.site-footer__more {
-  /* A short link like "[2]" still gets a 24 by 24 pixel target (WCAG 2.5.8). */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-inline-size: 1.5rem;
-  min-block-size: 1.5rem;
-  margin-inline-start: var(--space-2);
 }
 
 /* Find a district: the form card and the ranking card side by side on a wide screen. */

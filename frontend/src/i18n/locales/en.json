@@ -33,8 +33,7 @@
   },
   "footer": {
     "sources": "Data sources",
-    "newTab": "(opens in a new tab)",
-    "moreLink": "{{credit}}: address {{number}} (opens in a new tab)"
+    "newTab": "(opens in a new tab)"
   },
   "home": {
     "title": "Home",
@@ -84,26 +83,17 @@
       "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
       "districtNoData": "{{name}}: no data",
       "districtLoading": "{{name}}: loading the data",
-      "controls": "Zoom and move the map",
-      "zoomIn": "Zoom in",
-      "zoomOut": "Zoom out",
-      "panLeft": "Move the map left",
-      "panRight": "Move the map right",
-      "panUp": "Move the map up",
-      "panDown": "Move the map down",
-      "reset": "Whole city",
       "wholeCity": "The whole city is shown.",
       "zoomLevel": "Zoom {{zoom}} times.",
-      "zoomedTo": "Zoomed to {{name}}."
+      "zoomedTo": "Zoomed to {{name}}.",
+      "hint": "The mouse wheel zooms the map in and out; a zoomed map can be dragged. With the keyboard: + and − zoom, the arrow keys move the map, and 0 shows the whole city."
     },
     "legend": {
       "range": "Class {{number}}: from {{min}} to {{max}}",
       "single": "Class {{number}}: {{value}}",
       "noData": "Hatched area: no data",
       "lower": "lower value",
-      "higher": "higher value",
-      "lowerScore": "lower score",
-      "higherScore": "higher score"
+      "higher": "higher value"
     },
     "table": {
       "region": "List of the districts. It scrolls.",
@@ -130,7 +120,11 @@
     },
     "pickerLabel": "What colours the map",
     "listHeading": "List of districts",
-    "detailsLabel": "Details of the chosen district"
+    "detailsLabel": "Details of the chosen district",
+    "measureSearch": "Search for a measure",
+    "measureSearchHint": "Type part of a name, for example \"noise\". The list below then shows only the measures that match.",
+    "measureCount": "Measures that match: {{count}}.",
+    "measureNone": "No measure matches. Change the text."
   },
   "report": {
     "heading": "About the district",
@@ -151,7 +145,7 @@
     "noData": "No data.",
     "sample": "Sample size",
     "caveat": "Caveat",
-    "more": "Method, licence and credit line",
+    "more": "Data kind, date, source, method and licence",
     "method": "Method",
     "licence": "Licence",
     "attribution": "Credit line"

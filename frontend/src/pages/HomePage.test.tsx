@@ -23,9 +23,9 @@ test('the home page shows what the portal is, a search by district name, and the
   // The map is the second main part of the page, with the measure in its heading and one button per district.
   const map = await screen.findByRole('group', { name: /Mapa dzielnic\. Miara: Test score label/ })
   expect(within(map).getAllByRole('button')).toHaveLength(4)
-  // The key of the map: one line, from the lower score to the higher one.
-  expect(await screen.findByText('niższy wynik')).toBeInTheDocument()
-  expect(screen.getByText('wyższy wynik')).toBeInTheDocument()
+  // The key of the map: one line, from the lower value to the higher one.
+  expect(await screen.findByText('niższa wartość')).toBeInTheDocument()
+  expect(screen.getByText('wyższa wartość')).toBeInTheDocument()
 })
 
 test('typing shows the matching districts, the arrow keys move through them, and Enter opens the map on that district', async () => {
@@ -90,6 +90,17 @@ test('choosing a suggestion with the mouse opens the map on that district', asyn
   fireEvent.change(field, { target: { value: 'gam' } })
   fireEvent.click(screen.getByRole('option', { name: 'Gamma' }))
   expect(await screen.findByText('Przybliżono do dzielnicy: Gamma.')).toBeInTheDocument()
+})
+
+test('on the home page a district under the pointer shows no card: the map there only leads to the map page', async () => {
+  await search()
+  const map = await screen.findByRole('group', { name: /Mapa dzielnic/ })
+  const delta = await within(map).findByRole('button', { name: /^Delta/ })
+
+  fireEvent.pointerEnter(delta, { pointerType: 'mouse' })
+  fireEvent.focus(delta)
+
+  expect(document.querySelector('.map-tip')).toBeNull()
 })
 
 test('a district on the home map opens the map page on that district', async () => {
