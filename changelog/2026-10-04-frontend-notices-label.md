@@ -1,1 +1,0 @@
-- `frontend/`: the home page has a short section, marked "Koncepcja" or "Concept" with a dashed edge, saying that official notices of planned projects and infrastructure are to be implemented after city approval (task C4-3, issue #64). It calls no endpoint and shows no data. No imported code changed.

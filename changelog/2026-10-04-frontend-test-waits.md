@@ -1,1 +1,0 @@
-- `frontend/src/test/setup.ts`: tests wait up to five seconds (not one) for something to appear, so a busy machine or CI runner does not fail them. No imported code changed.
