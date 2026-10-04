@@ -61,8 +61,10 @@ a {
   text-underline-offset: 0.15em;
 }
 
-a:hover {
-  text-decoration-thickness: 0.15em;
+@media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 0.15em;
+  }
 }
 
 button,
@@ -80,7 +82,8 @@ select {
   position: absolute;
   inset-block-start: -10rem;
   inset-inline-start: var(--space-2);
-  z-index: 1;
+  /* Above the header, which would otherwise cover the link at the moment it takes the focus (WCAG 2.4.7, 2.4.11). */
+  z-index: 20;
   padding: var(--space-2) var(--space-4);
   font-family: var(--font-ui);
   background: var(--color-surface-raised);
@@ -193,9 +196,14 @@ main,
   transition: background-color var(--duration-base) ease-out;
 }
 
-.menu-opener:hover .menu-opener__icons,
 .menu-opener[aria-expanded='true'] .menu-opener__icons {
   background: var(--color-surface-raised);
+}
+
+@media (hover: hover) {
+  .menu-opener:hover .menu-opener__icons {
+    background: var(--color-surface-raised);
+  }
 }
 
 /* Two icons in one place. They cross-fade with a change of scale and blur, so the swap reads as one movement. */
@@ -258,12 +266,14 @@ main,
   transition-timing-function: ease-out;
 }
 
-.language-toggle button:hover,
-.error-message button:hover,
-.button-secondary:hover,
-.pill:hover {
-  color: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+@media (hover: hover) {
+  .language-toggle button:hover,
+  .error-message button:hover,
+  .button-secondary:hover,
+  .pill:hover {
+    color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
 }
 
 /*
@@ -296,12 +306,14 @@ button.reserve-bold {
   border-color: var(--color-accent);
 }
 
-.button-primary:hover,
-.language-toggle button[aria-pressed='true']:hover,
-.pill[aria-pressed='true']:hover {
-  color: var(--color-accent-contrast);
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+@media (hover: hover) {
+  .button-primary:hover,
+  .language-toggle button[aria-pressed='true']:hover,
+  .pill[aria-pressed='true']:hover {
+    color: var(--color-accent-contrast);
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
 }
 
 /* The label of an action button is in capitals at the full text size, as in the Gov.pl design system. The choices of a group (presets, categories, languages) keep their own case. */
@@ -367,8 +379,10 @@ button.reserve-bold {
   cursor: pointer;
 }
 
-.link-button:hover {
-  text-decoration-thickness: 0.15em;
+@media (hover: hover) {
+  .link-button:hover {
+    text-decoration-thickness: 0.15em;
+  }
 }
 
 /* Messages, after the Gov.pl design system: a 2 pixel frame in the colour of their kind, 4 pixel corners, and the message in words. */
@@ -1117,8 +1131,10 @@ summary {
   cursor: pointer;
 }
 
-summary:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  summary:hover {
+    text-decoration: underline;
+  }
 }
 
 .metric__more {
@@ -1325,8 +1341,10 @@ summary:hover {
   transition: color var(--duration-fast) ease-out;
 }
 
-.site-menu__section a:hover {
-  color: var(--color-accent-hover);
+@media (hover: hover) {
+  .site-menu__section a:hover {
+    color: var(--color-accent-hover);
+  }
 }
 
 /* The focus ring sits inside the row, so the edge of the panel does not cut it. */
@@ -1666,8 +1684,10 @@ main > .ai-report-card {
   cursor: pointer;
 }
 
-.search [role='option']:hover {
-  background: var(--color-surface);
+@media (hover: hover) {
+  .search [role='option']:hover {
+    background: var(--color-surface);
+  }
 }
 
 /* The suggestion the arrow keys are on: a thick edge as well as a fill, so it does not depend on colour. */
@@ -1746,12 +1766,20 @@ main > .ai-report-card {
 }
 
 /* A send button while its request is on the way: dimmed, still focusable, and it does nothing until the answer arrives. */
-.button-primary[aria-disabled='true'],
-.button-primary[aria-disabled='true']:hover {
+.button-primary[aria-disabled='true'] {
   color: var(--color-text-muted);
   background: var(--color-surface);
   border-color: var(--color-border-strong);
   cursor: default;
+}
+
+@media (hover: hover) {
+  .button-primary[aria-disabled='true']:hover {
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border-color: var(--color-border-strong);
+    cursor: default;
+  }
 }
 
 /*
