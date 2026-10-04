@@ -8,8 +8,8 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 - **Phase 1 is built and released to `main` (#96). Phase 2 is built on the district page and on Find a district** (commute, outlook, rent versus buy, similar districts, work place and budget).
 - **Pages:** home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
-- **`develop` holds everything up to pull request #110** once the last three of the stack are merged (#106 outlook, #108 rent versus buy and similar districts, #110 work place and budget, in that order; #104, the accessibility fixes, is merged). `main` holds everything up to #101 (checked by the coordinator on 4 October). Every issue up to #91 is closed.
-- `npm run check` passes on the last branch of the stack: both contracts, lint, type check, 181 tests, build. CI runs the same on every pull request, with the backend and city service tests.
+- **`develop` holds everything up to pull request #110**: the accessibility fixes (#104) and all of phase 2 (#101 commute, #106 outlook, #108 rent versus buy and similar districts, #110 work place and budget). Nothing is open: no pull request and no issue. `main` holds everything up to #101; only the coordinator merges `develop` into `main`.
+- `npm run check` passes on `develop`: both contracts, lint, type check, 181 tests, build. CI runs the same on every pull request, with the backend and city service tests.
 - The app was run against the real servers on 4 October: every page and main flow, 14 kinds of API call, all answered 200, no console error.
 
 ## What changed on 4 October (in order)
@@ -24,7 +24,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **Merge what is left of the stack, in this order:** #106 (F11 outlook), #108 (F12 rent versus buy and similar districts), #110 (F9 work place and budget). Each is built on the one before.
+1. **Nothing waits to be merged.** The next release to `main` is the coordinator's step.
 2. **F9 is built in part.** The work place and the budget are on Find a district. The household type and the children's ages are not: `REQUIREMENTS.md` says their weights are a proposal that the coordinator decides. Four household types already exist as preset buttons (Para, Nowożeńcy, Rodzina, Senior).
 3. **Decisions waiting for `Delta-43`**, each flagged in a pull request:
    - Observed values show their data kind, date and source one press away, not beside the number (#89). `REVIEW.md` and `AGENTS.md` rule 4 say "beside it".
@@ -59,7 +59,8 @@ Playwright is installed at the repository root by Aryna (not committed). The age
 
 ## Things that cost time
 
-- **Merging.** `gh pr merge` is refused in an agent's session. Open the pull request, state that the section 7 conditions hold, and let Aryna merge.
+- **Merging.** `gh pr merge <n> --merge` was refused in an agent's session on the morning of 4 October and worked that evening, when Aryna asked for the merge. Try it once when she asks; if it is refused, state that the section 7 conditions hold and let her merge.
+- **CI does not start on a pull request that conflicts with `develop`.** Merge `origin/develop` into the branch, resolve, and push; if the checks still do not appear, a further merge of `develop` starts them.
 - **Untracked files at the repository root.** A Playwright setup (`package.json`, `playwright.config.ts`, `tests/`, a workflow) and an Impeccable install under `.github/` are Aryna's and are not committed. **Never `git add -A` at the root:** stage files by name, or `git add -A frontend/src`.
 - **Changelog.** Do not edit `ON_SITE_CHANGELOG.md`. Add one new file to `../changelog/` (`../changelog/README.md`).
 - **Stacked branches.** Three pull requests were stacked on 4 October because nothing could be merged mid-session. Prefer a new branch from a current `develop`; when a pull request is still open, add to it.

@@ -1,0 +1,1 @@
+- `frontend/HANDOFF.md`: the state after the last merges of 4 October (phase 2 is on `develop`, nothing is open), and two notes on merging and CI. Documentation only. No imported code changed.
