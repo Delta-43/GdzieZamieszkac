@@ -49,7 +49,6 @@ export function HomePage() {
                 <DistrictMap
                   boundaries={map.boundaries}
                   values={map.mapValues}
-                  classCount={map.classCount}
                   metricLabel={map.metricLabel}
                   loading={map.loading}
                   selected={null}
@@ -59,7 +58,7 @@ export function HomePage() {
                   extras={map.extras}
                 />
               </div>
-              {map.classes.length > 0 && <MapLegend classes={map.classes} hasGaps={map.hasGaps && !map.loading} />}
+              {map.classes.length > 0 && <MapLegend classes={map.classes} hasGaps={map.hasGaps && !map.loading} label={map.metricLabel} higherIs={map.higherIs} />}
             </>
           )}
         </section>

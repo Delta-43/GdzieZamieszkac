@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { useMetrics } from '../api/useDistrictsData'
 import { useMeta } from '../api/useMeta'
+import { DataKindBadge } from '../components/DataKindBadge'
+import { DateText } from '../components/DateText'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { sourceLinks } from '../lib/sourceLinks'
@@ -29,6 +31,18 @@ export function SourcesPage() {
         <p>{t('about.score.text')}</p>
         <p>{t('about.score.limit')}</p>
         {meta.data?.score_note && <p className="note">{meta.data.score_note}</p>}
+      </section>
+
+      {/* The three kinds of data, each with its mark and one sentence, as beside the numbers. */}
+      <section aria-labelledby="about-kinds">
+        <h2 id="about-kinds">{t('about.kinds.heading')}</h2>
+        <ul>
+          {(['observed', 'estimated', 'proxy'] as const).map((kind) => (
+            <li key={kind}>
+              <DataKindBadge kind={kind} />: {t(`dataKindHelp.${kind}`)}
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="about-ai">
@@ -87,7 +101,12 @@ export function SourcesPage() {
                   )}
                   <p className="note">
                     {t('about.sources.licence')}: {source.licence}
-                    {source.as_of && ` · ${t('about.sources.asOf')}: ${source.as_of}`}
+                    {source.as_of && (
+                      <>
+                        {' · '}
+                        {t('about.sources.asOf')}: <DateText value={source.as_of} />
+                      </>
+                    )}
                   </p>
                   {used.length > 0 && (
                     <p className="note">

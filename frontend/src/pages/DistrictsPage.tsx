@@ -14,6 +14,7 @@ import {
 import { useBasemap } from '../api/useBasemap'
 import { useMeta } from '../api/useMeta'
 import { DataKindBadge } from '../components/DataKindBadge'
+import { DateText } from '../components/DateText'
 import { DistrictDetails } from '../components/DistrictDetails'
 import { DistrictMap, type MapValue } from '../components/DistrictMap'
 import { DistrictsTable } from '../components/DistrictsTable'
@@ -21,9 +22,9 @@ import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { MapLegend } from '../components/MapLegend'
 import { MapPicker, type Choice } from '../components/MapPicker'
-import { CLASS_COUNT, classify } from '../lib/classes'
+import { classify } from '../lib/classes'
 import type { MapView } from '../lib/mapView'
-import { plainNumber } from '../lib/plainNumber'
+import { wholeScore } from '../lib/score'
 import { usePageTitle } from '../lib/usePageTitle'
 
 // The catalogue key of the default livability score. The map starts with it.
@@ -42,7 +43,7 @@ function choiceFrom(params: URLSearchParams): Choice {
 }
 
 export function DistrictsPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   usePageTitle(t('districts.title'))
   const [params, setParams] = useSearchParams()
   // ?district= comes from the search on the home page: that district is selected, shown in the details and zoomed to.
@@ -62,6 +63,9 @@ export function DistrictsPage() {
   const metric = choice.kind === 'category' ? undefined : (metricsByKey.get(choice.kind === 'metric' ? choice.key : SCORE_KEY) ?? metricsByKey.get(SCORE_KEY))
   const metricValues = useMetricValues(metric?.key ?? '', metric?.available === true)
   const categoryScores = useCategoryScores(choice.kind === 'category' ? choice.category : null)
+  // The place of every district by the overall score, for the list: the place leads, the score follows.
+  const overall = useMetricValues(SCORE_KEY, metricsByKey.get(SCORE_KEY)?.available === true)
+  const overallRank = useMemo(() => new Map(overall.data?.values.map((v) => [v.district, v.rank])), [overall.data])
   const values = choice.kind === 'category' ? categoryScores : metricValues
 
   // The parts of `choice` the view depends on: `choice` itself is rebuilt on every render.
@@ -74,11 +78,12 @@ export function DistrictsPage() {
         label: t('districts.categoryScore', { category: categoryLabels.get(category) ?? category }),
         description: t('districts.categoryMethod'),
         note: categoryScores.data?.note,
-        // The recommend answer has no display string for the score (a known contract gap): shown as sent.
+        higherIs: 'better' as const,
+        // The recommend answer has no display string for the score (a known contract gap): a whole number with "pkt".
         values: ranking.map((item) => ({
           district: item.code,
           value: item.score,
-          display: plainNumber(item.score, i18n.language),
+          display: t('score.points', { value: wholeScore(item.score) }),
           rank: { position: item.rank, of: ranking.length },
         })),
       }
@@ -90,6 +95,7 @@ export function DistrictsPage() {
       description: metric.description,
       unit: metric.unit,
       dataKind: metric.data_kind,
+      higherIs: metric.higher_is,
       source: source && { name: source.name, asOf: source.as_of },
       unavailableReason: metric.available ? undefined : (metric.reason ?? t('districts.unavailable')),
       values: (metricValues.data?.values ?? []).map((v) => ({ district: v.district, value: v.value, display: v.display, dataKind: v.data_kind, rank: v.rank })),
@@ -102,7 +108,6 @@ export function DistrictsPage() {
     metric,
     metricValues.data,
     meta.data,
-    i18n.language,
     t,
   ])
 
@@ -117,7 +122,7 @@ export function DistrictsPage() {
   if (!districts.data || !boundaries.data || !metrics.data || !view) return <Loading />
 
   const mapValues = new Map<string, MapValue>()
-  valueOf.forEach((value, code) => mapValues.set(code, { display: value.display, classNumber: classOf.get(code) ?? 1 }))
+  valueOf.forEach((value, code) => mapValues.set(code, { display: value.display, classNumber: classOf.get(code) ?? 1, rank: value.rank }))
   const hasGaps = districts.data.districts.some((district) => !valueOf.has(district.code))
   const waiting = !view.unavailableReason && values.isPending
 
@@ -155,7 +160,6 @@ export function DistrictsPage() {
             <DistrictMap
               boundaries={boundaries.data}
               values={mapValues}
-              classCount={CLASS_COUNT}
               metricLabel={view.label}
               loading={waiting}
               selected={selected}
@@ -167,7 +171,7 @@ export function DistrictsPage() {
               card
             />
           </div>
-          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} />}
+          {classes.length > 0 && <MapLegend classes={classes} hasGaps={hasGaps && !waiting} label={view.label} higherIs={view.higherIs} />}
         </section>
 
         {/* The details of the chosen district: on the page only after a district is chosen, and announced politely when it changes. */}
@@ -216,7 +220,9 @@ export function DistrictsPage() {
             {view.source?.asOf && (
               <div>
                 <dt>{t('provenance.asOf')}</dt>
-                <dd>{view.source.asOf}</dd>
+                <dd>
+                  <DateText value={view.source.asOf} />
+                </dd>
               </div>
             )}
           </dl>
@@ -233,9 +239,12 @@ export function DistrictsPage() {
             view={view}
             showView={choice.kind !== 'overall'}
             valueOf={valueOf}
+            rankOf={overallRank}
             selected={selected}
             onSelect={setSelected}
           />
+          {/* What the score is and is not, in one sentence. The city name comes from /meta. */}
+          {meta.data && <p className="note">{t('score.explain', { city: meta.data.city_name })}</p>}
         </section>
       </div>
     </>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { dateInWords } from '../lib/dates'
 import type { components } from '../api/schema'
 
 type Series = components['schemas']['Series']
@@ -15,7 +16,7 @@ const PAD = { top: 28, right: 16, bottom: 30, left: 16 }
  * with the API's display strings of the lowest and highest value, and the table beside the chart holds every value.
  */
 export function PriceChart({ series }: { series: Series }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [active, setActive] = useState<number | null>(null)
   const points = series.points
   if (points.length === 0) return null
@@ -58,7 +59,7 @@ export function PriceChart({ series }: { series: Series }) {
           {t('series.lowest', { value: lowest.display })}
         </text>
         <text className="chart-label chart-label--end" x={WIDTH - PAD.right} y={y(min) + 20}>
-          {first.period_start} – {last.period_end}
+          {dateInWords(first.period_start, i18n.language)} – {dateInWords(last.period_end, i18n.language)}
         </text>
         {shown && active !== null && <line className="chart-crosshair" x1={x(active)} x2={x(active)} y1={PAD.top} y2={HEIGHT - PAD.bottom} />}
         <polyline className="chart-line" points={points.map((p, i) => `${x(i)},${y(p.value)}`).join(' ')} />
@@ -75,12 +76,23 @@ export function PriceChart({ series }: { series: Series }) {
       {/* The value under the pointer. The same values are in the table, so nothing is shown on hover only. */}
       <p className="chart-readout" aria-hidden="true">
         {shown
-          ? t('series.readout', { from: shown.period_start, to: shown.period_end, value: shown.display, n: shown.n_obs }) +
+          ? t('series.readout', {
+              from: dateInWords(shown.period_start, i18n.language),
+              to: dateInWords(shown.period_end, i18n.language),
+              value: shown.display,
+              n: shown.n_obs,
+            }) +
             (shown.low_confidence ? ` ${t('series.lowMark')}` : '')
           : t('series.hint')}
       </p>
       <figcaption>
-        {t('series.summary', { from: first.period_start, to: last.period_end, first: first.display, last: last.display, count: points.length })}{' '}
+        {t('series.summary', {
+          from: dateInWords(first.period_start, i18n.language),
+          to: dateInWords(last.period_end, i18n.language),
+          first: first.display,
+          last: last.display,
+          count: points.length,
+        })}{' '}
         {points.some((p) => p.low_confidence) && t('series.lowKey')}
       </figcaption>
     </figure>

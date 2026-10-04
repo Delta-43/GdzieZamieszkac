@@ -5,6 +5,7 @@ import { ApiError } from '../api/client'
 import type { components } from '../api/schema'
 import { useCompare, useDistricts } from '../api/useDistrictsData'
 import { DataKindBadge } from '../components/DataKindBadge'
+import { DateText } from '../components/DateText'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { usePageTitle } from '../lib/usePageTitle'
@@ -177,7 +178,7 @@ export function ComparePage() {
                             <>
                               <span className="compare-table__value">{cell.display}</span> <DataKindBadge kind={cell.data_kind} />
                               <span className="note compare-table__source">
-                                {t('provenance.asOf')}: {cell.as_of}
+                                {t('provenance.asOf')}: <DateText value={cell.as_of} />
                               </span>
                             </>
                           )}

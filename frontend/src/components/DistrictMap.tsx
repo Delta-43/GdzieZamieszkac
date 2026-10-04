@@ -6,7 +6,8 @@ import { buildMap, type Basemap } from '../lib/geo'
 
 type Boundaries = components['schemas']['BoundaryCollection']
 
-export type MapValue = { display: string; classNumber: number }
+/** A district's value on the map. The class number picks the colour and is never shown or spoken: a place or a step in words is. */
+export type MapValue = { display: string; classNumber: number; rank?: { position: number; of: number } }
 
 // Text sizes on the screen at the whole-city view. They are divided by the zoom, so a name keeps its size on the screen while the map grows.
 const PLACE_SIZE = 13
@@ -59,7 +60,6 @@ type Props = {
   boundaries: Boundaries
   /** Value and class per district code. A district that is missing here has no data and is drawn hatched. */
   values: Map<string, MapValue>
-  classCount: number
   metricLabel: string
   /** True while the values are on their way. Districts are then drawn plain: "no data" would be a false claim. */
   loading: boolean
@@ -87,7 +87,6 @@ type Props = {
 export function DistrictMap({
   boundaries,
   values,
-  classCount,
   metricLabel,
   loading,
   selected,
@@ -233,8 +232,8 @@ export function DistrictMap({
       range:
         info &&
         (info.minDisplay === info.maxDisplay
-          ? t('districts.legend.single', { number: info.number, value: info.minDisplay })
-          : t('districts.legend.range', { number: info.number, min: info.minDisplay, max: info.maxDisplay })),
+          ? t('districts.legend.single', { step: t(`districts.step.${info.number}`), value: info.minDisplay })
+          : t('districts.legend.range', { step: t(`districts.step.${info.number}`), min: info.minDisplay, max: info.maxDisplay })),
       extras: extras?.get(hoverShape.code) ?? [],
       // Kept away from the side edges, and under the district when there is no room above it.
       x: Math.min(80, Math.max(20, ((hoverShape.label.x - current.x) / current.w) * 100)),
@@ -304,7 +303,9 @@ export function DistrictMap({
           {shapes.map((shape) => {
             const value = values.get(shape.code)
             const name = value
-              ? t('districts.map.district', { name: shape.name, value: value.display, class: value.classNumber, count: classCount })
+              ? value.rank
+                ? t('districts.map.district', { name: shape.name, value: value.display, position: value.rank.position, of: value.rank.of })
+                : t('districts.map.districtStep', { name: shape.name, value: value.display, step: t(`districts.step.${value.classNumber}`) })
               : t(loading ? 'districts.map.districtLoading' : 'districts.map.districtNoData', { name: shape.name })
             return (
               <g

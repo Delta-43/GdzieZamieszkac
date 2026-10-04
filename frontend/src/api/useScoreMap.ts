@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { MapValue } from '../components/DistrictMap'
-import { CLASS_COUNT, classify } from '../lib/classes'
+import { classify } from '../lib/classes'
 import { useBoundaries, useDistricts, useMetrics, useMetricValues } from './useDistrictsData'
 
 // The catalogue key of the default livability score.
@@ -18,7 +18,7 @@ export function useScoreMap() {
     const list = values.data?.values ?? []
     const { classOf, classes } = classify(list)
     const mapValues = new Map<string, MapValue>()
-    list.forEach((item) => mapValues.set(item.district, { display: item.display, classNumber: classOf.get(item.district) ?? 1 }))
+    list.forEach((item) => mapValues.set(item.district, { display: item.display, classNumber: classOf.get(item.district) ?? 1, rank: item.rank }))
     return { mapValues, classes }
   }, [values.data])
 
@@ -37,7 +37,7 @@ export function useScoreMap() {
     districts: districts.data?.districts ?? [],
     boundaries: boundaries.data,
     metricLabel: metric?.label ?? '',
-    classCount: CLASS_COUNT,
+    higherIs: metric?.higher_is,
     ...derived,
     hasGaps: (districts.data?.districts ?? []).some((district) => !derived.mapValues.has(district.code)),
     loading: values.isPending && metric?.available === true,

@@ -17,7 +17,9 @@ test('every source from the API is listed with its credit line, licence, date an
   expect(within(sources).getAllByRole('listitem')).toHaveLength(3)
   // The credit line links to the first address the API gives.
   expect(within(sources).getByRole('link', { name: /Test credit line A/ })).toHaveAttribute('href', 'https://example.org/source-a')
-  expect(within(sources).getByText(/Licencja: Test licence · Stan danych na: 2026-09-30/)).toBeInTheDocument()
+  expect(within(sources).getByText(/Licencja: Test licence · Stan danych na:/)).toBeInTheDocument()
+  // The date is in words for people and in ISO form for machines.
+  expect(within(sources).getByText('30 września 2026')).toHaveAttribute('datetime', '2026-09-30')
   // The figures of a source are named with their labels from the catalogue.
   expect(within(sources).getByText(/Liczby z tego źródła: Test sale label/)).toBeInTheDocument()
   // A source without an address is shown as text, and a listings site is named but not linked.
@@ -71,4 +73,16 @@ test.each(['pl', 'en'] as const)('the sources page has no automated accessibilit
   await screen.findByText('Test source A')
   expect(document.documentElement.lang).toBe(language)
   expect((await axe(container)).violations).toEqual([])
+})
+
+test('the three kinds of data are explained, each with one sentence', async () => {
+  mockFetch(districtsApi)
+  renderApp('/sources')
+
+  const kinds = (await screen.findByRole('heading', { level: 2, name: 'Rodzaje danych' })).closest('section') as HTMLElement
+  expect(within(kinds).getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+    'zmierzone: Zmierzone albo podane w oficjalnych danych.',
+    'oszacowane: Obliczone z innych danych, a nie zmierzone wprost.',
+    'przybliżone: Przybliżone na podstawie innej, podobnej miary.',
+  ])
 })

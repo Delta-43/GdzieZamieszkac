@@ -10,23 +10,29 @@ import {
   type CategoryWeights,
   type ScoredCategory,
 } from '../api/useDistrictsData'
+import { useMeta } from '../api/useMeta'
 import { AiReportCard } from '../components/AiReportCard'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
-import { plainNumber } from '../lib/plainNumber'
+import { ScoreValue } from '../components/ScoreValue'
+import { betterThan, IMPORTANCE_WEIGHTS, MAX_WEIGHT } from '../lib/score'
 import { usePageTitle } from '../lib/usePageTitle'
 
-const MAX_WEIGHT = 5
+// Every category starts as "important". Equal weights give the default score, whatever the number is.
+const DEFAULT_WEIGHT = 3
 
-// A category that is not mentioned counts as 1 in the API, so 1 everywhere is the default score.
 function defaults(): CategoryWeights {
-  return Object.fromEntries(SCORED_CATEGORIES.map((category) => [category, 1])) as CategoryWeights
+  return Object.fromEntries(SCORED_CATEGORIES.map((category) => [category, DEFAULT_WEIGHT])) as CategoryWeights
 }
 
-/** Find a district: the user picks a preset or sets a weight per category, and the API ranks the districts. */
+/**
+ * Find a district: the user picks a preset or says how much each category matters (not important, important, very
+ * important), and the API ranks the districts. The exact weights, 0 to 5, are under "Advanced". The request is the same.
+ */
 export function FindPage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('find.title'))
+  const meta = useMeta()
   const formId = useId()
   const [weights, setWeights] = useState<CategoryWeights>(defaults)
   // The weights of the ranking on screen. Null means no weights were sent: the default score.
@@ -108,30 +114,58 @@ export function FindPage() {
             )}
           </div>
 
-          <p className="note" id={`${formId}-hint`}>
-            {t('find.hint')}
-          </p>
-
           {SCORED_CATEGORIES.map((category) => (
-            <div className="slider" key={category}>
-              <label htmlFor={`${formId}-${category}`}>{labels.get(category) ?? category}</label>
-              <input
-                id={`${formId}-${category}`}
-                type="range"
-                min={0}
-                max={MAX_WEIGHT}
-                step={1}
-                value={weights[category]}
-                aria-describedby={`${formId}-hint`}
-                aria-valuetext={weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
-                onChange={(event) => setWeight(category, Number(event.target.value))}
-              />
-              {/* The value as text, beside the slider. */}
-              <output htmlFor={`${formId}-${category}`}>
-                {weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
-              </output>
-            </div>
+            <fieldset className="importance" key={category}>
+              <legend>{labels.get(category) ?? category}</legend>
+              {/* A short question says what the category is about. Only reviewed questions are shown. */}
+              {i18n.exists(`find.question.${category}`) && <p className="note">{t(`find.question.${category}`)}</p>}
+              <div className="importance__choices">
+                {IMPORTANCE_WEIGHTS.map((weight) => (
+                  <label key={weight}>
+                    <input
+                      type="radio"
+                      name={`${formId}-importance-${category}`}
+                      checked={weights[category] === weight}
+                      onChange={() => setWeight(category, weight)}
+                    />
+                    {t(`find.importance.${weight}`)}
+                  </label>
+                ))}
+              </div>
+              {/* A preset or the sliders can set a weight between the three choices: it is said in words, not rounded. */}
+              {!(IMPORTANCE_WEIGHTS as readonly number[]).includes(weights[category]) && (
+                <p className="note">{t('find.otherWeight', { value: weights[category], max: MAX_WEIGHT })}</p>
+              )}
+            </fieldset>
           ))}
+
+          {/* The exact weights, 0 to 5, for those who want them. The three choices above set the same values. */}
+          <details className="find-advanced">
+            <summary>{t('find.advanced')}</summary>
+            <p className="note" id={`${formId}-hint`}>
+              {t('find.hint')}
+            </p>
+            {SCORED_CATEGORIES.map((category) => (
+              <div className="slider" key={category}>
+                <label htmlFor={`${formId}-${category}`}>{labels.get(category) ?? category}</label>
+                <input
+                  id={`${formId}-${category}`}
+                  type="range"
+                  min={0}
+                  max={MAX_WEIGHT}
+                  step={1}
+                  value={weights[category]}
+                  aria-describedby={`${formId}-hint`}
+                  aria-valuetext={weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
+                  onChange={(event) => setWeight(category, Number(event.target.value))}
+                />
+                {/* The value as text, beside the slider. */}
+                <output htmlFor={`${formId}-${category}`}>
+                  {weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
+                </output>
+              </div>
+            ))}
+          </details>
 
           {allZero && (
             <p className="error-message" role="alert">
@@ -165,7 +199,7 @@ export function FindPage() {
                   <caption>{t(applied ? 'find.table.caption' : 'find.table.captionDefault')}</caption>
                   <thead>
                     <tr>
-                      <th scope="col">{t('find.table.rank')}</th>
+                      <th scope="col">{t('score.placeHeader')}</th>
                       <th scope="col">{t('districts.table.district')}</th>
                       <th scope="col">{t('find.table.score')}</th>
                       <th scope="col">{t('find.table.drivers')}</th>
@@ -178,13 +212,15 @@ export function FindPage() {
                         <th scope="row">
                           <Link to={`/districts/${item.code}`}>{item.name}</Link>
                         </th>
-                        {/* The score and the percentile have no display string in the contract yet: shown as sent. */}
-                        <td>{plainNumber(item.score, i18n.language)}</td>
+                        <td>
+                          <ScoreValue score={item.score} />
+                        </td>
                         <td>
                           <ul className="drivers">
                             {item.top_drivers.map((driver) => (
                               <li key={driver.key}>
-                                {driver.label ?? driver.key}: {t('find.percentile', { value: plainNumber(driver.percentile, i18n.language) })}
+                                {/* The position among the other districts, in words. "Better" holds for every measure: the API has applied the direction. */}
+                                {driver.label ?? driver.key}: {t('find.better', { count: betterThan(driver.percentile, ranking.length), of: ranking.length - 1 })}
                               </li>
                             ))}
                           </ul>
@@ -195,8 +231,17 @@ export function FindPage() {
                 </table>
               </div>
 
+              {/* What the score is and is not, in one sentence. The city name comes from /meta. */}
+              {meta.data && <p className="note">{t('score.explain', { city: meta.data.city_name })}</p>}
               {/* The API's own note: scores compare the districts of this city only. */}
               <p className="note">{result.data.note}</p>
+              <details>
+                <summary>{t('score.how')}</summary>
+                <p>{t('score.howText')}</p>
+                <p>
+                  <Link to="/sources">{t('nav.sources')}</Link>
+                </p>
+              </details>
               <p className="note">{t('find.used', { count: result.data.metrics_used })}</p>
               {result.data.missing_metrics.length > 0 && (
                 <div className="notice">

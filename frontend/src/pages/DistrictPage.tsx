@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { ApiError } from '../api/client'
-import { useDistrictDetail } from '../api/useDistrictsData'
+import { useDistrictDetail, useMetrics } from '../api/useDistrictsData'
 import { AreaReport } from '../components/AreaReport'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
@@ -18,6 +18,9 @@ export function DistrictPage() {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
   const detail = useDistrictDetail(code)
+  // The plain-language description of each measure, from the catalogue, for its "What does this mean?".
+  const metrics = useMetrics()
+  const describe = (key: string) => metrics.data?.find((metric) => metric.key === key)?.description
   const unknown = detail.error instanceof ApiError && detail.error.status === 404
   usePageTitle(detail.data?.name ?? t(unknown ? 'detail.notFoundTitle' : 'districts.title'))
 
@@ -54,7 +57,7 @@ export function DistrictPage() {
             <p className="metric__value">{t('detail.areaValue', { value: plainNumber(district.area_km2, i18n.language) })}</p>
           </dd>
         </div>
-        {score && <MetricRow metric={score} />}
+        {score && <MetricRow metric={score} description={describe(score.key)} />}
       </dl>
       {/* The API's own note: scores compare the districts of this city only. */}
       {district.score_note && <p className="note">{district.score_note}</p>}
@@ -70,7 +73,7 @@ export function DistrictPage() {
           <h2 id="rental-heading">{t('detail.rental')}</h2>
           <dl className="metrics card">
             {derived.map((metric) => (
-              <MetricRow key={metric.key} metric={metric} />
+              <MetricRow key={metric.key} metric={metric} description={describe(metric.key)} />
             ))}
           </dl>
         </section>
@@ -80,10 +83,12 @@ export function DistrictPage() {
         <section key={category.category} aria-labelledby={`category-${category.category}`}>
           <h2 id={`category-${category.category}`}>{category.label}</h2>
           <dl className="metrics card">
+            {/* The measures without data come last, together, so the rows with a value read without a break. */}
             {category.metrics
               .filter((metric) => metric.key !== SCORE_KEY)
+              .sort((a, b) => Number(a.available === false) - Number(b.available === false))
               .map((metric) => (
-                <MetricRow key={metric.key} metric={metric} />
+                <MetricRow key={metric.key} metric={metric} description={describe(metric.key)} />
               ))}
           </dl>
         </section>

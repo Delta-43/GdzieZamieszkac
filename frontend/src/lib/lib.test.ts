@@ -1,7 +1,9 @@
 import { expect, test } from 'vitest'
 import { classify } from './classes'
+import { dateInWords, machineDate } from './dates'
 import { buildMap } from './geo'
 import { plainNumber } from './plainNumber'
+import { betterThan, wholeScore } from './score'
 
 const values = (numbers: number[]) => numbers.map((value, i) => ({ district: `d${i}`, value, display: `${value} u` }))
 
@@ -61,4 +63,23 @@ test('sourceLinks keeps real pages, splits several addresses, and avoids downloa
   expect(sourceLinks('https://www.otodom.pl ; https://www.olx.pl')).toEqual([])
   expect(sourceLinks('javascript:alert(1)')).toEqual([])
   expect(sourceLinks('not a url')).toEqual([])
+})
+
+test('a date from the API is shown in words in the language of the page, and kept in ISO form for machines', () => {
+  expect(dateInWords('2026-09-30', 'pl')).toBe('30 września 2026')
+  expect(dateInWords('2026-09-30', 'en')).toBe('30 September 2026')
+  // A time stamp gives its day, read as UTC, so the day does not move with the reader's time zone.
+  expect(dateInWords('2026-10-01T23:30:00+00:00', 'pl')).toBe('1 października 2026')
+  expect(machineDate('2026-10-01T23:30:00+00:00')).toBe('2026-10-01')
+  // A text that is not a date is shown as sent.
+  expect(dateInWords('test period', 'pl')).toBe('test period')
+  expect(machineDate('test period')).toBeUndefined()
+})
+
+test('a percentile becomes "better than k of the other n − 1 districts", and a score becomes a whole number', () => {
+  expect(betterThan(82.4, 18)).toBe(14)
+  expect(betterThan(100, 18)).toBe(17)
+  expect(betterThan(0, 18)).toBe(0)
+  expect(wholeScore(40.9)).toBe(41)
+  expect(wholeScore(41.3)).toBe(41)
 })

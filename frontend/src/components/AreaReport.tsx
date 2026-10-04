@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { useDistrictReport } from '../api/useDistrictsData'
+import { dateInWords } from '../lib/dates'
 import { Loading } from './Loading'
 
 /** The stored area report of a district, with the required label that artificial intelligence wrote it. */
 export function AreaReport({ code, headingLevel }: { code: string; headingLevel: 'h2' | 'h4' }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const report = useDistrictReport(code)
   const Heading = headingLevel
 
@@ -28,7 +29,7 @@ export function AreaReport({ code, headingLevel }: { code: string; headingLevel:
           <p key={index}>{paragraph}</p>
         ))}
       </div>
-      <p className="note">{t('report.generated', { date: report.data.generated_at.slice(0, 10) })}</p>
+      <p className="note">{t('report.generated', { date: dateInWords(report.data.generated_at, i18n.language) })}</p>
     </section>
   )
 }

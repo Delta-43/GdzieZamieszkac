@@ -57,9 +57,22 @@
     "back": "Wróć na stronę główną"
   },
   "dataKind": {
-    "observed": "obserwowane",
-    "estimated": "szacowane",
-    "proxy": "pośrednie"
+    "observed": "zmierzone",
+    "estimated": "oszacowane",
+    "proxy": "przybliżone"
+  },
+  "dataKindHelp": {
+    "observed": "Zmierzone albo podane w oficjalnych danych.",
+    "estimated": "Obliczone z innych danych, a nie zmierzone wprost.",
+    "proxy": "Przybliżone na podstawie innej, podobnej miary."
+  },
+  "score": {
+    "place": "Miejsce {{position}} z {{of}}",
+    "placeHeader": "Miejsce (1 = najlepsze)",
+    "points": "{{value}} pkt",
+    "explain": "Wynik porównuje ze sobą dzielnice miasta {{city}}. Nie ocenia, jak się tam żyje. Wysokie ceny mieszkań go obniżają.",
+    "how": "Jak to liczymy?",
+    "howText": "Dla każdej miary sprawdzamy, jak dzielnica wypada na tle pozostałych dzielnic miasta. Wynik to średnia z tych porównań, w skali od 0 do 100. Kategorie, które są dla Ciebie ważniejsze, liczą się mocniej. Pełny opis metody jest na stronie Źródła i jak to działa."
   },
   "provenance": {
     "dataKind": "Rodzaj danych",
@@ -74,13 +87,22 @@
     "optionNoData": "{{label}} (brak danych)",
     "unavailable": "Brak danych dla tej miary.",
     "noData": "brak danych",
-    "rank": "Pozycja {{position}} z {{of}}",
-    "higherIsBetter": "wyższa wartość to lepsza pozycja",
-    "lowerIsBetter": "niższa wartość to lepsza pozycja",
-    "classOf": "Przedział {{number}} z {{count}} na mapie",
+    "rank": "Miejsce {{position}} z {{of}} (1 = najlepsze)",
+    "higherIsBetter": "Im więcej, tym lepiej.",
+    "lowerIsBetter": "Im mniej, tym lepiej.",
+    "step": {
+      "1": "bardzo niska",
+      "2": "niska",
+      "3": "średnia",
+      "4": "wysoka",
+      "5": "bardzo wysoka"
+    },
+    "stepOf": "wartość {{step}}",
+    "compared": "Na tle innych dzielnic",
     "map": {
       "label": "Mapa dzielnic. Miara: {{metric}}",
-      "district": "{{name}}: {{value}}, przedział {{class}} z {{count}}",
+      "district": "{{name}}: {{value}}, miejsce {{position}} z {{of}}",
+      "districtStep": "{{name}}: {{value}}, wartość {{step}}",
       "districtNoData": "{{name}}: brak danych",
       "districtLoading": "{{name}}: wczytywanie danych",
       "wholeCity": "Widać całe miasto.",
@@ -89,21 +111,24 @@
       "hint": "Mapę przybliża i oddala kółko myszy; przybliżoną można przeciągać. Z klawiatury: klawisze + i − przybliżają i oddalają, strzałki przesuwają, a 0 pokazuje całe miasto."
     },
     "legend": {
-      "range": "Przedział {{number}}: od {{min}} do {{max}}",
-      "single": "Przedział {{number}}: {{value}}",
+      "range": "Wartość {{step}}: od {{min}} do {{max}}",
+      "single": "Wartość {{step}}: {{value}}",
       "noData": "Pole kreskowane: brak danych",
       "lower": "niższa wartość",
-      "higher": "wyższa wartość"
+      "higher": "wyższa wartość",
+      "darker": "Ciemniejszy kolor oznacza wyższą wartość: {{label}}.",
+      "better": "Dla tej miary wyższa wartość jest lepsza.",
+      "worse": "Dla tej miary wyższa wartość jest gorsza.",
+      "neutral": "Dla tej miary wyższa wartość nie jest ani lepsza, ani gorsza."
     },
     "table": {
       "region": "Lista dzielnic. Można ją przewijać.",
       "caption": "Dzielnice: wynik ogólny i {{metric}}",
       "district": "Dzielnica",
-      "score": "Wynik ogólny (0–100)",
+      "score": "Wynik ogólny (miejsce 1 = najlepsze)",
       "selected": "wybrana",
       "captionScore": "Dzielnice: wynik ogólny",
-      "rank": "Ranking",
-      "class": "Przedział"
+      "rank": "Ranking"
     },
     "colourBy": "Koloruj mapę według",
     "overall": "Wynik ogólny",
@@ -114,8 +139,7 @@
     "details": {
       "profile": "Profil dzielnicy: wyniki kategorii",
       "category": "Kategoria",
-      "score": "Wynik (0–100)",
-      "classShort": "{{number}} z {{count}}",
+      "score": "Wynik",
       "close": "Zamknij szczegóły"
     },
     "pickerLabel": "Co koloruje mapę",
@@ -145,7 +169,7 @@
     "noData": "Brak danych.",
     "sample": "Liczba obserwacji",
     "caveat": "Zastrzeżenie",
-    "more": "Rodzaj danych, data, źródło, metoda i licencja",
+    "more": "Co to znaczy?",
     "method": "Metoda",
     "licence": "Licencja",
     "attribution": "Oznaczenie źródła"
@@ -175,24 +199,36 @@
     "intro": "Wybierz gotowy profil albo ustaw, jak ważna jest dla Ciebie każda kategoria. Ranking oblicza API na podstawie danych publicznych.",
     "priorities": "Twoje priorytety",
     "presets": "Gotowe profile",
+    "importance": {
+      "0": "Nieważne",
+      "3": "Ważne",
+      "5": "Bardzo ważne"
+    },
+    "question": {
+      "cost": "Ile to kosztuje?",
+      "transport": "Jak dojadę?",
+      "amenities": "Co mam w pobliżu?",
+      "environment": "Jaki jest hałas i powietrze?"
+    },
+    "otherWeight": "Waga {{value}} z {{max}}. Dokładną wartość zmienisz w części Zaawansowane.",
+    "advanced": "Zaawansowane",
     "hint": "Skala od 0 do 5. Wartość 0 pomija kategorię. Wartość 5 liczy się pięć razy mocniej niż 1.",
     "weight": "{{value}} z {{max}}",
     "left_out": "0 – kategoria pominięta",
-    "allZero": "Wszystkie kategorie mają wartość 0. Ustaw co najmniej jedną kategorię powyżej zera.",
+    "allZero": "Wszystkie kategorie są nieważne. Wybierz co najmniej jedną jako ważną.",
     "submit": "Pokaż ranking",
     "reset": "Przywróć domyślne",
     "ranking": "Ranking dzielnic",
     "ready": "Ranking gotowy. Pierwsze miejsce: {{name}}.",
     "readyDefault": "Ranking domyślny, bez wag. Pierwsze miejsce: {{name}}.",
-    "percentile": "percentyl {{value}}",
+    "better": "lepszy niż w {{count}} z {{of}} pozostałych dzielnic",
     "used": "Liczba miar w wyniku: {{count}}.",
     "missing": "Miary bez danych w tym mieście są pominięte w wyniku:",
     "table": {
       "region": "Tabela z rankingiem dzielnic. Można ją przewijać.",
       "caption": "Ranking dla Twoich priorytetów",
-      "captionDefault": "Ranking domyślny: wskaźnik jakości życia",
-      "rank": "Miejsce",
-      "score": "Wynik (0–100)",
+      "captionDefault": "Ranking domyślny: wynik ogólny",
+      "score": "Wynik",
       "drivers": "Co najbardziej wpływa na wynik"
     }
   },
@@ -296,8 +332,11 @@
     "intro": "Skąd pochodzą liczby, jak powstaje wynik, gdzie używamy sztucznej inteligencji, a gdzie nie, i czego ten portal nie robi.",
     "score": {
       "heading": "Jak powstaje wynik",
-      "text": "Wynik liczy kod programu na podstawie danych publicznych, a kod jest testowany. Dla każdej miary dzielnica dostaje miejsce wśród dzielnic miasta (percentyl od 0 do 100, gdzie 100 to najlepiej). Wynik to średnia ważona tych miejsc. Wagi ustalasz Ty: suwakami na stronie Znajdź dzielnicę albo gotowym profilem.",
+      "text": "Wynik liczy kod programu na podstawie danych publicznych, a kod jest testowany. Dla każdej miary dzielnica dostaje od 0 do 100 punktów za to, jak wypada na tle pozostałych dzielnic miasta (100 to najlepiej). Wynik to średnia ważona tych punktów. Wagi ustalasz Ty: na stronie Znajdź dzielnicę albo gotowym profilem.",
       "limit": "Wynik pokazuje, jak dzielnica wypada na tle pozostałych dzielnic tego samego miasta. Nie porównuje miast i nie jest oceną tego, jak dobrze się tam mieszka."
+    },
+    "kinds": {
+      "heading": "Rodzaje danych"
     },
     "ai": {
       "heading": "Gdzie używamy sztucznej inteligencji",

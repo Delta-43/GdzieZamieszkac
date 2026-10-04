@@ -57,9 +57,22 @@
     "back": "Back to the home page"
   },
   "dataKind": {
-    "observed": "observed",
+    "observed": "measured",
     "estimated": "estimated",
-    "proxy": "proxy"
+    "proxy": "approximate"
+  },
+  "dataKindHelp": {
+    "observed": "Measured, or reported in official data.",
+    "estimated": "Calculated from other data, not measured directly.",
+    "proxy": "Approximated from another, similar measure."
+  },
+  "score": {
+    "place": "Place {{position}} of {{of}}",
+    "placeHeader": "Place (1 is best)",
+    "points": "{{value}} pts",
+    "explain": "The score compares the districts of {{city}} with each other. It does not judge what life is like there. High housing prices lower it.",
+    "how": "How do we work it out?",
+    "howText": "For each measure we check how the district compares with the other districts of the city. The score is the mean of those comparisons, on a scale from 0 to 100. Categories that matter more to you count more. The full method is on the page Sources and how it works."
   },
   "provenance": {
     "dataKind": "Data kind",
@@ -74,13 +87,22 @@
     "optionNoData": "{{label}} (no data)",
     "unavailable": "No data for this measure.",
     "noData": "no data",
-    "rank": "Rank {{position}} of {{of}}",
-    "higherIsBetter": "a higher value ranks better",
-    "lowerIsBetter": "a lower value ranks better",
-    "classOf": "Class {{number}} of {{count}} on the map",
+    "rank": "Place {{position}} of {{of}} (1 is best)",
+    "higherIsBetter": "More is better.",
+    "lowerIsBetter": "Less is better.",
+    "step": {
+      "1": "very low",
+      "2": "low",
+      "3": "medium",
+      "4": "high",
+      "5": "very high"
+    },
+    "stepOf": "{{step}} value",
+    "compared": "Among the districts",
     "map": {
       "label": "Map of the districts. Measure: {{metric}}",
-      "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
+      "district": "{{name}}: {{value}}, place {{position}} of {{of}}",
+      "districtStep": "{{name}}: {{value}}, {{step}} value",
       "districtNoData": "{{name}}: no data",
       "districtLoading": "{{name}}: loading the data",
       "wholeCity": "The whole city is shown.",
@@ -89,21 +111,24 @@
       "hint": "The mouse wheel zooms the map in and out; a zoomed map can be dragged. With the keyboard: + and − zoom, the arrow keys move the map, and 0 shows the whole city."
     },
     "legend": {
-      "range": "Class {{number}}: from {{min}} to {{max}}",
-      "single": "Class {{number}}: {{value}}",
+      "range": "{{step}} value: from {{min}} to {{max}}",
+      "single": "{{step}} value: {{value}}",
       "noData": "Hatched area: no data",
       "lower": "lower value",
-      "higher": "higher value"
+      "higher": "higher value",
+      "darker": "A darker colour means a higher value: {{label}}.",
+      "better": "For this measure a higher value is better.",
+      "worse": "For this measure a higher value is worse.",
+      "neutral": "For this measure a higher value is neither better nor worse."
     },
     "table": {
       "region": "List of the districts. It scrolls.",
       "caption": "Districts: overall score and {{metric}}",
       "district": "District",
-      "score": "Overall score (0–100)",
+      "score": "Overall score (place 1 is best)",
       "selected": "selected",
       "captionScore": "Districts: overall score",
-      "rank": "Ranking",
-      "class": "Class"
+      "rank": "Ranking"
     },
     "colourBy": "Colour the map by",
     "overall": "Overall score",
@@ -114,8 +139,7 @@
     "details": {
       "profile": "District profile: category scores",
       "category": "Category",
-      "score": "Score (0–100)",
-      "classShort": "{{number}} of {{count}}",
+      "score": "Score",
       "close": "Close the details"
     },
     "pickerLabel": "What colours the map",
@@ -145,7 +169,7 @@
     "noData": "No data.",
     "sample": "Sample size",
     "caveat": "Caveat",
-    "more": "Data kind, date, source, method and licence",
+    "more": "What does this mean?",
     "method": "Method",
     "licence": "Licence",
     "attribution": "Credit line"
@@ -175,24 +199,36 @@
     "intro": "Pick a ready profile, or set how much each category matters to you. The API computes the ranking from public data.",
     "priorities": "Your priorities",
     "presets": "Ready profiles",
+    "importance": {
+      "0": "Not important",
+      "3": "Important",
+      "5": "Very important"
+    },
+    "question": {
+      "cost": "What does it cost?",
+      "transport": "How do I get around?",
+      "amenities": "What is nearby?",
+      "environment": "What are the noise and the air like?"
+    },
+    "otherWeight": "Weight {{value}} of {{max}}. Change the exact value under Advanced.",
+    "advanced": "Advanced",
     "hint": "The scale runs from 0 to 5. A value of 0 leaves the category out. A value of 5 counts five times as much as 1.",
     "weight": "{{value}} of {{max}}",
     "left_out": "0 – category left out",
-    "allZero": "Every category is set to 0. Set at least one category above zero.",
+    "allZero": "Every category is not important. Choose at least one as important.",
     "submit": "Show the ranking",
     "reset": "Back to the defaults",
     "ranking": "Ranking of the districts",
     "ready": "The ranking is ready. First place: {{name}}.",
     "readyDefault": "The default ranking, with no weights. First place: {{name}}.",
-    "percentile": "percentile {{value}}",
+    "better": "better than {{count}} of the other {{of}} districts",
     "used": "Number of measures in the score: {{count}}.",
     "missing": "Measures without data in this city are left out of the score:",
     "table": {
       "region": "Table with the ranking of the districts. It scrolls.",
       "caption": "Ranking for your priorities",
-      "captionDefault": "Default ranking: the livability score",
-      "rank": "Place",
-      "score": "Score (0–100)",
+      "captionDefault": "Default ranking: the overall score",
+      "score": "Score",
       "drivers": "What moves the score most"
     }
   },
@@ -296,8 +332,11 @@
     "intro": "Where the numbers come from, how the score is made, where artificial intelligence is used and where it is not, and what this portal does not do.",
     "score": {
       "heading": "How the score is made",
-      "text": "The score is computed by program code from public data, and the code is tested. For each measure, a district gets a rank among the districts of the city (a percentile, 0 to 100, where 100 is best). The score is the weighted mean of those ranks. The weights are yours: the sliders on the page Find a district, or a preset.",
+      "text": "The score is computed by program code from public data, and the code is tested. For each measure, a district gets 0 to 100 points for how it compares with the other districts of the city (100 is best). The score is the weighted mean of those points. The weights are yours: on the page Find a district, or a preset.",
       "limit": "A score says how a district compares with the other districts of the same city. It does not compare cities, and it is not a grade of how good a place is to live."
+    },
+    "kinds": {
+      "heading": "Kinds of data"
     },
     "ai": {
       "heading": "Where artificial intelligence is used",
