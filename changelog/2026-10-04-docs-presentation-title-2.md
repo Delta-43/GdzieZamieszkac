@@ -1,0 +1,1 @@
+- `presentation-comments.html`: the title on the first slide now reads "Change your neighbourhood. Then your home." (replaces the earlier wording from the same day). `presentation.html` and other imported code are unchanged.
