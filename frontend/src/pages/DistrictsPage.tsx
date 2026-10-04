@@ -141,8 +141,13 @@ export function DistrictsPage() {
 
   return (
     <>
-      <h1>{t('districts.heading')}</h1>
-      <p>{t('districts.intro')}</p>
+      {/* The heading shares the column of the map, so both start at one edge on a wide screen. */}
+      <div className="districts-head">
+        <div>
+          <h1>{t('districts.heading')}</h1>
+          <p>{t('districts.intro')}</p>
+        </div>
+      </div>
 
       <div className="districts-layout">
         {/* The map comes first and alone: it is what people come for. */}
