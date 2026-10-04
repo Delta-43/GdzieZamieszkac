@@ -235,3 +235,79 @@ test('the outlook is hidden when the API answers 501', async () => {
   await screen.findByText('Test sale label', { selector: 'dt' })
   expect(screen.queryByRole('heading', { level: 2, name: 'Jak zmieniały się ceny' })).not.toBeInTheDocument()
 })
+
+test('rent versus buy shows the API estimate for 50 square metres, marked as an estimate, with the caveat and the medians behind it', async () => {
+  const fetchMock = mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).closest('section') as HTMLElement
+  expect(await within(section).findByText('5000 test price')).toBeInTheDocument()
+  expect(section).toHaveTextContent('Dla mieszkania 50 m² oszacowane')
+  expect(section).toHaveTextContent('30 test rent a month')
+  // The two derived figures carry the names the API gives them in the district's detail.
+  expect(within(section).getByText('Test yield label').closest('.metric')).toHaveTextContent('5 test%')
+  expect(section).toHaveTextContent('17,8 test years')
+  expect(section).toHaveTextContent('Zastrzeżenie: Test rent versus buy caveat.')
+  expect(section).toHaveTextContent('Test sale label: 100 test zmierzone')
+  expect(section).toHaveTextContent('Test rent label: 10 test oszacowane')
+
+  // A new size is sent only with the button, and the new figures replace the old ones.
+  fireEvent.change(within(section).getByLabelText('Powierzchnia mieszkania w m²'), { target: { value: '80' } })
+  expect(section).toHaveTextContent('5000 test price')
+  fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+  expect(await within(section).findByText('8000 test price')).toBeInTheDocument()
+  const asked = fetchMock.mock.calls.map(([input]) => new URL((input as Request).url)).filter((url) => url.pathname.endsWith('/rent-vs-buy'))
+  expect(asked.map((url) => url.searchParams.get('area_m2'))).toEqual(['50', '80'])
+})
+
+test('a size outside 15 to 250 square metres is named in text, tied to the field, and is not sent', async () => {
+  const fetchMock = mockFetch(districtsApi)
+  renderApp(PAGE)
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).closest('section') as HTMLElement
+  await within(section).findByText('5000 test price')
+  const field = within(section).getByLabelText('Powierzchnia mieszkania w m²')
+
+  for (const value of ['5', '300', 'abc', '']) {
+    fireEvent.change(field, { target: { value } })
+    fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(field).toHaveAccessibleDescription(/Podaj powierzchnię od 15 do 250 m²\./)
+    expect(field).toHaveFocus()
+  }
+  // The figures of the last good size stay, and nothing new was asked.
+  expect(section).toHaveTextContent('5000 test price')
+  expect(fetchMock.mock.calls.filter(([input]) => new URL((input as Request).url).pathname.endsWith('/rent-vs-buy'))).toHaveLength(1)
+
+  fireEvent.change(field, { target: { value: '15' } })
+  fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+  expect(field).not.toHaveAttribute('aria-invalid')
+  expect(await within(section).findByText('1500 test price')).toBeInTheDocument()
+})
+
+test('similar districts are listed with the measures they are closest on, by name, and the method one press away', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Podobne dzielnice' })).closest('section') as HTMLElement
+  const items = within(section).getAllByRole('listitem')
+  expect(items).toHaveLength(2)
+  expect(within(items[0] as HTMLElement).getByRole('link', { name: 'Beta' })).toHaveAttribute('href', '/districts/beta')
+  // The similarity is shown as sent, with a decimal comma in Polish. The measures carry their names from the catalogue.
+  expect(items[0]).toHaveTextContent('Podobieństwo: 0,769 (w skali od 0 do 1)')
+  expect(items[0]).toHaveTextContent('Najbardziej zbliżone miary: Test sale label, Test rent label')
+  expect(items[1]).not.toHaveTextContent('Najbardziej zbliżone miary')
+  expect(section).toHaveTextContent('Podobne nie znaczy lepsze ani gorsze.')
+  expect(within(section).getByText('Co to znaczy?').closest('details')).toHaveTextContent('Test similar method.')
+})
+
+test('rent versus buy and similar districts are hidden when the API answers 501', async () => {
+  mockFetch((request) =>
+    /\/(rent-vs-buy|similar)$/.test(new URL(request.url).pathname) ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  await screen.findByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('heading', { level: 2, name: 'Podobne dzielnice' })).not.toBeInTheDocument()
+})
+

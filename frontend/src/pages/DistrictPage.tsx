@@ -9,6 +9,8 @@ import { Loading } from '../components/Loading'
 import { MetricRow } from '../components/MetricRow'
 import { OutlookCard } from '../components/OutlookCard'
 import { PriceHistory } from '../components/PriceHistory'
+import { RentVsBuy } from '../components/RentVsBuy'
+import { SimilarDistricts } from '../components/SimilarDistricts'
 import { plainNumber } from '../lib/plainNumber'
 import { usePageTitle } from '../lib/usePageTitle'
 
@@ -83,6 +85,8 @@ export function DistrictPage() {
         </section>
       )}
 
+      <RentVsBuy code={district.code} yieldLabel={district.yield_gross?.label} paybackLabel={district.payback_years?.label} />
+
       <CommuteTable code={district.code} />
 
       {district.categories.map((category) => (
@@ -99,6 +103,8 @@ export function DistrictPage() {
           </dl>
         </section>
       ))}
+
+      <SimilarDistricts code={district.code} />
     </>
   )
 }

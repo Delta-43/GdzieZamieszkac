@@ -53,7 +53,7 @@ The city service (`../city-service/`, contract `../city-service/openapi.yaml`) w
 | F9 | Household profile in the browser, mapped to weights, with a budget filter | M | F6, backend task B3 | Nothing is stored. The budget filter uses the numeric values from `/metrics/{key}/values`. The result is labelled an estimate. |
 | F10 | Commute from a work district, from `/commute` | S | F4 | The API caveat is shown. Hidden when the endpoint answers `501`. Built on the district page (pull request for the F10 issue). |
 | F11 | Outlook card: momentum, the city's historical range, the backtest | S | F5 | It never shows a forecast or ranks districts by growth. Built on the district page (pull request for the F11 issue). |
-| F12 | Rent versus buy with a flat size input, and similar districts | S | F5 | The result is labelled an estimate |
+| F12 | Rent versus buy with a flat size input, and similar districts | S | F5 | The result is labelled an estimate. Built on the district page (pull request for the F12 issue). |
 
 ## Rules for every task
 

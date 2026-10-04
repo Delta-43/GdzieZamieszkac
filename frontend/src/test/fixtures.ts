@@ -175,6 +175,36 @@ export const reportFixture: Schemas['Report'] = {
   generated_at: '2026-09-30T12:00:00+00:00',
 }
 
+/** Rent versus buy, as the API estimates it. The price follows the size that was asked for. */
+export const rentVsBuyFixture: Schemas['RentVsBuy'] = {
+  district: 'alpha',
+  lang: 'pl',
+  area_m2: 50,
+  price: { value: 5000, currency: 'TST', display: '5000 test price' },
+  monthly_rent: { value: 30, currency: 'TST', display: '30 test rent a month' },
+  yield_gross: 0.05,
+  yield_display: '5 test%',
+  payback_years: 17.8,
+  payback_display: '17,8 test years',
+  data_kind: 'estimated',
+  based_on: [
+    { key: 'test_sale', display: '100 test', data_kind: 'observed' },
+    { key: 'test_rent', display: '10 test', data_kind: 'estimated' },
+  ],
+  caveat: 'Test rent versus buy caveat.',
+}
+
+/** The districts most like Alpha. The contract has no named schema for this answer. */
+export const similarFixture = {
+  district: 'alpha',
+  lang: 'pl',
+  method: 'Test similar method.',
+  similar: [
+    { code: 'beta', name: 'Beta', similarity: 0.769, closest_on: ['test_sale', 'test_rent'] },
+    { code: 'gamma', name: 'Gamma', similarity: 0.5, closest_on: [] },
+  ],
+}
+
 /** The outlook of Alpha: one change with data, one without, the city's past, and no published forecast. */
 export const outlookFixture: Schemas['Outlook'] = {
   district: 'alpha',
@@ -291,6 +321,11 @@ export function districtsApi(request: Request): Response {
       })),
     })
   }
+  if (pathname.endsWith('/rent-vs-buy')) {
+    const size = Number(new URL(request.url).searchParams.get('area_m2'))
+    return jsonResponse({ ...rentVsBuyFixture, area_m2: size, price: { value: size * 100, currency: 'TST', display: `${size * 100} test price` } })
+  }
+  if (pathname.endsWith('/similar')) return jsonResponse(similarFixture)
   if (pathname === '/v1/districts/alpha/outlook') return jsonResponse(outlookFixture)
   // The other districts answer as an API with the feature switched off: the section must hide.
   if (pathname.endsWith('/outlook')) return jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501)

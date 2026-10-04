@@ -235,6 +235,25 @@
     "day": "Timetable day",
     "longTrips": "Times above about 60 minutes are lower bounds: the real trip takes longer."
   },
+  "rentBuy": {
+    "heading": "Rent versus buy: an estimate",
+    "size": "Size of the flat in m²",
+    "sizeHint": "From {{min}} to {{max}} m².",
+    "invalid": "Give a size from {{min}} to {{max}} m².",
+    "submit": "Work it out",
+    "resultFor": "For a flat of {{size}} m²",
+    "price": "Price to buy",
+    "rent": "Rent",
+    "yield": "A year of rent as a share of the price",
+    "payback": "Years of rent that equal the price",
+    "basedOn": "From the medians of the district:"
+  },
+  "similar": {
+    "heading": "Similar districts",
+    "intro": "The districts closest on the measures the score is made of. Similar does not mean better or worse.",
+    "similarity": "Similarity: {{value}} (on a scale from 0 to 1)",
+    "closest": "Closest measures"
+  },
   "find": {
     "title": "Find a district",
     "heading": "Find a district that fits you",

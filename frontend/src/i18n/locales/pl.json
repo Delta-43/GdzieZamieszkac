@@ -235,6 +235,25 @@
     "day": "Dzień rozkładu",
     "longTrips": "Czasy powyżej około 60 minut są zaniżone: rzeczywisty przejazd trwa dłużej."
   },
+  "rentBuy": {
+    "heading": "Wynajem a kupno: szacunek",
+    "size": "Powierzchnia mieszkania w m²",
+    "sizeHint": "Od {{min}} do {{max}} m².",
+    "invalid": "Podaj powierzchnię od {{min}} do {{max}} m².",
+    "submit": "Przelicz",
+    "resultFor": "Dla mieszkania {{size}} m²",
+    "price": "Cena zakupu",
+    "rent": "Czynsz",
+    "yield": "Roczny czynsz jako część ceny",
+    "payback": "Po ilu latach czynsz zrówna się z ceną",
+    "basedOn": "Na podstawie median dzielnicy:"
+  },
+  "similar": {
+    "heading": "Podobne dzielnice",
+    "intro": "Dzielnice najbardziej zbliżone pod względem miar, z których powstaje wynik. Podobne nie znaczy lepsze ani gorsze.",
+    "similarity": "Podobieństwo: {{value}} (w skali od 0 do 1)",
+    "closest": "Najbardziej zbliżone miary"
+  },
   "find": {
     "title": "Znajdź dzielnicę",
     "heading": "Znajdź dzielnicę dla siebie",
