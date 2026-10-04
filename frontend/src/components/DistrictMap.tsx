@@ -199,6 +199,21 @@ export function DistrictMap({
     show({ ...asked, x: asked.x + dx * asked.w, y: asked.y + dy * asked.h }, '')
   }
 
+  /**
+   * A district that takes the focus while the map is zoomed in is brought into the view, at the same zoom, so the
+   * focus is never on a district that the edge of the drawing cuts off (WCAG 2.4.7). A district already in view stays put.
+   */
+  function reveal(box: { x0: number; y0: number; x1: number; y1: number }) {
+    if (!view) return
+    const x = (box.x0 + box.x1) / 2
+    const y = (box.y0 + box.y1) / 2
+    if (x >= asked.x && x <= asked.x + asked.w && y >= asked.y && y <= asked.y + asked.h) return
+    setByHand(false)
+    show({ ...asked, x: x - asked.w / 2, y: y - asked.h / 2 }, '')
+    // The browser has just scrolled the page to where the district was, outside the drawing: bring the map itself back.
+    svgRef.current?.scrollIntoView?.({ block: 'nearest' })
+  }
+
   // A search asks for a district: zoom to it, with room around it. React's pattern for state that follows a prop:
   // it is adjusted while rendering, not in an effect, so the map never shows the old view first.
   const [appliedFocus, setAppliedFocus] = useState<string | null>(null)
@@ -332,7 +347,10 @@ export function DistrictMap({
                   if (event.pointerType === 'mouse') showCard(shape.code)
                 }}
                 onPointerLeave={hideCard}
-                onFocus={() => showCard(shape.code)}
+                onFocus={() => {
+                  showCard(shape.code)
+                  reveal(shape.box)
+                }}
                 onBlur={hideCard}
               >
                 <path d={shape.path} fillRule="evenodd" />

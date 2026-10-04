@@ -109,6 +109,38 @@ test('?district= selects that district, opens its details and zooms the map to i
   expect(map.getByRole('button', { name: /^Delta/ })).toHaveAttribute('aria-pressed', 'true')
 })
 
+test('on a zoomed map a district that takes the focus is brought into the view, and one already in view stays put', async () => {
+  serve()
+  renderApp('/districts?district=delta')
+  await screen.findByText('Przybliżono do dzielnicy: Delta.')
+  const map = within(svg())
+  const delta = map.getByRole('button', { name: /^Delta/ })
+  // Zoom in as far as the map goes, so that only part of the city is in the view.
+  for (let i = 0; i < 8; i++) fireEvent.keyDown(delta, { key: '+' })
+  await waitFor(() => expect(screen.getByText(/^Powiększenie/)).toBeInTheDocument())
+  // The view glides to its new place: wait until it has stopped.
+  const settled = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    return svg().getAttribute('viewBox')
+  }
+  // The focus brings Delta into the view. Once it is there, the focus moves nothing.
+  fireEvent.focus(delta)
+  const zoomed = await settled()
+  fireEvent.focus(delta)
+  expect(await settled()).toBe(zoomed)
+
+  // A district cut off by the edge of the drawing comes into the view when it takes the focus, at the same zoom.
+  const width = (box: string | null) => Number(box?.split(' ')[2])
+  const moved: string[] = []
+  for (const name of ['Alpha', 'Beta', 'Gamma']) {
+    fireEvent.focus(map.getByRole('button', { name: new RegExp(`^${name}`) }))
+    const now = await settled()
+    if (now !== zoomed) moved.push(name)
+    expect(width(now)).toBeCloseTo(width(zoomed), 3)
+  }
+  expect(moved.length).toBeGreaterThan(0)
+})
+
 test('with the context file the map draws it, names it only when zoomed in, and gives the credit in text; the file is asked for from the same server', async () => {
   const fetchMock = serve(BASEMAP)
   renderApp('/districts')
