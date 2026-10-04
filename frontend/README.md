@@ -49,6 +49,19 @@ The design is accepted (4 October 2026): `../docs/DESIGN.md`. It follows the loo
 - **Font:** Lato, regular and bold, the typeface of that site. It is bundled from the `@fontsource/lato` package (SIL Open Font Licence 1.1) and served with the app, with the Latin Extended range for Polish. Nothing loads from a third party.
 - **Layout of the districts page:** a map with category buttons and a tabbed panel beside it. The header is a white bar over a blue navigation band, and section headings carry a short dark bar.
 
+**Shapes and sizes follow the Gov.pl design system** (the official guide "Przewodnik Gov UI", version 1.0 beta, read on 4 October 2026). The colours stay Kraków's (decision of the frontend developer).
+
+| From the Gov.pl design system | In the app |
+|---|---|
+| Sizes 12, 14, 16, 20, 24, 28, 32 and 40 pixels; headings at 1:1.25, running text at 1:1.5 | The `text-*` and `line-*` tokens. The page heading grows from 28 to 40 pixels with the screen. |
+| Button: 44 pixels high, 2 pixel border, 4 pixel corners, bold label in capitals at 16 pixels | `.button-primary`, `.button-secondary` and the retry button. The choices of a group (presets, categories, languages) keep their own case. |
+| Input, select, text area: 44 pixels high, 8 by 12 pixels of padding, 16 pixel text, 4 pixel corners | `.field` controls. |
+| Message: a 2 pixel frame in the colour of its kind, 4 pixel corners | `.notice`, `.error-message`, `.stale-notice`. |
+
+Where the guide and WCAG 2.2 AA disagree, WCAG wins: the border of a field is darker than the guide's light grey (3:1, criterion 1.4.11), and links stay underlined (1.4.1).
+
+Not taken from the guide, on purpose: the top bar "gov.pl, Serwis Rzeczypospolitej Polskiej", the eagle and the Gov.pl footer. They mark an official government site, and this app is not one. Not applied yet: the typeface (the guide uses Open Sans; the app uses Lato, the typeface of krakow.pl) and the spacing steps of 20, 28, 40, 56 and 72 pixels.
+
 Changing the look means changing the values in `tokens.ts`.
 
 ## The map
