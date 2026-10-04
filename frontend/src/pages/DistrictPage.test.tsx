@@ -170,3 +170,32 @@ test.each(['pl', 'en'] as const)('the district page has no automated accessibili
   expect(document.documentElement.lang).toBe(language)
   expect((await axe(container)).violations).toEqual([])
 })
+
+test('travel times are listed nearest first with the API caveat, and a missing connection is said in words', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })).closest('section') as HTMLElement
+  const rows = within(within(section).getByRole('table')).getAllByRole('row')
+  // The district itself is left out. The minutes are shown as sent, with a decimal comma in Polish. No connection is never a zero.
+  expect(rows.slice(1).map((row) => row.textContent)).toEqual(['Delta12 min', 'Beta41,5 min', 'Gammanie znaleziono połączenia'])
+  expect(within(section).getByRole('link', { name: 'Delta' })).toHaveAttribute('href', '/districts/delta')
+  // The caveat is on the page without a press, with the data kind, the day of the timetable and the note on long trips.
+  expect(section).toHaveTextContent('Zastrzeżenie: Test commute caveat from the API.')
+  expect(section).toHaveTextContent('oszacowane')
+  expect(within(section).getByText('7 października 2026')).toHaveAttribute('datetime', '2026-10-07')
+  expect(section).toHaveTextContent('Czasy powyżej około 60 minut są zaniżone')
+  expect(within(section).getByText('Co to znaczy?').closest('details')).toHaveTextContent('Test commute method.')
+})
+
+test('the travel times are hidden when the API answers 501, and the rest of the page stays', async () => {
+  mockFetch((request) =>
+    new URL(request.url).pathname === '/v1/commute' ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  expect(await screen.findByRole('heading', { level: 1, name: 'Alpha' })).toBeInTheDocument()
+  await screen.findByText('Test sale label', { selector: 'dt' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+})

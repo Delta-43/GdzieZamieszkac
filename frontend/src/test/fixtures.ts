@@ -175,6 +175,22 @@ export const reportFixture: Schemas['Report'] = {
   generated_at: '2026-09-30T12:00:00+00:00',
 }
 
+/** Travel times from Alpha, as /commute answers them: out of order, with Alpha itself, and one district without a connection. */
+export const commuteFixture: Schemas['Commute'] = {
+  from: 'alpha',
+  lang: 'pl',
+  data_kind: 'estimated',
+  method: 'Test commute method.',
+  as_of: '2026-10-07',
+  caveat: 'Test commute caveat from the API.',
+  destinations: [
+    { code: 'alpha', minutes: 0 },
+    { code: 'beta', minutes: 41.5 },
+    { code: 'gamma', minutes: null },
+    { code: 'delta', minutes: 12 },
+  ],
+}
+
 /** Category scores for the four districts, as /recommend answers them. */
 export const recommendFixture: Schemas['RecommendResponse'] = {
   lang: 'pl',
@@ -237,6 +253,7 @@ export function districtsApi(request: Request): Response {
   if (pathname.includes('/series/')) return jsonResponse({ type: 'about:blank', title: 'No history', status: 404 }, 404)
   if (pathname === '/v1/districts/nope') return jsonResponse({ type: 'about:blank', title: 'Unknown district', status: 404 }, 404)
   if (pathname.startsWith('/v1/districts/')) return jsonResponse(detailFixture)
+  if (pathname === '/v1/commute') return jsonResponse(commuteFixture)
   if (pathname === '/v1/metrics') return jsonResponse(metricsFixture)
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)
   if (pathname.startsWith('/v1/metrics/')) return jsonResponse({ ...metricValuesFixture, key: 'other', values: [] })

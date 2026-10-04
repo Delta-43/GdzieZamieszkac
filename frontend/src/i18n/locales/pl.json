@@ -193,6 +193,17 @@
       "enough": "wystarczająca"
     }
   },
+  "commute": {
+    "heading": "Dojazd komunikacją miejską z tej dzielnicy",
+    "region": "Tabela z czasem dojazdu. Można ją przewijać.",
+    "caption": "Szacowany czas dojazdu do pozostałych dzielnic, od najkrótszego",
+    "to": "Do dzielnicy",
+    "time": "Szacowany czas",
+    "minutes": "{{value}} min",
+    "none": "nie znaleziono połączenia",
+    "day": "Dzień rozkładu",
+    "longTrips": "Czasy powyżej około 60 minut są zaniżone: rzeczywisty przejazd trwa dłużej."
+  },
   "find": {
     "title": "Znajdź dzielnicę",
     "heading": "Znajdź dzielnicę dla siebie",
