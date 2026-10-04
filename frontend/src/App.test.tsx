@@ -127,7 +127,7 @@ test.each(['pl', 'en'] as const)('the home and not-found pages have no automated
   }
 })
 
-test('the menu button opens and closes the menu, moves the focus, and makes the page under it inert', async () => {
+test('the menu button opens a card of links under it, keeps the focus, and leaves the page in use', async () => {
   mockFetch(districtsApi)
   renderApp()
   const button = await screen.findByRole('button', { name: 'Menu' })
@@ -135,29 +135,68 @@ test('the menu button opens and closes the menu, moves the focus, and makes the 
   // Closed, the menu is hidden from assistive software and cannot be reached.
   expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
 
+  button.focus()
   fireEvent.click(button)
 
   const menu = screen.getByRole('navigation', { name: 'Nawigacja główna' })
   expect(button).toHaveAttribute('aria-expanded', 'true')
-  expect(menu.parentElement).toHaveFocus()
-  expect(document.querySelector('main')?.closest('[inert]')).not.toBeNull()
-  // The header stays usable while the menu is open: the same button closes it.
-  expect(button.closest('[inert]')).toBeNull()
+  // A card under a button, not a dialog: the focus stays on the button, the menu comes next, and the page is not inert.
+  expect(button).toHaveFocus()
+  expect(button.compareDocumentPosition(menu) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(document.querySelector('main')?.closest('[inert]')).toBeNull()
   expect(within(menu).getByRole('link', { name: 'Strona główna' })).toHaveAttribute('aria-current', 'page')
   expect(within(menu).getByRole('link', { name: 'Dzielnice na mapie' })).toHaveAttribute('href', '/districts')
   // There is no search field in the menu.
   expect(within(menu).queryByRole('searchbox')).not.toBeInTheDocument()
 
+  // Escape from inside the menu closes it and gives the focus back to the button.
+  within(menu).getByRole('link', { name: 'Dzielnice na mapie' }).focus()
   fireEvent.keyDown(document, { key: 'Escape' })
 
   expect(screen.queryByRole('navigation', { name: 'Nawigacja główna' })).not.toBeInTheDocument()
   expect(button).toHaveFocus()
-  expect(document.querySelector('main')?.closest('[inert]')).toBeNull()
 
   fireEvent.click(button)
   expect(button).toHaveAttribute('aria-expanded', 'true')
   fireEvent.click(button)
   expect(button).toHaveAttribute('aria-expanded', 'false')
+})
+
+test('a mouse over the menu button opens the menu, a click pins it, and a press outside closes it', async () => {
+  mockFetch(districtsApi)
+  renderApp()
+  const button = await screen.findByRole('button', { name: 'Menu' })
+  const wrap = button.parentElement as HTMLElement
+
+  // A touch does not hover: only a mouse opens the menu by resting on it.
+  fireEvent.pointerEnter(wrap, { pointerType: 'touch' })
+  expect(button).toHaveAttribute('aria-expanded', 'false')
+  fireEvent.pointerEnter(wrap, { pointerType: 'mouse' })
+  expect(button).toHaveAttribute('aria-expanded', 'true')
+
+  // The pointer leaves: the menu closes after a short wait.
+  fireEvent.pointerLeave(wrap, { pointerType: 'mouse' })
+  await waitFor(() => expect(button).toHaveAttribute('aria-expanded', 'false'))
+
+  // Opened by the pointer and then clicked: it is pinned, and stays when the pointer leaves.
+  fireEvent.pointerEnter(wrap, { pointerType: 'mouse' })
+  fireEvent.click(button)
+  fireEvent.pointerLeave(wrap, { pointerType: 'mouse' })
+  await new Promise((resolve) => setTimeout(resolve, 400))
+  expect(button).toHaveAttribute('aria-expanded', 'true')
+
+  fireEvent.pointerDown(screen.getByRole('main'))
+  expect(button).toHaveAttribute('aria-expanded', 'false')
+})
+
+test('the header has shortcuts to the three steps of the main flow, with the current page marked', async () => {
+  mockFetch(districtsApi)
+  renderApp('/find')
+
+  const quick = await screen.findByRole('navigation', { name: 'Skróty' })
+  expect(within(quick).getAllByRole('link').map((link) => link.textContent)).toEqual(['Dzielnice na mapie', 'Znajdź dzielnicę', 'Porównaj dzielnice'])
+  expect(within(quick).getByRole('link', { name: 'Znajdź dzielnicę' })).toHaveAttribute('aria-current', 'page')
+  expect(within(quick).getByRole('link', { name: 'Dzielnice na mapie' })).not.toHaveAttribute('aria-current')
 })
 
 test('the menu lists every district, and choosing one opens its page and closes the menu', async () => {

@@ -103,8 +103,10 @@ main,
 }
 
 /*
-  The header: a full-width white bar of a fixed height. The menu button is a grey square at its left edge,
-  then the site name, and the language toggle at the right. A blue rule runs under it.
+  The header: a full-width white bar of a fixed height. The menu button is a grey square at its left edge, then the
+  site name, the shortcuts to the main pages (wide screens), and the language toggle at the right. A blue rule runs
+  under it. On a screen that is wide and tall enough it stays at the top while the page scrolls, so the menu is always
+  attached to it. On a small screen, or at a high zoom, it scrolls away with the page and leaves the room to the content.
 */
 .site-header {
   position: relative;
@@ -136,6 +138,67 @@ main,
   font-size: var(--text-lg);
   font-weight: 700;
   text-decoration: none;
+}
+
+@media (min-width: 40rem) and (min-height: 30rem) {
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  /* Nothing that takes the focus or is jumped to may end up under the header (WCAG 2.4.11). */
+  :root {
+    scroll-padding-block-start: calc(var(--header-height) + var(--space-4));
+  }
+}
+
+/* The shortcuts: plain links in the bar, the current page marked by a thick rule and bold text as well as aria-current. */
+.site-quick {
+  display: none;
+}
+
+.site-quick ul {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-quick a {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-block-size: var(--target);
+  padding-inline: var(--space-3);
+  font-size: var(--text-base);
+  text-decoration: none;
+  color: var(--color-text);
+  border-block-end: 0.1875rem solid transparent;
+  transition: color var(--duration-fast) ease-out;
+}
+
+.site-quick a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.site-quick a[aria-current='page'] {
+  font-weight: 700;
+  color: var(--color-accent);
+  border-block-end-color: var(--color-accent);
+}
+
+@media (min-width: 68rem) {
+  .site-quick {
+    display: block;
+  }
+}
+
+/* The menu button and the card that drops from it. The pair is one hover and focus area. */
+.menu-wrap {
+  position: relative;
+  flex: none;
 }
 
 /* The menu button: a grey square as tall as the header, with the icon in a disc above the word. */
@@ -442,10 +505,16 @@ main:focus {
   gap: var(--space-2);
 }
 
+/* The choices of a group sit on a grid of equal columns, so every button has the same width and the rows line up. */
 .map-picker__pills {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
   gap: var(--space-2);
+}
+
+.map-picker__pills .pill {
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
 }
 
 .field {
@@ -1148,51 +1217,48 @@ summary:hover {
 }
 
 /*
-  The menu: a grey panel that opens from the left edge, under the header. Sections of plain links are divided by a
-  line. Only translate and visibility are animated; the durations are zero under reduced motion. Closed, it is
-  invisible and inert.
+  The menu: a card that drops from the menu button. It opens on a press and, for a mouse, when the pointer rests on
+  the button; it fades and settles over a short time, and at once under reduced motion. Closed, it is invisible and inert.
 */
 .site-menu {
-  position: fixed;
-  inset: var(--header-height) 0 0 0;
+  position: absolute;
+  inset-block-start: calc(100% + 0.25rem + var(--space-2));
+  inset-inline-start: var(--space-2);
   z-index: 10;
-  visibility: hidden;
+  box-sizing: border-box;
+  inline-size: min(24rem, calc(100vw - 2 * var(--space-2)));
+  max-block-size: calc(100dvh - var(--header-height) - var(--space-6));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   font-family: var(--font-ui);
   font-size: var(--text-base);
-  transition: visibility 0s linear var(--duration-menu);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-menu);
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 -0.25rem;
+  transition:
+    opacity var(--duration-menu) ease-out,
+    translate var(--duration-menu) var(--ease-out),
+    visibility 0s linear var(--duration-menu);
 }
 
 .site-menu.is-open {
   visibility: visible;
+  opacity: 1;
+  translate: 0 0;
   transition-delay: 0s;
 }
 
-/* The area beside the panel: a click there closes the menu. The page stays visible, as nothing dims it. */
-.site-menu__outside {
+/* The gap between the button and the card belongs to the pair, so the pointer can cross it without closing the menu. */
+.site-menu::before {
+  content: '';
   position: absolute;
-  inset: 0;
-}
-
-.site-menu__panel {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  box-sizing: border-box;
-  inline-size: min(20rem, 100%);
-  padding-block-end: var(--space-7);
-  overflow-y: auto;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-menu);
-  translate: -105% 0;
-  transition: translate var(--duration-menu) var(--ease-out);
-}
-
-.site-menu.is-open .site-menu__panel {
-  translate: 0 0;
-}
-
-.site-menu__panel:focus {
-  outline: none;
+  inset-inline: 0;
+  inset-block-start: calc(-1 * (0.25rem + var(--space-2)) - 1px);
+  block-size: calc(0.25rem + var(--space-2));
 }
 
 .site-menu__section {
@@ -1212,7 +1278,10 @@ summary:hover {
   background: var(--color-border);
 }
 
+/* The districts: smaller, in two columns, so the card stays short. */
 .site-menu__section--secondary {
+  columns: 2;
+  column-gap: 0;
   font-size: var(--text-sm);
 }
 
@@ -1585,13 +1654,15 @@ main > .ai-report-card {
   box-sizing: border-box;
   inline-size: 100%;
   min-block-size: var(--target);
-  padding-inline: var(--space-3);
+  padding: var(--space-2) var(--space-3);
   font-family: var(--font-ui);
   font-size: var(--text-base);
+  line-height: var(--line-base);
   color: var(--color-text);
   background: var(--color-surface-raised);
-  border: 2px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
+  /* The same frame as every other field of the app. */
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
 }
 
 .search [role='listbox'] {
@@ -1632,11 +1703,23 @@ main > .ai-report-card {
 }
 
 /* The first screen: what it is and the search on the left, the map on the right. Narrow screens stack them. */
+/* The left column is narrow and of one width from top to bottom, so the map takes the rest of the row. */
 .home-hero {
   display: grid;
-  gap: var(--space-5);
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: var(--space-6);
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
   align-items: start;
+}
+
+/* In that column the field and every button are stacked and share its width: one edge on each side. */
+.home-hero .search__row,
+.home-hero .find-actions {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.home-hero .search__field {
+  flex: none;
 }
 
 .home-hero__intro > :first-child {
@@ -1675,4 +1758,20 @@ main > .ai-report-card {
   background: var(--color-surface);
   border-color: var(--color-border-strong);
   cursor: default;
+}
+
+/*
+  A select drawn by the app, not by the browser: Safari ignores the height of its own, so it came out half as tall as
+  the fields beside it. The arrow is two small triangles in the text colour.
+*/
+.field select {
+  appearance: none;
+  padding-inline-end: var(--space-6);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.2rem) 50%,
+    calc(100% - 0.85rem) 50%;
+  background-size: 0.35rem 0.35rem;
+  background-repeat: no-repeat;
 }
