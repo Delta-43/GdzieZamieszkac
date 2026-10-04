@@ -1,0 +1,1 @@
+- `presentation.html`: the deck colours now follow wawel.krakow.pl (navy, indigo, slate blue, gold and olive on white). Every text colour pair meets WCAG AA contrast. Reason: team request. No imported code changed.
