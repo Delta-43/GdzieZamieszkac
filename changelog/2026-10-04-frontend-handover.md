@@ -1,1 +1,0 @@
-- `frontend/HANDOFF.md`: rewritten for the hand-off of the branch `frontend/map-home` to the frontend team: where things stand, what the branch holds, and the next steps (merge, the government look, manual accessibility checks). No imported code changed.

@@ -1,1 +1,0 @@
-- `presentation.html`: the headline font is now Inconsolata instead of Reddit Sans Condensed. Reason: team request. No imported code changed.
