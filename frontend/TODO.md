@@ -2,9 +2,9 @@
 
 Do these in order. Each task is one small pull request, opened with `--base develop`. Open a GitHub issue for the task first, and write `Closes #n` in the pull request. `../REVIEW.md` has the full rules, and `../TODO.md` has the status of every task.
 
-`Rysia` is back on the frontend since the evening of 3 October and builds these tasks, with `unicorn-alex` as reviewer (agreed between them; `../TODO.md` still lists the earlier owner).
+`Rysia` builds these tasks and `unicorn-alex` reviews them (agreed on 3 October; `../TODO.md` now lists the same).
 The state of the work, the open decisions and the next steps for a new session are in `HANDOFF.md`. The priorities for the whole project are in `../TODO.md`.
-Tasks F1 to F8 are the MVP (P0). Tasks F9 to F12 are P1. Do not start a P1 task before the P0 tasks pass review.
+Tasks F1 to F8 are the MVP (P0) and are done. Tasks F9 to F12 are P1: F10 is done (#101); F9, F11 and F12 are open.
 
 The screen details and the acceptance criteria are in `REQUIREMENTS.md`. The API is in `API.md`. The accessibility rules are in `ACCESSIBILITY.md`.
 
@@ -43,18 +43,17 @@ The city service (`../city-service/`, contract `../city-service/openapi.yaml`) w
 
 ## Small fixes waiting
 
-- Add a favicon: the browser logs a 404 for `/favicon.ico`.
-- Manual checks that were never done on any page: a keyboard pass, 320 pixels, 200 and 400 percent zoom, a screen reader. `REVIEW_CHECKLIST.md` section 5.
+- Manual checks with no written record: a keyboard pass, 320 pixels, 200 and 400 percent zoom, a screen reader. The reviewer closed the review issues (#70, #72) on 4 October. Write the result in `HANDOFF.md` when it is done. `REVIEW_CHECKLIST.md` section 5.
 - Delete `src/lib/plainNumber.ts` when the contract adds the `*_display` fields (backend task B2).
 
 ## Phase 2 tasks (P1)
 
 | ID | Task | Size | Needs | Done when |
 |---|---|---|---|---|
-| F9 | Household profile in the browser, mapped to weights, with a budget filter | M | F6, backend task B3 | Nothing is stored. The budget filter uses the numeric values from `/metrics/{key}/values`. The result is labelled an estimate. |
-| F10 | Commute from a work district, from `/commute` | S | F4 | The API caveat is shown. Hidden when the endpoint answers `501`. |
-| F11 | Outlook card: momentum, the city's historical range, the backtest | S | F5 | It never shows a forecast or ranks districts by growth |
-| F12 | Rent versus buy with a flat size input, and similar districts | S | F5 | The result is labelled an estimate |
+| F9 | Household profile in the browser, mapped to weights, with a budget filter | M | F6, backend task B3 | Nothing is stored. The budget filter uses the numeric values from `/metrics/{key}/values`. The result is labelled an estimate. Built in part (pull request for the F9 issue): the work place and the budget. The household type and the children's ages wait for the coordinator's weights. |
+| F10 | Commute from a work district, from `/commute` | S | F4 | The API caveat is shown. Hidden when the endpoint answers `501`. Built on the district page (pull request for the F10 issue). |
+| F11 | Outlook card: momentum, the city's historical range, the backtest | S | F5 | It never shows a forecast or ranks districts by growth. Built on the district page (pull request for the F11 issue). |
+| F12 | Rent versus buy with a flat size input, and similar districts | S | F5 | The result is labelled an estimate. Built on the district page (pull request for the F12 issue). |
 
 ## Rules for every task
 

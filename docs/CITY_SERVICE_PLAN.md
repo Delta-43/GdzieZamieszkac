@@ -1,16 +1,16 @@
 # City service plan (notices, AI report, resident feedback)
 
-Status: **proposal, waiting for the coordinator's decisions** (section "Decisions needed").
+Status (4 October 2026): **the AI report (section 2) and resident feedback (section 3) are built** in `city-service/` (tasks C1 to C3, contract `city-service/openapi.yaml`) and used by the frontend. **Official notices (section 1) and demand counts are not built** and stay concepts. The decisions below were taken on 3 October; the text is kept as the record of the design.
 Replaces the "concept only" status of P2 in `TODO.md` for two features: the AI report and resident feedback. **Official notices and demand counts stay concepts.** Notices are shown as "to be implemented after city approval" (coordinator, 3 October).
-Nothing here is built. The rules in `AGENTS.md` still apply; section "Rule changes" lists the ones that must change.
+The rules in `AGENTS.md` apply; section "Rule changes" lists the ones that changed for the city service.
 
 ## Split
 
 | Feature | Where | Why |
 |---|---|---|
 | Official notices | Not built | Waits for the city. Concept label only. The section below is the design for later. |
-| Personalised AI report | `city-service/` (new) | A language model call needs internet and an API key. The backend must keep neither. |
-| Resident feedback | `city-service/` (new) | It needs writes and storage. The backend must stay read-only. |
+| Personalised AI report | `city-service/` (built) | A language model call needs internet and an API key. The backend must keep neither. |
+| Resident feedback | `city-service/` (built) | It needs writes and storage. The backend must stay read-only. |
 
 `city-service/` is a separate FastAPI app with its own folder, container, secrets and database role. It never shares a database role with the backend. It reads the same public facts through the backend API (`GET /v1/...`), never through the database.
 

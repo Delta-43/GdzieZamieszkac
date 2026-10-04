@@ -170,3 +170,96 @@ test.each(['pl', 'en'] as const)('the find page has no automated accessibility v
   expect(document.documentElement.lang).toBe(language)
   expect((await axe(container)).violations).toEqual([])
 })
+
+// The medians per square metre for the budget: Alpha 100, Beta 200, Delta 300; Gamma has none.
+function withPrices(request: Request): Response {
+  const { pathname } = new URL(request.url)
+  const values = [
+    { district: 'alpha', value: 100, display: '100 test per m²', data_kind: 'observed', n_obs: null },
+    { district: 'beta', value: 200, display: '200 test per m²', data_kind: 'observed', n_obs: null },
+    { district: 'delta', value: 300, display: '300 test per m²', data_kind: 'observed', n_obs: null },
+  ]
+  if (pathname === '/v1/metrics/sale_price_median_m2/values' || pathname === '/v1/metrics/rent_price_median_m2/values') {
+    return jsonResponse({ key: pathname.split('/')[3], label: 'Test price label', lang: 'pl', higher_is: 'worse', values })
+  }
+  return districtsApi(request)
+}
+
+test('a budget hides the districts whose median times the size is above it, says it is an estimate, and keeps a district without a price', async () => {
+  const fetchMock = mockFetch(withPrices)
+  renderApp('/find')
+  const table = await screen.findByRole('table', { name: 'Ranking domyślny: wynik ogólny' })
+  const names = () => within(table).getAllByRole('rowheader').map((cell) => cell.textContent)
+  expect(names()).toEqual(['Delta', 'Gamma', 'Beta', 'Alpha'])
+  const profile = screen.getByRole('region', { name: 'Twoje warunki (opcjonalnie)' })
+  expect(profile).toHaveTextContent('Nie są zapisywane ani wysyłane i nie zmieniają wyniku.')
+
+  fireEvent.click(within(profile).getByRole('radio', { name: 'Kupno' }))
+  fireEvent.change(within(profile).getByLabelText('Najwyższa cena w zł'), { target: { value: '10 000' } })
+
+  // 50 square metres: Alpha 5 000 and Beta 10 000 fit, Delta 15 000 does not. Gamma has no price and stays.
+  await waitFor(() => expect(names()).toEqual(['Gamma', 'Beta', 'Alpha']))
+  // The place is the API's place among all the districts: it is not counted again.
+  expect(within(table).getAllByRole('row')[1]).toHaveTextContent('2Gamma')
+  expect(within(table).getByRole('columnheader', { name: 'Mediana za m²' })).toBeInTheDocument()
+  expect(within(table).getAllByRole('row')[2]).toHaveTextContent('200 test per m² zmierzone')
+  expect(within(table).getAllByRole('row')[1]).toHaveTextContent('brak danych')
+  const notice = screen.getByText(/Budżet: pokazano 3 z 4 dzielnic\. To szacunek: mediana za m² razy powierzchnia mieszkania\./)
+  expect(notice).toHaveTextContent('Dzielnice bez danych o cenie zostają na liście')
+  expect(notice.closest('[role="status"]')).not.toBeNull()
+
+  // A smaller flat lets Delta back in; a size out of range switches the budget off and says why.
+  fireEvent.change(within(profile).getByLabelText('Powierzchnia mieszkania w m²'), { target: { value: '30' } })
+  await waitFor(() => expect(names()).toEqual(['Delta', 'Gamma', 'Beta', 'Alpha']))
+  fireEvent.change(within(profile).getByLabelText('Powierzchnia mieszkania w m²'), { target: { value: '5' } })
+  expect(within(profile).getByLabelText('Powierzchnia mieszkania w m²')).toHaveAccessibleDescription(/Podaj powierzchnię od 15 do 250 m²\./)
+  expect(screen.queryByText(/Budżet: pokazano/)).not.toBeInTheDocument()
+
+  // Renting compares with the asking rents and says so.
+  fireEvent.change(within(profile).getByLabelText('Powierzchnia mieszkania w m²'), { target: { value: '50' } })
+  fireEvent.click(within(profile).getByRole('radio', { name: 'Wynajem' }))
+  fireEvent.change(within(profile).getByLabelText('Najwyższy czynsz miesięczny w zł'), { target: { value: '1' } })
+  // Only Gamma is left, because it has no rent to compare.
+  expect(await screen.findByText(/Budżet: pokazano 1 z 4 dzielnic\./)).toHaveTextContent('Czynsz to czynsz ofertowy z ogłoszeń, a nie z podpisanej umowy.')
+  expect(names()).toEqual(['Gamma'])
+
+  // Nothing of the profile was sent or stored: the only POST is the default ranking, and only the language is kept.
+  expect(await postBodies(fetchMock)).toEqual([{}])
+  expect(fetchMock.mock.calls.map(([input]) => (input as Request).url).join(' ')).not.toMatch(/10000|10%20000|area|budget/)
+  expect(Object.keys(window.localStorage).filter((key) => !/lang/i.test(key))).toEqual([])
+  expect(window.sessionStorage).toHaveLength(0)
+})
+
+test('a work district adds the estimated travel time from each district to it, and sends only district codes', async () => {
+  const fetchMock = mockFetch(districtsApi)
+  renderApp('/find')
+  const table = await screen.findByRole('table', { name: 'Ranking domyślny: wynik ogólny' })
+  expect(within(table).queryByRole('columnheader', { name: 'Dojazd do pracy (szacunek)' })).not.toBeInTheDocument()
+  // No travel time is asked for before a work place is chosen.
+  expect(fetchMock.mock.calls.filter(([input]) => new URL((input as Request).url).pathname === '/v1/commute')).toHaveLength(0)
+
+  fireEvent.change(screen.getByLabelText('Dzielnica, w której pracujesz'), { target: { value: 'beta' } })
+
+  expect(within(table).getByRole('columnheader', { name: 'Dojazd do pracy (szacunek)' })).toBeInTheDocument()
+  const row = (name: string) => within(table).getByRole('rowheader', { name }).closest('tr') as HTMLElement
+  // The minutes as sent, with a decimal comma in Polish; the work district itself says so in words.
+  await waitFor(() => expect(row('Delta')).toHaveTextContent('41,5 min'))
+  expect(row('Beta')).toHaveTextContent('ta sama dzielnica')
+  // One request per home district, each from that district.
+  const from = fetchMock.mock.calls.map(([input]) => new URL((input as Request).url)).filter((url) => url.pathname === '/v1/commute').map((url) => url.searchParams.get('from'))
+  expect(from.sort()).toEqual(['alpha', 'beta', 'delta', 'gamma'])
+})
+
+test.each(['pl', 'en'] as const)('the find page with a budget and a work district has no automated accessibility violation in %s', async (language) => {
+  mockFetch(withPrices)
+  const { container } = renderApp('/find')
+  if (language === 'en') fireEvent.click(screen.getByRole('button', { name: 'English' }))
+  await screen.findByRole('table')
+  fireEvent.click(screen.getByRole('radio', { name: language === 'pl' ? 'Kupno' : 'Buying' }))
+  fireEvent.change(screen.getByLabelText(language === 'pl' ? 'Najwyższa cena w zł' : 'Highest price in PLN'), { target: { value: '-5' } })
+  fireEvent.change(screen.getByLabelText(language === 'pl' ? 'Dzielnica, w której pracujesz' : 'The district where you work'), { target: { value: 'beta' } })
+  await screen.findByRole('columnheader', { name: language === 'pl' ? 'Mediana za m²' : 'Median per m²' })
+
+  expect((await axe(container)).violations).toEqual([])
+})
+

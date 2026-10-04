@@ -193,6 +193,67 @@
       "enough": "sufficient"
     }
   },
+  "outlook": {
+    "heading": "How prices have changed",
+    "district": "In this district",
+    "last12": "The last 12 months",
+    "sinceStart": "Since the data begins",
+    "fromTo": "from {{fromDate}} ({{from}}) to {{toDate}} ({{to}})",
+    "perYear": "{{value}} a year on average",
+    "sample": "Sales behind the two prices: {{from}} and {{to}}",
+    "noGrowth": "Too little data to show a change.",
+    "city": "In the whole city, in the past",
+    "cityRegion": "Table of price changes in the city. It scrolls.",
+    "cityCaption": "Price change in the city over past periods of this length",
+    "window": "Length of the period",
+    "median": "Most often about",
+    "low": "In 8 of 10 periods: from",
+    "high": "to",
+    "cityPeriod": "Period of the data",
+    "noForecast": "Why there is no forecast",
+    "backtest": "How the forecast methods were tested",
+    "backtestRegion": "Table of the test results. It scrolls.",
+    "backtestCaption": "Test on past data: {{cities}} cities, from {{from}} to {{to}}",
+    "method": "Method",
+    "quarters": "Horizon (quarters)",
+    "errorMethod": "Error of the method",
+    "errorNoChange": "Error of the rule \"no change\"",
+    "errorLastYear": "Error of the rule \"as in the last year\"",
+    "coverage": "Share inside the range (aim: 0.8)",
+    "result": "Test result",
+    "passes": "passed",
+    "fails": "not passed"
+  },
+  "commute": {
+    "heading": "Public transport from this district",
+    "region": "Table of travel times. It scrolls.",
+    "caption": "Estimated travel time to the other districts, shortest first",
+    "to": "To district",
+    "time": "Estimated time",
+    "minutes": "{{value}} min",
+    "none": "no connection found",
+    "day": "Timetable day",
+    "longTrips": "Times above about 60 minutes are lower bounds: the real trip takes longer."
+  },
+  "rentBuy": {
+    "heading": "Rent versus buy: an estimate",
+    "size": "Size of the flat in m²",
+    "sizeHint": "From {{min}} to {{max}} m².",
+    "invalid": "Give a size from {{min}} to {{max}} m².",
+    "submit": "Work it out",
+    "resultFor": "For a flat of {{size}} m²",
+    "price": "Price to buy",
+    "rent": "Rent",
+    "yield": "A year of rent as a share of the price",
+    "payback": "Years of rent that equal the price",
+    "basedOn": "From the medians of the district:"
+  },
+  "similar": {
+    "heading": "Similar districts",
+    "intro": "The districts closest on the measures the score is made of. Similar does not mean better or worse.",
+    "similarity": "Similarity: {{value}} (on a scale from 0 to 1)",
+    "closest": "Closest measures"
+  },
   "find": {
     "title": "Find a district",
     "heading": "Find a district that fits you",
@@ -231,6 +292,28 @@
       "score": "Score",
       "drivers": "What moves the score most"
     }
+  },
+  "profile": {
+    "heading": "Your conditions (optional)",
+    "private": "These settings stay on this page. They are not stored or sent, and they do not change the score.",
+    "work": "The district where you work",
+    "noWork": "— none chosen —",
+    "budget": "Budget",
+    "tenure": {
+      "none": "No limit",
+      "buy": "Buying",
+      "rent": "Renting"
+    },
+    "maxPrice": "Highest price in PLN",
+    "maxRent": "Highest monthly rent in PLN",
+    "amountInvalid": "Give an amount above zero.",
+    "commuteColumn": "Travel to work (estimate)",
+    "sameDistrict": "the same district",
+    "priceColumn": "Median per m²",
+    "shown": "Budget: {{shown}} of {{all}} districts are shown. This is an estimate: the median per m² times the size of the flat.",
+    "rentNote": "The rent is an asking rent from listings, not a signed lease.",
+    "noPrice": "Districts without price data stay in the list: they cannot be judged.",
+    "noneFit": "No district fits this budget."
   },
   "aiReport": {
     "heading": "A summary for your needs",

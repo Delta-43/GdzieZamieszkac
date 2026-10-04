@@ -193,6 +193,67 @@
       "enough": "wystarczająca"
     }
   },
+  "outlook": {
+    "heading": "Jak zmieniały się ceny",
+    "district": "W tej dzielnicy",
+    "last12": "Ostatnie 12 miesięcy",
+    "sinceStart": "Od początku danych",
+    "fromTo": "od {{fromDate}} ({{from}}) do {{toDate}} ({{to}})",
+    "perYear": "średnio {{value}} rocznie",
+    "sample": "Liczba transakcji: {{from}} i {{to}}",
+    "noGrowth": "Za mało danych, aby pokazać zmianę.",
+    "city": "W całym mieście, w przeszłości",
+    "cityRegion": "Tabela zmian cen w mieście. Można ją przewijać.",
+    "cityCaption": "Zmiana cen w mieście w przeszłych okresach tej długości",
+    "window": "Długość okresu",
+    "median": "Najczęściej około",
+    "low": "W 8 z 10 okresów: od",
+    "high": "do",
+    "cityPeriod": "Okres danych",
+    "noForecast": "Dlaczego nie ma prognozy",
+    "backtest": "Jak sprawdzono metody prognozy",
+    "backtestRegion": "Tabela z wynikami testu. Można ją przewijać.",
+    "backtestCaption": "Test na danych historycznych: {{cities}} miast, od {{from}} do {{to}}",
+    "method": "Metoda",
+    "quarters": "Horyzont (kwartały)",
+    "errorMethod": "Błąd metody",
+    "errorNoChange": "Błąd reguły „bez zmian”",
+    "errorLastYear": "Błąd reguły „jak w ostatnim roku”",
+    "coverage": "Trafność przedziału (cel: 0,8)",
+    "result": "Wynik testu",
+    "passes": "zaliczony",
+    "fails": "niezaliczony"
+  },
+  "commute": {
+    "heading": "Dojazd komunikacją miejską z tej dzielnicy",
+    "region": "Tabela z czasem dojazdu. Można ją przewijać.",
+    "caption": "Szacowany czas dojazdu do pozostałych dzielnic, od najkrótszego",
+    "to": "Do dzielnicy",
+    "time": "Szacowany czas",
+    "minutes": "{{value}} min",
+    "none": "nie znaleziono połączenia",
+    "day": "Dzień rozkładu",
+    "longTrips": "Czasy powyżej około 60 minut są zaniżone: rzeczywisty przejazd trwa dłużej."
+  },
+  "rentBuy": {
+    "heading": "Wynajem a kupno: szacunek",
+    "size": "Powierzchnia mieszkania w m²",
+    "sizeHint": "Od {{min}} do {{max}} m².",
+    "invalid": "Podaj powierzchnię od {{min}} do {{max}} m².",
+    "submit": "Przelicz",
+    "resultFor": "Dla mieszkania {{size}} m²",
+    "price": "Cena zakupu",
+    "rent": "Czynsz",
+    "yield": "Roczny czynsz jako część ceny",
+    "payback": "Po ilu latach czynsz zrówna się z ceną",
+    "basedOn": "Na podstawie median dzielnicy:"
+  },
+  "similar": {
+    "heading": "Podobne dzielnice",
+    "intro": "Dzielnice najbardziej zbliżone pod względem miar, z których powstaje wynik. Podobne nie znaczy lepsze ani gorsze.",
+    "similarity": "Podobieństwo: {{value}} (w skali od 0 do 1)",
+    "closest": "Najbardziej zbliżone miary"
+  },
   "find": {
     "title": "Znajdź dzielnicę",
     "heading": "Znajdź dzielnicę dla siebie",
@@ -231,6 +292,28 @@
       "score": "Wynik",
       "drivers": "Co najbardziej wpływa na wynik"
     }
+  },
+  "profile": {
+    "heading": "Twoje warunki (opcjonalnie)",
+    "private": "Te ustawienia zostają na tej stronie. Nie są zapisywane ani wysyłane i nie zmieniają wyniku.",
+    "work": "Dzielnica, w której pracujesz",
+    "noWork": "— nie wybrano —",
+    "budget": "Budżet",
+    "tenure": {
+      "none": "Bez limitu",
+      "buy": "Kupno",
+      "rent": "Wynajem"
+    },
+    "maxPrice": "Najwyższa cena w zł",
+    "maxRent": "Najwyższy czynsz miesięczny w zł",
+    "amountInvalid": "Podaj kwotę większą od zera.",
+    "commuteColumn": "Dojazd do pracy (szacunek)",
+    "sameDistrict": "ta sama dzielnica",
+    "priceColumn": "Mediana za m²",
+    "shown": "Budżet: pokazano {{shown}} z {{all}} dzielnic. To szacunek: mediana za m² razy powierzchnia mieszkania.",
+    "rentNote": "Czynsz to czynsz ofertowy z ogłoszeń, a nie z podpisanej umowy.",
+    "noPrice": "Dzielnice bez danych o cenie zostają na liście: nie da się ich ocenić.",
+    "noneFit": "Żadna dzielnica nie mieści się w tym budżecie."
   },
   "aiReport": {
     "heading": "Podsumowanie dla Twoich potrzeb",

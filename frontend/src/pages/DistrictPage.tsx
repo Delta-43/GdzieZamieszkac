@@ -3,10 +3,14 @@ import { Link, useParams } from 'react-router'
 import { ApiError } from '../api/client'
 import { useDistrictDetail, useMetrics } from '../api/useDistrictsData'
 import { AreaReport } from '../components/AreaReport'
+import { CommuteTable } from '../components/CommuteTable'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { MetricRow } from '../components/MetricRow'
+import { OutlookCard } from '../components/OutlookCard'
 import { PriceHistory } from '../components/PriceHistory'
+import { RentVsBuy } from '../components/RentVsBuy'
+import { SimilarDistricts } from '../components/SimilarDistricts'
 import { plainNumber } from '../lib/plainNumber'
 import { usePageTitle } from '../lib/usePageTitle'
 
@@ -68,6 +72,8 @@ export function DistrictPage() {
 
       <PriceHistory code={district.code} />
 
+      <OutlookCard code={district.code} />
+
       {derived.length > 0 && (
         <section aria-labelledby="rental-heading">
           <h2 id="rental-heading">{t('detail.rental')}</h2>
@@ -78,6 +84,10 @@ export function DistrictPage() {
           </dl>
         </section>
       )}
+
+      <RentVsBuy code={district.code} yieldLabel={district.yield_gross?.label} paybackLabel={district.payback_years?.label} />
+
+      <CommuteTable code={district.code} />
 
       {district.categories.map((category) => (
         <section key={category.category} aria-labelledby={`category-${category.category}`}>
@@ -93,6 +103,8 @@ export function DistrictPage() {
           </dl>
         </section>
       ))}
+
+      <SimilarDistricts code={district.code} />
     </>
   )
 }

@@ -4,6 +4,9 @@ import { Link } from 'react-router'
 import {
   SCORED_CATEGORIES,
   useCategoryLabels,
+  useCommuteTo,
+  useDistricts,
+  useMetricValues,
   useMetrics,
   usePersonas,
   useRecommend,
@@ -12,11 +15,18 @@ import {
 } from '../api/useDistrictsData'
 import { useMeta } from '../api/useMeta'
 import { AiReportCard } from '../components/AiReportCard'
+import { DataKindBadge } from '../components/DataKindBadge'
 import { ErrorMessage } from '../components/ErrorMessage'
+import { EMPTY_PROFILE, HouseholdProfile, MAX_SIZE, MIN_SIZE, typedNumber, type Profile } from '../components/HouseholdProfile'
 import { Loading } from '../components/Loading'
 import { ScoreValue } from '../components/ScoreValue'
+import { plainNumber } from '../lib/plainNumber'
 import { betterThan, IMPORTANCE_WEIGHTS, MAX_WEIGHT } from '../lib/score'
 import { usePageTitle } from '../lib/usePageTitle'
+
+// The catalogue keys of the two medians the budget is compared with.
+const SALE_KEY = 'sale_price_median_m2'
+const RENT_KEY = 'rent_price_median_m2'
 
 // Every category starts as "important". Equal weights give the default score, whatever the number is.
 const DEFAULT_WEIGHT = 3
@@ -79,109 +89,130 @@ export function FindPage() {
   const ranking = result.data?.ranking ?? []
   const top = ranking[0]
 
+  // The household's own conditions. They live in this page's memory only, and they never change the score:
+  // the work place adds a column, and the budget hides the districts that are above it.
+  const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE)
+  const districts = useDistricts()
+  const minutesTo = useCommuteTo(
+    profile.work,
+    ranking.map((item) => item.code),
+  )
+  const amount = typedNumber(profile.amount)
+  const size = typedNumber(profile.size)
+  const withBudget = profile.tenure !== 'none'
+  const prices = useMetricValues(profile.tenure === 'rent' ? RENT_KEY : SALE_KEY, withBudget)
+  const priceOf = new Map(prices.data?.values.map((value) => [value.district, value]))
+  const budgetOn = withBudget && Boolean(prices.data) && amount !== null && amount > 0 && size !== null && size >= MIN_SIZE && size <= MAX_SIZE
+  // An estimate: the district's median per square metre times the size of the flat. Only the comparison is made
+  // here; no figure of ours is shown. A district without a median cannot be judged, so it stays in the list.
+  const shown = budgetOn ? ranking.filter((item) => (priceOf.get(item.code)?.value ?? 0) * (size ?? 0) <= (amount ?? 0)) : ranking
+
   return (
     <>
       <h1>{t('find.heading')}</h1>
       <p>{t('find.intro')}</p>
 
       <div className="find-layout">
-        <form className="card" onSubmit={onSubmit} aria-labelledby={`${formId}-heading`}>
-          <h2 id={`${formId}-heading`}>{t('find.priorities')}</h2>
+        <div className="find-side">
+          <form className="card" onSubmit={onSubmit} aria-labelledby={`${formId}-heading`}>
+            <h2 id={`${formId}-heading`}>{t('find.priorities')}</h2>
 
-          <div role="group" aria-labelledby={`${formId}-presets`} className="map-picker__group">
-            <span id={`${formId}-presets`} className="map-picker__label">
-              {t('find.presets')}
-            </span>
-            {personas.isPending && <Loading />}
-            {personas.isError && <ErrorMessage error={personas.error} onRetry={() => void personas.refetch()} />}
-            <div className="map-picker__pills">
-              {personas.data?.map((item) => (
-                <button
-                  key={item.key}
-                  type="button"
-                  className="pill reserve-bold"
-                  data-label={item.label}
-                  aria-pressed={persona === item.key}
-                  onClick={() => choosePersona(item.key, item.weights.category)}
-                >
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </div>
-            {/* The description of the chosen preset, as the API sends it. */}
-            {personas.data?.find((item) => item.key === persona)?.description && (
-              <p className="note">{personas.data.find((item) => item.key === persona)?.description}</p>
-            )}
-          </div>
-
-          {SCORED_CATEGORIES.map((category) => (
-            <fieldset className="importance" key={category}>
-              <legend>{labels.get(category) ?? category}</legend>
-              {/* A short question says what the category is about. Only reviewed questions are shown. */}
-              {i18n.exists(`find.question.${category}`) && <p className="note">{t(`find.question.${category}`)}</p>}
-              <div className="importance__choices">
-                {IMPORTANCE_WEIGHTS.map((weight) => (
-                  <label key={weight}>
-                    <input
-                      type="radio"
-                      name={`${formId}-importance-${category}`}
-                      checked={weights[category] === weight}
-                      onChange={() => setWeight(category, weight)}
-                    />
-                    {t(`find.importance.${weight}`)}
-                  </label>
+            <div role="group" aria-labelledby={`${formId}-presets`} className="map-picker__group">
+              <span id={`${formId}-presets`} className="map-picker__label">
+                {t('find.presets')}
+              </span>
+              {personas.isPending && <Loading />}
+              {personas.isError && <ErrorMessage error={personas.error} onRetry={() => void personas.refetch()} />}
+              <div className="map-picker__pills">
+                {personas.data?.map((item) => (
+                  <button
+                    key={item.key}
+                    type="button"
+                    className="pill reserve-bold"
+                    data-label={item.label}
+                    aria-pressed={persona === item.key}
+                    onClick={() => choosePersona(item.key, item.weights.category)}
+                  >
+                    <span>{item.label}</span>
+                  </button>
                 ))}
               </div>
-              {/* A preset or the sliders can set a weight between the three choices: it is said in words, not rounded. */}
-              {!(IMPORTANCE_WEIGHTS as readonly number[]).includes(weights[category]) && (
-                <p className="note">{t('find.otherWeight', { value: weights[category], max: MAX_WEIGHT })}</p>
+              {/* The description of the chosen preset, as the API sends it. */}
+              {personas.data?.find((item) => item.key === persona)?.description && (
+                <p className="note">{personas.data.find((item) => item.key === persona)?.description}</p>
               )}
-            </fieldset>
-          ))}
+            </div>
 
-          {/* The exact weights, 0 to 5, for those who want them. The three choices above set the same values. */}
-          <details className="find-advanced">
-            <summary>{t('find.advanced')}</summary>
-            <p className="note" id={`${formId}-hint`}>
-              {t('find.hint')}
-            </p>
             {SCORED_CATEGORIES.map((category) => (
-              <div className="slider" key={category}>
-                <label htmlFor={`${formId}-${category}`}>{labels.get(category) ?? category}</label>
-                <input
-                  id={`${formId}-${category}`}
-                  type="range"
-                  min={0}
-                  max={MAX_WEIGHT}
-                  step={1}
-                  value={weights[category]}
-                  aria-describedby={`${formId}-hint`}
-                  aria-valuetext={weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
-                  onChange={(event) => setWeight(category, Number(event.target.value))}
-                />
-                {/* The value as text, beside the slider. */}
-                <output htmlFor={`${formId}-${category}`}>
-                  {weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
-                </output>
-              </div>
+              <fieldset className="importance" key={category}>
+                <legend>{labels.get(category) ?? category}</legend>
+                {/* A short question says what the category is about. Only reviewed questions are shown. */}
+                {i18n.exists(`find.question.${category}`) && <p className="note">{t(`find.question.${category}`)}</p>}
+                <div className="importance__choices">
+                  {IMPORTANCE_WEIGHTS.map((weight) => (
+                    <label key={weight}>
+                      <input
+                        type="radio"
+                        name={`${formId}-importance-${category}`}
+                        checked={weights[category] === weight}
+                        onChange={() => setWeight(category, weight)}
+                      />
+                      {t(`find.importance.${weight}`)}
+                    </label>
+                  ))}
+                </div>
+                {/* A preset or the sliders can set a weight between the three choices: it is said in words, not rounded. */}
+                {!(IMPORTANCE_WEIGHTS as readonly number[]).includes(weights[category]) && (
+                  <p className="note">{t('find.otherWeight', { value: weights[category], max: MAX_WEIGHT })}</p>
+                )}
+              </fieldset>
             ))}
-          </details>
 
-          {allZero && (
-            <p className="error-message" role="alert">
-              {t('find.allZero')}
+            {/* The exact weights, 0 to 5, for those who want them. The three choices above set the same values. */}
+            <details className="find-advanced">
+              <summary>{t('find.advanced')}</summary>
+              <p className="note" id={`${formId}-hint`}>
+                {t('find.hint')}
+              </p>
+              {SCORED_CATEGORIES.map((category) => (
+                <div className="slider" key={category}>
+                  <label htmlFor={`${formId}-${category}`}>{labels.get(category) ?? category}</label>
+                  <input
+                    id={`${formId}-${category}`}
+                    type="range"
+                    min={0}
+                    max={MAX_WEIGHT}
+                    step={1}
+                    value={weights[category]}
+                    aria-describedby={`${formId}-hint`}
+                    aria-valuetext={weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
+                    onChange={(event) => setWeight(category, Number(event.target.value))}
+                  />
+                  {/* The value as text, beside the slider. */}
+                  <output htmlFor={`${formId}-${category}`}>
+                    {weights[category] === 0 ? t('find.left_out') : t('find.weight', { value: weights[category], max: MAX_WEIGHT })}
+                  </output>
+                </div>
+              ))}
+            </details>
+
+            {allZero && (
+              <p className="error-message" role="alert">
+                {t('find.allZero')}
+              </p>
+            )}
+
+            <p className="find-actions">
+              <button type="submit" className="button-primary">
+                {t('find.submit')}
+              </button>
+              <button type="button" className="button-secondary" onClick={reset}>
+                {t('find.reset')}
+              </button>
             </p>
-          )}
-
-          <p className="find-actions">
-            <button type="submit" className="button-primary">
-              {t('find.submit')}
-            </button>
-            <button type="button" className="button-secondary" onClick={reset}>
-              {t('find.reset')}
-            </button>
-          </p>
-        </form>
+          </form>
+          <HouseholdProfile profile={profile} onChange={setProfile} districts={districts.data?.districts ?? []} />
+        </div>
 
         <section className="card" aria-labelledby={`${formId}-result`}>
           <h2 id={`${formId}-result`}>{t('find.ranking')}</h2>
@@ -202,11 +233,13 @@ export function FindPage() {
                       <th scope="col">{t('score.placeHeader')}</th>
                       <th scope="col">{t('districts.table.district')}</th>
                       <th scope="col">{t('find.table.score')}</th>
+                      {profile.work && <th scope="col">{t('profile.commuteColumn')}</th>}
+                      {withBudget && <th scope="col">{t('profile.priceColumn')}</th>}
                       <th scope="col">{t('find.table.drivers')}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {ranking.map((item) => (
+                    {shown.map((item) => (
                       <tr key={item.code}>
                         <td>{item.rank}</td>
                         <th scope="row">
@@ -215,6 +248,33 @@ export function FindPage() {
                         <td>
                           <ScoreValue score={item.score} />
                         </td>
+                        {profile.work && (
+                          <td>
+                            {/* Minutes from this district to the work place, as the API estimates them: shown as sent. */}
+                            {item.code === profile.work ? (
+                              t('profile.sameDistrict')
+                            ) : typeof minutesTo.get(item.code) === 'number' ? (
+                              t('commute.minutes', { value: plainNumber(minutesTo.get(item.code) as number, i18n.language) })
+                            ) : minutesTo.get(item.code) === null ? (
+                              <span className="no-data">{t('commute.none')}</span>
+                            ) : (
+                              '…'
+                            )}
+                          </td>
+                        )}
+                        {withBudget && (
+                          <td>
+                            {priceOf.get(item.code) ? (
+                              <>
+                                {priceOf.get(item.code)?.display} <DataKindBadge kind={priceOf.get(item.code)?.data_kind ?? 'observed'} />
+                              </>
+                            ) : prices.isPending ? (
+                              '…'
+                            ) : (
+                              <span className="no-data">{t('districts.noData')}</span>
+                            )}
+                          </td>
+                        )}
                         <td>
                           <ul className="drivers">
                             {item.top_drivers.map((driver) => (
@@ -231,6 +291,15 @@ export function FindPage() {
                 </table>
               </div>
 
+              {/* What the budget did to the list, said politely when it changes. It is an estimate, and it says so. */}
+              <div role="status">
+                {budgetOn && (
+                  <p className="notice">
+                    {shown.length === 0 ? t('profile.noneFit') : t('profile.shown', { shown: shown.length, all: ranking.length })}{' '}
+                    {profile.tenure === 'rent' && t('profile.rentNote')} {shown.some((item) => !priceOf.has(item.code)) && t('profile.noPrice')}
+                  </p>
+                )}
+              </div>
               {/* What the score is and is not, in one sentence. The city name comes from /meta. */}
               {meta.data && <p className="note">{t('score.explain', { city: meta.data.city_name })}</p>}
               {/* The API's own note: scores compare the districts of this city only. */}

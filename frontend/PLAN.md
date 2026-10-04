@@ -1,4 +1,4 @@
-# Frontend plan (F1 to F3)
+# Frontend plan (F1 to F3, built)
 
 Status: **approved and built** (3 and 4 October 2026). The stack below is the one in use. The pull request checks in `.github/workflows/ci.yml` run `npm run check`, so the generated types are checked there too.
 
@@ -11,7 +11,7 @@ Status: **approved and built** (3 and 4 October 2026). The stack below is the on
 | Server state | TanStack Query | One hook per endpoint in `src/api/` |
 | Routing | React Router | Focus moves to the main region after navigation |
 | Interface text | `i18next`, hand-written `pl.json` and `en.json` | Polish default. `?lang=` sent on every API call. |
-| Map | SVG drawn from `/districts.geojson` | No tiles, no third-party request |
+| Map | SVG drawn from `/districts.geojson`, with a context layer from OpenStreetMap built once by `scripts/build_basemap.py` | No tiles, no third-party request |
 | Tests | Vitest, Testing Library, `vitest-axe` | One accessibility check per page |
 | Lint | ESLint with `eslint-plugin-jsx-a11y` | |
 
@@ -30,17 +30,12 @@ Phase 2 (F9 to F12) starts only after phase 1 passes review.
 
 Unchanged from `README.md`: `src/api`, `src/components`, `src/pages`, `src/i18n/locales`, `src/lib`, `src/theme`, `src/test`, `public`.
 
-## Needs before F1 can start
-
-- The current dev API address, shared privately by `Delta-43`. It goes in `.env.local` (git-ignored) as `VITE_DEV_API`.
-- A yes on this plan, or changes to it.
-
 ## Questions for the coordinator
 
-1. Is the placeholder theme acceptable until the design requirements arrive?
-2. Is the 5.9 TypeScript pin acceptable, or should we try the newest versions first?
+1. Is the placeholder theme acceptable until the design requirements arrive? **Answered 4 October:** the look of krakow.pl is the accepted design (`../docs/DESIGN.md`).
+2. Is the 5.9 TypeScript pin acceptable, or should we try the newest versions first? **Answered:** the pin is in use (`package.json`).
 3. Who starts F1: `Rysia`, or an agent working for `unicorn-alex`? Both own `frontend/`, so two people must not start it in parallel.
-   **Answered 3 October:** `unicorn-alex` (the frontend is hers while `Rysia` is on break). Questions 1 and 2 are still open.
+   **Answered 3 October:** `unicorn-alex`. Since the evening of 3 October `Rysia` builds the frontend and `unicorn-alex` reviews it.
 
 ## Rules that every pull request keeps
 

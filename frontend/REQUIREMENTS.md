@@ -22,9 +22,9 @@ Design for a phone first, at 320 CSS pixels wide. Many users will also use a scr
 |---|---|---|
 | **1. Demo slice** | Districts list and map, district detail, compare, find a district, sources, accessibility statement | No. Everything is in the contract today. |
 | **2. Household profile** | Intake of household type, children's ages, work place and budget, mapped to weights and filters in the browser | No for the mapping. Extra persona presets are a small data change. |
-| **3. Public-service features** | Personalised AI report, official notices, resident feedback with identity checks, aggregate demand counts | Yes. Each needs a contract change and a new service first. |
+| **3. Public-service features** | Personalised AI report and resident feedback (built against the city service, without identity checks); official notices, identity checks and aggregate demand counts (not built) | Yes. The first two have their own contract, `../city-service/openapi.yaml`. The rest need a contract change and a new service first. |
 
-Build phase 1 first. Start phase 2 only when phase 1 passes review. Do not build phase 3 screens against imaginary endpoints.
+Status on 4 October 2026: phase 1 is built. Of phase 2 only the commute step is built (F10). Of phase 3 the AI report card and the feedback page are built; notices show a label only. Do not build phase 3 screens against imaginary endpoints.
 
 ## Shared elements (every page)
 
@@ -43,7 +43,7 @@ The MVP is one flow a judge can follow in under three minutes. Build in this ord
 |---|---|
 | P0 | Shared elements, districts list and map, district detail, find a district, compare, sources, accessibility statement draft, accessibility baseline |
 | P1 | Household profile, commute, outlook card, rent versus buy, similar districts |
-| Later | The phase 3 features. Build nothing for them. |
+| Later | The unbuilt phase 3 features (notices, identity checks, demand counts). Build nothing for them. |
 
 ## Phase 1 screens
 
@@ -130,11 +130,11 @@ The profile helps the user set weights and filters. It stays in the browser's me
 
 ## Phase 3: later features
 
-These need a contract change and a backend service first. Do not build them yet. They are here so you can leave room in the layout.
+The AI report and resident feedback are built against the city service (`../city-service/openapi.yaml`). The others need a contract change and a backend service first. Do not build them yet. They are here so you can leave room in the layout.
 
-- **Personalised AI report.** The user enters requirements and a profile and gets a summary. It must carry the artificial intelligence label.
+- **Personalised AI report (built).** The user enters requirements and gets a summary of the top three districts. It carries the artificial intelligence label and a notice that the text goes to a model provider and is not stored.
 - **Official notices.** Official notices of planned projects and infrastructure, set by the city. Show them as official, dated and sourced. Never present them as price forecasts.
-- **Resident feedback.** Residents report the rent they pay or bad data. Identity is checked through the national login node. The form must meet WCAG 2.2 accessible authentication.
+- **Resident feedback (built without identity checks).** Residents report the rent they pay or bad data. A report is stored as unverified and is never published. When identity checks arrive through the national login node, the form must meet WCAG 2.2 accessible authentication.
   Crime reports are not collected. Point people to the police's national threat map.
 - **Demand counts.** Aggregate and anonymous. The browser sends no personal data.
 
@@ -152,9 +152,9 @@ These need a contract change and a backend service first. Do not build them yet.
 
 ## Kraków data notes
 
-These notes describe the data on 2 October 2026. The API is the source of truth. It carries each caveat and each reason, so show those and do not copy this list into the interface.
+These notes describe the data on 4 October 2026. The API is the source of truth. It carries each caveat and each reason, so show those and do not copy this list into the interface.
 
-- 45 of the 51 catalogue metrics have data. The others come with a reason from the API.
+- 47 of the 51 catalogue metrics have data. The other four come with a reason from the API.
 - There is no recorded crime data for Kraków. Safety uses road accidents and proxies.
 - The Kraków transit feeds contain no rail or metro stops.
 - Resident figures are people registered for permanent residence. They are not the total population.

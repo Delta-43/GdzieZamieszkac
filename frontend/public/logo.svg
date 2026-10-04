@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">GdzieZamieszkać</title>
+  <!-- A house across two districts, in three steps of the map's blue ramp. A round stroke join in the fill colour rounds the corners. -->
+  <g stroke-linejoin="round" stroke-width="40">
+    <path d="M52 52H415.7L52 415.7Z" fill="#0063af" stroke="#0063af" />
+    <path d="M460 460V96.3L96.3 460Z" fill="#7fb0dc" stroke="#7fb0dc" />
+  </g>
+  <path d="M256 118 404 232H366V380H146V232H108Z" fill="#ffffff" stroke="#ffffff" stroke-width="44" stroke-linejoin="round" />
+  <path d="M256 118 404 232H366V380H146V232H108Z" fill="#0a3a66" stroke="#0a3a66" stroke-width="24" stroke-linejoin="round" />
+</svg>

@@ -175,6 +175,96 @@ export const reportFixture: Schemas['Report'] = {
   generated_at: '2026-09-30T12:00:00+00:00',
 }
 
+/** Rent versus buy, as the API estimates it. The price follows the size that was asked for. */
+export const rentVsBuyFixture: Schemas['RentVsBuy'] = {
+  district: 'alpha',
+  lang: 'pl',
+  area_m2: 50,
+  price: { value: 5000, currency: 'TST', display: '5000 test price' },
+  monthly_rent: { value: 30, currency: 'TST', display: '30 test rent a month' },
+  yield_gross: 0.05,
+  yield_display: '5 test%',
+  payback_years: 17.8,
+  payback_display: '17,8 test years',
+  data_kind: 'estimated',
+  based_on: [
+    { key: 'test_sale', display: '100 test', data_kind: 'observed' },
+    { key: 'test_rent', display: '10 test', data_kind: 'estimated' },
+  ],
+  caveat: 'Test rent versus buy caveat.',
+}
+
+/** The districts most like Alpha. The contract has no named schema for this answer. */
+export const similarFixture = {
+  district: 'alpha',
+  lang: 'pl',
+  method: 'Test similar method.',
+  similar: [
+    { code: 'beta', name: 'Beta', similarity: 0.769, closest_on: ['test_sale', 'test_rent'] },
+    { code: 'gamma', name: 'Gamma', similarity: 0.5, closest_on: [] },
+  ],
+}
+
+/** The outlook of Alpha: one change with data, one without, the city's past, and no published forecast. */
+export const outlookFixture: Schemas['Outlook'] = {
+  district: 'alpha',
+  lang: 'pl',
+  data_kind: 'observed',
+  momentum: {
+    growth_12m: {
+      value: 0.1,
+      display: '+10 test%',
+      annualised: null,
+      annualised_display: null,
+      from: '2025-04-01',
+      to: '2026-04-01',
+      from_display: '100 test',
+      to_display: '110 test',
+      n_obs_from: 78,
+      n_obs_to: 12,
+      low_confidence: true,
+    },
+    growth_since_start: null,
+  },
+  city_history: {
+    available: true,
+    period_start: '2006-06-01',
+    period_end: '2026-05-31',
+    windows: [{ quarters: 4, label: 'Test year', low: -0.05, median: 0.03, high: 0.15, low_display: '-5 test%', median_display: '+3 test%', high_display: '+15 test%', n_windows: 76 }],
+    source: { name: 'Test city source', licence: 'Test city licence', attribution: 'Test city credit' },
+    method: 'Test city method.',
+  },
+  scenario: {
+    published: false,
+    reason: 'Test reason for no forecast.',
+    ranges: [],
+    backtest: {
+      period_start: '2006-08-31',
+      period_end: '2026-05-31',
+      cities: 17,
+      results: [{ quarters: 4, method: 'Test method name', origins: 816, mae_method: 0.0619, mae_no_change: 0.0712, mae_last_year_continues: 0.0415, coverage_80: 0.686, passes: false }],
+    },
+  },
+  method: 'Test outlook method.',
+  caveat: 'Test outlook caveat: a record of the past, not a forecast.',
+}
+
+/** Travel times from Alpha, as /commute answers them: out of order, with Alpha itself, and one district without a connection. */
+export const commuteFixture: Schemas['Commute'] = {
+  from: 'alpha',
+  lang: 'pl',
+  data_kind: 'estimated',
+  method: 'Test commute method.',
+  as_of: '2026-10-07',
+  caveat: 'Test commute caveat from the API.',
+  destinations: [
+    { code: 'alpha', minutes: 0 },
+    { code: 'beta', minutes: 41.5 },
+    { code: 'gamma', minutes: null },
+    { code: 'delta', minutes: 12 },
+  ],
+}
+
 /** Category scores for the four districts, as /recommend answers them. */
 export const recommendFixture: Schemas['RecommendResponse'] = {
   lang: 'pl',
@@ -231,12 +321,21 @@ export function districtsApi(request: Request): Response {
       })),
     })
   }
+  if (pathname.endsWith('/rent-vs-buy')) {
+    const size = Number(new URL(request.url).searchParams.get('area_m2'))
+    return jsonResponse({ ...rentVsBuyFixture, area_m2: size, price: { value: size * 100, currency: 'TST', display: `${size * 100} test price` } })
+  }
+  if (pathname.endsWith('/similar')) return jsonResponse(similarFixture)
+  if (pathname === '/v1/districts/alpha/outlook') return jsonResponse(outlookFixture)
+  // The other districts answer as an API with the feature switched off: the section must hide.
+  if (pathname.endsWith('/outlook')) return jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501)
   if (pathname === '/v1/districts/beta/report') return jsonResponse(reportFixture)
   if (pathname.endsWith('/report')) return jsonResponse({ type: 'about:blank', title: 'No report', status: 404 }, 404)
   if (pathname === '/v1/districts/alpha/series/sale_price_median_m2') return jsonResponse(seriesFixture)
   if (pathname.includes('/series/')) return jsonResponse({ type: 'about:blank', title: 'No history', status: 404 }, 404)
   if (pathname === '/v1/districts/nope') return jsonResponse({ type: 'about:blank', title: 'Unknown district', status: 404 }, 404)
   if (pathname.startsWith('/v1/districts/')) return jsonResponse(detailFixture)
+  if (pathname === '/v1/commute') return jsonResponse(commuteFixture)
   if (pathname === '/v1/metrics') return jsonResponse(metricsFixture)
   if (pathname === '/v1/metrics/test_sale/values') return jsonResponse(metricValuesFixture)
   if (pathname.startsWith('/v1/metrics/')) return jsonResponse({ ...metricValuesFixture, key: 'other', values: [] })

@@ -138,6 +138,99 @@ export function useDistrictSeries(code: string | undefined, key: string) {
   })
 }
 
+/**
+ * Estimated minutes by public transport from each of the given districts to one work district, in the morning.
+ * One answer per home district (the API estimates from a district to all the others), cached, and asked only once a
+ * work district is chosen. A district is missing from the map while its answer is on the way or has failed.
+ */
+export function useCommuteTo(work: string, homes: string[]): Map<string, number | null> {
+  const { i18n } = useTranslation()
+  const answers = useQueries({
+    queries: homes.map((home) => ({
+      queryKey: ['commute', home, i18n.language],
+      enabled: work !== '',
+      retry: false,
+      queryFn: async () => {
+        const { data, error, response } = await api.GET('/commute', { params: { query: { from: home } } })
+        if (error) throw new ApiError(response.status, error.title)
+        return data
+      },
+    })),
+  })
+  const minutes = new Map<string, number | null>()
+  answers.forEach((answer, index) => {
+    const home = homes[index]
+    const to = answer.data?.destinations.find((destination) => destination.code === work)
+    if (home !== undefined && to) minutes.set(home, to.minutes)
+  })
+  return minutes
+}
+
+/** The price and the rent of a flat of the given size, estimated from the district's medians. A 501 answer hides the section. */
+export function useRentVsBuy(code: string | undefined, areaM2: number) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['rentVsBuy', code, areaM2, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    // The result of the last size stays on the page while the next one is on the way.
+    placeholderData: (previous) => previous,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/rent-vs-buy', { params: { path: { code: code ?? '' }, query: { area_m2: areaM2 } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
+/** The districts most like this one, by the measures of the score. A 501 answer hides the section. */
+export function useSimilar(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['similar', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/similar', { params: { path: { code: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
+/** How prices changed in the past, in the district and in the whole city. History, never a forecast. A 501 answer hides the section. */
+export function useOutlook(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['outlook', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/outlook', { params: { path: { code: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
+/**
+ * Estimated minutes by public transport from one district to every other one. A 501 answer means the feature is
+ * switched off: the caller hides the section.
+ */
+export function useCommute(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['commute', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/commute', { params: { query: { from: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
 /** The category names as the API sends them. They arrive only inside a district's detail, so the first district is read for them. */
 export function useCategoryLabels(): Map<string, string> {
   const districts = useDistricts()

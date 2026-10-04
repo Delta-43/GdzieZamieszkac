@@ -1,0 +1,1 @@
+- `presentation-comments.html`: new copy of `presentation.html` with a per-slide comments panel (key C), kept in the browser and shared as Markdown or JSON, so the team can review the deck. The only change to the copied code: the arrow keys also work while a button has focus. `presentation.html` is unchanged.

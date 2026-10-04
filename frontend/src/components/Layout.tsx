@@ -115,7 +115,11 @@ export function Layout() {
           <SiteMenu id={menuId} open={menuOpen} onClose={closeMenu} />
         </div>
         <p className="site-name">
-          <Link to="/">{t('site.name')}</Link>
+          <Link to="/">
+            {/* The logo is decoration: the link's name is the site name beside it. */}
+            <img className="site-logo" src="/logo.svg" alt="" width="32" height="32" />
+            {t('site.name')}
+          </Link>
           {/* The city name comes from /meta and is never written into the code. */}
           {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
         </p>

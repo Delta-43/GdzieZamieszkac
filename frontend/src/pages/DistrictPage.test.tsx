@@ -170,3 +170,144 @@ test.each(['pl', 'en'] as const)('the district page has no automated accessibili
   expect(document.documentElement.lang).toBe(language)
   expect((await axe(container)).violations).toEqual([])
 })
+
+test('travel times are listed nearest first with the API caveat, and a missing connection is said in words', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })).closest('section') as HTMLElement
+  const rows = within(within(section).getByRole('table')).getAllByRole('row')
+  // The district itself is left out. The minutes are shown as sent, with a decimal comma in Polish. No connection is never a zero.
+  expect(rows.slice(1).map((row) => row.textContent)).toEqual(['Delta12 min', 'Beta41,5 min', 'Gammanie znaleziono połączenia'])
+  expect(within(section).getByRole('link', { name: 'Delta' })).toHaveAttribute('href', '/districts/delta')
+  // The caveat is on the page without a press, with the data kind, the day of the timetable and the note on long trips.
+  expect(section).toHaveTextContent('Zastrzeżenie: Test commute caveat from the API.')
+  expect(section).toHaveTextContent('oszacowane')
+  expect(within(section).getByText('7 października 2026')).toHaveAttribute('datetime', '2026-10-07')
+  expect(section).toHaveTextContent('Czasy powyżej około 60 minut są zaniżone')
+  expect(within(section).getByText('Co to znaczy?').closest('details')).toHaveTextContent('Test commute method.')
+})
+
+test('the travel times are hidden when the API answers 501, and the rest of the page stays', async () => {
+  mockFetch((request) =>
+    new URL(request.url).pathname === '/v1/commute' ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  expect(await screen.findByRole('heading', { level: 1, name: 'Alpha' })).toBeInTheDocument()
+  await screen.findByText('Test sale label', { selector: 'dt' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+})
+
+test('the outlook is history: the change in the district, the city in the past, the reason for no forecast, and no future price', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Jak zmieniały się ceny' })).closest('section') as HTMLElement
+  // The API's caveat opens the section: this is the past, not a forecast.
+  expect(within(section).getByText('Test outlook caveat: a record of the past, not a forecast.')).toBeInTheDocument()
+  // The change as the API words it, with the two prices and dates it compares, the sample sizes and the low-confidence mark.
+  const last = within(section).getByText('Ostatnie 12 miesięcy').closest('.metric') as HTMLElement
+  expect(last).toHaveTextContent('+10 test% (niska wiarygodność)')
+  expect(last).toHaveTextContent('od 1 kwietnia 2025 (100 test) do 1 kwietnia 2026 (110 test)')
+  expect(last).toHaveTextContent('Liczba transakcji: 78 i 12')
+  // A change without data says so in words, never a zero.
+  expect(within(section).getByText('Od początku danych').closest('.metric')).toHaveTextContent('Za mało danych, aby pokazać zmianę.')
+  // The city in the past, as the API words each figure.
+  const city = within(section).getByRole('table', { name: 'Zmiana cen w mieście w przeszłych okresach tej długości' })
+  expect(within(city).getAllByRole('row')[1]).toHaveTextContent('Test year+3 test%-5 test%+15 test%')
+  expect(section).toHaveTextContent('Test city source')
+  // No forecast: the API's reason, and the test behind it with its figures as sent.
+  expect(within(section).getByRole('heading', { level: 3, name: 'Dlaczego nie ma prognozy' })).toBeInTheDocument()
+  expect(section).toHaveTextContent('Test reason for no forecast.')
+  const test = within(section).getByText('Jak sprawdzono metody prognozy').closest('details') as HTMLElement
+  expect(test).toHaveTextContent('Test method name40,06190,07120,04150,686niezaliczony')
+})
+
+test('the outlook is hidden when the API answers 501', async () => {
+  mockFetch((request) =>
+    new URL(request.url).pathname.endsWith('/outlook') ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  expect(await screen.findByRole('heading', { level: 1 })).toBeInTheDocument()
+  await screen.findByText('Test sale label', { selector: 'dt' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Jak zmieniały się ceny' })).not.toBeInTheDocument()
+})
+
+test('rent versus buy shows the API estimate for 50 square metres, marked as an estimate, with the caveat and the medians behind it', async () => {
+  const fetchMock = mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).closest('section') as HTMLElement
+  expect(await within(section).findByText('5000 test price')).toBeInTheDocument()
+  expect(section).toHaveTextContent('Dla mieszkania 50 m² oszacowane')
+  expect(section).toHaveTextContent('30 test rent a month')
+  // The two derived figures carry the names the API gives them in the district's detail.
+  expect(within(section).getByText('Test yield label').closest('.metric')).toHaveTextContent('5 test%')
+  expect(section).toHaveTextContent('17,8 test years')
+  expect(section).toHaveTextContent('Zastrzeżenie: Test rent versus buy caveat.')
+  expect(section).toHaveTextContent('Test sale label: 100 test zmierzone')
+  expect(section).toHaveTextContent('Test rent label: 10 test oszacowane')
+
+  // A new size is sent only with the button, and the new figures replace the old ones.
+  fireEvent.change(within(section).getByLabelText('Powierzchnia mieszkania w m²'), { target: { value: '80' } })
+  expect(section).toHaveTextContent('5000 test price')
+  fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+  expect(await within(section).findByText('8000 test price')).toBeInTheDocument()
+  const asked = fetchMock.mock.calls.map(([input]) => new URL((input as Request).url)).filter((url) => url.pathname.endsWith('/rent-vs-buy'))
+  expect(asked.map((url) => url.searchParams.get('area_m2'))).toEqual(['50', '80'])
+})
+
+test('a size outside 15 to 250 square metres is named in text, tied to the field, and is not sent', async () => {
+  const fetchMock = mockFetch(districtsApi)
+  renderApp(PAGE)
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).closest('section') as HTMLElement
+  await within(section).findByText('5000 test price')
+  const field = within(section).getByLabelText('Powierzchnia mieszkania w m²')
+
+  for (const value of ['5', '300', 'abc', '']) {
+    fireEvent.change(field, { target: { value } })
+    fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(field).toHaveAccessibleDescription(/Podaj powierzchnię od 15 do 250 m²\./)
+    expect(field).toHaveFocus()
+  }
+  // The figures of the last good size stay, and nothing new was asked.
+  expect(section).toHaveTextContent('5000 test price')
+  expect(fetchMock.mock.calls.filter(([input]) => new URL((input as Request).url).pathname.endsWith('/rent-vs-buy'))).toHaveLength(1)
+
+  fireEvent.change(field, { target: { value: '15' } })
+  fireEvent.click(within(section).getByRole('button', { name: 'Przelicz' }))
+  expect(field).not.toHaveAttribute('aria-invalid')
+  expect(await within(section).findByText('1500 test price')).toBeInTheDocument()
+})
+
+test('similar districts are listed with the measures they are closest on, by name, and the method one press away', async () => {
+  mockFetch(districtsApi)
+  renderApp(PAGE)
+
+  const section = (await screen.findByRole('heading', { level: 2, name: 'Podobne dzielnice' })).closest('section') as HTMLElement
+  const items = within(section).getAllByRole('listitem')
+  expect(items).toHaveLength(2)
+  expect(within(items[0] as HTMLElement).getByRole('link', { name: 'Beta' })).toHaveAttribute('href', '/districts/beta')
+  // The similarity is shown as sent, with a decimal comma in Polish. The measures carry their names from the catalogue.
+  expect(items[0]).toHaveTextContent('Podobieństwo: 0,769 (w skali od 0 do 1)')
+  expect(items[0]).toHaveTextContent('Najbardziej zbliżone miary: Test sale label, Test rent label')
+  expect(items[1]).not.toHaveTextContent('Najbardziej zbliżone miary')
+  expect(section).toHaveTextContent('Podobne nie znaczy lepsze ani gorsze.')
+  expect(within(section).getByText('Co to znaczy?').closest('details')).toHaveTextContent('Test similar method.')
+})
+
+test('rent versus buy and similar districts are hidden when the API answers 501', async () => {
+  mockFetch((request) =>
+    /\/(rent-vs-buy|similar)$/.test(new URL(request.url).pathname) ? jsonResponse({ type: 'about:blank', title: 'Not implemented', status: 501 }, 501) : districtsApi(request),
+  )
+  renderApp(PAGE)
+
+  await screen.findByRole('heading', { level: 2, name: 'Dojazd komunikacją miejską z tej dzielnicy' })
+  expect(screen.queryByRole('heading', { level: 2, name: 'Wynajem a kupno: szacunek' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('heading', { level: 2, name: 'Podobne dzielnice' })).not.toBeInTheDocument()
+})
+
