@@ -1928,3 +1928,58 @@ main :is(ul, ol):not([class]) > li {
 .outlook-scenario {
   margin-block-start: var(--space-5);
 }
+
+/* Rent versus buy: the size field with its button, then the figures for that size. */
+.rent-buy__form {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  margin-block-end: var(--space-4);
+}
+
+.rent-buy__form .field {
+  inline-size: 100%;
+}
+
+.rent-buy__form .field input {
+  max-inline-size: 12rem;
+}
+
+.rent-buy__for {
+  margin-block: 0 var(--space-2);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.rent-buy__based {
+  margin-block: var(--space-3) var(--space-1);
+}
+
+.rent-buy__based-list {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+/* Similar districts: a name, then two small lines about why it is alike. */
+.similar-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.similar-list li {
+  display: grid;
+  gap: var(--space-1);
+  padding-block-end: var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.similar-list a {
+  justify-self: start;
+  font-family: var(--font-ui);
+  font-weight: 700;
+}

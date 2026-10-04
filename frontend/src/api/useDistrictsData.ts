@@ -138,6 +138,38 @@ export function useDistrictSeries(code: string | undefined, key: string) {
   })
 }
 
+/** The price and the rent of a flat of the given size, estimated from the district's medians. A 501 answer hides the section. */
+export function useRentVsBuy(code: string | undefined, areaM2: number) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['rentVsBuy', code, areaM2, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    // The result of the last size stays on the page while the next one is on the way.
+    placeholderData: (previous) => previous,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/rent-vs-buy', { params: { path: { code: code ?? '' }, query: { area_m2: areaM2 } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
+/** The districts most like this one, by the measures of the score. A 501 answer hides the section. */
+export function useSimilar(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['similar', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/similar', { params: { path: { code: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
 /** How prices changed in the past, in the district and in the whole city. History, never a forecast. A 501 answer hides the section. */
 export function useOutlook(code: string | undefined) {
   const { i18n } = useTranslation()
