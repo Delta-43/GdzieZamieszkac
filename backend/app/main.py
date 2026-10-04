@@ -24,6 +24,16 @@ log = logging.getLogger("gdziezamieszkac")
 HTTP_TITLES = {404: "Not found", 405: "Method not allowed"}
 
 
+def validation_detail(exc: RequestValidationError) -> str:
+    """The reasons a request was refused, in words. A body that is not JSON, or sent with the wrong content type, gets a plain sentence."""
+    errors = exc.errors()
+    if any(e["type"] == "json_invalid" for e in errors):
+        return "The request body is not valid JSON."
+    if any(e["type"] in ("model_attributes_type", "dict_type") and e["loc"] == ("body",) for e in errors):
+        return "Send the body as a JSON object, with the header Content-Type: application/json."
+    return "; ".join(f"{'.'.join(str(p) for p in e['loc'] if p != 'body')}: {e['msg']}" for e in errors)
+
+
 def create_app(settings: Settings | None = None, store: DataStore | None = None) -> FastAPI:
     """Build the app: routes, middleware and error handlers. Tests pass their own settings and store."""
     settings = settings or get_settings()
@@ -59,8 +69,7 @@ def create_app(settings: Settings | None = None, store: DataStore | None = None)
 
     @app.exception_handler(RequestValidationError)
     async def _validation(request: Request, exc: RequestValidationError):
-        detail = "; ".join(f"{'.'.join(str(p) for p in e['loc'] if p != 'body')}: {e['msg']}" for e in exc.errors())
-        return problem(request.url.path, 422, "Invalid request", detail)
+        return problem(request.url.path, 422, "Invalid request", validation_detail(exc))
 
     return app
 
