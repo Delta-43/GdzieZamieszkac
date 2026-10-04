@@ -21,17 +21,17 @@ body {
 h1 {
   margin-block: 0 var(--space-4);
   max-inline-size: 28ch;
-  font-size: clamp(var(--text-xl), 1.2rem + 2vw, var(--text-2xl));
+  /* The largest heading of the Gov.pl design system: 28 pixels on a phone, growing to 40 on a wide screen. */
+  font-size: clamp(var(--text-2xl), 1.3rem + 2vw, var(--text-4xl));
   font-weight: 700;
   line-height: var(--line-tight);
-  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 h2 {
   margin-block: var(--space-5) var(--space-3);
   padding-inline-start: var(--space-3);
-  font-size: var(--text-lg);
+  font-size: clamp(var(--text-lg), 1.1rem + 0.6vw, var(--text-xl));
   font-weight: 700;
   line-height: var(--line-tight);
   /* Section headings carry a short dark bar, as on the city's website. */
@@ -207,8 +207,9 @@ main,
 }
 
 /*
-  Buttons. Secondary: white with a blue border and blue text. Primary, and the chosen item of a group: filled blue
-  with white text. Under the pointer the blue turns lighter. Only the colours change, over a short time.
+  Buttons, after the Gov.pl design system: 44 pixels high, a 2 pixel border, 4 pixel corners and a bold label.
+  Secondary: white with a blue border and blue text. Primary, and the chosen item of a group: filled blue with
+  white text. Under the pointer the blue turns lighter. Only the colours change, over a short time.
 */
 .language-toggle button,
 .error-message button,
@@ -281,8 +282,13 @@ button.reserve-bold {
   border-color: var(--color-accent-hover);
 }
 
+/* The label of an action button is in capitals at the full text size, as in the Gov.pl design system. The choices of a group (presets, categories, languages) keep their own case. */
+.error-message button,
+.button-secondary,
 .button-primary {
   padding-inline: var(--space-5);
+  font-size: var(--text-base);
+  text-transform: uppercase;
 }
 
 .language-toggle {
@@ -324,30 +330,31 @@ button.reserve-bold {
   text-decoration-thickness: 0.15em;
 }
 
-/* Notices: a card with a rule in a status colour and the message in words. */
+/* Messages, after the Gov.pl design system: a 2 pixel frame in the colour of their kind, 4 pixel corners, and the message in words. */
 .stale-notice,
 .notice,
 .error-message {
   font-family: var(--font-ui);
   font-size: var(--text-sm);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
 }
 
 .stale-notice {
   margin-block-start: var(--space-4);
   padding-block: var(--space-3);
-  border-inline-start: 0.25rem solid var(--color-warning);
+  border-color: var(--color-warning);
 }
 
 .notice {
   padding: var(--space-3) var(--space-4);
-  border-inline-start: 0.25rem solid var(--color-info);
+  border-color: var(--color-info);
 }
 
 .error-message {
   padding: var(--space-3) var(--space-4);
-  border-inline-start: 0.25rem solid var(--color-danger);
+  border-color: var(--color-danger);
 }
 
 .stale-notice p,
@@ -461,10 +468,14 @@ main:focus {
   inline-size: 100%;
   max-inline-size: 28rem;
   min-block-size: var(--target);
-  padding-inline: var(--space-3);
-  font-size: var(--text-sm);
+  /* A field of the Gov.pl design system: 44 pixels high, 8 by 12 pixels of padding, text at the full size, 4 pixel corners. */
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: var(--line-base);
   color: var(--color-text);
   background: var(--color-surface-raised);
+  /* The border is darker than the design system's light grey, so it reaches 3:1 against the page (WCAG 1.4.11). */
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
 }
