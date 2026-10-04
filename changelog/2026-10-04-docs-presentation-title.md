@@ -1,1 +1,0 @@
-- `presentation-comments.html`: the title on the first slide now reads "Choose district first. Then the flat." `presentation.html` and other imported code are unchanged.

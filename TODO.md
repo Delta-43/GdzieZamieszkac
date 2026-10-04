@@ -102,7 +102,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 
 ## P3: after the event
 
-- Deploy the stack on a server, with a pipeline for builds and releases, and off-server backups.
+- A pipeline for builds and releases, and off-server backups. The stack itself is deployed (4 October).
 - A Polish legal opinion on fees, municipal activity, the reward for feedback, and AI transparency.
 - The national login node for identity checks.
 - Confirm the reuse terms of the sources that say "check before redistribution": the city noise map, the city open data and the timetable feed.
@@ -128,7 +128,7 @@ Two features move from concept to real work. Plan: `docs/CITY_SERVICE_PLAN.md`. 
 
 ## Risks
 
-- **No deployed API.** The demo depends on the coordinator's machine staying awake and on Tailscale. Record a backup screen capture of the main flow.
+- **One demo server.** The demo runs on one team server (<https://demo.dchaudhury.com>), behind a Cloudflare Tunnel. If the server or the tunnel stops, the demo stops. Record a backup screen capture of the main flow.
 - **Time.** The frontend starts from nothing. Keep to P0.
 - **Rent figures** are asking rents from a one-time snapshot. Show the caveat, and show the low-confidence marks.
 - **Accessibility** is a legal requirement for a public service. Test the main flow with a keyboard and a screen reader before the demo.
