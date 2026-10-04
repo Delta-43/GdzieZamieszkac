@@ -98,7 +98,7 @@ function DistrictSelect({ id, error, describedBy }: { id: string; error?: string
   const { t } = useTranslation()
   const districts = useDistricts()
   return (
-    <select id={id} name="district" defaultValue="" aria-invalid={error ? true : undefined} aria-describedby={describedBy || undefined}>
+    <select id={id} name="district" aria-required="true" defaultValue="" aria-invalid={error ? true : undefined} aria-describedby={describedBy || undefined}>
       <option value="">{t('feedback.choose')}</option>
       {districts.data?.districts.map((district) => (
         <option key={district.code} value={district.code}>
@@ -137,18 +137,19 @@ export function RentPaidForm({ ready }: { ready: boolean }) {
     <section className="card" aria-labelledby={`${id}-heading`}>
       <h2 id={`${id}-heading`}>{t('feedback.rent.heading')}</h2>
       <p>{t('feedback.rent.intro')}</p>
+      <p className="note">{t('feedback.required')}</p>
       <form ref={formRef} onSubmit={(event) => submit(event, validate)} noValidate>
         <Field id={`${id}-district`} label={t('feedback.fields.district')} error={errors.district}>
           {(describedBy) => <DistrictSelect id={`${id}-district`} error={errors.district} describedBy={describedBy} />}
         </Field>
         <Field id={`${id}-rent`} label={t('feedback.fields.rent')} hint={t('feedback.hints.rent', { min: RENT_MIN, max: RENT_MAX })} error={errors.rent}>
           {(describedBy) => (
-            <input id={`${id}-rent`} name="rent" type="text" inputMode="numeric" autoComplete="off" aria-invalid={errors.rent ? true : undefined} aria-describedby={describedBy} />
+            <input id={`${id}-rent`} aria-required="true" name="rent" type="text" inputMode="numeric" autoComplete="off" aria-invalid={errors.rent ? true : undefined} aria-describedby={describedBy} />
           )}
         </Field>
         <Field id={`${id}-size`} label={t('feedback.fields.size')} error={errors.size}>
           {(describedBy) => (
-            <select id={`${id}-size`} name="size" defaultValue="" aria-invalid={errors.size ? true : undefined} aria-describedby={describedBy || undefined}>
+            <select id={`${id}-size`} aria-required="true" name="size" defaultValue="" aria-invalid={errors.size ? true : undefined} aria-describedby={describedBy || undefined}>
               <option value="">{t('feedback.choose')}</option>
               {SIZE_BANDS.map((band) => (
                 <option key={band} value={band}>
@@ -160,7 +161,7 @@ export function RentPaidForm({ ready }: { ready: boolean }) {
         </Field>
         <Field id={`${id}-month`} label={t('feedback.fields.month')} hint={t('feedback.hints.month')} error={errors.month}>
           {(describedBy) => (
-            <input id={`${id}-month`} name="month" type="text" inputMode="numeric" autoComplete="off" placeholder="2026-09" aria-invalid={errors.month ? true : undefined} aria-describedby={describedBy} />
+            <input id={`${id}-month`} aria-required="true" name="month" type="text" inputMode="numeric" autoComplete="off" placeholder="2026-09" aria-invalid={errors.month ? true : undefined} aria-describedby={describedBy} />
           )}
         </Field>
         <p className="find-actions">
@@ -201,13 +202,14 @@ export function DataProblemForm({ ready }: { ready: boolean }) {
     <section className="card" aria-labelledby={`${id}-heading`}>
       <h2 id={`${id}-heading`}>{t('feedback.problem.heading')}</h2>
       <p>{t('feedback.problem.intro')}</p>
+      <p className="note">{t('feedback.required')}</p>
       <form ref={formRef} onSubmit={(event) => submit(event, validate)} noValidate>
         <Field id={`${id}-district`} label={t('feedback.fields.district')} error={errors.district}>
           {(describedBy) => <DistrictSelect id={`${id}-district`} error={errors.district} describedBy={describedBy} />}
         </Field>
         <Field id={`${id}-metric`} label={t('feedback.fields.metric')} error={errors.metric}>
           {(describedBy) => (
-            <select id={`${id}-metric`} name="metric" defaultValue="" aria-invalid={errors.metric ? true : undefined} aria-describedby={describedBy || undefined}>
+            <select id={`${id}-metric`} aria-required="true" name="metric" defaultValue="" aria-invalid={errors.metric ? true : undefined} aria-describedby={describedBy || undefined}>
               <option value="">{t('feedback.choose')}</option>
               {metrics.data
                 ?.filter((metric) => metric.available)
@@ -221,7 +223,7 @@ export function DataProblemForm({ ready }: { ready: boolean }) {
         </Field>
         <Field id={`${id}-message`} label={t('feedback.fields.message')} hint={t('feedback.hints.message', { min: MESSAGE_MIN, max: MESSAGE_MAX })} error={errors.message}>
           {(describedBy) => (
-            <textarea id={`${id}-message`} name="message" rows={4} maxLength={MESSAGE_MAX} aria-invalid={errors.message ? true : undefined} aria-describedby={describedBy} />
+            <textarea id={`${id}-message`} aria-required="true" name="message" rows={4} maxLength={MESSAGE_MAX} aria-invalid={errors.message ? true : undefined} aria-describedby={describedBy} />
           )}
         </Field>
         <p className="find-actions">

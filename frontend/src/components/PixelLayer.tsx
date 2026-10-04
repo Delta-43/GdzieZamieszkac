@@ -26,7 +26,7 @@ const CSS_COLOUR: Record<string, string> = {
   loading: '--color-surface-raised',
   none: '--color-surface-raised',
 }
-const GLIDE = 650
+const GLIDE = 300
 
 /**
  * The colours of the districts as small squares, drawn on a canvas under the map. Purely visual: the districts above it, as SVG, carry the

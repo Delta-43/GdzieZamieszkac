@@ -17,7 +17,7 @@ const MAX_ZOOM = 6
 // From this zoom on, the landmarks are named.
 const LABEL_ZOOM = 2
 // How long the wave of colour takes to cross the map when the measure changes, in milliseconds.
-const WAVE = 650
+const WAVE = 250
 
 const reducedMotion = () => typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
 

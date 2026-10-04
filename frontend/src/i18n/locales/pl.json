@@ -252,6 +252,7 @@
     "noIdentity": "Dziś nie pytamy o tożsamość. Zgłoszenia nie da się jeszcze sprawdzić, więc nie jest używane.",
     "privacy": "Nie wpisuj imienia, adresu, numeru telefonu ani niczego, co wskazuje osobę lub właściciela mieszkania. Zgłoszeń o przestępstwach tu nie zbieramy.",
     "choose": "Wybierz…",
+    "required": "Wszystkie pola są wymagane.",
     "sending": "Wysyłanie…",
     "submit": "Wyślij zgłoszenie",
     "sent": "Zgłoszenie zostało wysłane.",
