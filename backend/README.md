@@ -76,22 +76,23 @@ per-client rate limits and a body size limit; security headers (`nosniff`, `fram
 no interactive docs or generated schema; errors as problem+json without internals (a request id links a 500 to its log line); no personal data stored or logged; dependencies pinned and checked with `pip-audit`.
 Not in the service by design: TLS, authentication (the data is public), a web application firewall. Those belong to the proxy or platform.
 
-## Next steps for the MVP
+## Open tasks of this module
 
-The task list for the whole project is in `../TODO.md`. These tasks belong to this module.
+The task list for the whole project is in `../TODO.md`; the state of the servers and the database is in `HANDOFF.md`.
 
-| ID | Task | Priority |
+| ID | Task | State |
 |---|---|---|
-| B1 | Run for Kraków behind a tunnel for the frontend developers. Set `TRUSTED_PROXY_HOPS=1` so rate limits count real clients. | P0 |
-| B2 | Add `*_display` fields for the district score, area, commute minutes, recommend score and percentile, and similarity. Change the contract first. | P1 |
-| B3 | Add couple and newly married presets to `app/data/personas.json`. `unicorn-alex` reviews the Polish text. | P1 |
-| B4 | Keep the offline tests green. Record any change to imported code in `../ON_SITE_CHANGELOG.md`. | Always |
-| B5 | Design the services for the later features (personalised AI report, official notices, resident feedback, demand counts). This backend stays read-only with no internet access. Build nothing before a contract change. | After the event |
+| B1 | Kraków runs behind `tailscale serve` (tailnet only) with `TRUSTED_PROXY_HOPS=0`. Set it to `1` only if the proxy sets `X-Forwarded-For`. | Open, not checked |
+| B2 | Add `*_display` fields for the district score, area, commute minutes, recommend score and percentile, and similarity. Change the contract first. | Open |
+| B3 | Couple and newly married presets in `app/data/personas.json` | Done (nine presets) |
+| B4 | Keep the offline tests green. Record any change to imported code in `changelog/`. | Always |
+| B5 | Notices and demand counts stay concepts. The AI report and feedback are built in `../city-service/`. | Concepts only |
 
-## Status (2026-10-02)
+## Status (4 October 2026)
 
-Implemented: `/health`, `/meta`, `/districts`, `/districts.geojson`, `/districts/{code}` (+ `/report`, `/similar`, `/rent-vs-buy`, `/series/{key}`), `/metrics`, `/metrics/{key}/values`, `/compare`, `/personas`, `/recommend`.
+All 16 operations of `openapi.yaml` are implemented: `/health`, `/meta`, `/districts`, `/districts.geojson`, `/districts/{code}` (+ `/report`, `/similar`, `/rent-vs-buy`, `/series/{key}`, `/outlook`), `/metrics`, `/metrics/{key}/values`, `/compare`, `/personas`, `/recommend` and `/commute?from=`.
+The Kraków deployment serves 18 districts and 51 metrics, 47 with data. 161 offline tests pass.
 `/districts/{code}/series/{key}` serves the quarterly sale-price history from `district_series` (only `sale_price_median_m2` has history; other metrics answer `404`).
-`/commute?from=` serves the stored district-to-district minutes. `/districts/{code}/outlook` serves momentum, the city's historical range and the backtest, and no forward scenario (it failed the gate, see `docs/BACKEND_PLAN.md` section 5).
-Both cities' matrices are loaded (checked against a journey planner on 2026-10-02; Kraków's long trips run optimistic, see the private decision log).
-Not in the contract yet: the price outlook (only after a passing backtest).
+`/districts/{code}/outlook` serves momentum, the city's historical range and the backtest, and no forward scenario (it failed the gate, see `docs/BACKEND_PLAN.md` section 5).
+`/commute` serves stored district-to-district minutes, checked against a journey planner on 2026-10-02. Kraków's long trips run optimistic.
+Only the Kraków schema is deployed for the event. `CITY=warsaw` still works in code, but this repository holds only the Kraków migrations.

@@ -1,6 +1,6 @@
 # Backend server and contract
 
-What you need to build the frontend against the running backend. Checked against the live server on 3 October 2026.
+What you need to build the frontend against the running backend. Checked against the live server on 4 October 2026.
 The contract is `../backend/openapi.yaml`. If this file and the contract disagree, the contract wins. How to use each endpoint is in `API.md`.
 
 ## The development server
@@ -28,7 +28,7 @@ If the check fails, look at three things in order: Tailscale is connected on you
 
 ### CORS
 
-The server allows two origins and nothing else: `http://localhost:5173` (the Vite default) and the address of the frontend developer's dev app, so the reviewer can use that app too. Run your dev server on port 5173 and listen on the network (`vite --host`). To allow another origin, ask in the pinned issue "Dev environment".
+Each server allows only its listed origins, and nothing else. The data API allows two: `http://localhost:5173` (the Vite default) and the address of the frontend developer's dev app, so the reviewer can use that app too. Run your dev server on port 5173 and listen on the network (`vite --host`). To allow another origin, ask in the pinned issue "Dev environment".
 Allowed methods are `GET`, `POST` and `OPTIONS`. No cookies or credentials are used. The browser can read `ETag`, `X-Data-Warning`, `X-Request-ID` and `Retry-After`.
 
 Do not point the app at this host in a build. Put the base URL in one setting, so the real deployment replaces it.
@@ -51,7 +51,7 @@ Do not point the app at this host in a build. Put the base URL in one setting, s
 | Operation | Method and path | Notes |
 |---|---|---|
 | `getHealth` | `GET /health` | Not needed by the app. |
-| `getMeta` | `GET /meta` | City, languages, staleness, and the credit line of every source (14 for Kraków). |
+| `getMeta` | `GET /meta` | City, languages, staleness, and the credit line of every source (15 for Kraków). |
 | `listDistricts` | `GET /districts` | Code, name, area, score, two highlights. |
 | `getDistrictBoundaries` | `GET /districts.geojson` | Map polygons. The code is in `properties.code`. |
 | `getDistrict` | `GET /districts/{code}` | All metrics by category, with rank. |
@@ -64,7 +64,7 @@ Do not point the app at this host in a build. Put the base URL in one setting, s
 | `getMetricValues` | `GET /metrics/{key}/values` | One metric for all districts, with the numeric `value`. |
 | `compareDistricts` | `GET /compare?codes=a,b,c` | Two to four districts. |
 | `getCommute` | `GET /commute?from={code}` | Minutes by public transport. Estimated. |
-| `listPersonas` | `GET /personas` | `student`, `family`, `remote_worker`, `senior`, `budget`. |
+| `listPersonas` | `GET /personas` | Nine presets: `student`, `family`, `remote_worker`, `senior`, `budget`, `city_life`, `quiet_green`, `couple`, `newly_married`. |
 | `recommend` | `POST /recommend` | Body `{ "weights": {...}, "lang": "pl" }`. |
 
 Send `lang=pl` or `lang=en` on every request. The server default is English, and the portal default is Polish.
@@ -74,7 +74,7 @@ Send `lang=pl` or `lang=en` on every request. The server default is English, and
 District codes (use them in paths):
 `bienczyce`, `biezanow-prokocim`, `bronowice`, `czyzyny`, `debniki`, `grzegorzki`, `krowodrza`, `lagiewniki-borek-falecki`, `mistrzejowice`, `nowa-huta`, `podgorze`, `podgorze-duchackie`, `pradnik-bialy`, `pradnik-czerwony`, `stare-miasto`, `swoszowice`, `wzgorza-krzeslawickie`, `zwierzyniec`.
 
-**Metrics with no data in Kraków.** They come back with `available: false` and a `reason`. Show the reason. Never show a zero.
+**Metrics with no data in Kraków** (four of 51; 47 have data). They come back with `available: false` and a `reason`. Show the reason. Never show a zero.
 
 | Key | Why it matters |
 |---|---|
@@ -82,14 +82,27 @@ District codes (use them in paths):
 | `crime_detection_rate` | Same reason. |
 | `population_total` | Kraków publishes registered permanent residents, not total population. Use `residents_registered` and keep its label. |
 | `transit_stops_rail_metro` | The Kraków feeds have no rail. |
-| `amenity_open_sports_grounds` | Its source (dane.um.warszawa.pl) exists only for Warsaw. |
-| `amenity_aed_public` | Same: the source exists only for Warsaw. |
+
+**Shown but not scored:** `amenity_open_sports_grounds` (now school sports grounds) and `amenity_aed_public` have Kraków data since 4 October. They are listed and ranked, and they do not enter the score.
 
 **History:** only `sale_price_median_m2` has a series (`has_series: true` in `/metrics`). Quarters with few deeds carry `low_confidence: true`, and the newest quarter can be partial. Stare Miasto has 22 quarters, 2021Q1 to 2026Q2. Do not draw a trend through a low-confidence point without marking it.
 
 **Commute:** minutes are estimates. Long trips run about 9 to 19 minutes optimistic. Show the `caveat` and `method` text with the figures. `minutes` is `null` when no connection was found.
 
 **Crime wording:** where crime data exists, write "recorded crimes per 10 000 residents". Never write "safe" or "dangerous".
+
+## The city service
+
+A second server, next to the data API, writes the personalised AI report and stores resident feedback. Contract: `../city-service/openapi.yaml`. It is the only place the model provider is called.
+
+| Operation | Method and path | Notes |
+|---|---|---|
+| health | `GET /v1/health` | Whether the data API is reachable and the model key is set. |
+| AI report | `POST /v1/ai-report` | The ranking is the API's. A model narrates the top three districts from a fixed fact list. Carries the AI label. `502` when the number guard drops the text, `503` without a key. |
+| feedback | `POST /v1/feedback` | `rent_paid` or `data_problem`. Stored as `unverified`, never published, never in a score. |
+| feedback status | `GET /v1/feedback/status` | What happens to a report. |
+
+Same access as the data API (tailnet only, plain HTTP, port 8100). Limits: 10 AI reports and 30 feedback reports a minute for the whole team, so send an AI report only on the button, and put TEST in anything sent by hand. The typed text goes to the model provider and is stored and logged nowhere.
 
 ## Headers and caching
 

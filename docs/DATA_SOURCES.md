@@ -10,13 +10,14 @@ The credit lines must be shown wherever the licence requires it. The frontend sh
 | Source | Metrics | As of | Licence | Credit line |
 |---|---|---|---|---|
 | Public transport timetable feeds (GTFS) from ZTP Kraków | Stops, routes, weekday and night departures, distance to the airport | 2026-09-30 | No licence text on the feed page | ZTP Kraków, MPK S.A. w Krakowie, R&G Plus (GTFS) |
-| OpenStreetMap, through Overpass | Schools, clinics, shops, malls, gyms, parking, parks, nightlife, street lighting, emergency services | 2026-09-30 | ODbL 1.0 | © OpenStreetMap contributors |
+| OpenStreetMap, through Overpass | Schools, clinics, shops, malls, gyms, parking, parks, nightlife, street lighting, emergency services, public defibrillators (points tagged `access=yes` or `permissive`) | 2026-09-30, and 2026-10-04 for defibrillators | ODbL 1.0 | © OpenStreetMap contributors |
 | GIOŚ air quality, stations and index | Mean NO2, PM10 and PM2.5, current air quality index | 2026-08-31 and 2026-09-30 | Open data, attribution required | Główny Inspektorat Ochrony Środowiska (GIOŚ), Państwowy Monitoring Środowiska |
 | Copernicus Tree Cover Density 2024 | Tree cover share | 2024-01-01 | Free, full and open access | Copernicus Land Monitoring Service, European Environment Agency |
 | Copernicus Urban Atlas 2018 | Green space share | 2018-12-31 | Free, full and open access | Copernicus Land Monitoring Service, European Environment Agency |
 | Kraków strategic noise map 2022 | Share of district area above 55 dB (Lden) | 2022-12-31 | Open data of the city. Check the reuse terms before redistribution. | Miasto Kraków, Strategiczna mapa hałasu 2022 |
 | BIP Kraków, residents by district | People registered for permanent residence, density | 2025-12-31 | Public information | Biuletyn Informacji Publicznej Miasta Krakowa; Centrum Obsługi Informatycznej UMK; Wydział Geodezji UMK |
 | Kraków open data, registered residents by age and sex | Mean age, share aged 65 and over, share female | 2024-12-31 | Open data of the city. Check the dataset page before redistribution. | Urząd Miasta Krakowa, Wydział Spraw Administracyjnych, otwartedane.um.krakow.pl |
+| Kraków open data, sports infrastructure of schools 2023/2024 | Pitches, courts and running tracks of schools, counted per district | 2023-12-31 | Open data of Gmina Miejska Kraków: free reuse with the credit and the dates of creation and acquisition. The data has no district, so each school is placed from its street address with OpenStreetMap address points (ODbL 1.0). | Gmina Miejska Kraków, otwartedane.um.krakow.pl (sports infrastructure of schools 2023/2024); © OpenStreetMap contributors |
 | National register of nurseries and children's clubs | Nursery places, monthly parent fee | 2026-09-30 | CC0 1.0 | Ministerstwo Rodziny, Pracy i Polityki Społecznej, dane.gov.pl |
 | Rejestr Cen Nieruchomości (RCN), GUGiK | Sale price per square metre, number of sales | 2026-09-30 | Open data, no access constraints | Rejestr Cen Nieruchomości, GUGiK |
 | Police SEWiK accident register, through the Polish Road Safety Observatory | Road accidents and pedestrian or cyclist casualties per km of road | 2024-12-31 | **Free for non-commercial use, credit required. Commercial use needs written approval.** | Instytut Transportu Samochodowego – Polskie Obserwatorium Bezpieczeństwa Ruchu Drogowego |
@@ -40,14 +41,19 @@ The credit lines must be shown wherever the licence requires it. The frontend sh
 
 ## Gaps for Kraków
 
-45 of the 51 catalogue metrics have data. The API gives a reason for each of the others.
+47 of the 51 catalogue metrics have data. The API gives a reason for each of the others.
 
 | Metric | Reason |
 |---|---|
 | Rail and metro stops | The Kraków timetable feeds contain no rail or metro stops. |
 | Total population | Kraków publishes registered residents per district, which is not a population count. |
 | Recorded crime per 10 000 residents, and detection rate | Recorded crime is not part of the data for this city. |
-| Open sports grounds, public defibrillators | These sources exist only for Warsaw. |
+
+## Coverage caveats of two metrics
+
+- **School sports grounds** count 906 of the 973 schools in the city register. 67 street addresses were not found among the OpenStreetMap address points, and are named in the metric's note. A school ground is not always open to everyone.
+- **Public defibrillators** count only the 75 of 329 mapped points that OpenStreetMap tags as public. Volunteers map them, and some are indoors with opening hours.
+- Both are shown and ranked but **not scored**. They join the score only when the stored scores and the area reports are recomputed together.
 
 ## Notes on use
 

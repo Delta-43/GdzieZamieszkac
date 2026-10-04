@@ -1,4 +1,4 @@
-# Frontend hand-off: state on 4 October 2026, after the reviewer's two rounds
+# Frontend hand-off: state on 4 October 2026, with phase 2 built
 
 For the next session on `frontend/`, human or agent. Written by the agent working for `Rysia` (Aryna) at the end of its session. The earlier versions are in the git history (pull requests #15, #41 and #71).
 
@@ -8,7 +8,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 - **Phase 1 is built and released to `main` (#96). Phase 2 is built on the district page and on Find a district** (commute, outlook, rent versus buy, similar districts, work place and budget).
 - **Pages:** home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
-- **`develop` holds everything up to pull request #101.** Four pull requests are open on top of it, as a stack (see "Next steps"). The last one contains this file.
+- **`develop` holds everything up to pull request #110** once the last three of the stack are merged (#106 outlook, #108 rent versus buy and similar districts, #110 work place and budget, in that order; #104, the accessibility fixes, is merged). `main` holds everything up to #101 (checked by the coordinator on 4 October). Every issue up to #91 is closed.
 - `npm run check` passes on the last branch of the stack: both contracts, lint, type check, 181 tests, build. CI runs the same on every pull request, with the backend and city service tests.
 - The app was run against the real servers on 4 October: every page and main flow, 14 kinds of API call, all answered 200, no console error.
 
@@ -24,13 +24,20 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **Merge the stack of four pull requests, in this order:** the accessibility fixes (`frontend/a11y-motion-pass`), F11 outlook (`frontend/outlook`), F12 rent versus buy and similar districts (`frontend/rent-buy-similar`), F9 household profile (`frontend/household-profile`). Each is built on the one before. An agent's session cannot merge (see "Things that cost time").
+1. **Merge what is left of the stack, in this order:** #106 (F11 outlook), #108 (F12 rent versus buy and similar districts), #110 (F9 work place and budget). Each is built on the one before.
 2. **F9 is built in part.** The work place and the budget are on Find a district. The household type and the children's ages are not: `REQUIREMENTS.md` says their weights are a proposal that the coordinator decides. Four household types already exist as preset buttons (Para, Nowożeńcy, Rodzina, Senior).
-3. **Decisions waiting for `Delta-43`**, each flagged in a pull request: provenance of an observed value one press away (#89); the map without buttons (#89); `../docs/DESIGN.md` out of date (#75, #92); numbers made in the browser (#90); the district itself in `/commute` and the sentence on long trips (#101); the backtest figures without display strings and the word "percentyl" in API method texts (F11, F12); the AI summary narrates the API's first three districts, also when a budget hides one of them (F9).
-4. **Polish text for `unicorn-alex`:** every string the agent wrote is listed in its pull request (#73, #75, #77, #85, #89, #90, #101 and the four of this stack). Do not guess wording: apply what the reviewer writes.
-5. **A screen reader pass (VoiceOver or NVDA) has never been done.** The keyboard, zoom, text spacing, reduced motion and target sizes are checked by `tests/wcag.spec.ts` (below), not by hand. Then update the draft statement (`about.a11y`).
+3. **Decisions waiting for `Delta-43`**, each flagged in a pull request:
+   - Observed values show their data kind, date and source one press away, not beside the number (#89). `REVIEW.md` and `AGENTS.md` rule 4 say "beside it".
+   - The map has no buttons: WCAG 2.5.7 rests on zooming out and in elsewhere, and a touch screen cannot zoom (#89).
+   - `../docs/DESIGN.md` describes neither the gov.pl shapes (#75), nor the removed pixel canvas, nor the header on a phone (#92). It is the coordinator's file.
+   - The whole-number score and "better than k of n − 1 districts" are computed in the browser (#90, `src/lib/score.ts`).
+   - `/commute` lists the district itself at 0 minutes, and the sentence on long trips is ours, not the API's (#101).
+   - The backtest figures have no display strings, and two API method texts still say "percentyl" (#106, #108).
+   - The AI summary narrates the API's first three districts, also when a budget hides one of them; a work place costs 18 `/commute` requests (#110).
+4. **Polish text for `unicorn-alex`:** every string the agent wrote is listed in its pull request (#73, #75, #77, #85, #89, #90, #101, #106, #108, #110), plus `districts.map.hint` (not listed in #89). `unicorn-alex` closed #82 and #83 on 4 October, with no comment: check with the reviewer whether the two category questions (*livability*, *safety*) and the step names were written. Do not guess wording: apply what the reviewer writes.
+5. **A screen reader pass (VoiceOver or NVDA) has no written record.** `unicorn-alex` closed the review issues #70 and #72 on 4 October; write the result here when it is known. The keyboard, zoom, text spacing, reduced motion and target sizes are checked by `tests/wcag.spec.ts` (below), not by hand. Then update the draft statement (`about.a11y`).
 6. **Open choices of Aryna's:** the typeface (the Gov.pl guide uses Open Sans, the app uses Lato); the dark bar beside section headings (a krakow.pl motif); whether the compare table, the list and the map card should hide the "observed" badge as the district page does.
-7. **Small fixes** in `TODO.md` (`plainNumber.ts` after backend task B2). Phase 2 is otherwise done.
+7. **Small fixes** in `TODO.md` (`plainNumber.ts` after backend task B2). Phase 2 is otherwise done, apart from point 2.
 
 ## How Aryna works (decided in this session)
 
@@ -61,7 +68,7 @@ Playwright is installed at the repository root by Aryna (not committed). The age
 - **WCAG tests.** `tests/wcag.spec.ts` at the repository root (local, not committed, like the view tests) runs axe on every page with every disclosure and the menu open, walks every page with Tab (focus visible, in view, not under the header, no trap), and checks text spacing, 200 percent text, 200 and 400 percent zoom, reduced motion, target sizes, headings, form errors and the map's keys. Run `npx playwright test tests/wcag.spec.ts` with the dev server up. Safari's Tab walk is skipped: it needs Option+Tab by default. A screen reader still needs a person.
 - **View tests.** `tests/responsive.spec.ts` at the repository root (Aryna's local Playwright setup, not committed) checks every page at eleven widths in Chromium, Firefox and WebKit: no sideways scroll, target sizes, line length, shared edges, and evenly filled rows of buttons. Run `npx playwright test tests/responsive.spec.ts` from the root with the dev server up, before a pull request that changes layout.
 - **The project has no code formatter.** Never run `prettier --write`: with no configuration it restyles every file. Match the style by hand; `npm run lint` is the check.
-- **Closing issues.** `Closes #n` does not close an issue when the pull request merges into `develop`, only when it reaches `main`. #72, #74, #76, #84 and #88 are still open for that reason.
+- **Closing issues.** `Closes #n` does not close an issue when the pull request merges into `develop`, only when it reaches `main`. #72, #74, #76, #84 and #88 stayed open for that reason until the release merge into `main` on 4 October closed them.
 - **The AI report costs model budget** (10 a minute for the whole team). Send only on the button, use fixtures in tests, and put TEST in anything sent by hand. Feedback reports are stored.
 
 ## Rules that are easy to break

@@ -7,6 +7,7 @@
 | `DATA_DICTIONARY.md` | The database tables, columns and the metric catalogue, generated from the live database |
 | `API_CONTRACT_DRAFT.md` | The reasoning behind the API contract. The contract itself is `../backend/openapi.yaml`. |
 | `BACKEND_PLAN.md` | Backend scope, the price history and the backtest of the outlook |
+| `CITY_SERVICE_PLAN.md` | What the city service does (AI report, resident feedback), what it never does, and the design of official notices, which are not built |
 | `DESIGN.md` | The accepted design: the look of krakow.pl, the rules our project forces, and the components for our data. The tokens are in `frontend/src/theme/tokens.ts`. |
 | `data-review/` | How data verification works, and the template for recording findings |
 

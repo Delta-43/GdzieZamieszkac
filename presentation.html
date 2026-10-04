@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1e234b">
+<meta name="theme-color" content="#0a3a66">
 <title>GdzieZamieszkać Kraków Pitch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inconsolata:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
 <style>
-  /* Layout: one idea per full-screen slide; items build in on each click and dim once discussed. Colours from wawel.krakow.pl, single light look by design. */
+  /* Layout: one idea per full-screen slide, fully visible. No transitions, builds or animation: a slide change is an instant cut. Colours match the earlier working deck, single light look by design. */
   :root {
     color-scheme: light;
-    /* colours taken from wawel.krakow.pl: navy header, indigo panels, slate-blue captions, gold notice bar, olive-gold accents */
-    --navy-950: #1e234b; --navy-900: #2d3056; --indigo: #464f89; --slate-blue: #5976a1; --indigo-100: #e4e7f2;
-    --white: #ffffff; --mist: #dfe3ef; --grey-50: #f5f5f5;
-    --gold: #dac362; --olive: #7e755a; --olive-text: #6b6349;
-    --paper: #ffffff; --ink: var(--navy-950); --muted: #5f5c59; --line: #dcdcdc;
-    --focus: #1f6fb8; --estimated: #b8860b; --proxy: #5976a1; --observed: #2e7d4f;
+    /* colours match the earlier working deck: deep blue panels, krakow.pl blue accents, pale-blue highlight */
+    --navy-950: #0a3a66; --navy-900: #0063af; --indigo: #0063af; --slate-blue: #286cab; --indigo-100: #e5f0fa;
+    --white: #ffffff; --mist: #e5f0fa; --grey-50: #f5f5f5;
+    --gold: #b5d3ee; --olive: #0063af; --olive-text: #0063af;
+    --paper: #ffffff; --ink: #071f32; --muted: #505050; --line: #bfbfbf;
+    --focus: #b35c00; --estimated: #aa6a00; --proxy: #286cab; --observed: #21763c;
 
-    --font-display: "Inconsolata", "Consolas", "Menlo", ui-monospace, monospace;
-    --font-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-display: "Lato", "Segoe UI", Arial, sans-serif;
+    --font-body: "Lato", "Segoe UI", Arial, sans-serif;
 
     --t-label: .8rem; --t-body: 1.15rem; --t-big: clamp(1.25rem, 2.1vw, 1.7rem);
     --t-h2: clamp(2rem, 4.2vw, 3.5rem); --t-h1: clamp(3rem, 8vw, 6.4rem); --t-num: clamp(3rem, 7vw, 5.6rem);
@@ -45,7 +45,6 @@
   .tnum { font-variant-numeric: tabular-nums; }
   .hl { background: linear-gradient(transparent 55%, var(--gold) 55%); padding: 0 .1em; }
   .dark .hl { background: var(--gold); color: var(--navy-950); border-radius: 4px; }
-  .cue { color: var(--olive-text); font-weight: 800; }
 
   /* deck shell */
   .deck { position: relative; width: 100%; height: 100%; }
@@ -60,11 +59,6 @@
   .sand { background: var(--grey-50); }
   .slide-no { position: absolute; top: var(--s3); right: var(--gutter); font-size: var(--t-label); font-weight: 800; letter-spacing: .1em; color: var(--muted); }
   .dark .slide-no { color: var(--mist); }
-
-  /* builds: hidden until mentioned, dimmed once discussed */
-  [data-step] { transition: opacity .3s ease; }
-  [data-step].pending { visibility: hidden; opacity: 0; }
-  [data-step].done[data-dim] { opacity: .25; }
 
   /* shared pieces */
   .row { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; }
@@ -122,7 +116,7 @@
   .controls :focus-visible { outline-color: var(--gold); }
   .counter { min-width: 64px; text-align: center; color: var(--mist); font-size: var(--t-label); font-weight: 800; letter-spacing: .08em; }
   .progress { position: fixed; z-index: 19; left: 0; bottom: 0; width: 100%; height: 6px; background: var(--line); }
-  .progress span { display: block; width: 0; height: 100%; background: var(--olive); transition: width .4s ease; }
+  .progress span { display: block; width: 0; height: 100%; background: var(--olive); }
   .overview { position: fixed; inset: 0; z-index: 30; display: none; overflow: auto; padding: var(--s4); background: var(--navy-950); }
   .overview.open { display: block; }
   .overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s2); max-width: 1180px; margin: var(--s5) auto; }
@@ -166,18 +160,15 @@
     .g2, .g3, .g4, .flow, .cols { grid-template-columns: 1fr; }
     .arrow { transform: rotate(90deg); }
   }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
-  /* print = the standalone handout: every item shown, narration under each slide */
+  /* print = the standalone handout: narration under each slide */
   @media print {
     body { overflow: visible; }
     .slide, .slide.active { position: relative; display: flex !important; height: 100vh; overflow: hidden; padding-bottom: var(--s3); page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    [data-step].pending { visibility: visible; opacity: 1; }
-    [data-step].done[data-dim] { opacity: 1; }
     .notes { display: block !important; position: static; max-width: 1180px; width: 100%; margin: 0 auto; border-width: 0 0 0 4px; border-radius: 0; background: transparent; color: inherit; font-size: 1.05rem; }
     .notes::before { content: "Narration"; display: block; font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--olive-text); }
     .dark .notes::before { color: var(--gold); }
-    .controls, .progress, .overview, .cue, .presenter { display: none !important; }
+    .controls, .progress, .overview, .presenter { display: none !important; }
   }
 </style>
   </head>
@@ -216,12 +207,12 @@
       <p class="eyebrow">GdzieZamieszkać · HackYeah 2026 · Smart City</p>
       <h1>Which district first.<br>Then the flat.</h1>
       <div class="grid g3 tight">
-        <div class="tile" data-step="1" data-dim><span class="eyebrow">A family, new to Kraków</span><p>“Two kids, one job in Podgórze. Where do we even look?”</p></div>
-        <div class="tile" data-step="2" data-dim><span class="eyebrow">What they find</span><p>Thousands of listings. Nothing on schools, air, noise or commute.</p></div>
-        <div class="tile" data-step="3"><span class="eyebrow">What is missing</span><p><span class="hl">One trusted, simple way to compare districts.</span></p></div>
+        <div class="tile"><span class="eyebrow">A family, new to Kraków</span><p>“Two kids, one job in Podgórze. Where do we even look?”</p></div>
+        <div class="tile"><span class="eyebrow">What they find</span><p>Thousands of listings. Nothing on schools, air, noise or commute.</p></div>
+        <div class="tile"><span class="eyebrow">What is missing</span><p><span class="hl">One trusted, simple way to compare districts.</span></p></div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Picture a family with two kids who are new to Kraków. <span class="cue">(Click) </span>People choose a flat before they choose a district, and every site they open shows offers, not what living in a district is like. The answers exist, but sit in separate public sources with different dates and formats. <span class="cue">(Click) </span>There is no trusted, simple source for comparing districts. That is the gap. <span class="presenter">Optional: add one real statistic, with its source, on how many people move to or within Kraków. The family is an illustration, not data.</span></aside>
+    <aside class="notes">Picture a family with two kids who are new to Kraków. People choose a flat before they choose a district, and every site they open shows offers, not what living in a district is like. The answers exist, but sit in separate public sources with different dates and formats. There is no trusted, simple source for comparing districts. That is the gap. <span class="presenter">Optional: add one real statistic, with its source, on how many people move to or within Kraków. The family is an illustration, not data.</span></aside>
   </section>
 
   <!-- 2 · Idea and audience -->
@@ -230,18 +221,18 @@
       <p class="eyebrow">The idea in one sentence</p>
       <h2>GdzieZamieszkać helps you choose a district before you look at flats.</h2>
       <div class="grid g2">
-        <div class="tile" data-step="1" data-dim>
+        <div class="tile">
           <span class="eyebrow">It is not</span>
           <ul class="ticks no"><li>a listings site</li><li>brokers or agents</li><li>links to offers</li></ul>
         </div>
-        <div class="tile" data-step="2" data-dim>
+        <div class="tile">
           <span class="eyebrow">Who it is for</span>
           <p><b>Residents and newcomers:</b> singles, couples, families, seniors, students.</p>
           <p><b>The city:</b> as host and owner.</p>
         </div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>Say what it is not first, so nobody files us under property portals: no listings, no brokers, no links to offers. <span class="cue">(Click) </span>Two beneficiaries. People get a tool to choose where to live: single people, couples, families, seniors and students. The city gets a public service it can host and own.</aside>
+    <aside class="notes">Say what it is not first, so nobody files us under property portals: no listings, no brokers, no links to offers. Two beneficiaries. People get a tool to choose where to live: single people, couples, families, seniors and students. The city gets a public service it can host and own.</aside>
   </section>
 
   <!-- 3 · City-hosted service -->
@@ -250,13 +241,13 @@
       <p class="eyebrow">Smart City</p>
       <h2>A public service, not a product. The city is the natural owner.</h2>
       <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Free, no login<small>open to every resident</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Holds official records<small>city and national open data</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Can publish notices<small>concept, after city approval</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Can collect verified feedback<small>later, once identity checks exist</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#storefront-fill"/></svg></span><span>Free, no login<small>open to every resident</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#database-fill"/></svg></span><span>Holds official records<small>city and national open data</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#lightbulb-fill"/></svg></span><span>Can publish notices<small>concept, after city approval</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#users-three-fill"/></svg></span><span>Can collect verified feedback<small>later, once identity checks exist</small></span></div>
       </div>
     </div>
-    <aside class="notes">This is our main difference from commercial products. <span class="cue">(Click) </span>The free tier needs no login. <span class="cue">(Click) </span>A city can hold official records. <span class="cue">(Click) </span>It can publish official notices; that is a concept and we do not demo it. <span class="cue">(Click) </span>And later it can collect verified feedback from residents. A commercial portal has none of this trust, and none of this reach. It is what ties the project to the Smart City category.</aside>
+    <aside class="notes">This is our main difference from commercial products. The free tier needs no login. A city can hold official records. It can publish official notices; that is a concept and we do not demo it. And later it can collect verified feedback from residents. A commercial portal has none of this trust, and none of this reach. It is what ties the project to the Smart City category.</aside>
   </section>
 
   <!-- 4 · Score and recommender -->
@@ -264,20 +255,20 @@
     <div class="inner">
       <h2>One livability score per district, tuned to what matters to you.</h2>
       <div class="grid g3">
-        <div class="num-item" data-step="1" data-dim><span class="num tnum">18</span><p>districts of Kraków</p></div>
-        <div class="num-item" data-step="1" data-dim><span class="num tnum">45</span><p>metrics with data</p></div>
-        <div class="num-item" data-step="1" data-dim><span class="num tnum">7</span><p>categories</p></div>
+        <div class="num-item"><span class="num tnum">18</span><p>districts of Kraków</p></div>
+        <div class="num-item"><span class="num tnum">45</span><p>metrics with data</p></div>
+        <div class="num-item"><span class="num tnum">7</span><p>categories</p></div>
       </div>
       <div class="flow" style="grid-template-columns: 1fr auto 1fr auto 1fr">
-        <div class="tile" data-step="2" data-dim><span class="eyebrow">You choose</span><h3>A persona preset, or your own weights</h3></div>
-        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3" data-dim><span class="eyebrow">Code computes</span><h3>Percentile ranks, weighted</h3></div>
-        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="4"><span class="eyebrow">You get</span><h3>Ranked districts and the metrics behind them</h3></div>
+        <div class="tile"><span class="eyebrow">You choose</span><h3>A persona preset, or your own weights</h3></div>
+        <div class="arrow" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile"><span class="eyebrow">Code computes</span><h3>Percentile ranks, weighted</h3></div>
+        <div class="arrow" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile"><span class="eyebrow">You get</span><h3>Ranked districts and the metrics behind them</h3></div>
       </div>
-      <p class="guard" data-step="4"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg><span><span class="hl">The score is computed in code. AI never computes it.</span></span></p>
+      <p class="guard"><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg><span><span class="hl">The score is computed in code. AI never computes it.</span></span></p>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>18 districts, 45 metrics with data, in seven categories: transport, demographics, amenities, environment, livability, cost and safety indicators. <span class="cue">(Click) </span>Users set what matters to them, or pick one of five persona presets. <span class="cue">(Click) </span>The score is percentile ranks within Kraków, from 0 to 100, with the user's weights. <span class="cue">(Click) </span>It is explainable: every ranking names the metrics behind it. And it is computed in code and tested. A language model never computes the score. If the AI judges ask where AI is used, this is the first answer: not here.</aside>
+    <aside class="notes">18 districts, 45 metrics with data, in seven categories: transport, demographics, amenities, environment, livability, cost and safety indicators. Users set what matters to them, or pick one of five persona presets. The score is percentile ranks within Kraków, from 0 to 100, with the user's weights. It is explainable: every ranking names the metrics behind it. And it is computed in code and tested. A language model never computes the score. If the AI judges ask where AI is used, this is the first answer: not here.</aside>
   </section>
 
   <!-- 5 · Provenance and honesty -->
@@ -285,13 +276,13 @@
     <div class="inner">
       <h2>Every number shows its trail. And we say what we cannot know.</h2>
       <div class="cols">
-        <div class="col-block" data-step="1" data-dim>
+        <div class="col-block">
           <h3>On every value</h3>
           <p class="chips"><span class="chip">observed</span><span class="chip est">estimated</span><span class="chip proxy">proxy</span></p>
           <p class="trail">source · licence · date · method · caveat</p>
           <p class="muted">No data? The app says why. It shows no zero.</p>
         </div>
-        <div class="col-block" data-step="2">
+        <div class="col-block">
           <h3>Honest by design</h3>
           <ul class="ticks">
             <li><b>District level, not address.</b> An address score implies precision the data lacks.</li>
@@ -302,7 +293,7 @@
         </div>
       </div>
     </div>
-    <aside class="notes">This is probably our strongest differentiator. Most tools show numbers with no explanation. <span class="cue">(Click) </span>Every value carries its kind (observed, estimated or proxy), its source, licence, date, method and caveat. Where there is no data, the app says why and shows no zero. <span class="cue">(Click) </span>And we admit limits. We score districts, not addresses, because an address score would imply precision the data does not have. We show no price forecast: we tested two methods and neither beat a naive baseline, so we publish the history and the backtest. Safety wording is recorded crimes per 10 000 residents; the app never says safe or dangerous. Admitting limits is why you can trust the rest. <span class="presenter">Be ready for the question on crime data: Kraków has none by district, so the safety category leans on road accidents and proxies, and says so.</span></aside>
+    <aside class="notes">This is probably our strongest differentiator. Most tools show numbers with no explanation. Every value carries its kind (observed, estimated or proxy), its source, licence, date, method and caveat. Where there is no data, the app says why and shows no zero. And we admit limits. We score districts, not addresses, because an address score would imply precision the data does not have. We show no price forecast: we tested two methods and neither beat a naive baseline, so we publish the history and the backtest. Safety wording is recorded crimes per 10 000 residents; the app never says safe or dangerous. Admitting limits is why you can trust the rest. <span class="presenter">Be ready for the question on crime data: Kraków has none by district, so the safety category leans on road accidents and proxies, and says so.</span></aside>
   </section>
 
   <!-- 6 · Real data -->
@@ -310,14 +301,14 @@
     <div class="inner">
       <h2>Real deeds, not asking prices.</h2>
       <div class="grid g2" style="gap: var(--s4)">
-        <div class="big-item" data-step="1" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Sale prices from actual deeds<small>national price register, quarterly history</small></span></div>
-        <div class="big-item" data-step="2" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Commute matrix between districts<small>public transport, from timetables</small></span></div>
-        <div class="big-item" data-step="3" data-dim><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>Rent versus buy estimate<small>labelled as an estimate</small></span></div>
-        <div class="big-item" data-step="4"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Polish and English<small>Polish by default</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#scales-fill"/></svg></span><span>Sale prices from actual deeds<small>national price register, quarterly history</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#train-fill"/></svg></span><span>Commute matrix between districts<small>public transport, from timetables</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#house-line-fill"/></svg></span><span>Rent versus buy estimate<small>labelled as an estimate</small></span></div>
+        <div class="big-item"><span class="badge"><svg class="ico" aria-hidden="true"><use href="#translate-fill"/></svg></span><span>Polish and English<small>Polish by default</small></span></div>
       </div>
-      <p class="muted small" data-step="4">Rents are asking rents from a one-time snapshot, and long commutes run fast. Both carry their caveat in the app.</p>
+      <p class="muted small">Rents are asking rents from a one-time snapshot, and long commutes run fast. Both carry their caveat in the app.</p>
     </div>
-    <aside class="notes">This proves the data is real and the tool is practical. <span class="cue">(Click) </span>Sale prices come from actual deeds in the national price register, not from asking prices. <span class="cue">(Click) </span>A commute matrix gives public transport time between districts. <span class="cue">(Click) </span>A rent-versus-buy estimate helps with the decision most people actually face. <span class="cue">(Click) </span>Polish by default, with an English toggle for newcomers. Be straight about limits: the rents are a one-time snapshot of asking rents, and commutes above about 60 minutes are lower bounds. <span class="presenter">Check before presenting: price history, commute and rent-versus-buy are served by the API (tasks F10 to F12 in TODO.md are still open for the frontend), so show them only if the screens are merged. Otherwise say they are in the API.</span></aside>
+    <aside class="notes">This proves the data is real and the tool is practical. Sale prices come from actual deeds in the national price register, not from asking prices. A commute matrix gives public transport time between districts. A rent-versus-buy estimate helps with the decision most people actually face. Polish by default, with an English toggle for newcomers. Be straight about limits: the rents are a one-time snapshot of asking rents, and commutes above about 60 minutes are lower bounds. <span class="presenter">Check before presenting: price history, commute and rent-versus-buy are served by the API (tasks F10 to F12 in TODO.md are still open for the frontend), so show them only if the screens are merged. Otherwise say they are in the API.</span></aside>
   </section>
 
   <!-- 7 · AI role, privacy and ethics -->
@@ -325,7 +316,7 @@
     <div class="inner">
       <h2>AI writes the words. Code owns the numbers. Your data stays yours.</h2>
       <div class="cols">
-        <div class="col-block" data-step="1" data-dim>
+        <div class="col-block">
           <h3><svg class="ico" aria-hidden="true"><use href="#sparkle-fill"/></svg> The role of AI</h3>
           <ol class="flowlist">
             <li>Stored facts, computed in code</li>
@@ -335,7 +326,7 @@
           </ol>
           <p class="muted">The personalised report is built in the city service.</p>
         </div>
-        <div class="col-block" data-step="2">
+        <div class="col-block">
           <h3><svg class="ico" aria-hidden="true"><use href="#shield-check-fill"/></svg> Privacy and ethics</h3>
           <ul class="ticks">
             <li>The backend stores nothing about users.</li>
@@ -345,7 +336,7 @@
         </div>
       </div>
     </div>
-    <aside class="notes">The AI task sheet wants a clear and checkable role for AI. <span class="cue">(Click) </span>Ours: a language model writes the district report from stored facts and may only cite the numbers it is given. A guard checks the text and rejects any number that is not in the facts. Every report carries an AI label. The personalised report, where you type what you need, is built in the separate city service, under the same guard. The score itself is never AI. <span class="cue">(Click) </span>Privacy: the backend is read-only and stores nothing about users. The household profile, once built, stays in the browser and only sets weights; it never filters by who lives in a district, because steering by demographics is a legal risk. <span class="presenter">Open decision in TODO.md: agree the exact wording of AI's role for the AI task before you present. This slide is a proposal: narrate and translate, guarded, labelled, never scoring.</span></aside>
+    <aside class="notes">The AI task sheet wants a clear and checkable role for AI. Ours: a language model writes the district report from stored facts and may only cite the numbers it is given. A guard checks the text and rejects any number that is not in the facts. Every report carries an AI label. The personalised report, where you type what you need, is built in the separate city service, under the same guard. The score itself is never AI. Privacy: the backend is read-only and stores nothing about users. The household profile, once built, stays in the browser and only sets weights; it never filters by who lives in a district, because steering by demographics is a legal risk. <span class="presenter">Open decision in TODO.md: agree the exact wording of AI's role for the AI task before you present. This slide is a proposal: narrate and translate, guarded, labelled, never scoring.</span></aside>
   </section>
 
   <!-- 8 · Demo, design, accessibility -->
@@ -354,19 +345,19 @@
       <p class="eyebrow">Live demo · 3 minutes</p>
       <h2>From a persona to a shortlist.</h2>
       <div class="flow demo" style="grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr">
-        <div class="tile" data-step="1" data-dim><span class="eyebrow">1</span><h3>Pick a persona or set priorities</h3></div>
-        <div class="arrow" data-step="2" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="2" data-dim><span class="eyebrow">2</span><h3>Ranked districts on the accessible map</h3></div>
-        <div class="arrow" data-step="3" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="3" data-dim><span class="eyebrow">3</span><h3>Open one: provenance, AI report, price history</h3></div>
-        <div class="arrow" data-step="4" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
-        <div class="tile" data-step="4" data-dim><span class="eyebrow">4</span><h3>Compare districts</h3></div>
+        <div class="tile"><span class="eyebrow">1</span><h3>Pick a persona or set priorities</h3></div>
+        <div class="arrow" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile"><span class="eyebrow">2</span><h3>Ranked districts on the accessible map</h3></div>
+        <div class="arrow" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile"><span class="eyebrow">3</span><h3>Open one: provenance, AI report, price history</h3></div>
+        <div class="arrow" aria-hidden="true"><svg class="ico"><use href="#arrow-right-fill"/></svg></div>
+        <div class="tile"><span class="eyebrow">4</span><h3>Compare districts</h3></div>
       </div>
-      <ul class="ticks inline" data-step="5">
+      <ul class="ticks inline">
         <li>Look follows krakow.pl</li><li>WCAG 2.2 AA target</li><li>Keyboard and small screens</li>
       </ul>
     </div>
-    <aside class="notes">Keep the demo to about three minutes. <span class="cue">(Click) </span>Pick a persona, for example the family, or set your own priorities. <span class="cue">(Click) </span>See the districts ranked on the accessible map. <span class="cue">(Click) </span>Open a district: show provenance on a number, the AI-labelled report and the price history. <span class="cue">(Click) </span>Compare two districts, including what is missing. <span class="cue">(Click) </span>On design: the look follows krakow.pl, the target is WCAG 2.2 AA, which is a legal duty for a public service, and the app works with a keyboard and on small screens. <span class="presenter">The demo depends on the coordinator's machine and Tailscale. Record a backup video of this flow and keep it ready. Do not demo notices or demand counts: they are concepts. Say WCAG is the target; the manual keyboard and screen-reader checks are still open in TODO.md.</span></aside>
+    <aside class="notes">Keep the demo to about three minutes. Pick a persona, for example the family, or set your own priorities. See the districts ranked on the accessible map. Open a district: show provenance on a number, the AI-labelled report and the price history. Compare two districts, including what is missing. On design: the look follows krakow.pl, the target is WCAG 2.2 AA, which is a legal duty for a public service, and the app works with a keyboard and on small screens. <span class="presenter">The demo depends on the coordinator's machine and Tailscale. Record a backup video of this flow and keep it ready. Do not demo notices or demand counts: they are concepts. Say WCAG is the target; the manual keyboard and screen-reader checks are still open in TODO.md.</span></aside>
   </section>
 
   <!-- 9 · City concepts and competition -->
@@ -374,7 +365,7 @@
     <div class="inner">
       <h2>What a city could add. And why we are different.</h2>
       <div class="cols">
-        <div class="col-block" data-step="1" data-dim>
+        <div class="col-block">
           <h3>For the city <span class="tag">concepts</span></h3>
           <ul class="ticks">
             <li><b>Official notices</b> of planned projects</li>
@@ -383,7 +374,7 @@
           </ul>
           <p class="muted small">Built, not published: the feedback form and the personalised AI report, in the city service. Feedback stays unverified and never changes a score.</p>
         </div>
-        <div class="col-block" data-step="2">
+        <div class="col-block">
           <h3>The market</h3>
           <table class="cmp">
             <tbody>
@@ -397,7 +388,7 @@
         </div>
       </div>
     </div>
-    <aside class="notes"><span class="cue">(Click) </span>These are concepts and we mark them as such: we build no fake endpoints and show no fake data for them. A city could publish official notices, collect verified feedback with identity checked and a salted token so that a landlord cannot trace a report, and see anonymous demand counts by district. Two pieces are real, in the separate city service: the personalised AI report, and resident feedback, which is stored as unverified and never published. <span class="cue">(Click) </span>The market, in one slide. MiejscoMetr scores a single address. Locumo writes property reports. Dobra Lokacja is a free map. PolandRent and Otodom Analytics cover prices. Our edge: a district recommender with household profiles, provenance on every number, prices from deeds, a commute matrix, and a city behind it. <span class="presenter">Preliminary market scan as of 3 October 2026. Do not claim it is exhaustive. The household profile is planned, not built.</span></aside>
+    <aside class="notes">These are concepts and we mark them as such: we build no fake endpoints and show no fake data for them. A city could publish official notices, collect verified feedback with identity checked and a salted token so that a landlord cannot trace a report, and see anonymous demand counts by district. Two pieces are real, in the separate city service: the personalised AI report, and resident feedback, which is stored as unverified and never published. The market, in one slide. MiejscoMetr scores a single address. Locumo writes property reports. Dobra Lokacja is a free map. PolandRent and Otodom Analytics cover prices. Our edge: a district recommender with household profiles, provenance on every number, prices from deeds, a commute matrix, and a city behind it. <span class="presenter">Preliminary market scan as of 3 October 2026. Do not claim it is exhaustive. The household profile is planned, not built.</span></aside>
   </section>
 
   <!-- 10 · Earlier vs on-site, roadmap -->
@@ -405,22 +396,22 @@
     <div class="inner">
       <h2>What we brought, what we built here, what comes next.</h2>
       <div class="grid g3">
-        <div class="tile" data-step="1" data-dim>
+        <div class="tile">
           <span class="eyebrow">Before HackYeah · 29 Sep to 2 Oct</span>
           <ul class="ticks"><li>Data and database</li><li>Read-only backend API, 16 operations, 153 offline tests</li></ul>
         </div>
-        <div class="tile" data-step="2" data-dim>
+        <div class="tile">
           <span class="eyebrow">At HackYeah · 3 and 4 Oct</span>
           <ul class="ticks"><li>Frontend</li><li>City service: personalised AI report, resident feedback</li><li>Documents, changelog</li></ul>
         </div>
-        <div class="tile" data-step="3">
+        <div class="tile">
           <span class="eyebrow">Next</span>
           <ul class="ticks"><li>Deploy on a server</li><li>Polish legal opinion: fees, AI transparency (EU AI Act, Article 50)</li><li>National login node</li><li>A second city</li><li>Data-sharing agreements for rents</li></ul>
         </div>
       </div>
-      <p class="muted small" data-step="3">Open: who operates it, and who pays. Our ask to Kraków: host it as a free public service. · Delta-43 · Rysia · unicorn-alex · github.com/Delta-43/GdzieZamieszkac</p>
+      <p class="muted small" style="max-width: 62ch">Open: who operates it, and who pays. Our ask to Kraków: host it as a free public service. · Delta-43 · Rysia · unicorn-alex · github.com/Delta-43/GdzieZamieszkac</p>
     </div>
-    <aside class="notes">HackYeah asks us to separate earlier work from on-site work. <span class="cue">(Click) </span>Before the event, from 29 September to 2 October, we built the data collection, the database and the read-only backend API. The first commit of the repository is the import of that earlier work, and every change to it is logged in the on-site changelog. <span class="cue">(Click) </span>On site we built the frontend, the city service with the personalised AI report and resident feedback, and the documents. <span class="cue">(Click) </span>The path to real use: deploy on a server, get a Polish legal opinion on fees and on AI transparency under Article 50 of the EU AI Act, connect the national login node, add a second city, and replace the one-time rent snapshot with data-sharing agreements. That also answers who operates it and who pays: the city is the natural host, and the legal opinion settles fees. <span class="presenter">Update the on-site column to what is finished before you present. Full credit lines and licences are in docs/DATA_SOURCES.md and README.md; the AI disclosure is in README.md.</span></aside>
+    <aside class="notes">HackYeah asks us to separate earlier work from on-site work. Before the event, from 29 September to 2 October, we built the data collection, the database and the read-only backend API. The first commit of the repository is the import of that earlier work, and every change to it is logged in the on-site changelog. On site we built the frontend, the city service with the personalised AI report and resident feedback, and the documents. The path to real use: deploy on a server, get a Polish legal opinion on fees and on AI transparency under Article 50 of the EU AI Act, connect the national login node, add a second city, and replace the one-time rent snapshot with data-sharing agreements. That also answers who operates it and who pays: the city is the natural host, and the legal opinion settles fees. <span class="presenter">Update the on-site column to what is finished before you present. Full credit lines and licences are in docs/DATA_SOURCES.md and README.md; the AI disclosure is in README.md.</span></aside>
   </section>
 </main>
 
@@ -448,8 +439,7 @@
     const overview = document.getElementById('overview');
     const overviewGrid = document.getElementById('overviewGrid');
     const pad = n => String(n).padStart(2, '0');
-    const maxStep = s => Math.max(0, ...[...s.querySelectorAll('[data-step]')].map(el => +el.dataset.step));
-    let current = 0, step = 0;
+    let current = 0;
 
     slides.forEach((slide, i) => {
       if (i === 0) return;
@@ -465,31 +455,18 @@
         slide.classList.toggle('active', on);
         slide.setAttribute('aria-hidden', on ? 'false' : 'true');
       });
-      const slide = slides[current];
-      slide.querySelectorAll('[data-step]').forEach(el => {
-        const n = +el.dataset.step;
-        el.classList.toggle('pending', n > step);
-        el.classList.toggle('done', n < step);
-      });
       counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
       progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
-      document.getElementById('prev').disabled = current === 0 && step === 0;
-      document.getElementById('next').disabled = current === slides.length - 1 && step === maxStep(slide);
+      document.getElementById('prev').disabled = current === 0;
+      document.getElementById('next').disabled = current === slides.length - 1;
       history.replaceState(null, '', `#${current + 1}`);
     }
-    function go(index, atEnd = false) {
+    function go(index) {
       current = Math.max(0, Math.min(slides.length - 1, index));
-      step = atEnd ? maxStep(slides[current]) : 0;
       render();
     }
-    function next() {
-      if (step < maxStep(slides[current])) { step++; render(); }
-      else if (current < slides.length - 1) go(current + 1);
-    }
-    function prev() {
-      if (step > 0) { step--; render(); }
-      else if (current > 0) go(current - 1, true);
-    }
+    const next = () => go(current + 1);
+    const prev = () => go(current - 1);
     function toggleOverview(open) {
       overview.hidden = !open;
       overview.classList.toggle('open', open);
@@ -523,7 +500,7 @@
       else if (e.key.toLowerCase() === 'n') deck.classList.toggle('show-notes');
       else if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
       else if (e.key === 'Home') go(0);
-      else if (e.key === 'End') go(slides.length - 1, true);
+      else if (e.key === 'End') go(slides.length - 1);
     });
     const start = Number(location.hash.slice(1));
     go(Number.isInteger(start) && start > 0 ? start - 1 : 0);
