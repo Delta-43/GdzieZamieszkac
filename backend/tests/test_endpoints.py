@@ -265,3 +265,8 @@ def test_a_body_that_is_not_json_gets_a_plain_sentence(client):
     assert wrong.status_code == 422 and "Content-Type: application/json" in wrong.json()["detail"]
     # Field errors keep naming the field.
     assert "cost" in client.post("/v1/recommend", json={"weights": {"category": {"cost": 9}}}).json()["detail"]
+
+
+def test_a_shown_but_not_scored_metric_cannot_be_given_a_weight(client):
+    r = client.post("/v1/recommend", json={"weights": {"metric": {"amenity_aed_public": 3}}})
+    assert r.status_code == 422

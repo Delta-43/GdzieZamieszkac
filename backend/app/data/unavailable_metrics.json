@@ -2,28 +2,20 @@
   "_comment": "Why a catalogue metric has no data in a city. Reviewed like data: change it when a gap is closed. Polish text needs a native-speaker check.",
   "krakow": {
     "crimes_per_10k": {
-      "en": "Recorded crime is not part of the data for this city.",
-      "pl": "Zarejestrowane przestępstwa nie są częścią danych dla tego miasta."
+      "en": "Kraków does not publish crime figures by district, so we show none.",
+      "pl": "Kraków nie publikuje danych o przestępstwach według dzielnic, więc ich nie pokazujemy."
     },
     "crime_detection_rate": {
-      "en": "Recorded crime is not part of the data for this city.",
-      "pl": "Zarejestrowane przestępstwa nie są częścią danych dla tego miasta."
+      "en": "Kraków does not publish crime figures by district, so we show none.",
+      "pl": "Kraków nie publikuje danych o przestępstwach według dzielnic, więc ich nie pokazujemy."
     },
     "transit_stops_rail_metro": {
-      "en": "Kraków's public timetable feeds contain no rail or metro stops.",
-      "pl": "Publiczne rozkłady jazdy Krakowa nie zawierają przystanków kolejowych ani metra."
+      "en": "The timetable data of Kraków's public transport contains no rail or metro stops.",
+      "pl": "Dane rozkładowe komunikacji miejskiej w Krakowie nie zawierają przystanków kolejowych ani metra."
     },
     "population_total": {
-      "en": "Kraków publishes registered residents per district, which is not a population count, so no total population is shown.",
-      "pl": "Kraków publikuje liczbę zameldowanych mieszkańców w dzielnicach, co nie jest liczbą ludności, dlatego nie pokazujemy łącznej liczby ludności."
-    },
-    "amenity_open_sports_grounds": {
-      "en": "This metric comes from an open-data source that exists only for Warsaw (dane.um.warszawa.pl).",
-      "pl": "Ta miara pochodzi ze źródła otwartych danych dostępnego tylko dla Warszawy (dane.um.warszawa.pl)."
-    },
-    "amenity_aed_public": {
-      "en": "This metric comes from an open-data source that exists only for Warsaw (dane.um.warszawa.pl).",
-      "pl": "Ta miara pochodzi ze źródła otwartych danych dostępnego tylko dla Warszawy (dane.um.warszawa.pl)."
+      "en": "Kraków publishes only the number of people registered as permanent residents in each district, and that is not the number of people who live there. See \"Registered permanent residents\" instead.",
+      "pl": "Kraków publikuje tylko liczbę osób zameldowanych na pobyt stały w dzielnicach, a to nie jest liczba mieszkańców. Zobacz zamiast tego „Zameldowani na pobyt stały”."
     }
   },
   "warsaw": {

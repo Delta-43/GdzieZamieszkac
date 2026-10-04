@@ -80,3 +80,24 @@ def test_store_raises_when_nothing_could_ever_be_loaded():
     store = DataStore(lambda: (_ for _ in ()).throw(ConnectionError("x")), lambda: "v")
     with pytest.raises(StoreUnavailable):
         store.get()
+
+
+def test_shown_but_not_scored_metrics_get_a_rank_and_leave_every_score_unchanged():
+    """The two Kraków metrics loaded in migration 0020 (school sports grounds, defibrillators) are in the catalogue as 'better' metrics. When they gain data
+    they are shown and ranked, but the default score stays what it was, so the stored scores and reports remain valid."""
+    from app.core.store import SHOWN_NOT_SCORED, Derived
+    from tests.fixtures import CODES, _def, _row, make_snapshot
+
+    key = "amenity_aed_public"
+    assert key in SHOWN_NOT_SCORED
+    without = make_snapshot()
+    without.metric_defs = [*without.metric_defs, _def(key, "amenities", 20, "better", "defibrillators")]
+    with_data = make_snapshot()
+    with_data.metric_defs = list(without.metric_defs)
+    with_data.rows = [*with_data.rows, *(_row(c, key, v) for c, v in zip(CODES, (9, 2, 5, 1), strict=True))]
+    before, after = Derived(without), Derived(with_data)
+    assert key in after.available and key not in before.available
+    assert list(after.default_score.round(6)) == list(before.default_score.round(6))
+    assert key not in after.scorable.columns
+    # Counts are ranked per km², as in the score: delta (5 per 5 km²) is first, and the direction is "better".
+    assert after.rank_of("delta", key)["position"] == 1 and after.rank_of("gamma", key)["position"] == 4
