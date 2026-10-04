@@ -3,6 +3,14 @@
 Status: **accepted by the coordinator, 4 October 2026.** The app follows the look of the city's own website, krakow.pl. The earlier proposal (Field Journal: moss green, Literata and IBM Plex Sans) was dropped, and its files were removed. They stay in the git history (the last commit that had them is the one before this change).
 Owner of the decision: `Delta-43`. Builder: the frontend team.
 
+## Changes since acceptance (4 October 2026)
+
+Two later decisions changed the look. `frontend/README.md` holds the detail and `frontend/HANDOFF.md` the reasons.
+
+- **Shapes and sizes follow the Gov.pl design system** (buttons, fields, messages, the type scale), with Kraków's colours and Lato kept (pull request #75).
+- **The map has no pixel canvas and no zoom buttons.** The districts are one blue ramp, and the colours change in a short wave by CSS. The map moves with the wheel, drag, double click and the keyboard (`+`, `-`, arrows, `0`), and a hint line says so (pull requests #73 and #89).
+- Where the component table below says "five classes with a legend", the legend is now one line that says what darker means and whether more is better for that measure. Class numbers are never shown: the five steps are named in words.
+
 ## The look
 
 - A white page, grey panels, one blue (`#0063af`), dark navy text (`#071f32`). The colours are the ones that site's stylesheet uses most. Colours and a typeface only: no logo, crest or photo of the city.
