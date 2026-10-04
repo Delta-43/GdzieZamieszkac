@@ -193,6 +193,17 @@
       "enough": "sufficient"
     }
   },
+  "commute": {
+    "heading": "Public transport from this district",
+    "region": "Table of travel times. It scrolls.",
+    "caption": "Estimated travel time to the other districts, shortest first",
+    "to": "To district",
+    "time": "Estimated time",
+    "minutes": "{{value}} min",
+    "none": "no connection found",
+    "day": "Timetable day",
+    "longTrips": "Times above about 60 minutes are lower bounds: the real trip takes longer."
+  },
   "find": {
     "title": "Find a district",
     "heading": "Find a district that fits you",

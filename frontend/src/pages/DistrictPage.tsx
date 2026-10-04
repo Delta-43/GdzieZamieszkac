@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router'
 import { ApiError } from '../api/client'
 import { useDistrictDetail, useMetrics } from '../api/useDistrictsData'
 import { AreaReport } from '../components/AreaReport'
+import { CommuteTable } from '../components/CommuteTable'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
 import { MetricRow } from '../components/MetricRow'
@@ -78,6 +79,8 @@ export function DistrictPage() {
           </dl>
         </section>
       )}
+
+      <CommuteTable code={district.code} />
 
       {district.categories.map((category) => (
         <section key={category.category} aria-labelledby={`category-${category.category}`}>
