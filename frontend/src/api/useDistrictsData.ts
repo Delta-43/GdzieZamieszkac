@@ -138,6 +138,34 @@ export function useDistrictSeries(code: string | undefined, key: string) {
   })
 }
 
+/**
+ * Estimated minutes by public transport from each of the given districts to one work district, in the morning.
+ * One answer per home district (the API estimates from a district to all the others), cached, and asked only once a
+ * work district is chosen. A district is missing from the map while its answer is on the way or has failed.
+ */
+export function useCommuteTo(work: string, homes: string[]): Map<string, number | null> {
+  const { i18n } = useTranslation()
+  const answers = useQueries({
+    queries: homes.map((home) => ({
+      queryKey: ['commute', home, i18n.language],
+      enabled: work !== '',
+      retry: false,
+      queryFn: async () => {
+        const { data, error, response } = await api.GET('/commute', { params: { query: { from: home } } })
+        if (error) throw new ApiError(response.status, error.title)
+        return data
+      },
+    })),
+  })
+  const minutes = new Map<string, number | null>()
+  answers.forEach((answer, index) => {
+    const home = homes[index]
+    const to = answer.data?.destinations.find((destination) => destination.code === work)
+    if (home !== undefined && to) minutes.set(home, to.minutes)
+  })
+  return minutes
+}
+
 /** The price and the rent of a flat of the given size, estimated from the district's medians. A 501 answer hides the section. */
 export function useRentVsBuy(code: string | undefined, areaM2: number) {
   const { i18n } = useTranslation()

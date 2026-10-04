@@ -1870,8 +1870,20 @@ main > .ai-report-card {
   clear: both;
 }
 
-.find-layout > form {
+/* Both cards of the left column measure themselves, so their rows of three choices stack when the card is narrow. */
+.find-side > .card {
   container-type: inline-size;
+}
+
+/* The left column of the page: the priorities, then the household's own conditions. */
+.find-side {
+  display: grid;
+  gap: var(--space-5);
+  min-inline-size: 0;
+}
+
+.find-side .field {
+  margin-block: var(--space-3);
 }
 
 @container (max-width: 23rem) {
