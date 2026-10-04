@@ -7,9 +7,9 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 ## Where things stand
 
 - **Phase 1 is built and released to `main` (#96). Phase 2 is built on the district page and on Find a district** (commute, outlook, rent versus buy, similar districts, work place and budget).
-- **Phase 1 pages.** Pages: home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
-- **`develop` holds everything up to pull request #90.** The last piece, the pull request for issue #91, is open on the branch `frontend/responsive-scaling`. It contains this file.
-- `npm run check` passes on it: both contracts, lint, type check, 167 tests, build. CI runs the same on every pull request, with the backend and city service tests.
+- **Pages:** home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
+- **`develop` holds everything up to pull request #101.** Four pull requests are open on top of it, as a stack (see "Next steps"). The last one contains this file.
+- `npm run check` passes on the last branch of the stack: both contracts, lint, type check, 181 tests, build. CI runs the same on every pull request, with the backend and city service tests.
 - The app was run against the real servers on 4 October: every page and main flow, 14 kinds of API call, all answered 200, no console error.
 
 ## What changed on 4 October (in order)
