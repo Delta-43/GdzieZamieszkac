@@ -5,7 +5,7 @@ Owner of the decision: `Delta-43`. Builder: the frontend team.
 
 ## Changes since acceptance (4 October 2026)
 
-Two later decisions changed the look. `frontend/README.md` holds the detail and `frontend/HANDOFF.md` the reasons.
+Two later decisions changed the look. `frontend/README.md` holds the detail and `ON_SITE_CHANGELOG.md` the reasons.
 
 - **Shapes and sizes follow the Gov.pl design system** (buttons, fields, messages, the type scale), with Kraków's colours and Lato kept (pull request #75).
 - **The map has no pixel canvas and no zoom buttons.** The districts are one blue ramp, and the colours change in a short wave by CSS. The map moves with the wheel, drag, double click and the keyboard (`+`, `-`, arrows, `0`), and a hint line says so (pull requests #73 and #89).
@@ -20,7 +20,7 @@ Two later decisions changed the look. `frontend/README.md` holds the detail and 
 
 ## Rules our project forces
 
-1. **No theme toggle.** `AGENTS.md` allows the browser to store only the language choice. The app is light only, and stores nothing else.
+1. **No theme toggle.** The project rules allow the browser to store only the language choice. The app is light only, and stores nothing else.
 2. **No third-party request.** Fonts, icons and map shapes are served with the app.
 3. **Contrast.** Use the hairline border for decorative dividers only. Use the strong border for inputs, sliders, buttons and the edge of every control. Warning text uses its own darker colour. The icons and rules next to a warning use the plain warning colour.
 
@@ -35,7 +35,7 @@ Two later decisions changed the look. `frontend/README.md` holds the detail and 
 ## Components for our data
 
 
-These are what makes the product different. Each one carries the data rules from `AGENTS.md`.
+These are what makes the product different. Each one carries the data rules in `../README.md` ("Rules the product keeps").
 
 | Component | Design |
 |---|---|

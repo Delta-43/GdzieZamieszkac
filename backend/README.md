@@ -1,7 +1,7 @@
 # backend/ — FastAPI application
 
-Owned by the **backend team**. One shared codebase, deployed once per city: `CITY=warsaw|krakow` picks the Postgres schema (see `../AGENTS.md`; no `/cities` endpoint, no city parameter).
-The API is **read-only**, has no accounts, stores nothing about its users, and never translates or generates text at request time. Worker rules: `AGENTS.md` in this folder.
+Owned by the **backend team**. One shared codebase, deployed once per city: `CITY=warsaw|krakow` picks the Postgres schema (no `/cities` endpoint, no city parameter).
+The API is **read-only**, has no accounts, stores nothing about its users, and never translates or generates text at request time. The rules for people and agents working on it are on the `develop` branch.
 
 The contract is `openapi.yaml` (OpenAPI 3.1). Tests check every route and response against it, so change the contract first (PR), then the code.
 Decisions behind it: `../docs/BACKEND_PLAN.md` and `../docs/API_CONTRACT_DRAFT.md`.
@@ -78,7 +78,7 @@ Not in the service by design: TLS, authentication (the data is public), a web ap
 
 ## Open tasks of this module
 
-The task list for the whole project is in `../TODO.md`; the state of the servers and the database is in `HANDOFF.md`.
+The task list and the state of the servers and the database are kept on the `develop` branch.
 
 | ID | Task | State |
 |---|---|---|

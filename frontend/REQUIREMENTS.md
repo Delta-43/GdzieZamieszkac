@@ -1,6 +1,6 @@
 # Requirements: frontend
 
-This file says what to build, in what order, and when a task is done. Rules that never change are in `AGENTS.md`.
+This file says what to build, in what order, and when a task is done. The data rules are in `../README.md` ("Rules the product keeps").
 The visual design is not decided yet. The coordinator will send design requirements. Until then, use one plain placeholder theme.
 
 ## Context
@@ -37,7 +37,7 @@ Status on 4 October 2026: phase 1 is built. Of phase 2 only the commute step is 
 
 ## Priority order for the MVP
 
-The MVP is one flow a judge can follow in under three minutes. Build in this order. `TODO.md` has the task list.
+The MVP is one flow a judge can follow in under three minutes. Build in this order.
 
 | Priority | Screens and parts |
 |---|---|

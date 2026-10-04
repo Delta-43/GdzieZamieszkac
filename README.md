@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <b>Live demo:</b> <a href="https://demo.dchaudhury.com">demo.dchaudhury.com</a>
+</p>
+
+<p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-proprietary-lightgrey.svg?style=plastic" alt="Licence: proprietary"></a>
   <a href="https://github.com/Delta-43/GdzieZamieszkac/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/Delta-43/GdzieZamieszkac/ci.yml?branch=main&label=CI&style=plastic" alt="CI"></a>
   <a href="https://github.com/Delta-43/GdzieZamieszkac/commits/main"><img src="https://img.shields.io/github/last-commit/Delta-43/GdzieZamieszkac.svg?style=plastic" alt="GitHub last commit"></a>
@@ -102,9 +106,9 @@ State on 4 October 2026, at the end of HackYeah.
 | Frontend, phase 1 | ✅ Built | Home, districts map, district (with commute), find, compare, feedback, sources, not found. Tests, lint, type check and build pass. |
 | Accessibility (WCAG 2.2 AA) | 🟡 Target | Automated checks pass on every page at two widths in both languages. The reviewer closed the accessibility and map review issues (#70, #72) on 4 October, but the repository holds no written record of a screen-reader or 400 percent zoom test. The accessibility statement in the app is marked as a draft. |
 | Polish text | ✅ Reviewed | The native-speaking reviewer closed the Polish text review issues (#82, #83) on 4 October. The text of the API comes from the stored catalogue and is never translated in the browser. |
-| Frontend, phase 2 | 🟡 Partly | Commute times on the district page are built (task F10). The household profile, the outlook card, and rent versus buy with similar districts are not (tasks F9, F11, F12). The API serves all of them. |
+| Frontend, phase 2 | 🟡 Mostly | The district page shows commute times, past price changes with a backtest, and rent versus buy with similar districts (tasks F10, F11, F12). The household profile (task F9) is built in part: Find a district takes a work place and a budget. The household type and the children's ages wait for agreed weights. |
 | Official notices, demand counts, identity checks for feedback | 💡 Concept | Shown only as a labelled concept. No endpoint and no data. |
-| Public deployment | ⬜ Not done | The demo runs on a team machine on a private network. See "Run it and check it". |
+| Public deployment | ✅ Live | <https://demo.dchaudhury.com>, on a team server since 4 October. Both services run in Docker behind Caddy and a Cloudflare Tunnel. There is no release pipeline and no off-server backup yet. |
 
 **Known limits.** Rents are asking rents from a one-time snapshot, shown as district medians. Kraków has no recorded crime data, so safety uses road accidents and proxies. Commute times on long trips run fast. The price outlook is history and a backtest, not a forecast: we tested two methods and neither beat the naive baseline.
 
@@ -118,8 +122,8 @@ The first commit of this repository is the import of the earlier work. Every lat
 | Data collection and the Supabase database (`krakow` schema, migrations 0001 to 0017) | Before the event, 29 September to 2 October 2026, for research | First commit. The data pipeline and the data stay private. |
 | Backend API (16 operations), its contract, its tests, `data/sources/derived/scoring.py`, and the backend and data documents | Before the event, same dates | First commit. Every change made on site to this code is listed in `ON_SITE_CHANGELOG.md`. |
 | City service (AI report and resident feedback) | On site, 3 October 2026 | `docs/CITY_SERVICE_PLAN.md`, `city-service/` |
-| Frontend, all of it | On site, 3 and 4 October 2026 | `frontend/HANDOFF.md`, `ON_SITE_CHANGELOG.md` |
-| Plain-language catalogue, units and Polish texts, school sports grounds and defibrillators, label wording (migrations 0018 to 0022) | On site, 4 October 2026 | `backend/HANDOFF.md`, `ON_SITE_CHANGELOG.md` |
+| Frontend, all of it | On site, 3 and 4 October 2026 | `frontend/README.md`, `ON_SITE_CHANGELOG.md` |
+| Plain-language catalogue, units and Polish texts, school sports grounds and defibrillators, label wording (migrations 0018 to 0022) | On site, 4 October 2026 | `ON_SITE_CHANGELOG.md` |
 | Rules, review process, CI, issue templates, README, sources document, pitch deck | On site, 3 and 4 October 2026 | `ON_SITE_CHANGELOG.md` |
 
 The earlier work lived in a private repository. It was copied here with personal data removed and no change to the code logic.
@@ -133,7 +137,7 @@ We disclose all significant use, as the event rules require.
 - **District reports.** A language model (`z-ai/glm-5.3-flash`, through OpenRouter) writes each report from a structured list of facts. A guard rejects any text that contains a number that is not in the facts. Reports are generated ahead of time and stored. The app labels every report as written by artificial intelligence.
 - **Personalised AI report** (`city-service/`, new on site). The same model narrates the top three districts for a person's priorities, at request time. The ranking is computed in code and the model only writes text from a fixed fact list. The same number guard applies. Every answer carries an AI label. The typed text goes to OpenRouter and is neither stored nor logged by us.
 - **Translation.** A language model (`deepseek/deepseek-v4.1-flash`, through OpenRouter) translates stored text between English and Polish. A glossary and a number check come first. Nothing is translated at request time.
-- **Development.** We used Claude Code (Anthropic) to help write and review code, tests and documents, in both the earlier work and the work on site. People review it, and we can explain all of it. Agents follow the rules in `AGENTS.md` and `REVIEW.md`.
+- **Development.** We used Claude Code (Anthropic) to help write and review code, tests and documents, in both the earlier work and the work on site. People review it, and we can explain all of it. The written rules the agents followed are on the `develop` branch (see "Documentation").
 
 ## 🗃️ Data and licences
 
@@ -175,7 +179,7 @@ OPENROUTER_LLM_KEY=... ../backend/.venv/bin/uvicorn app.main:app_from_env --fact
 cd ../frontend && npm run dev          # http://localhost:5173, forwards /v1 to both services
 ```
 
-On the team's machine `server/scripts/run_servers.sh start` keeps both servers running. The demo is reachable only on the team's private network, so there is no public address to click. The module guides explain the settings, the security measures and the Docker builds.
+**The public demo** is at <https://demo.dchaudhury.com>. The data API and the city service run as Docker containers, built from `backend/Dockerfile` and `city-service/Dockerfile`, with `ENVIRONMENT=production`. Caddy serves the built frontend and both services from that one address, so the browser calls no other origin. A Cloudflare Tunnel connects the address to Caddy, and no port of the server is open to the internet. The module guides explain the settings, the security measures and the Docker builds.
 
 ## 🧰 Tech stack
 
@@ -201,7 +205,7 @@ docs/                     Idea, data sources, data dictionary, design, plans, da
 changelog/                One file per pull request, built into ON_SITE_CHANGELOG.md before each merge into main
 scripts/                  build_changelog.py
 .github/                  CI, issue templates, pull request template
-presentation.html         The HackYeah pitch deck; open it in a browser
+pitch/                    The final pitch decks for the Smart City and Artificial Intelligence tracks (HTML and PDF), and the cover images
 ```
 
 ## 📚 Documentation
@@ -213,14 +217,13 @@ presentation.html         The HackYeah pitch deck; open it in a browser
 | `docs/DATA_DICTIONARY.md` | Tables, columns and the metric catalogue |
 | `backend/openapi.yaml`, `city-service/openapi.yaml` | The two API contracts. Change the contract first, then the code. |
 | `backend/README.md`, `city-service/README.md`, `frontend/README.md` | How each module works, its settings and how to run it |
-| `backend/HANDOFF.md`, `frontend/HANDOFF.md` | State of each module and how to restart or continue it |
 | `docs/DESIGN.md` | The look and the components that carry the data rules |
 | `docs/CITY_SERVICE_PLAN.md` | What the city service does and what it never does |
 | `docs/BACKEND_PLAN.md`, `docs/API_CONTRACT_DRAFT.md` | The reasoning behind the API, the price history and the backtest |
 | `frontend/ACCESSIBILITY.md`, `frontend/REVIEW_CHECKLIST.md` | The WCAG 2.2 AA rules and the checklist for every change |
-| `AGENTS.md`, `REVIEW.md` | The rules for people and agents, and the review process |
-| `TODO.md` | Priorities, owners and open decisions |
 | `ON_SITE_CHANGELOG.md` | Every change made during the event, with date and reason |
+
+`main` holds the released project. The working files for the team and its agents (the rules in `AGENTS.md`, the review process in `REVIEW.md`, the module hand-offs, the task lists and the first deck drafts) stay on the [`develop`](https://github.com/Delta-43/GdzieZamieszkac/tree/develop) branch, with their full history. Older documents that name them refer to that branch.
 
 ## 👥 Team
 

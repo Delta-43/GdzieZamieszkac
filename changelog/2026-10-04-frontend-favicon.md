@@ -1,1 +1,0 @@
-- `frontend/public/favicon.svg`, `frontend/public/favicon.ico`, `frontend/index.html`: a favicon in four blues of the map, served with the app, so the browser no longer logs a 404 for `/favicon.ico`. It is not a logo or a crest of the city. No imported code changed.
