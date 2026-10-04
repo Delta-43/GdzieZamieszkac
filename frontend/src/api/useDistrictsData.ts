@@ -138,6 +138,21 @@ export function useDistrictSeries(code: string | undefined, key: string) {
   })
 }
 
+/** How prices changed in the past, in the district and in the whole city. History, never a forecast. A 501 answer hides the section. */
+export function useOutlook(code: string | undefined) {
+  const { i18n } = useTranslation()
+  return useQuery({
+    queryKey: ['outlook', code, i18n.language],
+    enabled: Boolean(code),
+    retry: false,
+    queryFn: async () => {
+      const { data, error, response } = await api.GET('/districts/{code}/outlook', { params: { path: { code: code ?? '' } } })
+      if (error) throw new ApiError(response.status, error.title)
+      return data
+    },
+  })
+}
+
 /**
  * Estimated minutes by public transport from one district to every other one. A 501 answer means the feature is
  * switched off: the caller hides the section.
