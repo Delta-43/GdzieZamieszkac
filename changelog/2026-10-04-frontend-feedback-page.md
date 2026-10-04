@@ -1,1 +1,0 @@
-- `frontend/`: a feedback page (`/feedback`, in the menu and the footer) with two forms against the city service: rent paid and a data problem (task C4-2, issue #65). It shows the service's note (unverified, not published) before anything can be sent, names field errors in text, and stores nothing in the browser. No imported code changed.

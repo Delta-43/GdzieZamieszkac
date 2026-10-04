@@ -7,7 +7,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 ## Where things stand
 
 - **Phase 1 is built.** Pages: home (`/`), districts on the map (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
-- **`develop` holds everything up to pull request #89.** The last piece, the pull request for issue #82, is open on the branch `frontend/plain-language`. It contains this file.
+- **`develop` holds everything up to pull request #90.** The last piece, the pull request for issue #91, is open on the branch `frontend/responsive-scaling`. It contains this file.
 - `npm run check` passes on it: both contracts, lint, type check, 167 tests, build. CI runs the same on every pull request, with the backend and city service tests.
 - The app was run against the real servers on 4 October: every page and main flow, 14 kinds of API call, all answered 200, no console error.
 
@@ -23,7 +23,7 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Next steps, in order
 
-1. **Merge the pull request for issue #82** (branch `frontend/plain-language`). #89 is merged. An agent's session cannot merge (see "Things that cost time").
+1. **Merge the pull request for issue #91** (branch `frontend/responsive-scaling`): sizes and alignment at every width. #89 and #90 are merged. An agent's session cannot merge (see "Things that cost time").
 2. **Issue #82 is built, with three differences decided by Aryna** and written in a comment on the issue: the legend stays one line and gains a sentence on what darker means (the step list does not come back); one "Co to znaczy?" disclosure per measure, not two; a preset sends its exact weights, and a weight that is not 0, 3 or 5 is said in words. Two boxes of the issue stay open: the check with five people (Aryna), and the Polish text (`unicorn-alex`).
 3. **Decisions waiting for `Delta-43`**, each flagged in a pull request:
    - Observed values no longer show data kind, date and source beside the number (one press away). `REVIEW.md` and `AGENTS.md` rule 4 say "beside it" (#89).
@@ -62,6 +62,7 @@ Playwright is installed at the repository root by Aryna (not committed). The age
 - **Stacked branches.** Three pull requests were stacked on 4 October because nothing could be merged mid-session. Prefer a new branch from a current `develop`; when a pull request is still open, add to it.
 - **The list has the same names as the map.** On the districts page a test that looks for a button named "Delta" finds two. Look inside the map (`group` named "Mapa dzielnic…") or the list.
 - **The dev server loses its settings when a branch without `frontend/vite.config.ts` is checked out.** Restart it after such a switch.
+- **View tests.** `tests/responsive.spec.ts` at the repository root (Aryna's local Playwright setup, not committed) checks every page at eleven widths in Chromium, Firefox and WebKit: no sideways scroll, target sizes, line length, shared edges, and evenly filled rows of buttons. Run `npx playwright test tests/responsive.spec.ts` from the root with the dev server up, before a pull request that changes layout.
 - **The project has no code formatter.** Never run `prettier --write`: with no configuration it restyles every file. Match the style by hand; `npm run lint` is the check.
 - **Closing issues.** `Closes #n` does not close an issue when the pull request merges into `develop`, only when it reaches `main`. #72, #74, #76, #84 and #88 are still open for that reason.
 - **The AI report costs model budget** (10 a minute for the whole team). Send only on the button, use fixtures in tests, and put TEST in anything sent by hand. Feedback reports are stored.

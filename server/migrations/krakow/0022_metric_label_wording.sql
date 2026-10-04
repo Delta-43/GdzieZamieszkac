@@ -1,18 +1,19 @@
--- Wording changes to four metric labels, from the reviewer (unicorn-alex), at the coordinator's request.
--- Polish: "Liczba ..." for the two counts, a longer name for the detection rate, and "Natężenie ruchu (szacunek)" for the busyness estimate.
--- English: only the rail stations and the detection rate change. Descriptions are not touched.
--- Safe to re-run. UPDATEs are recorded in krakow.audit_log (old and new row), so the earlier texts can be restored.
+-- Label wording from the reviewer (unicorn-alex, 2026-10-04), applied on top of the plain-language catalogue of 0019.
+-- Polish: the stop metrics start with "Liczba", the 65+ share says "powyżej 65 lat", the busyness estimate is "Natężenie ruchu (szacunek)".
+-- English: "Train stations" and "Criminal offender detection rate". The rail metric keeps its description. Descriptions and units are not changed.
+-- Not changed on purpose: the three air metrics keep their 0019 labels ("Smog: ...", "Exhaust fumes: ...").
+-- Safe to re-run. UPDATEs are recorded in krakow.audit_log (old and new row), so the earlier labels can be restored. Polish text came from the reviewer.
 
-update krakow.metric_definitions set label_pl = 'Liczba przystanków w dzielnicy'
- where metric_key = 'transit_stops_total' and label_pl is distinct from 'Liczba przystanków w dzielnicy';
-
-update krakow.metric_definitions set label_pl = 'Liczba stacji kolejowych', label_en = 'Train stations'
- where metric_key = 'transit_stops_rail_metro'
-   and (label_pl is distinct from 'Liczba stacji kolejowych' or label_en is distinct from 'Train stations');
-
-update krakow.metric_definitions set label_pl = 'Wskaźnik wykrywalności sprawców przestępstw', label_en = 'Criminal offender detection rate'
- where metric_key = 'crime_detection_rate'
-   and (label_pl is distinct from 'Wskaźnik wykrywalności sprawców przestępstw' or label_en is distinct from 'Criminal offender detection rate');
-
-update krakow.metric_definitions set label_pl = 'Natężenie ruchu (szacunek)'
- where metric_key = 'busyness_index' and label_pl is distinct from 'Natężenie ruchu (szacunek)';
+update krakow.metric_definitions m
+   set label_en = v.label_en, label_pl = v.label_pl
+  from (values
+    ('transit_stops_total', 'Stops in the district', 'Liczba przystanków w dzielnicy'),
+    ('transit_stops_bus', 'Bus stops', 'Liczba przystanków autobusowych'),
+    ('transit_stops_tram', 'Tram stops', 'Liczba przystanków tramwajowych'),
+    ('transit_stops_rail_metro', 'Train stations', 'Liczba stacji kolejowych'),
+    ('share_age_65_plus', 'Residents aged 65 or older', 'Mieszkańcy powyżej 65 lat'),
+    ('crime_detection_rate', 'Criminal offender detection rate', 'Wskaźnik wykrywalności sprawców przestępstw'),
+    ('busyness_index', 'Crowds and traffic (estimate)', 'Natężenie ruchu (szacunek)')
+  ) as v(metric_key, label_en, label_pl)
+ where m.metric_key = v.metric_key
+   and (m.label_en, m.label_pl) is distinct from (v.label_en, v.label_pl);
