@@ -6,7 +6,6 @@
   "skipLink": "Przejdź do treści głównej",
   "nav": {
     "label": "Nawigacja główna",
-    "quick": "Skróty",
     "home": "Strona główna",
     "districts": "Dzielnice na mapie",
     "menu": "Menu",
@@ -34,8 +33,6 @@
   },
   "footer": {
     "sources": "Źródła danych",
-    "nav": "Nawigacja w stopce",
-    "tagline": "Poznaj dzielnice, zanim zaczniesz szukać mieszkania.",
     "newTab": "(otwiera się w nowej karcie)",
     "moreLink": "{{credit}}: adres {{number}} (otwiera się w nowej karcie)"
   },
@@ -52,7 +49,7 @@
     },
     "map": {
       "heading": "Mapa dzielnic: {{metric}}",
-      "hint": "Im ciemniejszy kolor, tym wyższa wartość. Wybierz dzielnicę na mapie, aby zobaczyć jej szczegóły. Każda dzielnica jest też na liście na stronie Dzielnice na mapie."
+      "hint": "Najedź na dzielnicę, aby zobaczyć jej wynik. Wybierz ją, aby zobaczyć szczegóły. Każda dzielnica jest też na liście na stronie Dzielnice na mapie."
     }
   },
   "notFound": {
@@ -74,7 +71,7 @@
   "districts": {
     "title": "Dzielnice",
     "heading": "Dzielnice na mapie i na liście",
-    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Te same wartości są na liście obok mapy.",
+    "intro": "Wybierz kategorię albo miarę, aby pokolorować mapę. Najedź na dzielnicę, aby zobaczyć jej wartość, i wybierz ją, aby zobaczyć szczegóły. Te same wartości są na liście pod mapą.",
     "optionNoData": "{{label}} (brak danych)",
     "unavailable": "Brak danych dla tej miary.",
     "noData": "brak danych",
@@ -100,11 +97,13 @@
       "zoomedTo": "Przybliżono do dzielnicy: {{name}}."
     },
     "legend": {
-      "title": "Legenda",
-      "direction": "Ciemniejszy kolor oznacza wyższą wartość.",
       "range": "Przedział {{number}}: od {{min}} do {{max}}",
       "single": "Przedział {{number}}: {{value}}",
-      "noData": "Pole kreskowane: brak danych"
+      "noData": "Pole kreskowane: brak danych",
+      "lower": "niższa wartość",
+      "higher": "wyższa wartość",
+      "lowerScore": "niższy wynik",
+      "higherScore": "wyższy wynik"
     },
     "table": {
       "region": "Lista dzielnic. Można ją przewijać.",
@@ -122,20 +121,16 @@
     "chooseMeasure": "— wybierz miarę —",
     "categoryScore": "Wynik kategorii: {{category}} (0–100)",
     "categoryMethod": "Wynik od 0 do 100 obliczony przez API tylko z miar tej kategorii. Porównuje dzielnice jednego miasta.",
-    "tabs": {
-      "label": "Dane dzielnic",
-      "list": "Lista",
-      "details": "Szczegóły"
-    },
     "details": {
-      "none": "Wybierz dzielnicę na mapie albo na liście, aby zobaczyć jej szczegóły.",
       "profile": "Profil dzielnicy: wyniki kategorii",
       "category": "Kategoria",
       "score": "Wynik (0–100)",
       "classShort": "{{number}} z {{count}}",
-      "backToList": "Wróć do listy"
+      "close": "Zamknij szczegóły"
     },
-    "pickerLabel": "Co koloruje mapę"
+    "pickerLabel": "Co koloruje mapę",
+    "listHeading": "Lista dzielnic",
+    "detailsLabel": "Szczegóły wybranej dzielnicy"
   },
   "report": {
     "heading": "Opis dzielnicy",

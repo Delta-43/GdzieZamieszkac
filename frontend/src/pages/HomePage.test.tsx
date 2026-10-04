@@ -23,7 +23,9 @@ test('the home page shows what the portal is, a search by district name, and the
   // The map is the second main part of the page, with the measure in its heading and one button per district.
   const map = await screen.findByRole('group', { name: /Mapa dzielnic\. Miara: Test score label/ })
   expect(within(map).getAllByRole('button')).toHaveLength(4)
-  expect(await screen.findByText('Legenda')).toBeInTheDocument()
+  // The key of the map: one line, from the lower score to the higher one.
+  expect(await screen.findByText('niższy wynik')).toBeInTheDocument()
+  expect(screen.getByText('wyższy wynik')).toBeInTheDocument()
 })
 
 test('typing shows the matching districts, the arrow keys move through them, and Enter opens the map on that district', async () => {
@@ -51,7 +53,7 @@ test('typing shows the matching districts, the arrow keys move through them, and
   // The map page opens with Beta chosen: its details show, and the map says it zoomed to it.
   expect(await screen.findByRole('heading', { level: 1, name: /Dzielnice na mapie/ })).toBeInTheDocument()
   expect(await screen.findByText('Przybliżono do dzielnicy: Beta.')).toBeInTheDocument()
-  expect(screen.getByRole('tab', { name: 'Szczegóły' })).toHaveAttribute('aria-selected', 'true')
+  expect(within(screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })).getByRole('heading', { level: 3, name: 'Beta' })).toBeInTheDocument()
 })
 
 test('a single match is chosen with Enter, and accents and capitals do not matter', async () => {
@@ -95,5 +97,5 @@ test('a district on the home map opens the map page on that district', async () 
   const map = await screen.findByRole('group', { name: /Mapa dzielnic/ })
   fireEvent.click(await within(map).findByRole('button', { name: /^Delta/ }))
   expect(await screen.findByText('Przybliżono do dzielnicy: Delta.')).toBeInTheDocument()
-  await waitFor(() => expect(screen.getByRole('tab', { name: 'Szczegóły' })).toHaveAttribute('aria-selected', 'true'))
+  await waitFor(() => expect(screen.getByRole('region', { name: 'Szczegóły wybranej dzielnicy' })).toBeInTheDocument())
 })

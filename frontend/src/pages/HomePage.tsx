@@ -55,9 +55,12 @@ export function HomePage() {
                   selected={null}
                   onSelect={open}
                   basemap={basemap}
+                  palette="score"
+                  classes={map.classes}
+                  extras={map.extras}
                 />
               </div>
-              {map.classes.length > 0 && <MapLegend classes={map.classes} hasGaps={map.hasGaps && !map.loading} />}
+              {map.classes.length > 0 && <MapLegend classes={map.classes} hasGaps={map.hasGaps && !map.loading} palette="score" />}
             </>
           )}
         </section>

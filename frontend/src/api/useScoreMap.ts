@@ -22,7 +22,18 @@ export function useScoreMap() {
     return { mapValues, classes }
   }, [values.data])
 
+  // The two values every district carries (the prices), with their labels from the catalogue, for its card on the map.
+  const extras = useMemo(() => {
+    const labels = new Map(metrics.data?.map((item) => [item.key, item.label]))
+    return new Map(
+      (districts.data?.districts ?? []).map((district) => [
+        district.code,
+        (district.highlights ?? []).map((highlight) => ({ label: labels.get(highlight.key) ?? highlight.key, display: highlight.display })),
+      ]),
+    )
+  }, [districts.data, metrics.data])
   return {
+    extras,
     districts: districts.data?.districts ?? [],
     boundaries: boundaries.data,
     metricLabel: metric?.label ?? '',

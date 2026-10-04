@@ -43,6 +43,16 @@ export const colors = {
   mapRamp3: '#7fb0dc',
   mapRamp4: '#0063af',
   mapRamp5: '#0a3a66',
+  /**
+   * The score ramp, for the overall score and the category scores only, where a higher value is the better one: from
+   * red through yellow to green. Red and green are hard to tell apart for some people, so the steps also differ in
+   * lightness, and the class of a district is always given in words as well (its card, the list, its button's name).
+   */
+  mapScore1: '#a61e2c',
+  mapScore2: '#e8704a',
+  mapScore3: '#f5d565',
+  mapScore4: '#93c96f',
+  mapScore5: '#1e8f4a',
   /** "No data" is hatching, never a fill that looks like a low value. */
   noDataStripe: '#bfbfbf',
   /**
@@ -105,6 +115,8 @@ export const CONTRAST_PAIRS: ContrastPair[] = [
 
 /** The ramp steps in order, palest first. */
 export const MAP_RAMP: ColorToken[] = ['mapRamp1', 'mapRamp2', 'mapRamp3', 'mapRamp4', 'mapRamp5']
+/** The score ramp, from the lowest class to the highest. */
+export const MAP_SCORE: ColorToken[] = ['mapScore1', 'mapScore2', 'mapScore3', 'mapScore4', 'mapScore5']
 
 /**
  * One typeface for everything, as on the city's website: Lato, regular and bold. It is self-hosted (bundled from the

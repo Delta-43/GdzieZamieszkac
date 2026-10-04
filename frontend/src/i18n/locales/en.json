@@ -6,7 +6,6 @@
   "skipLink": "Skip to main content",
   "nav": {
     "label": "Main navigation",
-    "quick": "Shortcuts",
     "home": "Home",
     "districts": "Districts on the map",
     "menu": "Menu",
@@ -34,8 +33,6 @@
   },
   "footer": {
     "sources": "Data sources",
-    "nav": "Footer navigation",
-    "tagline": "Get to know the districts before you look for a flat.",
     "newTab": "(opens in a new tab)",
     "moreLink": "{{credit}}: address {{number}} (opens in a new tab)"
   },
@@ -52,7 +49,7 @@
     },
     "map": {
       "heading": "Map of the districts: {{metric}}",
-      "hint": "The darker the colour, the higher the value. Choose a district on the map to see its details. Every district is also in the list on the page Districts on the map."
+      "hint": "Point at a district to see its score. Choose it to see its details. Every district is also in the list on the page Districts on the map."
     }
   },
   "notFound": {
@@ -74,7 +71,7 @@
   "districts": {
     "title": "Districts",
     "heading": "Districts on the map and in the list",
-    "intro": "Pick a category or a measure to colour the map. The same values are in the list beside the map.",
+    "intro": "Pick a category or a measure to colour the map. Point at a district to see its value, and choose it to see its details. The same values are in the list below the map.",
     "optionNoData": "{{label}} (no data)",
     "unavailable": "No data for this measure.",
     "noData": "no data",
@@ -100,11 +97,13 @@
       "zoomedTo": "Zoomed to {{name}}."
     },
     "legend": {
-      "title": "Legend",
-      "direction": "A darker colour means a higher value.",
       "range": "Class {{number}}: from {{min}} to {{max}}",
       "single": "Class {{number}}: {{value}}",
-      "noData": "Hatched area: no data"
+      "noData": "Hatched area: no data",
+      "lower": "lower value",
+      "higher": "higher value",
+      "lowerScore": "lower score",
+      "higherScore": "higher score"
     },
     "table": {
       "region": "List of the districts. It scrolls.",
@@ -122,20 +121,16 @@
     "chooseMeasure": "— pick a measure —",
     "categoryScore": "Category score: {{category}} (0–100)",
     "categoryMethod": "A score from 0 to 100 that the API computes from the measures of this category only. It compares the districts of one city.",
-    "tabs": {
-      "label": "District data",
-      "list": "List",
-      "details": "Details"
-    },
     "details": {
-      "none": "Choose a district on the map or in the list to see its details.",
       "profile": "District profile: category scores",
       "category": "Category",
       "score": "Score (0–100)",
       "classShort": "{{number}} of {{count}}",
-      "backToList": "Back to the list"
+      "close": "Close the details"
     },
-    "pickerLabel": "What colours the map"
+    "pickerLabel": "What colours the map",
+    "listHeading": "List of districts",
+    "detailsLabel": "Details of the chosen district"
   },
   "report": {
     "heading": "About the district",

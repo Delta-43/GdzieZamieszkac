@@ -53,7 +53,8 @@ test('the page is in the menu and in English when the toggle is used', async () 
   fireEvent.click(await screen.findByRole('button', { name: 'English' }))
   expect(await screen.findByRole('heading', { level: 1, name: 'Sources and how it works' })).toBeInTheDocument()
   expect(section('Where artificial intelligence is used')).toHaveTextContent('never computed by a model')
-  expect(screen.getAllByRole('link', { name: 'Sources and how it works' }).length).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Menu' }))
+  expect(within(screen.getByRole('navigation', { name: 'Main navigation' })).getByRole('link', { name: 'Sources and how it works' })).toHaveAttribute('aria-current', 'page')
 })
 
 test('a failing /meta shows an error with a retry and keeps the explanation', async () => {

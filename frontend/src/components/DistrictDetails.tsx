@@ -24,7 +24,7 @@ export function DistrictDetails({ district, view, value, classNumber, categoryLa
   const { t, i18n } = useTranslation()
   const profile = useAllCategoryScores(Boolean(district))
 
-  if (!district) return <p>{t('districts.details.none')}</p>
+  if (!district) return null
 
   return (
     <div className="district-details">
@@ -95,7 +95,7 @@ export function DistrictDetails({ district, view, value, classNumber, categoryLa
       </p>
       <p>
         <button type="button" className="button-secondary" onClick={onBack}>
-          {t('districts.details.backToList')}
+          {t('districts.details.close')}
         </button>
       </p>
     </div>

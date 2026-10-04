@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { Link, Outlet, useLocation } from 'react-router'
 import { useMeta } from '../api/useMeta'
-import { PAGES } from '../lib/pages'
 import { Footer } from './Footer'
 import { CloseIcon, MenuIcon } from './Icons'
 import { LanguageToggle } from './LanguageToggle'
@@ -19,7 +18,7 @@ const HOVER_CLOSE_MS = 250
  */
 type MenuState = 'closed' | 'hover' | 'pinned'
 
-/** The parts every page shares: skip link, header with the menu and the shortcuts, language toggle, stale-data notice and footer. */
+/** The parts every page shares: skip link, header with the menu, language toggle, stale-data notice and footer. */
 export function Layout() {
   const { t } = useTranslation()
   const meta = useMeta()
@@ -120,18 +119,6 @@ export function Layout() {
           {/* The city name comes from /meta and is never written into the code. */}
           {meta.data?.city_name && <span className="site-city">{t('site.city', { city: meta.data.city_name })}</span>}
         </p>
-        {/* The steps of the main flow, one press away on a wide screen. On a narrow one they are in the menu only. */}
-        <nav className="site-quick" aria-label={t('nav.quick')}>
-          <ul>
-            {PAGES.filter((page) => page.quick).map((page) => (
-              <li key={page.to}>
-                <NavLink to={page.to} end={page.end}>
-                  {t(page.labelKey)}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
         <LanguageToggle />
       </header>
       <StaleNotice />
