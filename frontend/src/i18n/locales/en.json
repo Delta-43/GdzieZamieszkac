@@ -13,7 +13,8 @@
     "groupDistricts": "Districts",
     "findDistrict": "Find a district",
     "compare": "Compare districts",
-    "feedback": "Share feedback"
+    "feedback": "Share feedback",
+    "sources": "Sources and how it works"
   },
   "language": {
     "label": "Language"
@@ -47,6 +48,10 @@
       "heading": "Official notices",
       "badge": "Concept",
       "text": "Notices of planned projects and infrastructure, published by the city, are to be implemented after city approval. They do not exist yet: this section shows no notices and no data."
+    },
+    "map": {
+      "heading": "Map of the districts: {{metric}}",
+      "hint": "The darker the colour, the higher the value. Choose a district on the map to see its details. Every district is also in the list on the page Districts on the map."
     }
   },
   "notFound": {
@@ -80,7 +85,18 @@
       "label": "Map of the districts. Measure: {{metric}}",
       "district": "{{name}}: {{value}}, class {{class}} of {{count}}",
       "districtNoData": "{{name}}: no data",
-      "districtLoading": "{{name}}: loading the data"
+      "districtLoading": "{{name}}: loading the data",
+      "controls": "Zoom and move the map",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "panLeft": "Move the map left",
+      "panRight": "Move the map right",
+      "panUp": "Move the map up",
+      "panDown": "Move the map down",
+      "reset": "Whole city",
+      "wholeCity": "The whole city is shown.",
+      "zoomLevel": "Zoom {{zoom}} times.",
+      "zoomedTo": "Zoomed to {{name}}."
     },
     "legend": {
       "title": "Legend",
@@ -95,7 +111,9 @@
       "district": "District",
       "score": "Overall score (0–100)",
       "selected": "selected",
-      "captionScore": "Districts: overall score"
+      "captionScore": "Districts: overall score",
+      "rank": "Ranking",
+      "class": "Class"
     },
     "colourBy": "Colour the map by",
     "overall": "Overall score",
@@ -115,7 +133,8 @@
       "score": "Score (0–100)",
       "classShort": "{{number}} of {{count}}",
       "backToList": "Back to the list"
-    }
+    },
+    "pickerLabel": "What colours the map"
   },
   "report": {
     "heading": "About the district",
@@ -279,5 +298,72 @@
       "unavailable": "Reports cannot be received right now. Try again later.",
       "generic": "The report was not sent. Check your internet connection and try again."
     }
+  },
+  "about": {
+    "title": "Sources and how it works",
+    "heading": "Sources and how it works",
+    "intro": "Where the numbers come from, how the score is made, where artificial intelligence is used and where it is not, and what this portal does not do.",
+    "score": {
+      "heading": "How the score is made",
+      "text": "The score is computed by program code from public data, and the code is tested. For each measure, a district gets a rank among the districts of the city (a percentile, 0 to 100, where 100 is best). The score is the weighted mean of those ranks. The weights are yours: the sliders on the page Find a district, or a preset.",
+      "limit": "A score says how a district compares with the other districts of the same city. It does not compare cities, and it is not a grade of how good a place is to live."
+    },
+    "ai": {
+      "heading": "Where artificial intelligence is used",
+      "used": "Where it is used",
+      "notUsed": "Where it is not used",
+      "reports": "The area report of each district is written by a language model from a fixed list of facts, ahead of time. Every report carries a label saying so.",
+      "summary": "The summary on the page Find a district is written by a language model when you ask for it, from the ranking on screen and your text. Your text is sent to an outside provider of the model and is not stored by us.",
+      "translation": "Stored text is translated between Polish and English by a language model before it is published. Nothing is translated while you use the portal.",
+      "noScore": "The score and the ranking are never computed by a model.",
+      "noNumbers": "A model never adds, changes or invents a number. A text that holds a number that is not in the facts is thrown away.",
+      "noVerdict": "A model never says that a district is safe or dangerous.",
+      "guard": "If a text cannot be written, the portal says so and everything else keeps working."
+    },
+    "not": {
+      "heading": "What this portal does not do",
+      "listings": "It is not a listings site. It shows no flats for sale or rent, no brokers and no links to offers. Rents are district medians.",
+      "safety": "It makes no judgement of safety. Crime would be shown as recorded crimes per 10 000 residents, and Kraków has no crime data in this portal today.",
+      "forecast": "It makes no forecast of prices. It shows history and a range seen in the past.",
+      "advice": "It does not give financial or legal advice, and it does not ask who lives in a district."
+    },
+    "sources": {
+      "heading": "Sources",
+      "intro": "Every source in use, with the credit line the licence asks for, as the data service gives it.",
+      "credit": "Credit",
+      "licence": "Licence",
+      "asOf": "Data as of",
+      "metrics": "Figures from this source"
+    },
+    "gaps": {
+      "heading": "Gaps in the data",
+      "intro": "These figures have no data for this city. They are left out of the score. The reason is the data service's own text.",
+      "none": "Every figure has data for this city."
+    },
+    "a11y": {
+      "heading": "Accessibility statement (draft)",
+      "draft": "This is a draft written during the HackYeah event. The city that hosts the service must complete and review it each year.",
+      "target": "The target is the Web Content Accessibility Guidelines 2.2, level AA. The portal is not yet fully checked against it.",
+      "done": "What has been done",
+      "doneAuto": "Every page is checked by an automated accessibility test in both languages.",
+      "doneContrast": "Every pair of colours is tested for contrast: 4.5 to 1 for text and 3 to 1 for the parts of a control.",
+      "doneKeyboard": "The pages have a skip link and a visible focus, and they fit a screen 320 pixels wide without sideways scrolling.",
+      "todo": "What has not been done yet",
+      "todoScreenReader": "A full check with a screen reader on each page.",
+      "todoZoom": "A full check at 400 percent zoom on each page.",
+      "todoMap": "On the two darkest classes of the map, the thin outline of a district does not reach 3 to 1 against its fill. Every district is also in the table next to the map.",
+      "report": "How to report a problem",
+      "reportText": "The city that hosts the service will give a contact for accessibility problems. During the event, report a problem to the project team, or as an issue in the project repository on GitHub.",
+      "todoKeyboard": "A full check with the keyboard alone on each page."
+    }
+  },
+  "search": {
+    "region": "Search for a district",
+    "label": "Type a district name",
+    "hint": "For example: {{example}}. The district is shown on the map.",
+    "submit": "Show on the map",
+    "list": "Districts that match what you typed",
+    "count": "Suggestions: {{count}}.",
+    "missed": "There is no district with that name. Check the spelling, or choose a district on the map."
   }
 }

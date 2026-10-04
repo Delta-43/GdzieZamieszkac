@@ -34,6 +34,8 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'jsdom',
       setupFiles: ['src/test/setup.ts'],
+      // An automated accessibility check of a whole page takes several seconds in jsdom, more on a busy machine or in CI.
+      testTimeout: 20_000,
       // jsdom cannot build a request from a relative URL, so tests give the client an absolute origin.
       env: { VITE_API_URL: 'http://api.test', VITE_CITY_API_URL: 'http://city.test' },
     },

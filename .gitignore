@@ -17,3 +17,11 @@ city-service/data/
 .*.swp
 *.swo
 *~
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+frontend/public/basemap/*.json

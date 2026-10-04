@@ -1,4 +1,4 @@
-# Frontend hand-off: state on 4 October 2026
+# Frontend hand-off: state on 4 October 2026, after the map work
 
 For the next session on `frontend/`, human or agent. Updated by the coordinator's agent after the second backend test. The earlier versions are in the git history (pull requests #15 and #41).
 
@@ -6,20 +6,23 @@ Read first: `../AGENTS.md`, `../REVIEW.md` section 7, `AGENTS.md`, then this fil
 
 ## Where things stand
 
-- The app exists and runs. Tasks F1 to F7 and C4-0, C4-1 are merged into `develop`. `TODO.md` has the status of every task.
-- Pages: home (`/`), districts with the map and the list (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), and "page not found".
-- Shared parts: skip link, header with a menu button, a menu that opens from the left, language toggle (Polish default), stale-data notice, loading and error states, footer with every source linked to its origin.
-- The design is decided: the look of krakow.pl (`../docs/DESIGN.md`, `src/theme/tokens.ts`, Lato from `src/main.tsx`). The Field Journal proposal was removed.
-- `npm run check` passes: both contracts in `api:check`, lint, type check, tests, build. The same command runs in CI (`../.github/workflows/ci.yml`) on every pull request.
-- The header no longer scrolls sideways at 320 pixels (#45, merged in #50).
+- The app exists and runs. Everything in `TODO.md` for phase 1 is built: F1 to F8 and C4-0 to C4-3 (the last four arrive with the branch `frontend/map-home`, see below).
+- Pages: home (`/`) with a search by district name and the map, districts with the map and the list (`/districts`), one district (`/districts/<code>`), find a district (`/find`) with the AI report card, compare (`/compare?codes=a,b`), feedback (`/feedback`), sources and how it works (`/sources`), and "page not found".
+- **The map is the centre of the app** (issue #70). Layers: pixels on a canvas (`PixelLayer.tsx`), the district buttons as SVG (`DistrictMap.tsx`), and context from OpenStreetMap. Read "The map" in `README.md` before you change any of it. The context file is not in git (ODbL): run `python3 frontend/scripts/build_basemap.py` while the data API runs, or the map shows districts alone. `?district=<code>` selects and zooms to a district.
+- The design is decided in two parts: the look of krakow.pl (`../docs/DESIGN.md`, `src/theme/tokens.ts`, Lato) is in use; the **coordinator asked for the design language of the official Polish government sites** (gov.pl). That is the next design task: read the official design documentation first, check the app against it, and change `tokens.ts` and the styles. Do not guess its details.
+- `npm run check` passes: both contracts in `api:check`, lint, type check, 150 tests, build. The same command runs in CI (`../.github/workflows/ci.yml`) on every pull request.
+
+## What `frontend/map-home` holds
+
+One branch with all the frontend work that was open on 4 October, cut from `develop` at `8ad6d60` and merging cleanly with it. It contains, in this order: C4-3 (notices label, #64), C4-2 (feedback page, #65), F8 (sources page, #66), and the map work (#70). The pull requests #67 and #68 were merged into `develop` separately, while this branch was being finished. #69 (F8) holds the third alone: it is redundant once this branch is merged and can then be closed.
 
 ## Next steps, in order
 
-1. **Open bugs:** #56 (two ticks a few milliseconds apart keep only the second district on Compare) and #57 (Compare at 320 pixels: the measure column fills the screen).
-2. **C4-2, the feedback page**: two forms (`rent_paid`, `data_problem`). The generated types now carry the discriminator values (`rent_paid`, `data_problem`) since issue #54. Show the note from `GET /v1/feedback/status` before sending. Put the word TEST in any message you send by hand, because reports are stored. The service rejects unknown fields (422) and answers `413` above 8 KB and `429` with `Retry-After`.
-3. **C4-3, the notices label**: "to be implemented after city approval". No endpoint.
-4. **F8 sources, "how it works" and the draft accessibility statement.**
-5. The small fixes at the end of `TODO.md`.
+1. **Merge `frontend/map-home`** (pull request #71 into `develop`), then close #69 if GitHub has not.
+2. **The government look.** Read the official Polish government design system documentation (gov.pl). Write down what applies (type, colour, components, header and footer, form patterns) in `../docs/DESIGN.md`, then change `tokens.ts` and the styles. Keep the contrast pairs in `theme.test.ts` honest. Polish text goes to `unicorn-alex`.
+3. **Manual accessibility checks** that were never done: keyboard only, a screen reader (NVDA), 200 and 400 percent zoom, on every page. Update the draft statement in `src/pages/SourcesPage.tsx` and `en.json`/`pl.json` (`about.a11y`) when they are done.
+4. **Small fixes** at the end of `TODO.md` (favicon, long district names on the map, `plainNumber.ts` after backend task B2).
+5. **Phase 2** (F9 to F12) only after the above.
 
 ## Rules that stay
 

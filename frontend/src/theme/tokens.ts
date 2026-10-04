@@ -45,6 +45,14 @@ export const colors = {
   mapRamp5: '#0a3a66',
   /** "No data" is hatching, never a fill that looks like a low value. */
   noDataStripe: '#bfbfbf',
+  /**
+   * The context of the map (rivers, lakes, main roads, railways). They only help a reader find their way: nothing is read from
+   * them, so they have no contrast requirement, and they are drawn thin and see-through over the districts. Water is white, as a
+   * gap in the colours, so it is never mistaken for a step of the blue ramp.
+   */
+  mapWater: '#ffffff',
+  mapRoad: '#2b2b2b',
+  mapRail: '#2b2b2b',
 } as const
 
 export type ColorToken = keyof typeof colors

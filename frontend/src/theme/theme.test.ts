@@ -18,8 +18,9 @@ test.each(CONTRAST_PAIRS)('$fg on $bg reaches $min:1 ($use)', ({ fg, bg, min }) 
 
 test('every colour that can sit on a background is covered by a contrast pair', () => {
   const backgrounds = new Set<string>(['bg', 'surface', 'surfaceRaised', 'accent', 'accentHover', ...MAP_RAMP])
-  // "border" is a decorative hairline and carries no meaning, so it is the one colour with no requirement.
-  const exempt = new Set<string>(['border', 'noDataStripe'])
+  // "border" is a decorative hairline and carries no meaning, so it has no requirement. The same goes for the context of the map
+  // (water, roads, railways): they only help to find one's way, nothing is read from them, and they are thin and see-through.
+  const exempt = new Set<string>(['border', 'noDataStripe', 'mapWater', 'mapRoad', 'mapRail'])
   const covered = new Set<string>(CONTRAST_PAIRS.map((pair) => pair.fg))
   const uncovered = Object.keys(colors).filter((name) => !backgrounds.has(name) && !exempt.has(name) && !covered.has(name))
   expect(uncovered).toEqual([])
