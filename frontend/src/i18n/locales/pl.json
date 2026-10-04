@@ -293,6 +293,28 @@
       "drivers": "Co najbardziej wpływa na wynik"
     }
   },
+  "profile": {
+    "heading": "Twoje warunki (opcjonalnie)",
+    "private": "Te ustawienia zostają na tej stronie. Nie są zapisywane ani wysyłane i nie zmieniają wyniku.",
+    "work": "Dzielnica, w której pracujesz",
+    "noWork": "— nie wybrano —",
+    "budget": "Budżet",
+    "tenure": {
+      "none": "Bez limitu",
+      "buy": "Kupno",
+      "rent": "Wynajem"
+    },
+    "maxPrice": "Najwyższa cena w zł",
+    "maxRent": "Najwyższy czynsz miesięczny w zł",
+    "amountInvalid": "Podaj kwotę większą od zera.",
+    "commuteColumn": "Dojazd do pracy (szacunek)",
+    "sameDistrict": "ta sama dzielnica",
+    "priceColumn": "Mediana za m²",
+    "shown": "Budżet: pokazano {{shown}} z {{all}} dzielnic. To szacunek: mediana za m² razy powierzchnia mieszkania.",
+    "rentNote": "Czynsz to czynsz ofertowy z ogłoszeń, a nie z podpisanej umowy.",
+    "noPrice": "Dzielnice bez danych o cenie zostają na liście: nie da się ich ocenić.",
+    "noneFit": "Żadna dzielnica nie mieści się w tym budżecie."
+  },
   "aiReport": {
     "heading": "Podsumowanie dla Twoich potrzeb",
     "intro": "Opisz własnymi słowami, co jest dla Ciebie ważne. Sztuczna inteligencja napisze krótkie podsumowanie trzech pierwszych dzielnic z rankingu pokazanego na tej stronie. Twój opis nie zmienia rankingu.",

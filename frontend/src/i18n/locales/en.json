@@ -293,6 +293,28 @@
       "drivers": "What moves the score most"
     }
   },
+  "profile": {
+    "heading": "Your conditions (optional)",
+    "private": "These settings stay on this page. They are not stored or sent, and they do not change the score.",
+    "work": "The district where you work",
+    "noWork": "— none chosen —",
+    "budget": "Budget",
+    "tenure": {
+      "none": "No limit",
+      "buy": "Buying",
+      "rent": "Renting"
+    },
+    "maxPrice": "Highest price in PLN",
+    "maxRent": "Highest monthly rent in PLN",
+    "amountInvalid": "Give an amount above zero.",
+    "commuteColumn": "Travel to work (estimate)",
+    "sameDistrict": "the same district",
+    "priceColumn": "Median per m²",
+    "shown": "Budget: {{shown}} of {{all}} districts are shown. This is an estimate: the median per m² times the size of the flat.",
+    "rentNote": "The rent is an asking rent from listings, not a signed lease.",
+    "noPrice": "Districts without price data stay in the list: they cannot be judged.",
+    "noneFit": "No district fits this budget."
+  },
   "aiReport": {
     "heading": "A summary for your needs",
     "intro": "Describe in your own words what matters to you. Artificial intelligence writes a short summary of the first three districts in the ranking shown on this page. Your text does not change the ranking.",
