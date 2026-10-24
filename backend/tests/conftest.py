@@ -7,12 +7,28 @@ import yaml
 from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from datetime import datetime
+
+import app.core.store as store_module
 from app.core.config import Settings
 from app.core.store import DataStore
 from app.main import create_app
-from tests.fixtures import make_snapshot
+from tests.fixtures import NOW, make_snapshot
 
 SPEC_PATH = Path(__file__).resolve().parents[1] / "openapi.yaml"
+
+
+class _FrozenDatetime(datetime):
+    """datetime whose now() is the fixtures' NOW, so staleness does not depend on the day the suite runs."""
+
+    @classmethod
+    def now(cls, tz=None):
+        return NOW if tz else NOW.replace(tzinfo=None)
+
+
+@pytest.fixture(autouse=True)
+def _frozen_clock(monkeypatch):
+    monkeypatch.setattr(store_module, "datetime", _FrozenDatetime)
 
 
 @pytest.fixture(scope="session")

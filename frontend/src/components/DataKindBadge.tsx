@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
+import { DEMO } from '../demo/flag'
 
 type DataKind = components['schemas']['DataKind']
 
@@ -22,7 +23,8 @@ export function DataKindBadge({ kind }: { kind: DataKind }) {
   return (
     <span className="data-kind">
       <Mark kind={kind} />
-      {t(`dataKind.${kind}`)}
+      {/* In the demo no value is measured: what the catalogue calls measured is sample data. */}
+      {DEMO && kind === 'observed' ? t('demo.kindSample') : t(`dataKind.${kind}`)}
     </span>
   )
 }

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type 
 import { useTranslation } from 'react-i18next'
 import { Link, Outlet, useLocation } from 'react-router'
 import { useMeta } from '../api/useMeta'
+import { DEMO } from '../demo/flag'
+import { DemoBanner } from './DemoNotice'
 import { Footer } from './Footer'
 import { CloseIcon, MenuIcon } from './Icons'
 import { LanguageToggle } from './LanguageToggle'
@@ -93,6 +95,7 @@ export function Layout() {
       <a className="skip-link" href={`#${MAIN_ID}`}>
         {t('skipLink')}
       </a>
+      {DEMO && <DemoBanner />}
       <header className="site-header">
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- the wrapper only watches the pointer and the focus leaving; the button inside it is the control, for every kind of input */}
         <div ref={menuWrapRef} className="menu-wrap" onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onBlur={onBlur}>
@@ -117,7 +120,7 @@ export function Layout() {
         <p className="site-name">
           <Link to="/">
             {/* The logo is decoration: the link's name is the site name beside it. */}
-            <img className="site-logo" src="/logo.svg" alt="" width="32" height="32" />
+            <img className="site-logo" src={`${import.meta.env.BASE_URL}logo.svg`} alt="" width="32" height="32" />
             {t('site.name')}
           </Link>
           {/* The city name comes from /meta and is never written into the code. */}

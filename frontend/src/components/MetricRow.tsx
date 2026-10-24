@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { components } from '../api/schema'
 import { DataKindBadge } from './DataKindBadge'
+import { DEMO } from '../demo/flag'
 import { DateText } from './DateText'
 
 type MetricEntry = components['schemas']['MetricEntry']
@@ -38,7 +39,7 @@ export function MetricRow({ metric, description }: { metric: MetricEntry; descri
         <p className="metric__value">
           <span>{metric.display}</span>
           {/* An estimate or an indirect measure says so beside the number. A measured value needs no mark: its kind is in the details below. */}
-          {metric.data_kind !== 'observed' && (
+          {(metric.data_kind !== 'observed' || DEMO) && (
             <>
               {' '}
               <DataKindBadge kind={metric.data_kind} />
@@ -72,7 +73,7 @@ export function MetricRow({ metric, description }: { metric: MetricEntry; descri
             <div>
               <dt>{t('provenance.dataKind')}</dt>
               <dd>
-                <DataKindBadge kind={metric.data_kind} /> {t(`dataKindHelp.${metric.data_kind}`)}
+                <DataKindBadge kind={metric.data_kind} /> {DEMO && metric.data_kind === 'observed' ? t('demo.kindSampleHelp') : t(`dataKindHelp.${metric.data_kind}`)}
               </dd>
             </div>
             <div>

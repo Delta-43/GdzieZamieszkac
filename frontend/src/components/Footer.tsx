@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useMeta } from '../api/useMeta'
+import { DEMO } from '../demo/flag'
 import { ErrorMessage } from './ErrorMessage'
 import { Loading } from './Loading'
 
@@ -27,6 +28,18 @@ export function Footer() {
               ))}
             </ul>
           )}
+        </section>
+        {/* Who made it, when the data was collected, and under what terms the repository is public. Plain text, like the credit lines. */}
+        <section className="site-footer__about" aria-labelledby="footer-about">
+          <h2 id="footer-about">{t('footerAbout.heading')}</h2>
+          <p>
+            {t('footerAbout.project')} {t('footerAbout.team')}
+          </p>
+          <p>{t('footerAbout.data')}</p>
+          <p>
+            {t('footerAbout.licence')} {t('footerAbout.repo')}: github.com/Delta-43/GdzieZamieszkac.
+          </p>
+          {DEMO && <p>{t('footerAbout.demo')}</p>}
         </section>
       </div>
     </footer>

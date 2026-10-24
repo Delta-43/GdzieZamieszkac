@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_API_URL?: string
   /** Origin of the city service (AI report, resident feedback). Empty means the same origin as the page. Public. */
   readonly VITE_CITY_API_URL?: string
+  /** 'true' in the build for GitHub Pages: sample data bundled with the app, no server. Set by `vite build --mode demo`. */
+  readonly VITE_DEMO?: string
 }
 
 interface ImportMeta {

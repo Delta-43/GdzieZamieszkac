@@ -67,6 +67,17 @@ Not taken from the guide, on purpose: the top bar "gov.pl, Serwis Rzeczypospolit
 
 Changing the look means changing the values in `tokens.ts`.
 
+## Demo for GitHub Pages
+
+`npm run build:demo` builds the same app as a static site that needs no server. It is published by `.github/workflows/pages.yml`.
+
+- **How it works.** `vite build --mode demo` sets `VITE_DEMO`. In that build `src/api/client.ts` and `src/api/cityClient.ts` do not call `fetch`: they call `src/demo/handler.ts`, which answers every route of both OpenAPI contracts from the data in `src/demo/data/`. Scores, rankings, similar districts and the AI summary are worked out in the browser from that data, with the same method as the API (`src/demo/engine.ts`). A normal build contains none of this code.
+- **No network.** The demo loads no data, font, map tile or script from another server. Fonts are bundled, the map is drawn from the extract in `src/demo/data/basemap.json`, and the base address of the demo API is `demo.invalid`, which cannot resolve.
+- **Address.** The app lives under `/GdzieZamieszkac/` and uses a hash router, so a deep link such as `/GdzieZamieszkac/#/districts/lagiewniki-borek-falecki` and a refresh work on Pages. `404.html` sends an address without the `#` to the hashed one.
+- **What is real and what is sample.** Real, from this repository: the catalogue of 51 measures (read from `server/migrations/krakow`), the reasons for the four gaps, the sources and licences (`docs/DATA_SOURCES.md`), the district shapes (OpenStreetMap), and the school sports grounds and public defibrillators per district (migration 0020). **Every other value is sample data**, made up by `scripts/build-demo-fixtures.mjs` from a rough profile of each district, because the measured database is not in the repository. The demo says so on every page. The district reports and the AI summary are sample texts written in advance, labelled as such; the figures in them come from the sample data.
+- **Feedback.** The service status says it does not accept reports, and the forms are disabled.
+- **Licence.** The shapes and the map extract are © OpenStreetMap contributors, ODbL 1.0, and stay under that licence (the map shows the credit). The rest of the repository is under `../LICENSE`.
+
 ## The map
 
 The map is the centre of the app. It is built from two layers, with no map library and no request to a map server:
@@ -91,6 +102,9 @@ Run them from this folder. Tested with Node 26 and npm 11. CI uses Node 26.
 | `npm run api:generate` | Writes `src/api/schema.d.ts` from `../backend/openapi.yaml` and `src/api/citySchema.d.ts` from `../city-service/openapi.yaml`. Run it after every contract change and commit the result. |
 | `npm run api:check` | Fails when the committed types differ from a fresh run. |
 | `npm run check` | Runs `api:check`, `lint`, `typecheck`, `test` and `build`. Run it before you open a pull request. |
+| `npm run build:demo` | Builds the static demo for GitHub Pages into `dist/` (see below). |
+| `npm run preview:demo` | Serves that build at `http://localhost:4173/GdzieZamieszkac/`. |
+| `npm run demo:data` | Makes `src/demo/data/` again (needs the network once: it asks OpenStreetMap for the district shapes). |
 
 Copy `.env.example` to `.env.local` and put the API addresses there. Git ignores `.env.local`, so the address stays private.
 

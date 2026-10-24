@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { useMetrics } from '../api/useDistrictsData'
 import { useMeta } from '../api/useMeta'
 import { DataKindBadge } from '../components/DataKindBadge'
+import { DemoAbout } from '../components/DemoNotice'
+import { DEMO } from '../demo/flag'
 import { DateText } from '../components/DateText'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
@@ -25,6 +27,7 @@ export function SourcesPage() {
     <>
       <h1>{t('about.heading')}</h1>
       <p>{t('about.intro')}</p>
+      {DEMO && <DemoAbout />}
 
       <section aria-labelledby="about-score">
         <h2 id="about-score">{t('about.score.heading')}</h2>
@@ -39,7 +42,7 @@ export function SourcesPage() {
         <ul>
           {(['observed', 'estimated', 'proxy'] as const).map((kind) => (
             <li key={kind}>
-              <DataKindBadge kind={kind} />: {t(`dataKindHelp.${kind}`)}
+              <DataKindBadge kind={kind} />: {DEMO && kind === 'observed' ? t('demo.kindSampleHelp') : t(`dataKindHelp.${kind}`)}
             </li>
           ))}
         </ul>

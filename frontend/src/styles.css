@@ -2010,3 +2010,46 @@ main :is(ul, ol):not([class]) > li {
   font-family: var(--font-ui);
   font-weight: 700;
 }
+
+/* Demo build only: the strip that says the figures are samples, and the footer lines about the project. */
+.demo-banner {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  background: var(--color-surface-raised);
+  border-block-end: 2px solid var(--color-info);
+}
+
+.demo-banner p {
+  box-sizing: border-box;
+  max-inline-size: var(--container);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-4);
+}
+
+.demo-about {
+  margin-block: var(--space-4);
+}
+
+.demo-about p:last-child {
+  margin-block-end: 0;
+}
+
+.site-footer__about {
+  margin-block-start: var(--space-4);
+}
+
+.site-footer__about p {
+  margin-block: 0 var(--space-2);
+  max-inline-size: none;
+  font-size: var(--text-xs);
+  line-height: var(--line-base);
+  color: var(--color-text-muted);
+}
+
+/* A form that the demo has switched off: the controls are disabled, and this keeps the group from adding a frame of its own. */
+.demo-off {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}

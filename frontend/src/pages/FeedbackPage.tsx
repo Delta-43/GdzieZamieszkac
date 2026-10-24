@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { noteText, useFeedbackStatus } from '../api/useFeedback'
+import { DEMO } from '../demo/flag'
 import { DataProblemForm, RentPaidForm } from '../components/FeedbackForms'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { Loading } from '../components/Loading'
@@ -13,6 +14,12 @@ export function FeedbackPage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('feedback.title'))
   const status = useFeedbackStatus()
+  const forms = (
+    <>
+      <RentPaidForm ready={Boolean(status.data?.accepting)} />
+      <DataProblemForm ready={Boolean(status.data?.accepting)} />
+    </>
+  )
 
   return (
     <>
@@ -30,8 +37,15 @@ export function FeedbackPage() {
       )}
 
       <p className="note">{t('feedback.privacy')}</p>
-      <RentPaidForm ready={Boolean(status.data?.accepting)} />
-      <DataProblemForm ready={Boolean(status.data?.accepting)} />
+      {/* In the demo nothing can be sent: the service says it does not accept reports, and the controls are disabled as well. */}
+      {DEMO ? (
+        <fieldset className="demo-off" disabled>
+          <legend className="visually-hidden">{t('demo.formsOff')}</legend>
+          {forms}
+        </fieldset>
+      ) : (
+        forms
+      )}
     </>
   )
 }

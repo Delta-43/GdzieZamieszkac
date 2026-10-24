@@ -2,6 +2,7 @@ import { useId, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { ApiError } from '../api/client'
+import { DEMO } from '../demo/flag'
 import { useAiReport } from '../api/useAiReport'
 import { dateInWords } from '../lib/dates'
 import type { CategoryWeights } from '../api/useDistrictsData'
@@ -46,7 +47,7 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
   return (
     <section className="card ai-report-card" aria-labelledby={`${id}-heading`}>
       <h2 id={`${id}-heading`}>{t('aiReport.heading')}</h2>
-      <p>{t('aiReport.intro')}</p>
+      <p>{DEMO ? t('demo.aiIntro') : t('aiReport.intro')}</p>
 
       <form onSubmit={onSubmit} noValidate>
         <div className="field">
@@ -71,7 +72,7 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
         )}
         {/* Said before the first request: the typed text leaves our servers. */}
         <p className="notice" id={`${id}-privacy`}>
-          {t('aiReport.privacy')}
+          {DEMO ? t('demo.aiPrivacy') : t('aiReport.privacy')}
         </p>
         <p className="find-actions">
           {/* While a report is written the button is dimmed and does nothing. It stays focusable. */}
@@ -120,7 +121,7 @@ export function AiReportCard({ weights }: { weights: CategoryWeights | null }) {
           {/* The facts the model was given, in the language of the report: the basis of the text. */}
           {report.data.facts.length > 0 && (
             <>
-              <h3 lang={i18n.language}>{t('aiReport.facts')}</h3>
+              <h3 lang={i18n.language}>{DEMO ? t('demo.aiFacts') : t('aiReport.facts')}</h3>
               <ul>
                 {report.data.facts.map((fact, index) => (
                   <li key={index}>{fact}</li>
