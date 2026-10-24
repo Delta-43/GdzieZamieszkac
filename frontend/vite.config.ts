@@ -14,8 +14,13 @@ export default defineConfig(({ mode }) => {
     .map((host) => host.trim())
     .filter(Boolean)
 
+  // The demo build (npm run build:demo) is a static site for GitHub Pages: it lives under /GdzieZamieszkac/ and bundles its own sample data.
+  const demo = mode === 'demo' || env.VITE_DEMO === 'true'
+
   return {
+    base: demo ? '/GdzieZamieszkac/' : '/',
     plugins: [react()],
+    define: { 'import.meta.env.VITE_DEMO': JSON.stringify(demo ? 'true' : '') },
     server: {
       // Listen on the network so the reviewer can open the dev app over the team Tailscale network.
       host: true,
