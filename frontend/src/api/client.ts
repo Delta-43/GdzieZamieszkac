@@ -13,7 +13,7 @@ export const api = createClient<paths>({
   baseUrl: `${origin}/v1`,
   // Look up fetch on each call. openapi-fetch otherwise keeps the fetch it saw when this module loaded,
   // and a test could not replace it afterwards.
-  fetch: (request) => (DEMO ? import('../demo/handler').then((demo) => demo.demoFetch(request)) : globalThis.fetch(request)),
+  fetch: (request) => (import.meta.env.VITE_DEMO === 'true' ? import('../demo/handler').then((demo) => demo.demoFetch(request)) : globalThis.fetch(request)),
   // The API default is English and the portal default is Polish, so every request carries the language.
   querySerializer: (query) => serializeQuery({ ...query, lang: currentLanguage() }),
 })

@@ -11,5 +11,5 @@ const origin = DEMO ? 'https://demo.invalid' : (import.meta.env.VITE_CITY_API_UR
 export const cityApi = createClient<paths>({
   baseUrl: `${origin}/v1`,
   // Look up fetch on each call, so a test can replace it (see client.ts).
-  fetch: (request) => (DEMO ? import('../demo/handler').then((demo) => demo.demoFetch(request)) : globalThis.fetch(request)),
+  fetch: (request) => (import.meta.env.VITE_DEMO === 'true' ? import('../demo/handler').then((demo) => demo.demoFetch(request)) : globalThis.fetch(request)),
 })

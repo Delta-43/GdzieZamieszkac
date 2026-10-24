@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { parseBasemap, type Basemap } from '../lib/geo'
-import { DEMO } from '../demo/flag'
 import { useMeta } from './useMeta'
 
 /**
@@ -16,8 +15,8 @@ export function useBasemap(): Basemap | null {
     staleTime: Infinity,
     retry: false,
     queryFn: async () => {
-      // The demo carries its own extract (OpenStreetMap, ODbL) inside the app.
-      if (DEMO) return parseBasemap((await import('../demo/data/basemap.json')).default)
+      // The demo carries its own extract (OpenStreetMap, ODbL) inside the app. The test is written out, so a normal build drops the import.
+      if (import.meta.env.VITE_DEMO === 'true') return parseBasemap((await import('../demo/data/basemap.json')).default)
       // A Request, like every other call of the app, so the file is asked for the same way and shows in the same place in a test.
       const response = await fetch(new Request(new URL(`${import.meta.env.BASE_URL}basemap/${city}.json`, window.location.href)))
       if (!response.ok || !(response.headers.get('Content-Type') ?? '').includes('json')) return null

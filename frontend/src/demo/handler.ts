@@ -3,7 +3,7 @@ import type { components as CityComponents } from '../api/citySchema'
 import { currentLanguage } from '../i18n'
 import { CATEGORIES, CATEGORY_LABELS, SAFETY_KEY, SCORE_KEY, createEngine, formatNumber, type Engine, type Weights } from './engine'
 import type { DemoMetric, DemoModel, Lang } from './model'
-import { AI_LABEL, AI_REPORT, CHARACTER, DEMO_METHOD, FEEDBACK_NOTE, REPORT_PARTS } from './texts'
+import { AI_LABEL, AI_REPORT, CHARACTER, DEMO_METHOD, FEEDBACK_NOTE, REPORT_PARTS, SAMPLE_SOURCE } from './texts'
 
 // The data API and the city service of the live site, answered from the browser. Every route of backend/openapi.yaml and
 // city-service/openapi.yaml that the app calls is here, with the same answer shapes, over the bundled sample data.
@@ -107,8 +107,11 @@ const price = (value: number, lang: Lang) => `${formatNumber(Math.round(value), 
 
 function sourceOf(model: DemoModel, metric: DemoMetric, lang: Lang): Schemas['Source'] {
   const source = model.sources[metric.source]!
+  const name = lang === 'pl' ? source.pl.name : source.name
+  // A value made up for the demo names the source it is modelled on, and says it is sample data.
+  const sample = !metric.real && metric.source !== 'derived'
   return {
-    name: lang === 'pl' ? source.pl.name : source.name,
+    name: sample ? `${SAMPLE_SOURCE[lang]}${name}` : name,
     ...(source.url ? { url: source.url } : {}),
     licence: lang === 'pl' ? source.pl.licence : source.licence,
     attribution: source.attribution,
@@ -186,7 +189,7 @@ async function answerFor(route: string, method: string, url: URL, body: unknown)
       n_obs: Math.min(sale.n ?? Infinity, rent.n ?? Infinity),
       as_of: '2026-09-30',
       source: {
-        name: sources.map((source) => (lang === 'pl' ? source.pl.name : source.name)).join(` ${TEXT.and[lang]} `),
+        name: SAMPLE_SOURCE[lang] + sources.map((source) => (lang === 'pl' ? source.pl.name : source.name)).join(` ${TEXT.and[lang]} `),
         licence: sources.map((source) => (lang === 'pl' ? source.pl.licence : source.licence)).join(' / '),
         attribution: sources.map((source) => source.attribution).join('; '),
       },
@@ -375,7 +378,7 @@ async function answerFor(route: string, method: string, url: URL, body: unknown)
       const rank = engine.rankOf(SCORE_KEY, code)
       const item = engine.score().find((entry) => entry.code === code)!
       const ordered = [...item.parts].sort((a, b) => b.percentile - a.percentile)
-      const labelOf = (key: string) => engine.metricByKey.get(key)!.label[lang].replace(/\s*\(.*\)\s*$/, '')
+      const labelOf = (key: string) => `${lang === 'pl' ? '„' : '“'}${engine.metricByKey.get(key)!.label[lang].replace(/\s*\(.*\)\s*$/, '')}”`
       const best = ordered.slice(0, 2).map((part) => labelOf(part.key)).join(', ')
       const worst = ordered.slice(-2).reverse().map((part) => labelOf(part.key)).join(', ')
       const salePrice = engine.valueOf(SALE_KEY, code)
@@ -634,7 +637,8 @@ function aiReport(model: DemoModel, ranked: RankedRow[], weights: Weights | null
     const values: Record<string, string> = { n1: top[0]?.name ?? '', n2: top[1]?.name ?? '', n3: top[2]?.name ?? '', s1: score(top[0]?.score ?? 0), s2: score(top[1]?.score ?? 0), s3: score(top[2]?.score ?? 0), ...extra }
     return text.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? '')
   }
-  const drivers = (top[0]?.top_drivers ?? []).map((driver) => driver.label.replace(/\s*\(.*\)\s*$/, '')).join(', ')
+  const quote = (text: string) => `${lang === 'pl' ? '„' : '“'}${text}”`
+  const drivers = (top[0]?.top_drivers ?? []).map((driver) => quote(driver.label.replace(/\s*\(.*\)\s*$/, ''))).join(', ')
   const first = persona
     ? fill(AI_REPORT.profile[lang], { label: persona.label[lang], description: persona.description[lang].replace(/\.$/, '').toLowerCase() })
     : fill(AI_REPORT.custom[lang])

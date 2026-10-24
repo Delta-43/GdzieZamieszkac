@@ -38,8 +38,8 @@ export const CHARACTER: Record<string, Bilingual> = {
     pl: 'Dębniki leżą na lewym brzegu Wisły, naprzeciw Wawelu, i sięgają aż do opactwa w Tyńcu. Część północna jest miejska, a południowa spokojniejsza i zieleńsza.',
   },
   'lagiewniki-borek-falecki': {
-    en: 'Łagiewniki-Borek Fałęcki lies south of the centre. It is known for the Divine Mercy Sanctuary, and around it are housing estates, allotments and green pockets. Trams and buses link it to the centre in a short time.',
-    pl: 'Łagiewniki-Borek Fałęcki leży na południe od centrum. Znane jest z Sanktuarium Bożego Miłosierdzia, a wokół są osiedla, ogródki działkowe i zielone enklawy. Tramwaje i autobusy dowożą stąd do centrum w krótkim czasie.',
+    en: 'Łagiewniki-Borek Fałęcki lies south of the centre. It is known for the Divine Mercy Sanctuary, and around it are housing estates, allotments and green pockets. Trams and buses link it to the centre.',
+    pl: 'Łagiewniki-Borek Fałęcki leży na południe od centrum. Znane jest z Sanktuarium Bożego Miłosierdzia, a wokół są osiedla, ogródki działkowe i zielone enklawy. Tramwaje i autobusy łączą go z centrum.',
   },
   swoszowice: {
     en: 'Swoszowice is a large district on the southern edge of the city, with a spa tradition, hills and woods. It is the quietest and greenest part of Kraków, and it is farther from the centre.',
@@ -130,4 +130,10 @@ export const DEMO_CAVEAT_REAL: Bilingual = {
 export const DEMO_METHOD: Bilingual = {
   en: 'In the demo the value is made up from a rough profile of the district. The live service uses the source named here.',
   pl: 'W wersji demonstracyjnej wartość jest wymyślona na podstawie zgrubnego profilu dzielnicy. Działająca usługa korzysta ze źródła wskazanego tutaj.',
+}
+
+/** Put before the name of a source whose value is made up in the demo, so the provenance of the value never reads as a real source. */
+export const SAMPLE_SOURCE: Bilingual = {
+  en: 'Sample data, modelled on: ',
+  pl: 'Dane przykładowe, wzorowane na: ',
 }

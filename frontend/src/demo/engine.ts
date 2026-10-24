@@ -105,14 +105,18 @@ export function createEngine(model: DemoModel) {
     return model.values[key]?.[code]
   }
 
-  /** 1 = best. Ties share the best place. */
+  /** 1 = best. Ties share the best place. Counts are ranked per km2, as in the API. */
   function rankOf(key: string, code: string): { position: number; of: number; direction: 'higher is better' | 'lower is better' } | undefined {
     const metric = metricByKey.get(key)
     if (!metric || metric.higher_is === 'neutral' || !metric.available) return undefined
-    const mine = valueOf(key, code)
-    if (!mine) return undefined
-    const all = codes.map((c) => valueOf(key, c)?.value).filter((v): v is number => v !== undefined)
-    const better = all.filter((v) => (metric.higher_is === 'better' ? v > mine.value : v < mine.value)).length
+    const per = (c: string) => {
+      const v = valueOf(key, c)?.value
+      return v === undefined ? undefined : v / (PER_KM2.has(key) ? area.get(c)! : 1)
+    }
+    const mine = per(code)
+    if (mine === undefined) return undefined
+    const all = codes.map(per).filter((v): v is number => v !== undefined)
+    const better = all.filter((v) => (metric.higher_is === 'better' ? v > mine : v < mine)).length
     return { position: better + 1, of: all.length, direction: metric.higher_is === 'better' ? 'higher is better' : 'lower is better' }
   }
 
