@@ -478,5 +478,28 @@
     "list": "Dzielnice pasujące do wpisanego tekstu",
     "count": "Podpowiedzi: {{count}}.",
     "missed": "Nie ma dzielnicy o takiej nazwie. Sprawdź pisownię albo wybierz dzielnicę na mapie."
+  },
+  "demo": {
+    "banner": "Wersja demonstracyjna z przykładowymi danymi. Liczby na tej stronie są poglądowe, nie są pomiarami, a nic nie jest wysyłane na żaden serwer.",
+    "bannerLink": "O tej wersji",
+    "heading": "O tej wersji demonstracyjnej",
+    "what": "To statyczna wersja demonstracyjna GdzieZamieszkać, przygotowana na prezentację na HackYeah 2026. Działa w całości w Twojej przeglądarce: nie pobiera danych, czcionek, map ani skryptów z żadnego innego serwera, nie ma kont ani śledzenia.",
+    "sample": "Liczby to dane przykładowe. Baza pomiarów z wydarzenia nie jest częścią repozytorium, więc wartości wymyślono na podstawie zgrubnego profilu każdej dzielnicy. Wyjątkiem są liczby szkolnych boisk i publicznych defibrylatorów, które pochodzą z bazy projektu. Wartości wyglądają prawdopodobnie, ale nie są pomiarami i nic nie mówią o prawdziwych dzielnicach. Kształty dzielnic i tło mapy pochodzą z OpenStreetMap.",
+    "ai": "Raporty o dzielnicach i podsumowanie dla Twoich potrzeb to teksty przykładowe, napisane z wyprzedzeniem z pomocą sztucznej inteligencji. Liczby w nich uzupełnia kod z przykładowych danych. Nic nie powstaje na żywo.",
+    "forms": "Formularze opinii są wyłączone. Nic, co wpiszesz, nie jest wysyłane ani zapisywane.",
+    "licence": "Repozytorium jest publiczne po to, by można było obejrzeć tę pracę. Wszelkie prawa zastrzeżone: zobacz plik LICENSE.",
+    "aiIntro": "Opisz własnymi słowami, co jest dla Ciebie ważne. W działającej usłudze sztuczna inteligencja pisze wtedy krótkie podsumowanie trzech pierwszych dzielnic rankingu widocznego na tej stronie. W wersji demonstracyjnej podsumowanie jest tekstem przykładowym, napisanym z wyprzedzeniem.",
+    "aiPrivacy": "To wersja demonstracyjna: wpisany tekst zostaje w Twojej przeglądarce i nie jest nigdzie wysyłany. Podsumowanie nie korzysta z Twoich słów. Podąża tylko za rankingiem widocznym na tej stronie.",
+    "formsOff": "Formularze są wyłączone w wersji demonstracyjnej",
+    "aiFacts": "Fakty, na których opiera się tekst przykładowy"
+  },
+  "footerAbout": {
+    "heading": "O projekcie",
+    "project": "GdzieZamieszkać, projekt na HackYeah 2026.",
+    "team": "Zespół: Delta-43, Rysia i unicorn-alex.",
+    "data": "Dane zebrane od 29 września do 2 października 2026. Źródła, licencje i daty są wymienione wyżej oraz na stronie Źródła i jak to działa.",
+    "licence": "Repozytorium jest publiczne po to, by można było je obejrzeć. Wszelkie prawa zastrzeżone.",
+    "repo": "Repozytorium z kodem",
+    "demo": "Wersja demonstracyjna z przykładowymi danymi."
   }
 }

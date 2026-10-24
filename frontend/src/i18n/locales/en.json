@@ -478,5 +478,28 @@
     "list": "Districts that match what you typed",
     "count": "Suggestions: {{count}}.",
     "missed": "There is no district with that name. Check the spelling, or choose a district on the map."
+  },
+  "demo": {
+    "banner": "Demo with sample data. The figures on this site are illustrative, not measurements, and nothing is sent to any server.",
+    "bannerLink": "About this demo",
+    "heading": "About this demo",
+    "what": "This is a static demo of GdzieZamieszkać, made for the HackYeah 2026 presentation. It runs entirely in your browser: it loads no data, fonts, maps or scripts from any other server, and it has no accounts and no tracking.",
+    "sample": "The numbers are sample data. The measured database of the event is not part of the repository, so the values were made up from a rough profile of each district, except the number of school sports grounds and of public defibrillators, which come from the project database. The values look plausible, but they are not measurements and they say nothing about the real districts. The district shapes and the map background are from OpenStreetMap.",
+    "ai": "The district reports and the summary for your needs are sample texts, written in advance with the help of artificial intelligence. The figures in them are filled in by the code from the sample data. Nothing is written live.",
+    "forms": "The feedback forms are switched off. Nothing you type is sent or stored.",
+    "licence": "The repository is public so that readers can look at the work. All rights are reserved: see the LICENSE file.",
+    "aiIntro": "Describe in your own words what matters to you. In the live service, artificial intelligence then writes a short summary of the first three districts of the ranking on this page. In this demo the summary is a sample text written in advance.",
+    "aiPrivacy": "This is a demo: the text you type stays in your browser and is sent nowhere. The summary does not use your words. It only follows the ranking on this page.",
+    "formsOff": "The forms are switched off in the demo",
+    "aiFacts": "Facts the sample text is based on"
+  },
+  "footerAbout": {
+    "heading": "About the project",
+    "project": "GdzieZamieszkać (Where to live), a project for HackYeah 2026.",
+    "team": "Team: Delta-43, Rysia and unicorn-alex.",
+    "data": "Data collected between 29 September and 2 October 2026. Sources, licences and dates are listed above and on the page Sources and how it works.",
+    "licence": "The repository is public so that readers can look at it. All rights are reserved.",
+    "repo": "Source repository",
+    "demo": "Demo with sample data."
   }
 }

@@ -230,6 +230,18 @@ test('the footer is small print: every credit line once, as plain text, with no 
   expect(within(footer).queryByRole('link')).not.toBeInTheDocument()
 })
 
+test('the footer names the project, the event, the team and the licence terms, as plain text', async () => {
+  mockFetch(districtsApi)
+  renderApp()
+
+  const footer = await screen.findByRole('contentinfo')
+  const about = within(footer).getByRole('region', { name: 'O projekcie' })
+  expect(about).toHaveTextContent('GdzieZamieszkać, projekt na HackYeah 2026.')
+  expect(about).toHaveTextContent('Zespół: Delta-43, Rysia i unicorn-alex.')
+  expect(about).toHaveTextContent('Wszelkie prawa zastrzeżone.')
+  expect(within(about).queryByRole('link')).not.toBeInTheDocument()
+})
+
 test.each(['pl', 'en'] as const)('the home page marks official notices as a concept and calls no endpoint for them in %s', async (language) => {
   const fetchMock = mockFetch(withMeta(metaFixture))
   renderApp('/')
