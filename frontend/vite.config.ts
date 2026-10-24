@@ -1,6 +1,21 @@
 import react from '@vitejs/plugin-react'
-import { loadEnv } from 'vite'
+import { loadEnv, type Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
+
+// GitHub Pages answers an unknown address with 404.html. The demo keeps its pages after the #, so an old or hand-typed
+// address such as /GdzieZamieszkac/districts/stare-miasto is sent to /GdzieZamieszkac/#/districts/stare-miasto.
+function pagesFallback(base: string): Plugin {
+  const source = `<!doctype html><html lang="pl"><head><meta charset="UTF-8" /><title>GdzieZamieszkać</title></head><body><script>
+var base = ${JSON.stringify(base)}, path = location.pathname;
+location.replace(path.indexOf(base) === 0 ? base + '#/' + path.slice(base.length) + location.search + location.hash : base);
+</script><noscript><a href="${base}">GdzieZamieszkać</a></noscript></body></html>`
+  return {
+    name: 'pages-fallback',
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: '404.html', source })
+    },
+  }
+}
 
 // Development only. The dev server forwards /v1 to the API, so the browser makes same-origin requests
 // and needs no CORS setup. The API address is private: it lives in .env.local, which git ignores.
@@ -19,7 +34,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: demo ? '/GdzieZamieszkac/' : '/',
-    plugins: [react()],
+    plugins: [react(), ...(demo ? [pagesFallback('/GdzieZamieszkac/')] : [])],
     define: { 'import.meta.env.VITE_DEMO': JSON.stringify(demo ? 'true' : '') },
     server: {
       // Listen on the network so the reviewer can open the dev app over the team Tailscale network.

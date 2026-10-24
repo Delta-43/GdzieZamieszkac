@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <b>Live demo:</b> <a href="https://demo.dchaudhury.com">demo.dchaudhury.com</a>
+  <b>Live demo:</b> <a href="https://demo.dchaudhury.com">demo.dchaudhury.com</a><br>
+  <b>Static demo with sample data (GitHub Pages):</b> <a href="https://delta-43.github.io/GdzieZamieszkac/">delta-43.github.io/GdzieZamieszkac</a> (see <a href="frontend/README.md#demo-for-github-pages">how it works</a>)
 </p>
 
 <p align="center">
