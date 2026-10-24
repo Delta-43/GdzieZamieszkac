@@ -491,7 +491,9 @@
     "aiIntro": "Opisz własnymi słowami, co jest dla Ciebie ważne. W działającej usłudze sztuczna inteligencja pisze wtedy krótkie podsumowanie trzech pierwszych dzielnic rankingu widocznego na tej stronie. W wersji demonstracyjnej podsumowanie jest tekstem przykładowym, napisanym z wyprzedzeniem.",
     "aiPrivacy": "To wersja demonstracyjna: wpisany tekst zostaje w Twojej przeglądarce i nie jest nigdzie wysyłany. Podsumowanie nie korzysta z Twoich słów. Podąża tylko za rankingiem widocznym na tej stronie.",
     "formsOff": "Formularze są wyłączone w wersji demonstracyjnej",
-    "aiFacts": "Fakty, na których opiera się tekst przykładowy"
+    "aiFacts": "Fakty, na których opiera się tekst przykładowy",
+    "kindSample": "przykładowe",
+    "kindSampleHelp": "Wartość przykładowa na potrzeby wersji demonstracyjnej, nie pomiar."
   },
   "footerAbout": {
     "heading": "O projekcie",

@@ -42,7 +42,7 @@ export function SourcesPage() {
         <ul>
           {(['observed', 'estimated', 'proxy'] as const).map((kind) => (
             <li key={kind}>
-              <DataKindBadge kind={kind} />: {t(`dataKindHelp.${kind}`)}
+              <DataKindBadge kind={kind} />: {DEMO && kind === 'observed' ? t('demo.kindSampleHelp') : t(`dataKindHelp.${kind}`)}
             </li>
           ))}
         </ul>

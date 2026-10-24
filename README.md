@@ -5,8 +5,7 @@
 </p>
 
 <p align="center">
-  <b>Live demo:</b> <a href="https://demo.dchaudhury.com">demo.dchaudhury.com</a><br>
-  <b>Static demo with sample data (GitHub Pages):</b> <a href="https://delta-43.github.io/GdzieZamieszkac/">delta-43.github.io/GdzieZamieszkac</a> (see <a href="frontend/README.md#demo-for-github-pages">how it works</a>)
+  <b>Demo with sample data (GitHub Pages):</b> <a href="https://delta-43.github.io/GdzieZamieszkac/">delta-43.github.io/GdzieZamieszkac</a> (<a href="frontend/README.md#demo-for-github-pages">how it works</a>)
 </p>
 
 <p align="center">
@@ -109,7 +108,7 @@ State on 4 October 2026, at the end of HackYeah.
 | Polish text | ✅ Reviewed | The native-speaking reviewer closed the Polish text review issues (#82, #83) on 4 October. The text of the API comes from the stored catalogue and is never translated in the browser. |
 | Frontend, phase 2 | 🟡 Mostly | The district page shows commute times, past price changes with a backtest, and rent versus buy with similar districts (tasks F10, F11, F12). The household profile (task F9) is built in part: Find a district takes a work place and a budget. The household type and the children's ages wait for agreed weights. |
 | Official notices, demand counts, identity checks for feedback | 💡 Concept | Shown only as a labelled concept. No endpoint and no data. |
-| Public deployment | ✅ Live | <https://demo.dchaudhury.com>, on a team server since 4 October. Both services run in Docker behind Caddy and a Cloudflare Tunnel. There is no release pipeline and no off-server backup yet. |
+| Public demo | ✅ Live | <https://delta-43.github.io/GdzieZamieszkac/>, a static GitHub Pages demo with labelled sample data. It has no server, no model and no network call. The earlier team-server deployment is gone. |
 
 **Known limits.** Rents are asking rents from a one-time snapshot, shown as district medians. Kraków has no recorded crime data, so safety uses road accidents and proxies. Commute times on long trips run fast. The price outlook is history and a backtest, not a forecast: we tested two methods and neither beat the naive baseline.
 
@@ -180,7 +179,7 @@ OPENROUTER_LLM_KEY=... ../backend/.venv/bin/uvicorn app.main:app_from_env --fact
 cd ../frontend && npm run dev          # http://localhost:5173, forwards /v1 to both services
 ```
 
-**The public demo** is at <https://demo.dchaudhury.com>. The data API and the city service run as Docker containers, built from `backend/Dockerfile` and `city-service/Dockerfile`, with `ENVIRONMENT=production`. Caddy serves the built frontend and both services from that one address, so the browser calls no other origin. A Cloudflare Tunnel connects the address to Caddy, and no port of the server is open to the internet. The module guides explain the settings, the security measures and the Docker builds.
+**The public demo** is a static site on GitHub Pages: <https://delta-43.github.io/GdzieZamieszkac/>. It is built by `.github/workflows/pages.yml` from `frontend/` (`npm run build:demo`) and answers from sample data bundled with the app, so no container, tunnel or server is involved. The data API and the city service can still be run from `backend/Dockerfile` and `city-service/Dockerfile`; the module guides explain the settings, the security measures and the Docker builds.
 
 ## 🧰 Tech stack
 

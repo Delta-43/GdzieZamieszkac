@@ -4,7 +4,7 @@
 
 **The data is © OpenStreetMap contributors, under the Open Database Licence (ODbL) 1.0** (<https://www.openstreetmap.org/copyright>). The map shows that credit under it. A simplified extract like this one is a derived database: if it is shared, it is shared under the ODbL, with the credit. The rest of this repository is under its own licence (`../../../LICENSE`).
 
-For that reason the generated file is **not committed**. Make it once, from the folder of the repository, while the data API runs:
+**Committed for the offline Pages demo.** The demo build must not depend on a map server, so a copy of the extract is committed as `frontend/src/demo/data/basemap.json`, next to the district shapes in `boundaries.json` (also from OpenStreetMap). Both files are under the ODbL 1.0, and the OpenStreetMap credit is shown in the map itself, in the footer and on the Sources page. The normal app still reads `public/basemap/<city>.json`, which Git ignores. Make it once, from the folder of the repository, while the data API runs:
 
 ```bash
 python3 frontend/scripts/build_basemap.py            # reads the extent and the city code from the API, asks Overpass once, writes frontend/public/basemap/<city>.json

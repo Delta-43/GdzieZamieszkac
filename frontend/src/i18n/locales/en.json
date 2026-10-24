@@ -491,7 +491,9 @@
     "aiIntro": "Describe in your own words what matters to you. In the live service, artificial intelligence then writes a short summary of the first three districts of the ranking on this page. In this demo the summary is a sample text written in advance.",
     "aiPrivacy": "This is a demo: the text you type stays in your browser and is sent nowhere. The summary does not use your words. It only follows the ranking on this page.",
     "formsOff": "The forms are switched off in the demo",
-    "aiFacts": "Facts the sample text is based on"
+    "aiFacts": "Facts the sample text is based on",
+    "kindSample": "sample",
+    "kindSampleHelp": "Sample value for the demo, not measured."
   },
   "footerAbout": {
     "heading": "About the project",
